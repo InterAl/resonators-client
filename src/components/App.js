@@ -1,17 +1,22 @@
 import React from 'react';
 import YeomanImage from './YeomanImage';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import RaisedButton from 'material-ui/RaisedButton';
+import AppBar from 'material-ui/AppBar';
+import Drawer from 'material-ui/Drawer';
 import './app.css';
 
 class AppComponent extends React.Component {
 
   render() {
     return (
-      <div className="index">
-        <YeomanImage />
-        <div className="notice">
-          Please edit <code>src/components/App.js</code> to get started!
-        </div>
-      </div>
+      <MuiThemeProvider>
+          <div>
+              <AppBar title="Resonators" />
+              <Drawer open={true} />
+              <RaisedButton label="aaa" />
+          </div>
+      </MuiThemeProvider>
     );
   }
 }
