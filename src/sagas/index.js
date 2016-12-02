@@ -3,5 +3,6 @@ const createRootSaga = (sagas, sagaParams) => function*() {
 };
 
 export default createRootSaga([
-    require('./initSaga').default.saga
+    require('./initSaga').default.saga,
+    require('./sessionSaga').default.saga
 ], {});

@@ -10,9 +10,9 @@ function reduxStore(initialState) {
 
   const store = createStore(reducers, initialState,
     applyMiddleware(
-        reduxLogger,
         // window.devToolsExtension && window.devToolsExtension(),
-        sagaMiddleware
+        sagaMiddleware,
+        reduxLogger,
     ));
 
   sagaMiddleware.run(saga);

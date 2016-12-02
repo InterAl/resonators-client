@@ -1,5 +1,7 @@
+import { put } from 'redux-saga/effects';
 import SagaReducerFactory from 'SagaReducerFactory';
 import { actions, types } from '../actions/initActions';
+import { actions as sessionActions } from '../actions/sessionActions';
 
 let {handle, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -8,8 +10,7 @@ let {handle, saga, reducer} = SagaReducerFactory({
 });
 
 handle(types.INIT_APP, function*() {
-    let x = 5;
-    console.log('i\'m in the zone!');
+    // yield put(sessionActions.resume());
 });
 
 export default {saga, reducer};

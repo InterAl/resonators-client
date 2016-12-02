@@ -13,7 +13,7 @@ class AppComponent extends React.Component {
       <MuiThemeProvider>
           <div>
               <AppBar title="Resonators" />
-              <Drawer open={true} />
+              <Drawer open={false} />
               <RaisedButton label="aaa" />
           </div>
       </MuiThemeProvider>
