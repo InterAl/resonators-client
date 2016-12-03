@@ -5,12 +5,9 @@ export function get() {
 }
 
 export function create(email, password) {
-    return fetcher('/user_sessions.json', {
-        method: 'POST',
-        body: {
-            email,
-            password
-        }
+    return fetcher.post('/user_sessions.json', {
+        email,
+        password
     });
 }
 

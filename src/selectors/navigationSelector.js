@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
-import loginInfo from './loginInfo';
+import loginInfoSelector from './loginInfo';
 
 export default createSelector(
-    state => loginInfo,
+    loginInfoSelector,
 
     loginInfo => ({
         showHamburger: Boolean(loginInfo.loggedIn)

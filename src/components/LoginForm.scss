@@ -1,0 +1,19 @@
+.loginForm {
+    margin: 0 auto;
+
+    .cardText {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .submitBtn {
+        align-self: center;
+        width: 100%;
+        margin: 10px;
+        height: 50px !important;
+    }
+
+    .submitBtnWrapper {
+        margin-top: 20px;
+    }
+}

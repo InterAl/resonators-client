@@ -12,6 +12,14 @@ import '../static/bootstrap/css/bootstrap.min.css';
 
 const {PropTypes} = React;
 
+const routes = (
+    <Route path="/">
+        <Route path="react" component={Visitor} />
+        <Route path="react/followers" component={Followers} />
+        <Route path="/*" component={NoMatch} />
+    </Route>       
+);
+
 class AppComponent extends React.Component {
   static propTypes = {
       loginInfo: PropTypes.object.isRequired,
@@ -28,10 +36,7 @@ class AppComponent extends React.Component {
               <Drawer open={false} />
               <div className='screenWrapper'>
                   <Router history={browserHistory}>
-                    <Route path="/" component={Visitor}>
-                        <Route path="/followers" component={Followers} />
-                        <Route path="/*" component={NoMatch} />
-                    </Route>
+                    {routes}
                   </Router>
               </div>
           </div>

@@ -2,6 +2,7 @@ import SagaReducerFactory from 'SagaReducerFactory';
 import { put, call } from 'redux-saga/effects';
 import { actions, types } from '../actions/sessionActions';
 import * as sessionApi from '../api/session';
+import {browserHistory} from 'react-router';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -12,23 +13,51 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     }
 });
 
+handle(types.RESUME, function*(sagaParams, action) {
+    let user = yield call(sessionApi.get);
+    let loggedIn = yield updateUser(user);
+
+    if (!loggedIn)
+        browserHistory.replace('/react');
+});
+
 handle(types.LOGIN, function*(sagaParams, action) {
     let {email, password} = action.payload;
 
-    let user = yield call(sessionApi.create, email, password);
-    yield updateUser(user);
+    let user;
+
+    try {
+        user = yield call(sessionApi.create, email, password);
+    } catch (err) {
+        console.warn('login failed', err);
+    }
+
+    let loggedIn = yield updateUser(user);
+
+    if (!loggedIn)
+        yield put({
+            type: "@@redux-form/SET_SUBMIT_FAILED",
+            error: true,
+            meta: {
+                form: "login",
+                fields: []
+            }
+        });
 });
 
-handle(types.RESUME, function*(sagaParams, action) {
-    let user = yield call(sessionApi.get);
-    yield updateUser(user);
-});
+function* updateUser(user = {}) {
+    const loggedIn = new Date(user.expires_at) > new Date();
 
-function* updateUser(user) {
     yield put(updateState({
         user,
-        loggedIn: user.expires_at > 0
+        loggedIn
     }));
+
+    if (loggedIn) {
+        browserHistory.push(`/react/followers`);
+    }
+
+    return loggedIn;
 }
 
 export default {saga, reducer};
