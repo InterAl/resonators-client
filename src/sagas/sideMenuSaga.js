@@ -29,7 +29,7 @@ handle(types.CLICK_MENU_ITEM, function*(sagaParams, {payload}) {
     if (payload === 'logout') {
         yield put(sessionActions.logout());
     } else {
-        browserHistory.push(payload);
+        browserHistory.push(`/react/${payload}`);
     }
 
     yield put(actions.toggleMenu());

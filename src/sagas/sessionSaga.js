@@ -1,6 +1,7 @@
 import SagaReducerFactory from 'SagaReducerFactory';
 import { put, call, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/sessionActions';
+import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';
 import {browserHistory} from 'react-router';
 
@@ -35,14 +36,7 @@ handle(types.LOGIN, function*(sagaParams, action) {
     let loggedIn = yield updateUser(user);
 
     if (!loggedIn)
-        yield put({
-            type: "@@redux-form/SET_SUBMIT_FAILED",
-            error: true,
-            meta: {
-                form: "login",
-                fields: []
-            }
-        });
+        yield put(formErrorAction('login'));
 });
 
 handle(types.LOGOUT, function*() {

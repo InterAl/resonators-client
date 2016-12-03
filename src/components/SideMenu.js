@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {actions} from '../actions/menuActions';
 import {List, ListItem} from 'material-ui/List';
 import IconButton from 'material-ui/IconButton';
+import Divider from 'material-ui/Divider';
 import FollowerIcon from 'material-ui/svg-icons/maps/directions-walk';
 import ClinicIcon from 'material-ui/svg-icons/content/weekend';
 import CloseIcon from 'material-ui/svg-icons/navigation/close';
@@ -33,7 +34,9 @@ class SideMenu extends Component {
                                   leftIcon={<FollowerIcon/>} />
                         <ListItem onClick={() => this.props.clickMenuItem('clinic')}
                                   primaryText='Clinic'
-                                  leftIcon={<ClinicIcon/>}/>
+                                  leftIcon={<ClinicIcon/>}
+                        />
+                        <Divider />
                         <ListItem onClick={() => this.props.clickMenuItem('logout')}
                                   primaryText='Logout'
                                   style={{color: '#ff4444'}}
