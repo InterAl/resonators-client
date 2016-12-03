@@ -1,5 +1,5 @@
 import SagaReducerFactory from 'SagaReducerFactory';
-import { put, call } from 'redux-saga/effects';
+import { put, call, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/sessionActions';
 import * as sessionApi from '../api/session';
 import {browserHistory} from 'react-router';
@@ -43,6 +43,16 @@ handle(types.LOGIN, function*(sagaParams, action) {
                 fields: []
             }
         });
+});
+
+handle(types.LOGOUT, function*() {
+    try {
+        let sessionId = yield select(state => state.session.user.id);
+        yield call(sessionApi.logout, sessionId);
+        browserHistory.replace('/react');
+    } catch (err) {
+        console.warn('logout failed', err);
+    }
 });
 
 function* updateUser(user = {}) {

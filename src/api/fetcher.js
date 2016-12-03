@@ -1,4 +1,4 @@
-function fetcher(url, options) {
+function fetcher(url, options={}) {
     return fetch(url, {
                 credentials: 'same-origin',
                 ...options
@@ -9,7 +9,8 @@ function fetcher(url, options) {
                         unauthorized: true
                     });
 
-                return response.json();
+                if (!options.emptyResponse)
+                    return response.json();
             })
             .catch(err => {
                 console.error('failed fetching', err);
