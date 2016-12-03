@@ -1,7 +1,7 @@
 import fetcher from './fetcher';
 
-export function get(id) {
-    return fetcher(`/user_sessions/${id}.json`);
+export function get() {
+    return fetcher('/user_sessions');
 }
 
 export function create(email, password) {

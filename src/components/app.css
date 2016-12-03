@@ -1,3 +1,14 @@
 body {
     margin: 0;
 }
+
+.mainContainer {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.screenWrapper {
+    flex: 1;
+    display: flex;
+}

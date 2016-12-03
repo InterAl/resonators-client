@@ -8,15 +8,15 @@ import React, {
   Component,
   PropTypes
 } from 'react';
-import {} from '../actions/';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Main from '../components/App';
+import loginInfoSelector from '../selectors/loginInfo';
+import navigationSelector from '../selectors/navigationSelector';
 /* Populated by react-webpack-redux:reducer */
 class App extends Component {
   render() {
-    const { actions } = this.props;
-    return <Main actions={actions} />;
+    return <Main {...this.props} />;
   }
 }
 /* Populated by react-webpack-redux:reducer
@@ -25,17 +25,17 @@ class App extends Component {
  *       adjust it here.
  */
 App.propTypes = {
-  actions: PropTypes.object.isRequired
 };
-function mapStateToProps(state) { // eslint-disable-line no-unused-vars
-  /* Populated by react-webpack-redux:reducer */
-  const props = {};
-  return props;
+
+function mapStateToProps(state) {
+    return {
+        loginInfo: loginInfoSelector(state),
+        navigationInfo: navigationSelector(state)
+    };
 }
+
 function mapDispatchToProps(dispatch) {
-  /* Populated by react-webpack-redux:action */
-  const actions = {};
-  const actionMap = { actions: bindActionCreators(actions, dispatch) };
-  return actionMap;
+    return {dispatch};
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(App);

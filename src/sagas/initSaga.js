@@ -10,7 +10,7 @@ let {handle, saga, reducer} = SagaReducerFactory({
 });
 
 handle(types.INIT_APP, function*() {
-    // yield put(sessionActions.resume());
+    yield put(sessionActions.resume());
 });
 
 export default {saga, reducer};
