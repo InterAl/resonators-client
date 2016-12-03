@@ -7,10 +7,12 @@ const createRootSaga = (sagas, sagaParams) => function*() {
 
 export const sagas = createRootSaga([
     require('./initSaga').default.saga,
-    require('./sessionSaga').default.saga
+    require('./sessionSaga').default.saga,
+    require('./sideMenuSaga').default.saga
 ], {});
 
 export const reducers = combineReducers({
     session: require('../sagas/sessionSaga').default.reducer,
+    menu: require('./sideMenuSaga').default.reducer,
     form: formReducer
 });

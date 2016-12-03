@@ -11,6 +11,7 @@ import React, {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Main from '../components/App';
+import {actions as menuActions} from '../actions/menuActions';
 import loginInfoSelector from '../selectors/loginInfo';
 import navigationSelector from '../selectors/navigationSelector';
 /* Populated by react-webpack-redux:reducer */
@@ -35,7 +36,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return {dispatch};
+    return bindActionCreators({
+        toggleMenu: menuActions.toggleMenu
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

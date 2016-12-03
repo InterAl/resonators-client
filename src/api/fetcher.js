@@ -1,5 +1,8 @@
-function fetcher(...args) {
-    return fetch(...args)
+function fetcher(url, options) {
+    return fetch(url, {
+                credentials: 'same-origin',
+                ...options
+            })
             .then(response => {
                 if (response.status === 401)
                     return Promise.reject({

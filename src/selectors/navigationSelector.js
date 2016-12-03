@@ -3,8 +3,10 @@ import loginInfoSelector from './loginInfo';
 
 export default createSelector(
     loginInfoSelector,
+    state => state.menu,
 
-    loginInfo => ({
-        showHamburger: Boolean(loginInfo.loggedIn)
+    (loginInfo, menu) => ({
+        showHamburger: Boolean(loginInfo.loggedIn),
+        menuOpen: Boolean(menu.isOpen)
     })
 )
