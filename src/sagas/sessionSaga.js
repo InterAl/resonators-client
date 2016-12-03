@@ -59,6 +59,7 @@ function* updateUser(user = {}) {
 
     if (loggedIn) {
         browserHistory.push(`/react/followers`);
+        yield put(actions.loginSuccess());
     }
 
     return loggedIn;

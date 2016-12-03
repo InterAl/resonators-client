@@ -20,7 +20,7 @@ class SideMenu extends Component {
             <Drawer
                 open={this.props.navigationInfo.menuOpen}
             >
-                <div>
+                <div className='sideMenu'>
                     <AppBar
                         iconElementLeft={
                             <IconButton onClick={this.props.toggleMenu}>
@@ -36,7 +36,7 @@ class SideMenu extends Component {
                                   primaryText='Clinic'
                                   leftIcon={<ClinicIcon/>}
                         />
-                        <Divider />
+                        <Divider style={{marginTop: 12, marginBottom: 12}}/>
                         <ListItem onClick={() => this.props.clickMenuItem('logout')}
                                   primaryText='Logout'
                                   style={{color: '#ff4444'}}

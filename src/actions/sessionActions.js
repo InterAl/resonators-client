@@ -3,7 +3,8 @@ import {ActionCreatorHelper} from 'SagaReducerFactory';
 const actionsList = [
     'LOGIN',
     'LOGOUT',
-    'RESUME'
+    'RESUME',
+    'LOGIN_SUCCESS'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'SESSION_');

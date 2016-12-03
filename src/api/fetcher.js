@@ -28,4 +28,14 @@ fetcher.post = (url, body) => {
     });
 };
 
+fetcher.put = (url, body) => {
+    return fetcher(url, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body)
+    });
+};
+
 export default fetcher;
