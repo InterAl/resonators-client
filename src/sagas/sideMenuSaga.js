@@ -2,6 +2,7 @@ import SagaReducerFactory from 'SagaReducerFactory';
 import { put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/menuActions';
 import { actions as sessionActions} from '../actions/sessionActions';
+import {actions as navigationActions} from '../actions/navigationActions';
 import {browserHistory} from 'react-router';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
@@ -29,7 +30,7 @@ handle(types.CLICK_MENU_ITEM, function*(sagaParams, {payload}) {
     if (payload === 'logout') {
         yield put(sessionActions.logout());
     } else {
-        browserHistory.push(`/react/${payload}`);
+        yield put(navigationActions.navigate(payload));
     }
 
     yield put(actions.toggleMenu());

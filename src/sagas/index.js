@@ -10,7 +10,8 @@ export const sagas = createRootSaga([
     require('./sessionSaga').default.saga,
     require('./sideMenuSaga').default.saga,
     require('./clinicsSaga').default.saga,
-    require('./followersSaga').default.saga
+    require('./followersSaga').default.saga,
+    require('./navigationSaga').default.saga
 ], {});
 
 export const reducers = combineReducers({
@@ -18,5 +19,6 @@ export const reducers = combineReducers({
     menu: require('./sideMenuSaga').default.reducer,
     clinics: require('./clinicsSaga').default.reducer,
     followers: require('./followersSaga').default.reducer,
+    navigation: require('./navigationSaga').default.reducer,
     form: formReducer
 });

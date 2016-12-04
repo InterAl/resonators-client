@@ -6,7 +6,14 @@ import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
+import ClearIcon from 'material-ui/svg-icons/content/clear';
+import IconButton from 'material-ui/IconButton';
+import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import './Followers.scss';
 
 class Followers extends Component {
     constructor() {
@@ -40,6 +47,14 @@ class Followers extends Component {
                 <TableRowColumn>
                     {f.clinicName}
                 </TableRowColumn>
+                <TableRowColumn className='editColumn col-sm-2'>
+                    <IconButton>
+                        <EditIcon/>
+                    </IconButton>
+                    <IconButton>
+                        <ClearIcon/>
+                    </IconButton>
+                </TableRowColumn>
             </TableRow>
         ));
     }
@@ -63,41 +78,53 @@ class Followers extends Component {
 
     renderShowEmailsToggle() {
         return (
-            <div className='col-sm-3'>
-                <Toggle
-                    toggled={this.state.showEmails}
-                    label="Show emails"
-                    labelPosition='left'
-                    onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
-            </div>
-            );
-        }
+            <Toggle
+                toggled={this.state.showEmails}
+                label="Show emails"
+                labelPosition='right'
+                onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
+        );
+    }
 
-        render() {
-            return (
-                <div className='row'>
-                    <div className='col-sm-8 col-sm-offset-2'>
-                        <Table>
-                            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                                <TableRow>
-                                    <TableHeaderColumn>
-                                        {this.renderClinicFilter()}
-                                    </TableHeaderColumn>
-                                    <TableHeaderColumn>
-                                        {this.renderShowEmailsToggle()}
-                                    </TableHeaderColumn>
-                                    {this.state.showEmails && <TableHeaderColumn />}
-                                </TableRow>
-                                <TableRow>
-                                    <TableHeaderColumn>Name</TableHeaderColumn>
-                                    {this.state.showEmails &&
-                                    <TableHeaderColumn>
-                                        Email
-                                    </TableHeaderColumn>
-                                }
-                                <TableHeaderColumn>Clinic</TableHeaderColumn>
-                            </TableRow>
-                        </TableHeader>
+    renderToolbox() {
+        return (
+            <Toolbar>
+                <ToolbarGroup>
+                    {this.renderClinicFilter()}
+                    {this.renderShowEmailsToggle()}
+                </ToolbarGroup>
+                <ToolbarGroup>
+                    <FloatingActionButton mini={true}>
+                        <ContentAdd />
+                    </FloatingActionButton>
+                </ToolbarGroup>
+            </Toolbar>
+        );
+    }
+
+    renderHeader() {
+        return (
+            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+                <TableRow>
+                    <TableHeaderColumn>Name</TableHeaderColumn>
+                    {this.state.showEmails &&
+                    <TableHeaderColumn>
+                        Email
+                    </TableHeaderColumn>}
+                    <TableHeaderColumn>Clinic</TableHeaderColumn>
+                    <TableHeaderColumn className='editColumn'>Actions</TableHeaderColumn>
+                </TableRow>
+            </TableHeader>
+        );
+    }
+
+    render() {
+        return (
+            <div className='followers row'>
+                <div className='col-sm-8 col-sm-offset-2'>
+                    {this.renderToolbox()}
+                    <Table>
+                        {this.renderHeader()}
                         <TableBody displayRowCheckbox={false}>
                             {this.renderFollowers()}
                         </TableBody>

@@ -9,7 +9,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionCreators: actions,
     initState: {
         followers: [],
-        filterByClinicId: null
+        filterByClinicId: 'all'
     }
 });
 

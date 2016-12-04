@@ -3,7 +3,7 @@ import { put, call, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/sessionActions';
 import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';
-import {browserHistory} from 'react-router';
+import {actions as navigationActions} from '../actions/navigationActions';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -19,7 +19,7 @@ handle(types.RESUME, function*(sagaParams, action) {
     let loggedIn = yield updateUser(user);
 
     if (!loggedIn)
-        browserHistory.replace('/react');
+        yield put(navigationActions.navigate('login'));
 });
 
 handle(types.LOGIN, function*(sagaParams, action) {
@@ -43,7 +43,7 @@ handle(types.LOGOUT, function*() {
     try {
         let sessionId = yield select(state => state.session.user.id);
         yield call(sessionApi.logout, sessionId);
-        browserHistory.replace('/react');
+        yield put(navigationActions.navigate('logout'));
     } catch (err) {
         console.warn('logout failed', err);
     }
@@ -58,7 +58,7 @@ function* updateUser(user = {}) {
     }));
 
     if (loggedIn) {
-        browserHistory.push(`/react/followers`);
+        yield put(navigationActions.navigate('followers'));
         yield put(actions.loginSuccess());
     }
 
