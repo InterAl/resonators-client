@@ -7,6 +7,7 @@ import SideMenu from './SideMenu';
 import routes from './Routes';
 import IconButton from 'material-ui/IconButton';
 import Hamburger from 'material-ui/svg-icons/navigation/menu';
+import ModalDisplayer from './ModalDisplayer';
 import './app.css';
 import '../static/bootstrap/css/bootstrap.min.css';
 
@@ -35,6 +36,7 @@ class AppComponent extends React.Component {
                   <Router history={browserHistory}>
                     {routes}
                   </Router>
+                  <ModalDisplayer modal={this.props.navigationInfo.modal} />
               </div>
           </div>
       </MuiThemeProvider>

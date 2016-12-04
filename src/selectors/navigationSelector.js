@@ -9,6 +9,7 @@ export default createSelector(
     (loginInfo, menu, navigation) => ({
         showHamburger: Boolean(loginInfo.loggedIn),
         menuOpen: Boolean(menu.isOpen),
-        title: navigation.title
+        title: navigation.title,
+        modal: navigation.modal
     })
 )

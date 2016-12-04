@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {actions} from '../actions/followersActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {actions as navigationActions} from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -48,7 +49,7 @@ class Followers extends Component {
                     {f.clinicName}
                 </TableRowColumn>
                 <TableRowColumn className='editColumn col-sm-2'>
-                    <IconButton>
+                    <IconButton onTouchTap={() => this.props.showEditFollowerModal(f.id)}>
                         <EditIcon/>
                     </IconButton>
                     <IconButton>
@@ -94,7 +95,7 @@ class Followers extends Component {
                     {this.renderShowEmailsToggle()}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                    <FloatingActionButton mini={true}>
+                    <FloatingActionButton mini={true} onTouchTap={this.props.showCreateFollowerModal}>
                         <ContentAdd />
                     </FloatingActionButton>
                 </ToolbarGroup>
@@ -146,7 +147,20 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         editFollower: actions.edit,
-        filterByClinicId: actions.filterByClinicId
+        filterByClinicId: actions.filterByClinicId,
+        showEditFollowerModal: followerId => navigationActions.showModal({
+            name: 'editFollower',
+            props: {
+                followerId,
+                editMode: true
+            }
+        }),
+        showCreateFollowerModal: () => navigationActions.showModal({
+            name: 'editFollower',
+            props: {
+                editMode: false
+            }
+        })
     }, dispatch);
 }
 

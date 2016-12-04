@@ -1,7 +1,9 @@
 import {ActionCreatorHelper} from 'SagaReducerFactory';
 
 const actionsList = [
-    'NAVIGATE'
+    'NAVIGATE',
+    'SHOW_MODAL',
+    'HIDE_MODAL'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'NAVIGATION_');

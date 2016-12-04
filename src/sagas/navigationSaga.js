@@ -7,7 +7,8 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
-        title: 'Resonators'
+        title: 'Resonators',
+        modal: null
     }
 });
 
@@ -37,6 +38,21 @@ handle(types.NAVIGATE, function*(sagaParams, {payload}) {
 
     yield put(updateState({
         title
+    }));
+});
+
+handle(types.SHOW_MODAL, function*(sagaParams, {payload}) {
+    yield put(updateState({
+        modal: {
+            name: payload.name,
+            props: payload.props
+        }
+    }));
+});
+
+handle(types.HIDE_MODAL, function*() {
+    yield put(updateState({
+        modal: null
     }));
 });
 
