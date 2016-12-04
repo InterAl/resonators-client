@@ -24,13 +24,12 @@ class AppComponent extends React.Component {
           <div className='mainContainer'>
               <AppBar
                 showMenuIconButton={this.props.navigationInfo.showHamburger}
-                onLeftIconButtonTouchTap={() => console.log('ggg')}
                 iconElementLeft={
                     <IconButton onClick={this.props.toggleMenu}>
                         <Hamburger />
                     </IconButton>
                 }
-                title="Resonators" />
+                title={this.props.navigationInfo.title}/>
               <SideMenu />
               <div className='screenWrapper'>
                   <Router history={browserHistory}>
