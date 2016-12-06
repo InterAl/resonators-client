@@ -7,12 +7,14 @@ export default createSelector(
 
     (followers, clinics) => {
         return {
-            followers: followers.followers
+            followers: _(followers.followers)
                                 .filter(f => filterByClinicId(followers, f))
                                 .map(f => ({
                                     ...f,
                                     clinicName: getClinicName(clinics, f.clinic_id)
-                                })),
+                                }))
+                                .sortBy('created_at')
+                                .value(),
             clinics,
             clinicIdFilter: followers.filterByClinicId
         };

@@ -5,9 +5,11 @@ import {bindActionCreators} from 'redux';
 import {actions} from '../actions/followersActions';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
+import SelectField from './FormComponents/SelectField';
 import navigationInfoSelector from '../selectors/navigationSelector';
 
 const {PropTypes} = React;
@@ -35,10 +37,6 @@ class EditFollowerModal extends Component {
         this.cfg = props.editMode ? editCfg : newCfg;
     }
 
-    handleSubmit() {
-        this.props.update();
-    }
-
     handleClose() {
         this.props.onClose();
     }
@@ -51,7 +49,7 @@ class EditFollowerModal extends Component {
                 onTouchTap={this.props.onClose}
             />,
             <FlatButton
-                type='submit'
+                onTouchTap={this.props.handleSubmit}
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
@@ -64,13 +62,24 @@ class EditFollowerModal extends Component {
             <Field type='password'
                 placeholder='Password'
                 name='password'
-                component={TextField} />
+                component={TextField} />,
+
+            <Field name='clinic'
+                   label='Clinic'
+                   required={true}
+                   component={SelectField}>
+            {
+                this.props.clinics.map(clinic => (
+                    <MenuItem value={clinic.id} primaryText={clinic.name} />
+                ))
+            }
+            </Field>
         ];
     }
 
     renderForm() {
         return (
-            <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+            <form >
                 <Field type='text'
                        placeholder='Name'
                        name='name'
@@ -102,6 +111,26 @@ class EditFollowerModal extends Component {
 
 let Form = reduxForm({
     form: 'editFollower',
+    validate: (formData) => {
+        let errors = {};
+
+        if (!formData.name)
+            errors.name = 'Required';
+
+        if (!formData.email) {
+            errors.email = 'Required'
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)) {
+            errors.email = 'Invalid email address'
+        }
+
+        if (!formData.password)
+            errors.password = 'Required'
+
+        if (!formData.clinic)
+            errors.clinic = 'Required';
+
+        return errors;
+    }
 })(EditFollowerModal);
 
 function mapStateToProps(state) {
@@ -123,9 +152,27 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(props => (
-    <Form initialValues={props.follower && {
-            name: props.follower.user.name,
-            email: props.follower.user.email
-        }} {...props} />
-))
+export default connect(mapStateToProps, mapDispatchToProps)(props => {
+    function handleCreateSubmit(formData) {
+        props.create(formData);
+    }
+
+    function handleUpdateSubmit(formData) {
+        props.update({...formData, id: props.followerId});
+    }
+
+    function handleSubmit(formData) {
+        if (props.editMode)
+            handleUpdateSubmit(formData);
+        else
+            handleCreateSubmit(formData);
+    }
+
+    return (
+        <Form onSubmit={handleSubmit}
+              initialValues={props.follower && {
+                  name: props.follower.user.name,
+                  email: props.follower.user.email
+              }} {...props} />
+    );
+})

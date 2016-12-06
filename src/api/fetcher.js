@@ -4,12 +4,16 @@ function fetcher(url, options={}) {
                 ...options
             })
             .then(response => {
-                if (response.status === 401)
-                    return Promise.reject({
-                        unauthorized: true
-                    });
+                if (response.status >= 300) {
+                    if (response.status === 401)
+                        return Promise.reject({
+                            unauthorized: true
+                        });
+                    else
+                        return Promise.reject(response);
+                }
 
-                if (!options.emptyResponse)
+                if (!options.emptyResponse && response.status !== 204)
                     return response.json();
             })
             .catch(err => {
