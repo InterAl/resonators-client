@@ -10,6 +10,7 @@ export default createSelector(
         showHamburger: Boolean(loginInfo.loggedIn),
         menuOpen: Boolean(menu.isOpen),
         title: navigation.title,
-        modal: navigation.modal
+        modal: navigation.modal,
+        modalProps: _.get(navigation.modal, 'props')
     })
 )

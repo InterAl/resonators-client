@@ -26,3 +26,7 @@ export function edit({
         }
     });
 }
+
+export function deleteFollower(id) {
+    return fetcher.delete(`/leader_followers/${id}`);
+}

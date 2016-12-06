@@ -79,7 +79,7 @@ class EditFollowerModal extends Component {
 
     renderForm() {
         return (
-            <form >
+            <form autoComplete='off'>
                 <Field type='text'
                        placeholder='Name'
                        name='name'
@@ -134,14 +134,14 @@ let Form = reduxForm({
 })(EditFollowerModal);
 
 function mapStateToProps(state) {
-    let props = _.get(navigationInfoSelector(state), 'modal.props');
-    let follower = _.find(state.followers.followers, f => f.id === props.followerId);
+    let {modalProps: {followerId, editMode}} = navigationInfoSelector(state);
+    let follower = _.find(state.followers.followers, f => f.id === followerId);
     let clinics = state.clinics.clinics;
 
     return {
         follower,
         clinics,
-        editMode: props.editMode
+        editMode
     };
 }
 

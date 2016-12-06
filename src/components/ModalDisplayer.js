@@ -3,9 +3,11 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
+import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 
 const modalMap = {
-    'editFollower': EditFollowerModal
+    'editFollower': EditFollowerModal,
+    'deleteFollower': DeleteFollowerPrompt
 };
 
 class ModalDisplayer extends Component {

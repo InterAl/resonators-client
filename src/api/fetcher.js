@@ -42,4 +42,10 @@ fetcher.put = (url, body) => {
     });
 };
 
+fetcher.delete = (url, body) => {
+    return fetcher(url, {
+        method: 'DELETE'
+    });
+};
+
 export default fetcher;

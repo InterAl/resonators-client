@@ -52,7 +52,7 @@ class Followers extends Component {
                     <IconButton onTouchTap={() => this.props.showEditFollowerModal(f.id)}>
                         <EditIcon/>
                     </IconButton>
-                    <IconButton>
+                    <IconButton onTouchTap={() => this.props.showDeleteFollowerPrompt(f.id)}>
                         <ClearIcon/>
                     </IconButton>
                 </TableRowColumn>
@@ -159,6 +159,12 @@ function mapDispatchToProps(dispatch) {
             name: 'editFollower',
             props: {
                 editMode: false
+            }
+        }),
+        showDeleteFollowerPrompt: followerId => navigationActions.showModal({
+            name: 'deleteFollower',
+            props: {
+                followerId
             }
         })
     }, dispatch);
