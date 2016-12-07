@@ -30,3 +30,7 @@ export function edit({
 export function deleteFollower(id) {
     return fetcher.delete(`/leader_followers/${id}`);
 }
+
+export function getResonators(followerId) {
+    return fetcher(`/leader_followers/${followerId}/reminders.json`);
+}

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import SagaReducerFactory from 'SagaReducerFactory';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/navigationActions';
@@ -17,6 +18,9 @@ const screenToRoute = {
         route: '/react/followers',
         title: 'Followers'
     },
+    'followerResonators': {
+        route: '/react/followers/:followerId/resonators'
+    },
     'login': {
         route: '/react',
         title: 'Resonators'
@@ -28,8 +32,12 @@ const screenToRoute = {
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {
-    let {requestedRoute, replace} = parseNavigationRequestPayload(payload);
-    let {route, title} = getScreenRoute(requestedRoute);
+    let {requestedRoute, replace, params} = parseNavigationRequestPayload(payload);
+    let {route, title} = getScreenRoute(requestedRoute, params);
+
+    if (params) {
+        route = resolveParameterizedRoute(route, params);
+    }
 
     if (payload.replace)
         browserHistory.replace(route);
@@ -57,20 +65,27 @@ handle(types.HIDE_MODAL, function*() {
 });
 
 function parseNavigationRequestPayload(payload) {
-    let replace, route;
+    let replace, route, params;
 
     if (typeof payload === 'string') {
         route = payload;
     } else {
-        route = payload.route;
-        replace = payload.repalce;
+        ({replace, route, params} = payload);
     }
 
-    return { requestedRoute: route, replace };
+    return { requestedRoute: route, replace, params };
 }
 
-function getScreenRoute(screen) {
-    return screenToRoute[screen] || screenToRoute['login'];
+function getScreenRoute(screen, params) {
+    let route = screenToRoute[screen] || screenToRoute['login'];
+    return route;
+}
+
+function resolveParameterizedRoute(route, params) {
+    return _.reduce(_.keys(params), (acc, cur) => {
+        let replaced = acc.replace(`:${cur}`, params[cur]);
+        return replaced;
+    }, route);
 }
 
 export default {saga, reducer};

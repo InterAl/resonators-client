@@ -25,10 +25,15 @@ class Followers extends Component {
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
+        this.handleSelectFollower = this.handleSelectFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
         this.props.filterByClinicId(value);
+    }
+
+    handleSelectFollower(followerId) {
+        this.props.selectFollower(followerId);
     }
 
     renderFollowers() {
@@ -36,7 +41,9 @@ class Followers extends Component {
             <TableRow>
                 <TableRowColumn>
                 <span>
-                    {f.user.name}
+                    <a onClick={() => this.handleSelectFollower(f.id)}>
+                        {f.user.name}
+                    </a>
                 </span>
                 </TableRowColumn>
                 {
@@ -169,7 +176,8 @@ function mapDispatchToProps(dispatch) {
             props: {
                 followerId
             }
-        })
+        }),
+        selectFollower: actions.selectFollower
     }, dispatch);
 }
 

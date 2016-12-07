@@ -3,6 +3,7 @@ import SagaReducerFactory from 'SagaReducerFactory';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
+import { actions as navActions} from '../actions/navigationActions';
 import * as followerApi from '../api/follower';
 
 let followersSelector = state => state.followers.followers;
@@ -43,8 +44,8 @@ handle(types.DELETE, function*(sagaParams, {payload}) {
 
 handle(types.UPDATE, function*(sagaParams, {payload}) {
     yield call(followerApi.edit, payload);
-    let followers = yield select(followersSelector)
-    let follower = _.find(followers, f => f.id === payload.id);
+    let follower = yield getFollower(payload.id);
+
     let updatedFollower = {
         ...follower,
         user: {
@@ -57,6 +58,28 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
     yield updateStateWithNewFollower(updatedFollower);
 });
 
+handle(types.SELECT_FOLLOWER, function*(sagaParams, {payload}) {
+    let follower = yield getFollower(payload);
+
+    if (!follower.resonators) {
+        let followerResonators = yield call(followerApi.getResonators, payload);
+
+        let patchedFollower = {
+            ...follower,
+            resonators: followerResonators
+        };
+
+        yield updateStateWithNewFollower(patchedFollower);
+    }
+
+    yield put(navActions.navigate({
+        route: 'followerResonators',
+        params: {
+            followerId: payload
+        }
+    }));
+});
+
 function* updateStateWithNewFollower(follower) {
     let lastFollowers = yield select(followersSelector);
 
@@ -66,6 +89,11 @@ function* updateStateWithNewFollower(follower) {
     yield put(updateState({
         followers
     }));
+}
+
+function* getFollower(id) {
+    let followers = yield select(followersSelector);
+    return _.find(followers, f => f.id === id);
 }
 
 export default {saga, reducer};
