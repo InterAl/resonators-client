@@ -2,7 +2,6 @@ import _ from 'lodash';
 import SagaReducerFactory from 'SagaReducerFactory';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
-import { actions as navigationActions } from '../actions/navigationActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
 
@@ -30,7 +29,6 @@ handle(types.CREATE, function*(sagaParams, {payload}) {
 
     follower.user.email = payload.email;
     yield updateStateWithNewFollower(follower);
-    yield hideModal();
 });
 
 handle(types.DELETE, function*(sagaParams, {payload}) {
@@ -41,8 +39,6 @@ handle(types.DELETE, function*(sagaParams, {payload}) {
     yield put(updateState({
         followers: followersWithoutDeleted
     }));
-
-    yield hideModal();
 });
 
 handle(types.UPDATE, function*(sagaParams, {payload}) {
@@ -59,7 +55,6 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
     };
 
     yield updateStateWithNewFollower(updatedFollower);
-    yield hideModal();
 });
 
 function* updateStateWithNewFollower(follower) {
@@ -71,10 +66,6 @@ function* updateStateWithNewFollower(follower) {
     yield put(updateState({
         followers
     }));
-}
-
-function* hideModal() {
-    yield put(navigationActions.hideModal());
 }
 
 export default {saga, reducer};

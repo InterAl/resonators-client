@@ -8,6 +8,16 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 class DeleteFollowerPrompt extends Component {
+    constructor() {
+        super();
+
+        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    }
+
+    handleRemoveClick() {
+        this.props.onClose(() => this.props.deleteFollower(this.props.follower.id))
+    }
+
     renderModalButtons() {
         return [
             <FlatButton
@@ -16,7 +26,7 @@ class DeleteFollowerPrompt extends Component {
                 primary={true}
             />,
             <FlatButton
-                onTouchTap={() => this.props.deleteFollower(this.props.follower.id)}
+                onTouchTap={this.handleRemoveClick}
                 label="Remove"
                 primary={true}
                 keyboardFocused={true}
@@ -31,7 +41,7 @@ class DeleteFollowerPrompt extends Component {
 
         return (
             <Dialog
-                open={true}
+                open={this.props.open}
                 title='Delete Follower'
                 modal={false}
                 actions={this.renderModalButtons()}

@@ -81,6 +81,7 @@ class Followers extends Component {
         return (
             <Toggle
                 toggled={this.state.showEmails}
+                style={{top: 8}}
                 label="Show emails"
                 labelPosition='right'
                 onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
@@ -95,7 +96,9 @@ class Followers extends Component {
                     {this.renderShowEmailsToggle()}
                 </ToolbarGroup>
                 <ToolbarGroup>
-                    <FloatingActionButton mini={true} onTouchTap={this.props.showCreateFollowerModal}>
+                    <FloatingActionButton
+                        mini={true}
+                        onTouchTap={this.props.showCreateFollowerModal}>
                         <ContentAdd />
                     </FloatingActionButton>
                 </ToolbarGroup>

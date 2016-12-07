@@ -34,6 +34,8 @@ class EditFollowerModal extends Component {
             doneBtn: 'Create'
         };
 
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.cfg = props.editMode ? editCfg : newCfg;
     }
 
@@ -41,15 +43,19 @@ class EditFollowerModal extends Component {
         this.props.onClose();
     }
 
+    handleSubmit() {
+        this.props.onClose(this.props.handleSubmit);
+    }
+
     renderModalButtons() {
         return [
             <FlatButton
                 label="Cancel"
                 primary={true}
-                onTouchTap={this.props.onClose}
+                onTouchTap={this.handleClose}
             />,
             <FlatButton
-                onTouchTap={this.props.handleSubmit}
+                onTouchTap={this.handleSubmit}
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
@@ -98,7 +104,7 @@ class EditFollowerModal extends Component {
     render() {
         return (
             <Dialog
-                open={true}
+                open={this.props.open}
                 title={this.cfg.title}
                 modal={false}
                 actions={this.renderModalButtons()}
