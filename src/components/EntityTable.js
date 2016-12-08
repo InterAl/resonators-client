@@ -14,12 +14,17 @@ export default class EntityTable extends Component {
     static propTypes = {
         rows: PropTypes.object,
         header: PropTypes.array,
-        actions: PropTypes.array,
+        rowActions: PropTypes.array,
         addButton: PropTypes.bool,
         toolbox: PropTypes.object,
         onAdd: PropTypes.func,
         onEdit: PropTypes.func,
-        onRemove: PropTypes.func
+        onRemove: PropTypes.func,
+        className: PropTypes.string
+    };
+
+    static defaultProps = {
+        className: ''
     };
 
     renderToolbox() {
@@ -52,7 +57,7 @@ export default class EntityTable extends Component {
                             </TableHeaderColumn>
                         );
                     })}
-                    {this.props.actions &&
+                    {this.props.rowActions &&
                     <TableHeaderColumn className='editColumn'>
                         Actions
                     </TableHeaderColumn>}
@@ -91,9 +96,9 @@ export default class EntityTable extends Component {
                                 </TableRowColumn>
                             ))}
 
-                            {this.props.actions &&
+                            {this.props.rowActions &&
                             <TableRowColumn key='actions' className='editColumn'>
-                                {this.props.actions.map((actionName, i) => {
+                                {this.props.rowActions.map((actionName, i) => {
                                     return this.renderAction(actionName, id);
                                 })}
                             </TableRowColumn>}
@@ -106,7 +111,7 @@ export default class EntityTable extends Component {
 
     render() {
         return (
-            <div className='followers row'>
+            <div className={`${this.props.className} row`}>
                 <div className='col-sm-8 col-sm-offset-2'>
                     {(this.props.addButton || this.props.toolbox) &&
                      this.renderToolbox()}

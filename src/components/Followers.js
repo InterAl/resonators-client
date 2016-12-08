@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {actions} from '../actions/followersActions';
 import {bindActionCreators} from 'redux';
@@ -7,13 +8,7 @@ import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import ClearIcon from 'material-ui/svg-icons/content/clear';
-import IconButton from 'material-ui/IconButton';
-import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
-import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import EntityTable from './EntityTable';
 import './Followers.scss';
 
 class Followers extends Component {
@@ -26,6 +21,8 @@ class Followers extends Component {
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
         this.handleSelectFollower = this.handleSelectFollower.bind(this);
+        this.handleEditFollower = this.handleEditFollower.bind(this);
+        this.handleRemoveFollower = this.handleRemoveFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -36,35 +33,12 @@ class Followers extends Component {
         this.props.selectFollower(followerId);
     }
 
-    renderFollowers() {
-        return this.props.followers.map(f => (
-            <TableRow>
-                <TableRowColumn>
-                <span>
-                    <a onClick={() => this.handleSelectFollower(f.id)}>
-                        {f.user.name}
-                    </a>
-                </span>
-                </TableRowColumn>
-                {
-                    this.state.showEmails &&
-                    <TableRowColumn>
-                        {f.user.email}
-                    </TableRowColumn>
-                }
-                <TableRowColumn>
-                    {f.clinicName}
-                </TableRowColumn>
-                <TableRowColumn className='editColumn col-sm-2'>
-                    <IconButton onTouchTap={() => this.props.showEditFollowerModal(f.id)}>
-                        <EditIcon/>
-                    </IconButton>
-                    <IconButton onTouchTap={() => this.props.showDeleteFollowerPrompt(f.id)}>
-                        <ClearIcon/>
-                    </IconButton>
-                </TableRowColumn>
-            </TableRow>
-        ));
+    handleEditFollower(id) {
+        this.props.showEditFollowerModal(id);
+    }
+
+    handleRemoveFollower(id) {
+        this.props.showDeleteFollowerPrompt(id);
     }
 
     renderClinicFilter() {
@@ -95,53 +69,48 @@ class Followers extends Component {
         );
     }
 
-    renderToolbox() {
-        return (
-            <Toolbar>
-                <ToolbarGroup>
-                    {this.renderClinicFilter()}
-                    {this.renderShowEmailsToggle()}
-                </ToolbarGroup>
-                <ToolbarGroup>
-                    <FloatingActionButton
-                        mini={true}
-                        onTouchTap={this.props.showCreateFollowerModal}>
-                        <ContentAdd />
-                    </FloatingActionButton>
-                </ToolbarGroup>
-            </Toolbar>
-        );
+    getHeader() {
+        let header = [];
+        header.push('Name');
+        this.state.showEmails && header.push('Email');
+        header.push('Clinic');
+        return header;
     }
 
-    renderHeader() {
-        return (
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                <TableRow>
-                    <TableHeaderColumn>Name</TableHeaderColumn>
-                    {this.state.showEmails &&
-                    <TableHeaderColumn>
-                        Email
-                    </TableHeaderColumn>}
-                    <TableHeaderColumn>Clinic</TableHeaderColumn>
-                    <TableHeaderColumn className='editColumn'>Actions</TableHeaderColumn>
-                </TableRow>
-            </TableHeader>
-        );
+    getRows() {
+        return _.reduce(this.props.followers, (acc, f) => {
+            let cols = [];
+            cols.push(f.user.name);
+            this.state.showEmails && cols.push(f.user.email);
+            cols.push(f.clinicName);
+            acc[f.id] = cols;
+            return acc;
+        }, {});
+    }
+
+    getToolbox() {
+        return {
+            left: [this.renderClinicFilter(), this.renderShowEmailsToggle()]
+        };
     }
 
     render() {
+        let header = this.getHeader();
+        let rows = this.getRows();
+        let toolbox = this.getToolbox();
+
         return (
-            <div className='followers row'>
-                <div className='col-sm-8 col-sm-offset-2'>
-                    {this.renderToolbox()}
-                    <Table>
-                        {this.renderHeader()}
-                        <TableBody displayRowCheckbox={false}>
-                            {this.renderFollowers()}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
+            <EntityTable
+                header={header}
+                rows={rows}
+                toolbox={toolbox}
+                addButton={true}
+                rowActions={['edit', 'remove']}
+                className='followers'
+                onAdd={this.handleAddFollower}
+                onEdit={this.handleEditFollower}
+                onRemove={this.handleRemoveFollower}
+            />
         );
     }
 }
