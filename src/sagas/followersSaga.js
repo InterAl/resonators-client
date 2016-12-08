@@ -74,9 +74,10 @@ handle(types.SELECT_FOLLOWER, function*(sagaParams, {payload}) {
 
     yield put(navActions.navigate({
         route: 'followerResonators',
-        params: {
+        routeParams: {
             followerId: payload
-        }
+        },
+        title: `${follower.user.name}'s' Resonators`
     }));
 });
 

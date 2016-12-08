@@ -33,11 +33,11 @@ const screenToRoute = {
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {
-    let {requestedRoute, replace, params} = parseNavigationRequestPayload(payload);
-    let {route, title} = getScreenRoute(requestedRoute, params);
+    let {requestedRoute, replace, routeParams, requestedTitle} = parseNavigationRequestPayload(payload);
+    let {route, title} = getScreenRoute(requestedRoute, routeParams);
 
-    if (params) {
-        route = resolveParameterizedRoute(route, params);
+    if (routeParams) {
+        route = resolveParameterizedRoute(route, routeParams);
     }
 
     if (payload.replace)
@@ -46,7 +46,7 @@ handle(types.NAVIGATE, function*(sagaParams, {payload}) {
         browserHistory.push(route);
 
     yield put(updateState({
-        title
+        title: requestedTitle || title
     }));
 });
 
@@ -66,15 +66,15 @@ handle(types.HIDE_MODAL, function*() {
 });
 
 function parseNavigationRequestPayload(payload) {
-    let replace, route, params;
+    let replace, route, routeParams, requestedTitle;
 
     if (typeof payload === 'string') {
         route = payload;
     } else {
-        ({replace, route, params} = payload);
+        ({replace, route, routeParams, title: requestedTitle} = payload);
     }
 
-    return { requestedRoute: route, replace, params };
+    return { requestedRoute: route, replace, routeParams, requestedTitle };
 }
 
 function getScreenRoute(screen, params) {
