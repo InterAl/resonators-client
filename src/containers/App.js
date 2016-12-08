@@ -11,9 +11,6 @@ import React, {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Main from '../components/App';
-import {actions as menuActions} from '../actions/menuActions';
-import loginInfoSelector from '../selectors/loginInfo';
-import navigationSelector from '../selectors/navigationSelector';
 /* Populated by react-webpack-redux:reducer */
 class App extends Component {
   render() {
@@ -29,16 +26,11 @@ App.propTypes = {
 };
 
 function mapStateToProps(state) {
-    return {
-        loginInfo: loginInfoSelector(state),
-        navigationInfo: navigationSelector(state)
-    };
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        toggleMenu: menuActions.toggleMenu
-    }, dispatch);
+    return {dispatch};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

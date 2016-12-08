@@ -1,15 +1,12 @@
 import React from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import RaisedButton from 'material-ui/RaisedButton';
-import AppBar from 'material-ui/AppBar';
-import { Router, browserHistory } from 'react-router';
-import SideMenu from './SideMenu';
-import routes from './Routes';
-import IconButton from 'material-ui/IconButton';
-import Hamburger from 'material-ui/svg-icons/navigation/menu';
-import ModalDisplayer from './ModalDisplayer';
-import './app.css';
+import { Router, Route, browserHistory } from 'react-router';
+import Layout from './Layout';
 import '../static/bootstrap/css/bootstrap.min.css';
+import Followers from './Followers';
+import NoMatch from './NoMatch';
+import Visitor from './Visitor';
+import FollowerResonators from './FollowerResonators';
+import EditResonator from './EditResonator';
 
 const {PropTypes} = React;
 
@@ -21,25 +18,15 @@ class AppComponent extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider>
-          <div className='mainContainer'>
-              <AppBar
-                showMenuIconButton={this.props.navigationInfo.showHamburger}
-                iconElementLeft={
-                    <IconButton onClick={this.props.toggleMenu}>
-                        <Hamburger />
-                    </IconButton>
-                }
-                title={this.props.navigationInfo.title}/>
-              <SideMenu />
-              <div className='screenWrapper'>
-                  <Router history={browserHistory}>
-                    {routes}
-                  </Router>
-                  <ModalDisplayer modal={this.props.navigationInfo.modal} />
-              </div>
-          </div>
-      </MuiThemeProvider>
+      <Router history={browserHistory}>
+          <Route path="/" component={Layout}>
+              <Route path="react" component={Visitor} />
+              <Route path="react/followers" component={Followers} />
+              <Route path="react/followers/:followerId/resonators/new" component={EditResonator} />
+              <Route path="react/followers/:followerId/resonators" component={FollowerResonators}/>
+              <Route path="/*" component={NoMatch} />
+          </Route>
+      </Router>
     );
   }
 }

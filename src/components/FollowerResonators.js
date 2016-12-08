@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
 import moment from 'moment';
+import {browserHistory} from 'react-router';
 
 class FollowerResonators extends Component {
     getHeader() {
@@ -37,11 +38,12 @@ class FollowerResonators extends Component {
     render() {
         let rows = this.getRows();
         let header = this.getHeader();
+        // let addRoute = browserHistory.getCurrentLocation() + '/new';
 
         return (
             <EntityTable
                 selectable={false}
-                onAdd={() => console.log('adding')}
+                onAdd={() => browserHistory.push('/react/followers/6ea556b1-e79d-45d1-85e0-966ef285a6e0/resonators/new')}
                 onEdit={() => console.log('editing')}
                 onRemove={() => console.log('removing')}
                 addButton={true}
