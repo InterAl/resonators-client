@@ -19,7 +19,8 @@ const screenToRoute = {
         title: 'Followers'
     },
     'followerResonators': {
-        route: '/react/followers/:followerId/resonators'
+        route: '/react/followers/:followerId/resonators',
+        title: 'Resonators'
     },
     'login': {
         route: '/react',

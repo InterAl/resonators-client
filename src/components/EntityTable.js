@@ -2,11 +2,13 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
+import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import './EntityTable.scss';
 
 const {PropTypes} = React;
 
@@ -20,11 +22,14 @@ export default class EntityTable extends Component {
         onAdd: PropTypes.func,
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
-        className: PropTypes.string
+        onShow: PropTypes.func,
+        className: PropTypes.string,
+        selectable: PropTypes.bool
     };
 
     static defaultProps = {
-        className: ''
+        className: '',
+        selectable: false
     };
 
     renderToolbox() {
@@ -81,6 +86,13 @@ export default class EntityTable extends Component {
                         <ClearIcon/>
                     </IconButton>
                 );
+
+            case 'show':
+                return (
+                    <IconButton onTouchTap={() => this.props.onShow(id)}>
+                        <ShowIcon/>
+                    </IconButton>
+                );
         }
     }
 
@@ -111,11 +123,11 @@ export default class EntityTable extends Component {
 
     render() {
         return (
-            <div className={`${this.props.className} row`}>
+            <div className={`entity-table ${this.props.className} row`}>
                 <div className='col-sm-8 col-sm-offset-2'>
                     {(this.props.addButton || this.props.toolbox) &&
                      this.renderToolbox()}
-                    <Table>
+                    <Table selectable={this.props.selectable}>
                         {this.renderHeader()}
                         {this.renderBody()}
                     </Table>

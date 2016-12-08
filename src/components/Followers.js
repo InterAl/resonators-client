@@ -23,6 +23,7 @@ class Followers extends Component {
         this.handleSelectFollower = this.handleSelectFollower.bind(this);
         this.handleEditFollower = this.handleEditFollower.bind(this);
         this.handleRemoveFollower = this.handleRemoveFollower.bind(this);
+        this.handleAddFollower = this.handleAddFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -31,6 +32,10 @@ class Followers extends Component {
 
     handleSelectFollower(followerId) {
         this.props.selectFollower(followerId);
+    }
+
+    handleAddFollower() {
+        this.props.showCreateFollowerModal();
     }
 
     handleEditFollower(id) {
@@ -80,7 +85,9 @@ class Followers extends Component {
     getRows() {
         return _.reduce(this.props.followers, (acc, f) => {
             let cols = [];
-            cols.push(f.user.name);
+            cols.push(<a onClick={() => this.handleSelectFollower(f.id)}>
+                        {f.user.name}
+                      </a>);
             this.state.showEmails && cols.push(f.user.email);
             cols.push(f.clinicName);
             acc[f.id] = cols;
