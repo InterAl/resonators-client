@@ -3,10 +3,16 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
+import {actions} from '../actions/followersActions';
 // import moment from 'moment';
 import {browserHistory} from 'react-router';
 
 class FollowerResonators extends Component {
+    componentDidUpdate() {
+        if (this.props.follower)
+            this.props.fetchFollowerResonators(this.props.follower.id);
+    }
+
     getHeader() {
         return [
             'Resonator'
@@ -59,16 +65,16 @@ function mapStateToProps(state, {params: {followerId}}) {
     if (!followerId) return {};
 
     let follower = _.find(state.followers.followers, f => f.id === followerId);
-    let {resonators} = follower;
 
     return {
-        resonators
+        resonators: _.get(follower, 'resonators'),
+        follower
     };
 }
 
 function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
     return bindActionCreators({
-
+        fetchFollowerResonators: actions.fetchFollowerResonators
     }, dispatch);
 }
 

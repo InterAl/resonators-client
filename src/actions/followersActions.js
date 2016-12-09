@@ -6,7 +6,7 @@ const actionsList = [
     'DELETE',
     'EDIT',
     'FILTER_BY_CLINIC_ID',
-    'SELECT_FOLLOWER'
+    'FETCH_FOLLOWER_RESONATORS'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'FOLLOWERS_');

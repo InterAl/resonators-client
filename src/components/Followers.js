@@ -9,6 +9,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
 import EntityTable from './EntityTable';
+import {Link} from 'react-router';
 import './Followers.scss';
 
 class Followers extends Component {
@@ -85,9 +86,7 @@ class Followers extends Component {
     getRows() {
         return _.reduce(this.props.followers, (acc, f) => {
             let cols = [];
-            cols.push(<a onClick={() => this.handleSelectFollower(f.id)}>
-                        {f.user.name}
-                      </a>);
+            cols.push(<Link to={`/react/followers/${f.id}/resonators`}>{f.user.name}</Link>);
             this.state.showEmails && cols.push(f.user.email);
             cols.push(f.clinicName);
             acc[f.id] = cols;

@@ -58,7 +58,7 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
     yield updateStateWithNewFollower(updatedFollower);
 });
 
-handle(types.SELECT_FOLLOWER, function*(sagaParams, {payload}) {
+handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
     let follower = yield getFollower(payload);
 
     if (!follower.resonators) {
@@ -71,14 +71,6 @@ handle(types.SELECT_FOLLOWER, function*(sagaParams, {payload}) {
 
         yield updateStateWithNewFollower(patchedFollower);
     }
-
-    yield put(navActions.navigate({
-        route: 'followerResonators',
-        routeParams: {
-            followerId: payload
-        },
-        title: `${follower.user.name}'s' Resonators`
-    }));
 });
 
 function* updateStateWithNewFollower(follower) {

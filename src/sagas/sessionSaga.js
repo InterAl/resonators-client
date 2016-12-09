@@ -4,6 +4,7 @@ import { actions, types } from '../actions/sessionActions';
 import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';
 import {actions as navigationActions} from '../actions/navigationActions';
+import {browserHistory} from 'react-router';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -58,8 +59,10 @@ function* updateUser(user = {}) {
     }));
 
     if (loggedIn) {
-        yield put(navigationActions.navigate('followers'));
         yield put(actions.loginSuccess());
+
+        if (browserHistory.getCurrentLocation().pathname === '/react/')
+            yield put(navigationActions.navigate('followers'));
     }
 
     return loggedIn;
