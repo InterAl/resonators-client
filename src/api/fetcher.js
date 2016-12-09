@@ -42,7 +42,7 @@ fetcher.put = (url, body) => {
     });
 };
 
-fetcher.delete = (url, body) => {
+fetcher.delete = (url) => {
     return fetcher(url, {
         method: 'DELETE'
     });

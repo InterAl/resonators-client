@@ -19,7 +19,7 @@ class LoginForm extends Component {
                         <Field type='password' name='password' component={TextField}
                                props={{ placeholder: 'Password' }}
                         />
-                        {this.props.submitFailed && "Login failed"}
+                        {this.props.submitFailed && 'Login failed'}
                         <div className='submitBtnWrapper'>
                             <Button
                                 type="submit"

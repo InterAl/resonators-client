@@ -3,7 +3,6 @@ import {actions} from '../actions/sessionActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import LoginForm from './LoginForm';
-import { SubmissionError } from 'redux-form';
 import './Visitor.scss';
 
 class Visitor extends Component {
@@ -25,7 +24,7 @@ class Visitor extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps() {
     return { };
 }
 

@@ -1,5 +1,5 @@
 import SagaReducerFactory from 'SagaReducerFactory';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { actions, types } from '../actions/clinicActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import * as clinicApi from '../api/clinic';

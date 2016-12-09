@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from 'SagaReducerFactory';
-import { call, put, select } from 'redux-saga/effects';
+import { put } from 'redux-saga/effects';
 import { actions, types } from '../actions/navigationActions';
 import {browserHistory} from 'react-router';
 
@@ -33,8 +33,8 @@ const screenToRoute = {
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {
-    let {requestedRoute, replace, routeParams, requestedTitle} = parseNavigationRequestPayload(payload);
-    let {route, title} = getScreenRoute(requestedRoute, routeParams);
+    let {requestedRoute, routeParams, requestedTitle} = parseNavigationRequestPayload(payload);
+    let {route, title} = getScreenRoute(requestedRoute);
 
     if (routeParams) {
         route = resolveParameterizedRoute(route, routeParams);
@@ -77,7 +77,7 @@ function parseNavigationRequestPayload(payload) {
     return { requestedRoute: route, replace, routeParams, requestedTitle };
 }
 
-function getScreenRoute(screen, params) {
+function getScreenRoute(screen) {
     let route = screenToRoute[screen] || screenToRoute['login'];
     return route;
 }

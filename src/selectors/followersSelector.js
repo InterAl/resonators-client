@@ -23,7 +23,7 @@ export default createSelector(
 
 function filterByClinicId(followers, follower) {
     return !followers.filterByClinicId ||
-            followers.filterByClinicId === 'all' || 
+            followers.filterByClinicId === 'all' ||
             follower.clinic_id === followers.filterByClinicId
 }
 

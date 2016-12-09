@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
-import moment from 'moment';
+// import moment from 'moment';
 import {browserHistory} from 'react-router';
 
 class FollowerResonators extends Component {
@@ -29,7 +29,7 @@ class FollowerResonators extends Component {
 
     getRows() {
         return _.reduce(this.props.resonators, (acc, r) => {
-            let updatedAt = moment(r.updated_at).format('DD/MM/YYYY hh:mm');
+            // let updatedAt = moment(r.updated_at).format('DD/MM/YYYY hh:mm');
             acc[r.id] = [this.renderColumn(r)];
             return acc;
         }, {});
@@ -43,7 +43,7 @@ class FollowerResonators extends Component {
         return (
             <EntityTable
                 selectable={false}
-                onAdd={() => browserHistory.push('/react/followers/6ea556b1-e79d-45d1-85e0-966ef285a6e0/resonators/new')}
+                onAdd={() => browserHistory.push('/react/followers/resonators/new')}
                 onEdit={() => console.log('editing')}
                 onRemove={() => console.log('removing')}
                 addButton={true}
@@ -66,7 +66,7 @@ function mapStateToProps(state, {params: {followerId}}) {
     };
 }
 
-function mapDispatchToProps(dispatch, {params: {followerId}}) {
+function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
     return bindActionCreators({
 
     }, dispatch);

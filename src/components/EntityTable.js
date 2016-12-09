@@ -6,8 +6,8 @@ import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
 import IconButton from 'material-ui/IconButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
-import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
+import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import './EntityTable.scss';
 
 const {PropTypes} = React;
@@ -110,7 +110,7 @@ export default class EntityTable extends Component {
 
                             {this.props.rowActions &&
                             <TableRowColumn key='actions' className='editColumn'>
-                                {this.props.rowActions.map((actionName, i) => {
+                                {this.props.rowActions.map(actionName => {
                                     return this.renderAction(actionName, id);
                                 })}
                             </TableRowColumn>}

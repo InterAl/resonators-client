@@ -16,12 +16,12 @@ class EditResonator extends Component {
 
 function mapStateToProps(state) {
     return {
-
+        state
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+    return bindActionCreators({}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditResonator);

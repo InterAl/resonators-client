@@ -94,10 +94,14 @@ class WebpackBaseConfig {
             enforce: 'pre',
             test: /\.js?$/,
             include: this.srcPathAbsolute,
-            loader: 'babel-loader',
-            query: {
-              presets: ['es2015', 'stage-0']
-            }
+            loaders: [{
+                loader: 'babel-loader',
+                query: {
+                  presets: ['es2015', 'stage-0']
+                }
+            }, {
+                loader: 'eslint-loader'
+            }]
           },
           {
             test: /^.((?!cssmodule).)*\.css$/,

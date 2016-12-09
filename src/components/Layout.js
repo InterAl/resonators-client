@@ -7,7 +7,6 @@ import IconButton from 'material-ui/IconButton';
 import SideMenu from './SideMenu';
 import Hamburger from 'material-ui/svg-icons/navigation/menu';
 import ModalDisplayer from './ModalDisplayer';
-import loginInfoSelector from '../selectors/loginInfo';
 import navigationSelector from '../selectors/navigationSelector';
 import {actions as menuActions} from '../actions/menuActions';
 import './app.css';

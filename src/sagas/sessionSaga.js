@@ -14,7 +14,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     }
 });
 
-handle(types.RESUME, function*(sagaParams, action) {
+handle(types.RESUME, function*() {
     let user = yield call(sessionApi.get);
     let loggedIn = yield updateUser(user);
 
