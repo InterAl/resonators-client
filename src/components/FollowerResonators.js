@@ -8,9 +8,18 @@ import {actions} from '../actions/followersActions';
 import {browserHistory} from 'react-router';
 
 class FollowerResonators extends Component {
-    componentDidUpdate() {
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
         if (this.props.follower)
             this.props.fetchFollowerResonators(this.props.follower.id);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.follower)
+            nextProps.fetchFollowerResonators(nextProps.follower.id);
     }
 
     getHeader() {
@@ -44,12 +53,12 @@ class FollowerResonators extends Component {
     render() {
         let rows = this.getRows();
         let header = this.getHeader();
-        // let addRoute = browserHistory.getCurrentLocation() + '/new';
+        let addRoute = browserHistory.getCurrentLocation().pathname + '/new';
 
         return (
             <EntityTable
                 selectable={false}
-                onAdd={() => browserHistory.push('/react/followers/resonators/new')}
+                onAdd={() => browserHistory.push(addRoute)}
                 onEdit={() => console.log('editing')}
                 onRemove={() => console.log('removing')}
                 addButton={true}

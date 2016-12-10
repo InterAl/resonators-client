@@ -3,7 +3,6 @@ import SagaReducerFactory from 'SagaReducerFactory';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
-import { actions as navActions} from '../actions/navigationActions';
 import * as followerApi from '../api/follower';
 
 let followersSelector = state => state.followers.followers;
