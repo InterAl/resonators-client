@@ -1,13 +1,17 @@
+import _ from 'lodash';
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default ({style}) => {
+export default ({style, onClick}) => {
+    let onClickProp = onClick ? {onClick} : {};
+
     return (
         <RaisedButton
-            type='submit'
+            type={onClick ? 'button' : 'submit'}
             label='Next'
             primary={true}
             style={style}
+            {...onClickProp}
         />
     );
 };

@@ -2,7 +2,7 @@ import {ActionCreatorHelper} from 'SagaReducerFactory';
 
 const actionsList = [
     'CREATE',
-    'UPDATE_CREATION_STEP'
+    'ADD_CRITERION'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'RESONATOR_');

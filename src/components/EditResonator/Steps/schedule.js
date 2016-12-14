@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {actions} from '../../../actions/resonatorActions';
+import {actions} from '../../../actions/resonatorCreationActions';
 import {Field} from 'redux-form';
 import TimePicker from 'material-ui/TimePicker';
+import BackButton from './backButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 import CheckboxField from '../../FormComponents/CheckboxField';
 import StepBase from './stepBase';
 import Toggle from '../../FormComponents/ToggleField';
@@ -47,50 +49,59 @@ class EditResonatorSchedule extends Component {
         ));
     }
 
+    renderDivider() {
+        return (
+            <Divider style={{marginTop: 20, marginBottom: 20}}/>
+        );
+    }
     render() {
         return (
-            <div className='edit-resonator-schedule'>
-                <div className='subheader'>
-                    Days active:
-                </div>
-                <div className='days'>
-                    {this.renderDays()}
-                </div>
-                <br/>
-                <Field
-                    name='remindOnADay'
-                    label='Remind on a day'
-                    labelPosition='right'
-                    component={Toggle}
-                />
-                <br/>
-                <Field
-                    name='time'
-                    label='Sending time'
-                    component={
-                        ({input: {value, onChange}}) =>
-                        <TimePicker
-                            autoOk={true}
-                            hintText='Sending Time'
-                            onChange={(e, date) => onChange(date)}
-                            value={value}
+            <div className='edit-resonator-schedule row'>
+                <div className='col-sm-8'>
+                    <div className='subheader'>
+                        Days active:
+                    </div>
+                    <div className='days'>
+                        {this.renderDays()}
+                    </div>
+                    {this.renderDivider()}
+                    <Field
+                        name='time'
+                        label='Sending time'
+                        component={
+                            ({input: {value, onChange}}) =>
+                            <TimePicker
+                                autoOk={true}
+                                hintText='Sending Time'
+                                onChange={(e, date) => onChange(date)}
+                                value={value}
+                            />
+                            }
                         />
-                    }
-                />
-                {this.props.resonatorCreated ? <RaisedButton
-                    primary={true}
-                    label='Next'
-                    onClick={this.props.handleSubmit(this.handleUpdate)}
-                /> : <RaisedButton
-                        primary={true}
-                        label='Create'
-                        onClick={this.props.handleSubmit(this.handleCreate)}
-                    />
-                }
-            </div>
+                        <div className='navButton'>
+                            <BackButton onClick={this.props.onBack} />
+                            {this.props.resonatorCreated ? <RaisedButton
+                                primary={true}
+                                label='Next'
+                                onClick={this.props.handleSubmit(this.handleUpdate)}
+                            /> : <RaisedButton
+                                primary={true}
+                                label='Create'
+                                onClick={this.props.handleSubmit(this.handleCreate)}
+                            />
+                            }
+                        </div>
+                    </div>
+                </div>
         );
     }
 }
+
+EditResonatorSchedule = StepBase({
+    formName: 'EditResonatorSchedule',
+    noNext: true,
+    noBack: true
+})(EditResonatorSchedule);
 
 EditResonatorSchedule = connect(state => ({
     resonatorCreated: state.resonatorCreation.resonator
@@ -98,10 +109,5 @@ EditResonatorSchedule = connect(state => ({
     createResonator: actions.create,
     updateCreationStep: actions.updateCreationStep
 }, dispatch))(EditResonatorSchedule);
-
-EditResonatorSchedule = StepBase({
-    formName: 'EditResonatorSchedule',
-    noNext: true
-})(EditResonatorSchedule);
 
 export default EditResonatorSchedule;

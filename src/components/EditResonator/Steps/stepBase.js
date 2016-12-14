@@ -1,6 +1,6 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
-import {actions} from '../../../actions/resonatorActions';
+import {actions} from '../../../actions/resonatorCreationActions';
 import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import NavButtons from './navButtons';
@@ -30,11 +30,13 @@ export default ({
         }, dispatch);
     }
 
-    function mapStateToProps() {
-        return {};
+    function mapStateToProps(state) {
+        return {
+            initialValues: state.resonatorCreation.formData
+        };
     }
 
-    StepBase = connect(mapStateToProps, mapDispatchToProps)(StepBase);
     StepBase = reduxForm({ form: formName, validate })(StepBase);
+    StepBase = connect(mapStateToProps, mapDispatchToProps)(StepBase);
     return StepBase;
 }

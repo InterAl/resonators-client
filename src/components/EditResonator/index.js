@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
+import {actions} from '../../actions/resonatorCreationActions';
 import BasicStep from './Steps/basic';
 import ScheduleStep from './Steps/schedule';
 import ActivationStep from './Steps/activation';
 import MediaStep from './Steps/media';
+import CriteriaStep from './Steps/Criteria';
+import RaisedButton from 'material-ui/RaisedButton';
 import {
   Stepper, StepLabel, StepContent, Step
 } from 'material-ui/Stepper';
@@ -14,7 +18,7 @@ class EditResonator extends Component {
         super(props);
 
         this.state = {
-            activeStep: 1,
+            activeStep: 4,
             noCreationStep: props.resonator,
             maxCompletedStep: null
         };
@@ -31,6 +35,11 @@ class EditResonator extends Component {
         this.handleNext = this.handleNext.bind(this);
         this.handleBack = this.handleBack.bind(this);
         this.updateActiveStep = this.updateActiveStep.bind(this);
+        this.handleFinalUpdate = this.handleFinalUpdate.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.reset(this.props.params.followerId);
     }
 
     handleNext() {
@@ -39,6 +48,10 @@ class EditResonator extends Component {
 
     handleBack() {
         this.updateActiveStep(this.state.activeStep - 1);
+    }
+
+    handleFinalUpdate() {
+        this.props.updateFinal();
     }
 
     updateActiveStep(activeStep) {
@@ -118,7 +131,7 @@ class EditResonator extends Component {
                     Criteria
                 </StepLabel>
                 <StepContent>
-                    <ScheduleStep
+                    <CriteriaStep
                         onNext={this.handleNext}
                         onBack={this.handleBack}
                     />
@@ -134,10 +147,7 @@ class EditResonator extends Component {
                     Final
                 </StepLabel>
                 <StepContent>
-                    <ScheduleStep
-                        onNext={this.handleNext}
-                        onBack={this.handleBack}
-                    />
+                    <RaisedButton label='Update' onClick={this.handleFinalUpdate} />
                 </StepContent>
             </Step>
         );
@@ -167,4 +177,11 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(EditResonator);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        updateFinal: actions.updateFinal,
+        reset: actions.reset,
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditResonator);

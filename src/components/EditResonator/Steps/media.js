@@ -1,28 +1,46 @@
 import React, {Component} from 'react';
+import {actions} from '../../../actions/resonatorCreationActions';
+import Subheader from 'material-ui/Subheader';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {reduxForm} from 'redux-form';
 import NavButtons from './navButtons';
 
 class EditResonatorMedia extends Component {
+    constructor() {
+        super();
+
+        this.handleFileChange = this.handleFileChange.bind(this);
+    }
+
+    handleFileChange(ev) {
+        this.props.updateCreationStep({
+            imageFile: ev.target.files[0]
+        });
+    }
+
     render() {
         return (
-            <form onSubmit={this.props.handleSubmit(this.props.onNext)}>
+            <div>
+                <Subheader>Upload an image</Subheader>
+
                 <input type="file"
-                       onChange={ev => console.log('zzzz', ev.target.files)}
+                       onChange={this.handleFileChange}
                        accept="image/*" />
 
-                <NavButtons onBack={this.props.onBack}/>
-            </form>
+                <br/>
+
+               <NavButtons onNext={this.props.onNext}
+                           onBack={this.props.onBack}/>
+            </div>
         );
     }
 }
 
-function mapStateToProps() {
-    return {
-        initialValues: {}
-    };
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        updateCreationStep: actions.updateCreationStep
+    }, dispatch);
 }
 
-export default connect(mapStateToProps)(reduxForm({
-    form: 'EditResonatorMedia'
-})(EditResonatorMedia));
+export default connect(() => ({}), mapDispatchToProps)(EditResonatorMedia);
