@@ -78,6 +78,7 @@ class EditResonatorSchedule extends Component {
                             />
                             }
                         />
+                        {!this.props.editMode &&
                         <div className='navButton'>
                             <BackButton onClick={this.props.onBack} />
                             {this.props.resonatorCreated ? <RaisedButton
@@ -90,7 +91,7 @@ class EditResonatorSchedule extends Component {
                                 onClick={this.props.handleSubmit(this.handleCreate)}
                             />
                             }
-                        </div>
+                        </div>}
                     </div>
                 </div>
         );
@@ -98,7 +99,6 @@ class EditResonatorSchedule extends Component {
 }
 
 EditResonatorSchedule = StepBase({
-    formName: 'EditResonatorSchedule',
     noNext: true,
     noBack: true
 })(EditResonatorSchedule);

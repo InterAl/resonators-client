@@ -27,7 +27,6 @@ class EditResonatorBasic extends Component {
 }
 
 export default StepBase({
-    formName: 'EditResonatorBasic',
     noBack: true,
     validate(formData) {
         let errors = {};

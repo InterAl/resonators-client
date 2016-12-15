@@ -14,11 +14,19 @@ import {
 import './index.scss';
 
 class EditResonator extends Component {
+    static propTypes = {
+        editMode: React.PropTypes.bool
+    }
+
+    static defaultProps = {
+        editMode: true
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
-            activeStep: 4,
+            activeStep: 0,
             noCreationStep: props.resonator,
             maxCompletedStep: null
         };
@@ -39,7 +47,8 @@ class EditResonator extends Component {
     }
 
     componentDidMount() {
-        this.props.reset(this.props.params.followerId);
+        const {followerId, resonatorId} = this.props.params;
+        this.props.reset({followerId, resonatorId});
     }
 
     handleNext() {
@@ -61,93 +70,75 @@ class EditResonator extends Component {
         })
     }
 
-    renderBasic(completed) {
-        return (
-            <Step completed={completed}>
-                <StepLabel>
-                    Basic
-                </StepLabel>
-                <StepContent>
-                    <BasicStep
-                        onNext={this.handleNext}
-                    />
-                </StepContent>
-            </Step>
-        );
+    renderBasic() {
+        return {
+            label: 'Basic',
+            content: <BasicStep
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+            />
+        };
     }
 
-    renderActivation(completed) {
-        return (
-            <Step completed={completed}>
-                <StepLabel>
-                    Activation
-                </StepLabel>
-                <StepContent>
-                    <ActivationStep
-                        onNext={this.handleNext}
-                        onBack={this.handleBack}
-                    />
-                </StepContent>
-            </Step>
-        );
+    renderActivation() {
+        return {
+            label: 'Activation',
+            content: <ActivationStep
+                    editMode={this.props.editMode}
+                    onNext={this.handleNext}
+                    onBack={this.handleBack}
+                />
+        };
     }
 
-    renderSchedule(completed) {
-        return (
-            <Step completed={completed}>
-                <StepLabel>
-                    Schedule
-                </StepLabel>
-                <StepContent>
-                    <ScheduleStep
-                        onNext={this.handleNext}
-                        onBack={this.handleBack}
-                    />
-                </StepContent>
-            </Step>
-        );
+    renderSchedule() {
+        return {
+            label: 'Schedule',
+            content: <ScheduleStep
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+            />
+        };
     }
 
-    renderMedia(completed) {
-        return (
-            <Step completed={completed}>
-                <StepLabel>
-                    Media
-                </StepLabel>
-                <StepContent>
-                    <MediaStep
-                        onNext={this.handleNext}
-                        onBack={this.handleBack}
-                    />
-                </StepContent>
-            </Step>
-        );
+    renderMedia() {
+        return {
+            label: 'Media',
+            content: <MediaStep
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+            />
+        };
     }
 
-    renderCriteria(completed) {
-        return (
-            <Step completed={completed}>
-                <StepLabel>
-                    Criteria
-                </StepLabel>
-                <StepContent>
-                    <CriteriaStep
-                        onNext={this.handleNext}
-                        onBack={this.handleBack}
-                    />
-                </StepContent>
-            </Step>
-        );
+    renderCriteria() {
+        return {
+            label: 'Criteria',
+            content: <CriteriaStep
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+            />
+        };
     }
 
-    renderFinal(completed) {
+    renderFinal() {
+        return {
+            label: 'Final',
+            content: <RaisedButton label='Update' onClick={this.handleFinalUpdate} />
+        };
+    }
+
+    renderStep(idx, {label, content}) {
         return (
-            <Step completed={completed}>
+            <Step key={idx} completed={idx <= this.state.maxCompletedStep}>
                 <StepLabel>
-                    Final
+                    {label}
                 </StepLabel>
-                <StepContent>
-                    <RaisedButton label='Update' onClick={this.handleFinalUpdate} />
+                <StepContent active={this.props.editMode}>
+                    {content}
                 </StepContent>
             </Step>
         );
@@ -163,7 +154,7 @@ class EditResonator extends Component {
                         linear={false}
                         activeStep={this.state.activeStep}
                         orientation='vertical'>
-                        {this.steps.map((step, idx) => step(idx <= maxCompletedStep))}
+                        {this.steps.map((step, idx) => this.renderStep(idx, step()))}
                     </Stepper>
                 </div>
             </div>

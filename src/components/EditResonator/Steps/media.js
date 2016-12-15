@@ -30,8 +30,10 @@ class EditResonatorMedia extends Component {
 
                 <br/>
 
-               <NavButtons onNext={this.props.onNext}
+                {!this.props.editMode &&
+                    <NavButtons onNext={this.props.onNext}
                            onBack={this.props.onBack}/>
+                }
             </div>
         );
     }

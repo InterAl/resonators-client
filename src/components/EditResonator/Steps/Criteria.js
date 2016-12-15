@@ -42,10 +42,10 @@ class EditResonatorCriteria extends Component {
                     onAddCriterion={this.handleAddCriterion}
                     onRemoveCriterion={this.handleRemoveCriterion}
                 />
-                <NavButtons
+                {!this.props.editMode && <NavButtons
                     onNext={this.props.onNext}
                     onBack={this.props.onBack}
-                />
+                />}
             </div>
         );
     }

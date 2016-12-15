@@ -25,6 +25,4 @@ class EditResonatorActivation extends Component {
     }
 }
 
-export default StepBase({
-    formName: 'EditResonatorActivation',
-})(EditResonatorActivation);
+export default StepBase()(EditResonatorActivation);

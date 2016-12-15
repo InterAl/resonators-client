@@ -23,6 +23,7 @@ class AppComponent extends React.Component {
               <Route path="react" component={Visitor} />
               <Route path="react/followers" component={Followers} />
               <Route path="react/followers/:followerId/resonators/new" component={EditResonator} />
+              <Route path="react/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
               <Route path="react/followers/:followerId/resonators" component={FollowerResonators}/>
               <Route path="/*" component={NoMatch} />
           </Route>
