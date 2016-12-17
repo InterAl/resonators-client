@@ -42,8 +42,13 @@ class EditFollowerModal extends Component {
         this.props.onClose();
     }
 
-    handleSubmit() {
-        this.props.onClose(this.props.handleSubmit);
+    handleSubmit(formData) {
+        if (this.props.editMode)
+            this.props.update({...formData, id: this.props.followerId});
+        else
+            this.props.create(formData);
+
+        this.props.onClose();
     }
 
     renderModalButtons() {
@@ -54,7 +59,7 @@ class EditFollowerModal extends Component {
                 onTouchTap={this.handleClose}
             />,
             <FlatButton
-                onTouchTap={this.handleSubmit}
+                onTouchTap={this.props.handleSubmit(this.handleSubmit)}
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
@@ -146,7 +151,11 @@ function mapStateToProps(state) {
     return {
         follower,
         clinics,
-        editMode
+        editMode,
+        initialValues: {
+            name: follower.user.name,
+            email: follower.user.email
+        }
     };
 }
 
@@ -157,27 +166,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(props => {
-    function handleCreateSubmit(formData) {
-        props.create(formData);
-    }
-
-    function handleUpdateSubmit(formData) {
-        props.update({...formData, id: props.followerId});
-    }
-
-    function handleSubmit(formData) {
-        if (props.editMode)
-            handleUpdateSubmit(formData);
-        else
-            handleCreateSubmit(formData);
-    }
-
-    return (
-        <Form onSubmit={handleSubmit}
-              initialValues={props.follower && {
-                  name: props.follower.user.name,
-                  email: props.follower.user.email
-              }} {...props} />
-    );
-})
+export default connect(mapStateToProps, mapDispatchToProps)(Form);
