@@ -69,7 +69,8 @@ handle(types.RESET, function*(sagaParams, {payload: {followerId, resonatorId}}) 
     yield put(updateState({
         followerId,
         resonator,
-        formData
+        formData,
+        editMode: !!resonatorId
     }));
 });
 

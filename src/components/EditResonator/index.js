@@ -140,12 +140,14 @@ class EditResonator extends Component {
     }
 
     renderStep(idx, {label, content}) {
+        let activeProp = this.props.editMode ? {active: true} : null;
+
         return (
             <Step key={idx} completed={idx <= this.state.maxCompletedStep}>
                 <StepLabel>
                     {label}
                 </StepLabel>
-                <StepContent active={this.props.editMode}>
+                <StepContent {...activeProp}>
                     {content}
                 </StepContent>
             </Step>
@@ -171,6 +173,7 @@ class EditResonator extends Component {
 function mapStateToProps(state) {
     return {
         resonator: state.resonatorCreation.resonator,
+        editMode: state.resonatorCreation.editMode,
         showSpinnerFinalUpdate: state.resonatorCreation.showSpinnerFinalUpdate
     };
 }
