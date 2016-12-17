@@ -1,6 +1,6 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import SagaReducerFactory from 'SagaReducerFactory';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 import { actions, types } from '../actions/resonatorActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import * as criteriaApi from '../api/criteria';

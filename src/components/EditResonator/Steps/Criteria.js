@@ -15,7 +15,7 @@ class EditResonatorCriteria extends Component {
     }
 
     handleAddCriterion(criterionId) {
-        let {criteria = []} = this.props.formData;
+        let criteria = this.getSelectedCriteria();
 
         let nextCriteria = criteria.concat(criterionId);
 
@@ -25,7 +25,7 @@ class EditResonatorCriteria extends Component {
     }
 
     handleRemoveCriterion(criterionId) {
-        let {criteria = []} = this.props.formData;
+        let criteria = this.getSelectedCriteria();
 
         let nextCriteria = _.reject(criteria, id => id === criterionId);
 
@@ -34,11 +34,16 @@ class EditResonatorCriteria extends Component {
         });
     }
 
+    getSelectedCriteria() {
+        let {criteria = []} = this.props.formData;
+        return criteria;
+    }
+
     render() {
         return (
             <div>
                 <ResonatorCriteriaSelection
-                    resonator={this.props.resonator}
+                    selectedCriteria={this.getSelectedCriteria()}
                     onAddCriterion={this.handleAddCriterion}
                     onRemoveCriterion={this.handleRemoveCriterion}
                 />

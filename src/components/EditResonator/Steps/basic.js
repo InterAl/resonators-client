@@ -6,7 +6,7 @@ import StepBase from './stepBase';
 class EditResonatorBasic extends Component {
     render() {
         return (
-            <form onSubmit={this.props.handleSubmit(this.props.onNext)}>
+            <div>
                 <Field name='title'
                     placeholder='Title'
                     type='text'
@@ -21,7 +21,7 @@ class EditResonatorBasic extends Component {
                     placeholder='Link'
                     type='text'
                     component={TextField} />
-            </form>
+            </div>
         );
     }
 }

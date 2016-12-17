@@ -8,6 +8,7 @@ import ActivationStep from './Steps/activation';
 import MediaStep from './Steps/media';
 import CriteriaStep from './Steps/Criteria';
 import RaisedButton from 'material-ui/RaisedButton';
+import CircularProgress from 'material-ui/CircularProgress';
 import {
   Stepper, StepLabel, StepContent, Step
 } from 'material-ui/Stepper';
@@ -127,7 +128,14 @@ class EditResonator extends Component {
     renderFinal() {
         return {
             label: 'Final',
-            content: <RaisedButton label='Update' onClick={this.handleFinalUpdate} />
+            content: <div className='finalUpdateStep'>
+                        <RaisedButton
+                            primary={true}
+                            label='Update'
+                            onClick={this.handleFinalUpdate} />
+                        {this.props.showSpinnerFinalUpdate &&
+                         <CircularProgress size={30} thickness={3}/>}
+                     </div>
         };
     }
 
@@ -145,8 +153,6 @@ class EditResonator extends Component {
     }
 
     render() {
-        const {maxCompletedStep} = this.state;
-
         return (
             <div className='row edit-resonator'>
                 <div className='col-sm-8 col-sm-offset-2'>
@@ -164,7 +170,8 @@ class EditResonator extends Component {
 
 function mapStateToProps(state) {
     return {
-        resonator: state.resonatorCreation.resonator
+        resonator: state.resonatorCreation.resonator,
+        showSpinnerFinalUpdate: state.resonatorCreation.showSpinnerFinalUpdate
     };
 }
 

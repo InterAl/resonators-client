@@ -9,7 +9,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import CheckboxField from '../../FormComponents/CheckboxField';
 import StepBase from './stepBase';
-import Toggle from '../../FormComponents/ToggleField';
 import moment from 'moment';
 import './schedule.scss';
 
@@ -39,6 +38,7 @@ class EditResonatorSchedule extends Component {
     renderDays() {
         return [0,1,2,3,4,5,6].map(i => (
             <Field
+                key={i}
                 className='day'
                 name={`day${i}`}
                 component={CheckboxField}

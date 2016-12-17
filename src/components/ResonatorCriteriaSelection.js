@@ -1,27 +1,23 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {actions} from '../actions/resonatorCreationActions';
 import {List, ListItem} from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 import Subheader from 'material-ui/Subheader';
-import Icon from 'material-ui/svg-icons/action/question-answer';
 import criteriaSelector from '../selectors/criteriaSelector';
 import './ResonatorCriteriaSelection.scss';
 
 class ResonatorCriteriaSelection extends Component {
     static propTypes = {
-        resonator: React.PropTypes.object,
+        selectedCriteria: React.PropTypes.array,
         onAddCriterion: React.PropTypes.func,
-        onRemoveCriterion: React.func
+        onRemoveCriterion: React.PropTypes.func
     }
 
     static defaultProps = {
         onRemoveCriterion: _.noop,
         onAddCriterion: _.noop,
-        resonator: {
-            questions: []
-        },
+        selectedCriteria: [],
         criteria: []
     }
 
@@ -33,24 +29,21 @@ class ResonatorCriteriaSelection extends Component {
         }
     }
 
-    getAttachedCriteria() {
-        return _.get(this.props.resonator, 'questions', []);
-    }
-
     isCriterionAttached(criterion) {
-        return _.find(this.getAttachedCriteria(),
-                      c => c.id === criterion.id)
+        return _.find(this.props.selectedCriteria,
+                      id => id === criterion.id)
     }
 
     renderCriteria() {
-        return this.props.criteria.map(criterion => {
+        return this.props.criteria.map((criterion, idx) => {
             return (
                 <ListItem
+                    key={idx}
                     className='criterion-selection-item'
                     primaryText={criterion.title}
                     leftCheckbox={
                         <Checkbox
-                            defaultChecked={this.isCriterionAttached(criterion)}
+                            defaultChecked={!!this.isCriterionAttached(criterion)}
                             onCheck={(e, c) => this.handleCheck(criterion.id, c)}
                         />
                     }

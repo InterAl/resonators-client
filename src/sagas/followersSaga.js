@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from 'SagaReducerFactory';
-import { call, put, select } from 'redux-saga/effects';
+import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
@@ -58,10 +58,26 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
 });
 
 handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
-    let follower = yield getFollower(payload);
+    yield fetchFollowerResonators(payload);
+});
+
+export function* waitForFollowers() {
+    let followers;
+
+    do {
+        followers = yield select(followersSelector);
+        if (followers.length > 0)
+            break;
+        else
+            yield take('*');
+    } while (followers.length === 0)
+}
+
+export function* fetchFollowerResonators(followerId) {
+    let follower = yield getFollower(followerId);
 
     if (!follower.resonators) {
-        let followerResonators = yield call(followerApi.getResonators, payload);
+        let followerResonators = yield call(followerApi.getResonators, followerId);
 
         let patchedFollower = {
             ...follower,
@@ -70,7 +86,7 @@ handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
 
         yield updateStateWithNewFollower(patchedFollower);
     }
-});
+}
 
 function* updateStateWithNewFollower(follower) {
     let lastFollowers = yield select(followersSelector);
@@ -80,6 +96,24 @@ function* updateStateWithNewFollower(follower) {
 
     yield put(updateState({
         followers
+    }));
+}
+
+export function* updateResonator(followerId, resonator) {
+    let followers = yield select(followersSelector);
+
+    let follower = _.find(followers, f => f.id === followerId);
+
+    let updatedResonators = _.reject(follower.resonators, r => r.id === resonator.id)
+                             .concat(resonator);
+
+    let updatedFollower = {...follower, updatedResonators};
+
+    let updatedFollowers = _.reject(followers, f => f.id === followerId)
+                            .concat(updatedFollower);
+
+    yield put(updateState({
+        followers: updatedFollowers
     }));
 }
 

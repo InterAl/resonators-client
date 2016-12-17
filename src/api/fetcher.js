@@ -22,13 +22,24 @@ function fetcher(url, options={}) {
             });
 }
 
-fetcher.post = (url, body) => {
+fetcher.post = (url, body, emptyResponse = false) => {
     return fetcher(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        emptyResponse
+    });
+};
+
+fetcher.upload = (url, body) => {
+    return fetcher(url, {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json, text/plain, */*'
+        },
+        body
     });
 };
 
@@ -44,7 +55,8 @@ fetcher.put = (url, body) => {
 
 fetcher.delete = (url) => {
     return fetcher(url, {
-        method: 'DELETE'
+        method: 'DELETE',
+        emptyResponse: true
     });
 };
 

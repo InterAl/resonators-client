@@ -4,4 +4,13 @@
     .navButtons {
     
     }
+
+    .finalUpdateStep {
+        display: flex;
+        alignItems: center;
+
+        >div {
+            margin-right: 12px;
+        }
+    }
 }

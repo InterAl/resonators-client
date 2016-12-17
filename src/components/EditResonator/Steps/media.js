@@ -3,8 +3,8 @@ import {actions} from '../../../actions/resonatorCreationActions';
 import Subheader from 'material-ui/Subheader';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {reduxForm} from 'redux-form';
 import NavButtons from './navButtons';
+import ResonatorImage from '../../ResonatorImage';
 
 class EditResonatorMedia extends Component {
     constructor() {
@@ -23,6 +23,10 @@ class EditResonatorMedia extends Component {
         return (
             <div>
                 <Subheader>Upload an image</Subheader>
+
+                <ResonatorImage resonator={this.props.resonator} />
+
+                <br/>
 
                 <input type="file"
                        onChange={this.handleFileChange}
@@ -45,4 +49,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(() => ({}), mapDispatchToProps)(EditResonatorMedia);
+function mapStateToProps(state) {
+    return {
+        resonator: state.resonatorCreation.resonator
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditResonatorMedia);
