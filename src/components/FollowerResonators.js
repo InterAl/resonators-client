@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
 import {actions} from '../actions/followersActions';
+import ResonatorImage from './ResonatorImage' ;
 // import moment from 'moment';
 import {browserHistory} from 'react-router';
 
@@ -32,7 +33,7 @@ class FollowerResonators extends Component {
         return (
             <div className='row'>
                 <div className='image col-lg-2 col-sm-3 col-xs-6'>
-                    <img src='http://placehold.it/80x80&text=[image]'/>
+                    <ResonatorImage width={80} height={80} resonator={resonator} />
                 </div>
                 <div className='name col-lg-10 col-sm-9 col-xs-6'>
                     <b>{resonator.title}</b><br/>

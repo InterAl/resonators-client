@@ -1,7 +1,7 @@
 import React from 'react';
 import getResonatorImage from '../selectors/getResonatorImage';
 
-export default ({resonator, size: {width = 120, height = 300} = {}}) => {
+export default ({resonator, width = 120, height = 300}) => {
     let url = getResonatorImage(resonator);
 
     return (
