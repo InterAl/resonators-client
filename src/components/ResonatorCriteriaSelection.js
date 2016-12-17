@@ -54,7 +54,7 @@ class ResonatorCriteriaSelection extends Component {
 
     render() {
         return (
-            <div className='resonator-criteria-selection'>
+            <div className='resonator-criteria-selection col-xs-12'>
                 <Subheader>
                     Attach criteria to the resonator (optional)
                 </Subheader>

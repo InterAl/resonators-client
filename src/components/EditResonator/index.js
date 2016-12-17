@@ -7,6 +7,7 @@ import ScheduleStep from './Steps/schedule';
 import ActivationStep from './Steps/activation';
 import MediaStep from './Steps/media';
 import CriteriaStep from './Steps/Criteria';
+import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import {
@@ -131,7 +132,7 @@ class EditResonator extends Component {
             content: <div className='finalUpdateStep'>
                         <RaisedButton
                             primary={true}
-                            label='Update'
+                            label='Submit'
                             onClick={this.handleFinalUpdate} />
                         {this.props.showSpinnerFinalUpdate &&
                          <CircularProgress size={30} thickness={3}/>}
@@ -157,7 +158,10 @@ class EditResonator extends Component {
     render() {
         return (
             <div className='row edit-resonator'>
-                <div className='col-sm-8 col-sm-offset-2'>
+                <div className='col-xs-8 col-sm-8 col-sm-offset-2'>
+                    <Subheader>
+                        {this.props.editMode ? 'Edit Resonator' : 'Create Resonator'}
+                    </Subheader>
                     <Stepper
                         linear={false}
                         activeStep={this.state.activeStep}
