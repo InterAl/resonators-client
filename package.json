@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "copy": "copyfiles -f ./src/index.html ./dist && copyfiles -u 1 \"./src/static/**\" ./dist",
-    "dist": "npm run clean && npm run copy && webpack --progress --bail --env dist -p",
+    "dist": "npm run clean && npm run copy && webpack --progress --bail --env dist -p && cp dist/assets/app.js ../../../../../public/app.js",
     "lint": "eslint ./src",
     "posttest": "npm run lint",
     "release:major": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
