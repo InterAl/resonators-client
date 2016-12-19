@@ -12,7 +12,7 @@ import Main from '../components/App';
 /* Populated by react-webpack-redux:reducer */
 class App extends Component {
   render() {
-    return <Main {...this.props} />;
+    return <Main dispatch={this.props.dispatch} {...this.props} />;
   }
 }
 /* Populated by react-webpack-redux:reducer

@@ -56,6 +56,7 @@ class FollowerResonators extends Component {
         let header = this.getHeader();
         let addRoute = browserHistory.getCurrentLocation().pathname + '/new';
         let getEditRoute = id => `${browserHistory.getCurrentLocation().pathname}/${id}/edit`;
+        let showRoute = id => `${browserHistory.getCurrentLocation().pathname}/${id}/show`;
 
         return (
             <EntityTable
@@ -63,6 +64,7 @@ class FollowerResonators extends Component {
                 onAdd={() => browserHistory.push(addRoute)}
                 onEdit={id => browserHistory.push(getEditRoute(id))}
                 onRemove={() => console.log('removing')}
+                onShow={id => browserHistory.push(showRoute(id))}
                 addButton={true}
                 rowActions={['show', 'edit', 'remove']}
                 header={header}

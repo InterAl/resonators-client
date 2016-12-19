@@ -76,6 +76,11 @@ export function* waitForFollowers() {
 export function* fetchFollowerResonators(followerId) {
     let follower = yield getFollower(followerId);
 
+    if (!follower)
+        yield waitForFollowers();
+
+    follower = yield getFollower(followerId);
+
     if (!follower.resonators) {
         let followerResonators = yield call(followerApi.getResonators, followerId);
 

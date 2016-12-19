@@ -1,0 +1,31 @@
+.resonator-criteria {
+    margin: 10px 0;
+
+    .list {
+        border: 1px solid rgba(0,0,0,0.1);
+
+        .listitem-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 93%;
+        }
+
+        .buttons-row {
+            display: flex !important;
+            width: 75px !important;
+            margin: 0 18px !important;
+
+            button {
+            }
+        }
+
+        button {
+            margin: 0 !important;
+        }
+
+        >div {
+            margin-bottom: 10px;
+        }
+    }
+}
