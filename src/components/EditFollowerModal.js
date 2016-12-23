@@ -148,15 +148,19 @@ function mapStateToProps(state) {
     let follower = _.find(state.followers.followers, f => f.id === followerId);
     let clinics = state.clinics.clinics;
 
-    return {
+    let ret = {
         follower,
         clinics,
-        editMode,
-        initialValues: {
+        editMode
+    };
+
+    if (follower)
+        ret.initialValues = {
             name: follower.user.name,
             email: follower.user.email
-        }
-    };
+        };
+
+    return ret;
 }
 
 function mapDispatchToProps(dispatch) {

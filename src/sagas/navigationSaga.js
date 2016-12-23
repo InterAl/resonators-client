@@ -29,6 +29,10 @@ const screenToRoute = {
     'logout': {
         route: '/react/',
         title: 'Resonators'
+    },
+    'clinic': {
+        route: '/react/followers',
+        title: 'Clinics'
     }
 };
 
