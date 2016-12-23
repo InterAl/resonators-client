@@ -26,9 +26,10 @@ class ShowResonator extends Component {
 
         return (
             <div className='showResonator col-xs-12 col-md-10 col-md-offset-1 col-sm-offset-2 col-sm-8'>
+                {_.size(this.props.resonator.questions) > 0 &&
                 <ResonatorCriteria
                     resonator={this.props.resonator}
-                />
+                />}
                 <iframe
                     style={{
                         height: this.state.iframeHeight,

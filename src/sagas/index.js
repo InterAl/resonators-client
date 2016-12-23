@@ -13,7 +13,8 @@ export const sagas = createRootSaga([
     require('./followersSaga').default.saga,
     require('./navigationSaga').default.saga,
     require('./resonatorCreation').default.saga,
-    require('./criteriaSaga').default.saga
+    require('./criteriaSaga').default.saga,
+    require('./resonatorStatsSaga').default.saga
 ], {});
 
 export const reducers = combineReducers({
@@ -24,5 +25,6 @@ export const reducers = combineReducers({
     navigation: require('./navigationSaga').default.reducer,
     resonatorCreation: require('./resonatorCreation').default.reducer,
     criteria: require('./criteriaSaga').default.reducer,
+    resonatorStats: require('./resonatorStatsSaga').default.reducer,
     form: formReducer
 });
