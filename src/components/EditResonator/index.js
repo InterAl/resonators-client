@@ -133,7 +133,7 @@ class EditResonator extends Component {
                         <RaisedButton
                             primary={true}
                             label='Submit'
-                            onClick={this.handleFinalUpdate} />
+                            onTouchTap={this.handleFinalUpdate} />
                         {this.props.showSpinnerFinalUpdate &&
                          <CircularProgress size={30} thickness={3}/>}
                      </div>

@@ -23,7 +23,7 @@ class LoginForm extends Component {
                         <div className='submitBtnWrapper'>
                             <Button
                                 type="submit"
-                                onClick={this.submitForm}
+                                onTouchTap={this.submitForm}
                                 className='submitBtn'
                                 label='submit'
                                 primary={true} />

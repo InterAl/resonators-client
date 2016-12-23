@@ -26,7 +26,7 @@ class Layout extends Component {
                     <AppBar
                       showMenuIconButton={this.props.navigationInfo.showHamburger}
                       iconElementLeft={
-                          <IconButton onClick={this.props.toggleMenu}>
+                          <IconButton onTouchTap={this.props.toggleMenu}>
                               <Hamburger />
                           </IconButton>
                       }

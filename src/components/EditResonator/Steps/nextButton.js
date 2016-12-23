@@ -1,12 +1,12 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default ({style, onClick}) => {
-    let onClickProp = onClick ? {onClick} : {};
+export default ({style, onTouchTap}) => {
+    let onClickProp = onTouchTap ? {onTouchTap} : {};
 
     return (
         <RaisedButton
-            type={onClick ? 'button' : 'submit'}
+            type={onTouchTap ? 'button' : 'submit'}
             label='Next'
             primary={true}
             style={style}

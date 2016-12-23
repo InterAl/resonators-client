@@ -28,7 +28,7 @@ export default class ResonatorCriteria extends Component {
     }
 
     renderChartIcon(qid) {
-        return <IconButton onClick={() => this.handleShowChart(qid)}
+        return <IconButton onTouchTap={() => this.handleShowChart(qid)}
                            style={{width:48, height: 48}} tooltip='Show Chart'>
                    <ChartIcon size='large' style={{width: 128, height: 128}}/>
                 </IconButton>
@@ -45,7 +45,7 @@ export default class ResonatorCriteria extends Component {
                         {this.renderChartIcon(qid)}
                         <IconButton
                             tooltip='Download Chart'
-                            onClick={() => this.handleDownloadChart(question.id)}>
+                            onTouchTap={() => this.handleDownloadChart(question.id)}>
                             <DownloadChartIcon />
                         </IconButton>
                     </div>

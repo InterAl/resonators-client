@@ -23,21 +23,21 @@ class SideMenu extends Component {
                 <div className='sideMenu'>
                     <AppBar
                         iconElementLeft={
-                            <IconButton onClick={this.props.toggleMenu}>
+                            <IconButton onTouchTap={this.props.toggleMenu}>
                                 <CloseIcon />
                             </IconButton>
                         }
                     />
                     <List>
-                        <ListItem onClick={() => this.props.clickMenuItem('followers')}
+                        <ListItem onTouchTap={() => this.props.clickMenuItem('followers')}
                                   primaryText='Followers'
                                   leftIcon={<FollowerIcon/>} />
-                        <ListItem onClick={() => this.props.clickMenuItem('clinic')}
+                        <ListItem onTouchTap={() => this.props.clickMenuItem('clinic')}
                                   primaryText='Clinic'
                                   leftIcon={<ClinicIcon/>}
                         />
                         <Divider style={{marginTop: 12, marginBottom: 12}}/>
-                        <ListItem onClick={() => this.props.clickMenuItem('logout')}
+                        <ListItem onTouchTap={() => this.props.clickMenuItem('logout')}
                                   primaryText='Logout'
                                   style={{color: '#ff4444'}}
                                   leftIcon={<LogoutIcon color='#ff4444'/>}/>
