@@ -54,7 +54,7 @@ function aggregateChart(allAnswers) {
         acc.push({
             question_id: 'sumAggregation',
             time,
-            rank,
+            rank
         });
 
         return acc;
@@ -67,7 +67,7 @@ function aggregateChart(allAnswers) {
         title: 'Sum Aggregation',
         answers: [{
             body: '',
-            rank: _.min(ranks)
+            rank: 0
         }, {
             body: '',
             rank: _.max(ranks)
