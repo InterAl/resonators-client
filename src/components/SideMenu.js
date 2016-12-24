@@ -43,7 +43,10 @@ class SideMenu extends Component {
                                           onTouchTap={() => this.props.clickMenuItem('clinic')}
                                           primaryText='Clinics List'
                                           leftIcon={<ListIcon/>}/>,
-                                      <ListItem primaryText='Criteria' leftIcon={<CriteriaIcon/>}/>
+                                      <ListItem
+                                          onTouchTap={() => this.props.clickMenuItem('criteriaCreation')}
+                                          primaryText='Criteria'
+                                          leftIcon={<CriteriaIcon/>}/>
                                   ]}
                         />
                         <Divider style={{marginTop: 12, marginBottom: 12}}/>

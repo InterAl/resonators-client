@@ -30,8 +30,8 @@ const screenToRoute = {
         route: '/react/',
         title: 'Resonators'
     },
-    'clinic': {
-        route: '/react/followers',
+    'criteriaCreation': {
+        route: '/react/clinics/criteria/new',
         title: 'Clinics'
     }
 };

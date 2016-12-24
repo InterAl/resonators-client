@@ -8,6 +8,8 @@ import ResonatorImage from './ResonatorImage' ;
 import ResonatorCriteria from './ResonatorCriteria';
 import {browserHistory} from 'react-router';
 import resonatorsSelector from '../selectors/resonatorsSelector';
+import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
+import ExpandableCard from './ExpandableCard';
 import './ShowResonator.scss';
 
 class ShowResonator extends Component {
@@ -30,14 +32,16 @@ class ShowResonator extends Component {
                 <ResonatorCriteria
                     resonator={this.props.resonator}
                 />}
-                <iframe
-                    style={{
-                        height: this.state.iframeHeight,
-                        width: this.state.iframeWidth
-                    }}
-                    style={{height: '100vh', border: 0}}
-                    src={`/reminders/${this.props.params.resonatorId}/render`}
-                />
+                <ExpandableCard
+                    id='resonatorPreview'
+                    title='Resonator Preview'
+                    avatar={<ShowIcon/>}
+                >
+                    <iframe
+                        style={{border: 0, height:800}}
+                        src={`/reminders/${this.props.params.resonatorId}/render`}
+                    />
+                </ExpandableCard>
             </div>
         );
     }
