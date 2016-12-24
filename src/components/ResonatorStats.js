@@ -5,6 +5,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import ExpandableCard from './ExpandableCard';
+import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';
 
 class ResonatorStats extends Component {
@@ -15,18 +17,18 @@ class ResonatorStats extends Component {
     constructor() {
         super();
 
-        this.renderChart = this.renderChart.bind(this);
+        this.renderCard = this.renderCard.bind(this);
     }
 
     componentWillMount() {
         this.props.fetchResonatorStats({
-            resonatorId: this.props.params.resonatorId
+            resonatorId: this.props.resonatorId
         });
     }
 
     renderQuestionLegend(question) {
         return (
-            <Table>
+            <Table style={{width:500, margin: '0 auto', marginTop: 36}}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                     <TableRow>
                         <TableHeaderColumn colSpan='2'
@@ -62,47 +64,61 @@ class ResonatorStats extends Component {
     }
 
     renderChart(question) {
+        return [
+            <div style={{height: 500, paddingRight: 30}}>
+                <ResponsiveContainer>
+                    <LineChart data={question.followerAnswers}>
+                        <XAxis dataKey="time"/>
+                        <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]}/>
+                        <Tooltip/>
+                        <Legend/>
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                        <Line type="linear" dataKey="rank" stroke="#82ca9d" />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>,
+            <div>
+                {this.renderQuestionLegend(question)}
+            </div>
+        ];
+    }
+
+    renderEmptyState() {
         return (
-            <div className='resonator-stats-chart row'>
-                <div className='col-sm-2'>
-                    {this.renderQuestionLegend(question)}
-                </div>
-                <div className='col-sm-10' style={{height: 400}}>
-                    <ResponsiveContainer>
-                        <LineChart data={question.followerAnswers}>
-                            <XAxis dataKey="time"/>
-                            <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]}/>
-                            <Tooltip/>
-                            <Legend/>
-                            <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-                            <Line type="linear" dataKey="rank" stroke="#82ca9d" />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
+            <div style={{textAlign: 'center', padding: 20}}>
+                No feedback has been given for this criterion.
+            </div>
+        );
+    }
+
+    renderCard(question) {
+        return (
+            <div className='row' style={{marginBottom: 10}}>
+                <ExpandableCard
+                    id={`resonatorStats_${question.id}`}
+                    title={question.title}
+                    width='100%'
+                    avatar={<ChartIcon/>}
+                >
+                    {_.isEmpty(question.followerAnswers) ?
+                        this.renderEmptyState() : this.renderChart(question)}
+                </ExpandableCard>
             </div>
         )
     }
 
     render() {
         return <div className='resonator-stats-wrapper'>
-                   {_.map(this.props.stats, this.renderChart)}
+                   {_.map(this.props.stats, this.renderCard)}
                </div>
     }
 }
 
 function mapStateToProps(state, ownProps) {
-    let {resonatorId, qid} = ownProps.params;
-
-    let resonatorStats = state.resonatorStats.stats[resonatorId];
-
-    let filteredQuestions = _(resonatorStats)
-                                .map((q, qid) => ({q, qid}))
-                                .filter(q => qid === 'all' || q.qid === qid)
-                                .map(q => q.q)
-                                .value();
+    let stats = state.resonatorStats.stats[ownProps.resonatorId];
 
     return {
-        stats: filteredQuestions
+        stats
     };
 }
 
