@@ -29,24 +29,6 @@ class ResonatorStats extends Component {
     renderQuestionLegend(question) {
         return (
             <Table style={{width:500, margin: '0 auto', marginTop: 36}}>
-                <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
-                    <TableRow>
-                        <TableHeaderColumn colSpan='2'
-                            style={{whiteSpace: 'normal', textOverflow: 'inherit', paddingBottom: 10}}>
-                            <b>{question.title}</b><br/>
-                            <br/>
-                            {question.description}
-                        </TableHeaderColumn>
-                    </TableRow>
-                    <TableRow>
-                        <TableHeaderColumn>
-                            Rank
-                        </TableHeaderColumn>
-                        <TableHeaderColumn>
-                            Answer
-                        </TableHeaderColumn>
-                    </TableRow>
-                </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                     {_.map(question.answers, a => (
                         <TableRow>
@@ -77,9 +59,12 @@ class ResonatorStats extends Component {
                     </LineChart>
                 </ResponsiveContainer>
             </div>,
-            <div>
+            <ExpandableCard
+                id={`resonatorStats_${question.id}_legend`}
+                title='Legend'
+            >
                 {this.renderQuestionLegend(question)}
-            </div>
+            </ExpandableCard>
         ];
     }
 
@@ -97,6 +82,7 @@ class ResonatorStats extends Component {
                 <ExpandableCard
                     id={`resonatorStats_${question.id}`}
                     title={question.title}
+                    subtitle={question.description}
                     width='100%'
                     avatar={<ChartIcon/>}
                 >

@@ -11,6 +11,7 @@ class ExpandableCard extends Component {
         subtitle: React.PropTypes.string,
         width: React.PropTypes.number,
         margin: React.PropTypes.any,
+        style: React.PropTypes.object,
         avatar: React.PropTypes.any,
         id: React.PropTypes.string
     };
@@ -18,6 +19,7 @@ class ExpandableCard extends Component {
     static defaultProps = {
         width: 400,
         margin: '0 auto',
+        style: {},
         cardData: {}
     };
 
@@ -38,7 +40,7 @@ class ExpandableCard extends Component {
         let {expanded} = this.props.cardData;
 
         return (
-            <Card style={{width: this.props.width, margin: this.props.margin}}
+            <Card style={{width: this.props.width, margin: this.props.margin, ...this.props.style}}
                   expanded={expanded}
                   onExpandChange={this.handleExpandChange}
             >
