@@ -13,14 +13,16 @@ class ExpandableCard extends Component {
         margin: React.PropTypes.any,
         style: React.PropTypes.object,
         avatar: React.PropTypes.any,
-        id: React.PropTypes.string
+        id: React.PropTypes.string,
+        onExpandChange: React.PropTypes.func
     };
 
     static defaultProps = {
         width: 400,
         margin: '0 auto',
         style: {},
-        cardData: {}
+        cardData: {},
+        onExpandChange: _.noop
     };
 
     constructor() {
@@ -34,6 +36,8 @@ class ExpandableCard extends Component {
             this.props.expand(this.props.id);
         else
             this.props.contract(this.props.id);
+
+        this.props.onExpandChange(expanded);
     }
 
     render() {
