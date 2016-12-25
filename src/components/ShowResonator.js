@@ -46,25 +46,27 @@ class ShowResonator extends Component {
 
         return (
             <div className='showResonator col-xs-12 col-md-10 col-md-offset-1 col-sm-offset-2 col-sm-8'>
-                <ExpandableCard
-                    onExpandChange={expanded => !expanded && this.setState({
-                        iframeWidth: 0, iframeHeight: 0
-                    })}
-                    id={`resonatorPreview-${resonatorId}`}
-                    title='Resonator Preview'
-                    avatar={<ShowIcon/>}
-                >
-                    <div>
-                        {!this.state.iframeHeight &&
-                        <CircularProgress style={{margin: '0 auto', display: 'block'}}/>}
+                <div className='row'>
+                    <ExpandableCard
+                        onExpandChange={expanded => !expanded && this.setState({
+                            iframeWidth: 0, iframeHeight: 0
+                        })}
+                        id={`resonatorPreview-${resonatorId}`}
+                        title='Resonator Preview'
+                        avatar={<ShowIcon/>}
+                    >
+                        <div>
+                            {!this.state.iframeHeight &&
+                            <CircularProgress style={{margin: '0 auto', display: 'block'}}/>}
 
-                        <iframe
-                            onLoad={this.handleIframeLoad}
-                            style={{border: 0, height: this.state.iframeHeight}}
-                            src={`/reminders/${resonatorId}/render`}
-                        />
-                    </div>
-                </ExpandableCard>
+                            <iframe
+                                onLoad={this.handleIframeLoad}
+                                style={{border: 0, height: this.state.iframeHeight}}
+                                src={`/reminders/${resonatorId}/render`}
+                            />
+                        </div>
+                    </ExpandableCard>
+                </div>
                 {_.size(this.props.resonator.questions) > 0 && (
                     <div>
                         <hr/>
