@@ -10,7 +10,8 @@ import FollowerResonators from './FollowerResonators';
 import EditResonator from './EditResonator';
 import ShowResonator from './ShowResonator';
 import ResonatorStats from './ResonatorStats';
-import CriteriaCreation from './CriteriaCreation';
+import CriteriaList from './CriteriaList';
+import CriteriaCreation from './CriteriaCreation/index';
 
 const {PropTypes} = React;
 
@@ -32,6 +33,8 @@ class AppComponent extends React.Component {
               <Route path="react/followers/:followerId/resonators" component={FollowerResonators}/>
               <Route path="react/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
               <Route path="react/clinics/criteria/new" component={CriteriaCreation}/>
+              <Route path="react/clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
+              <Route path="react/clinics/criteria" component={CriteriaList}/>
               <Route path="/*" component={NoMatch} />
           </Route>
       </Router>

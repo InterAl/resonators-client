@@ -33,6 +33,10 @@ const screenToRoute = {
     'criteriaCreation': {
         route: '/react/clinics/criteria/new',
         title: 'Clinics'
+    },
+    'criteriaList': {
+        route: '/react/clinics/criteria',
+        title: 'Clinic Criteria'
     }
 };
 

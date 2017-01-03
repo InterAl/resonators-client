@@ -44,8 +44,8 @@ class SideMenu extends Component {
                                           primaryText='Clinics List'
                                           leftIcon={<ListIcon/>}/>,
                                       <ListItem
-                                          onTouchTap={() => this.props.clickMenuItem('criteriaCreation')}
-                                          primaryText='Criteria'
+                                          onTouchTap={() => this.props.clickMenuItem('criteriaList')}
+                                          primaryText='Criteria List'
                                           leftIcon={<CriteriaIcon/>}/>
                                   ]}
                         />

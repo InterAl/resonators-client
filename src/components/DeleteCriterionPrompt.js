@@ -2,12 +2,12 @@ import _ from 'lodash';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {actions} from '../actions/followersActions';
+import {actions} from '../actions/criteriaActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
 import FlatButton from 'material-ui/FlatButton';
 import DeletePrompt from './DeletePrompt';
 
-class DeleteFollowerPrompt extends Component {
+class DeleteCriterionPrompt extends Component {
     constructor() {
         super();
 
@@ -15,18 +15,18 @@ class DeleteFollowerPrompt extends Component {
     }
 
     handleRemoveClick() {
-        this.props.deleteFollower(this.props.follower.id);
+        this.props.deleteCriterion(this.props.criterion.id);
     }
 
     render() {
-        if (!this.props.follower) return null;
+        if (!this.props.criterion) return null;
 
-        let {follower: {user: {name}}} = this.props;
+        let {criterion: {title}} = this.props;
 
         return (
             <DeletePrompt
-                title='Delete Follower'
-                text={`Delete ${name}?`}
+                title='Delete Criterion?'
+                text={`Delete ${title}?`}
                 onDelete={this.handleRemoveClick}
                 onClose={this.props.onClose}
                 open={this.props.open}
@@ -36,18 +36,18 @@ class DeleteFollowerPrompt extends Component {
 }
 
 function mapStateToProps(state) {
-    let {modalProps: {followerId}} = navigationInfoSelector(state);
-    let follower = _.find(state.followers.followers, f => f.id === followerId);
+    let {modalProps: {criterionId}} = navigationInfoSelector(state);
+    let criterion = _.find(state.criteria.criteria, c => c.id === criterionId);
 
     return {
-        follower
+        criterion
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        deleteFollower: actions.delete
+        deleteCriterion: actions.deleteCriterion,
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeleteFollowerPrompt);
+export default connect(mapStateToProps, mapDispatchToProps)(DeleteCriterionPrompt);
