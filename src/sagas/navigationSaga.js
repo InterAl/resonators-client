@@ -18,6 +18,10 @@ const screenToRoute = {
         route: '/react/followers',
         title: 'Followers'
     },
+    'clinics': {
+        route: '/react/clinics',
+        title: 'Clinics'
+    },
     'followerResonators': {
         route: '/react/followers/:followerId/resonators',
         title: 'Resonators'

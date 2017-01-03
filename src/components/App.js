@@ -4,6 +4,7 @@ import { Router, Route, browserHistory } from 'react-router';
 import Layout from './Layout';
 import '../static/bootstrap/css/bootstrap.min.css';
 import Followers from './Followers';
+import Clinics from './Clinics';
 import NoMatch from './NoMatch';
 import Visitor from './Visitor';
 import FollowerResonators from './FollowerResonators';
@@ -32,6 +33,7 @@ class AppComponent extends React.Component {
               <Route path="react/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
               <Route path="react/followers/:followerId/resonators" component={FollowerResonators}/>
               <Route path="react/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
+              <Route path="react/clinics" component={Clinics}/>
               <Route path="react/clinics/criteria/new" component={CriteriaCreation}/>
               <Route path="react/clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
               <Route path="react/clinics/criteria" component={CriteriaList}/>

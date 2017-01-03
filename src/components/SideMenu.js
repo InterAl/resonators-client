@@ -40,7 +40,7 @@ class SideMenu extends Component {
                                   primaryTogglesNestedList={true}
                                   nestedItems={[
                                       <ListItem
-                                          onTouchTap={() => this.props.clickMenuItem('clinic')}
+                                          onTouchTap={() => this.props.clickMenuItem('clinics')}
                                           primaryText='Clinics List'
                                           leftIcon={<ListIcon/>}/>,
                                       <ListItem
