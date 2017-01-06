@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'SagaReducerFactory';
+import SagaReducerFactory from 'saga-reducer-factory';
 import { put } from 'redux-saga/effects';
 import { actions, types } from '../actions/navigationActions';
 import {browserHistory} from 'react-router';

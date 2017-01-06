@@ -1,4 +1,4 @@
-import {ActionCreatorHelper} from 'SagaReducerFactory';
+import {ActionCreatorHelper} from 'saga-reducer-factory';
 
 const actionsList = [
     'TOGGLE_MENU',

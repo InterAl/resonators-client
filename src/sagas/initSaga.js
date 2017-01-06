@@ -1,5 +1,5 @@
 import { put } from 'redux-saga/effects';
-import SagaReducerFactory from 'SagaReducerFactory';
+import SagaReducerFactory from 'saga-reducer-factory';
 import { actions, types } from '../actions/initActions';
 import { actions as sessionActions } from '../actions/sessionActions';
 

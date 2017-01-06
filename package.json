@@ -88,6 +88,7 @@
     "redux-logger": "^2.7.4",
     "redux-saga": "^0.13.0",
     "reselect": "^2.5.4",
+    "saga-reducer-factory": "^1.0.2",
     "webpack": "^2.1.0-beta.6",
     "whatwg-fetch": "^2.0.1"
   }

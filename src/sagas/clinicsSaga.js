@@ -1,4 +1,4 @@
-import SagaReducerFactory from 'SagaReducerFactory';
+import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put } from 'redux-saga/effects';
 import { actions, types } from '../actions/clinicActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';

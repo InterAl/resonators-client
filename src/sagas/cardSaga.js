@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'SagaReducerFactory';
+import SagaReducerFactory from 'saga-reducer-factory';
 import { put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/cardActions';
 

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'SagaReducerFactory';
+import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put, select } from 'redux-saga/effects';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import { actions, types } from '../actions/criteriaActions';
