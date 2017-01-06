@@ -50,6 +50,16 @@ handle(types.LOGOUT, function*() {
     }
 });
 
+handle(types.REGISTER, function*(sagaParams, {payload}) {
+    try {
+        let user = yield call(sessionApi.register, payload.email, payload.name, payload.password);
+        yield updateUser(user);
+        yield put(navigationActions.hideModal());
+    } catch (err) {
+        console.error('registration failed', err);
+    }
+});
+
 function* updateUser(user = {}) {
     const loggedIn = new Date(user.expires_at) > new Date();
 

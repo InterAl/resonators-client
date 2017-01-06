@@ -6,11 +6,13 @@ import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 import DeleteCriterionPrompt from './DeleteCriterionPrompt';
+import RegistrationModal from './RegistrationModal';
 
 const modalMap = {
     'editFollower': EditFollowerModal,
     'deleteFollower': DeleteFollowerPrompt,
-    'deleteCriterion': DeleteCriterionPrompt
+    'deleteCriterion': DeleteCriterionPrompt,
+    'registration': RegistrationModal
 };
 
 class ModalDisplayer extends Component {

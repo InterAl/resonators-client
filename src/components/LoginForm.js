@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actions as navigationActions} from '../actions/navigationActions';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
 import { Field, reduxForm } from 'redux-form';
@@ -28,6 +31,14 @@ class LoginForm extends Component {
                                 label='submit'
                                 primary={true} />
                         </div>
+
+                        <Button
+                            type="button"
+                            onTouchTap={this.props.showRegistrationModal}
+                            className="registerBtn"
+                            labelStyle={{fontSize: 12}}
+                            label='No account? Register here'
+                        />
                     </form>
                 </CardText>
             </Card>
@@ -35,6 +46,14 @@ class LoginForm extends Component {
     }
 }
 
-export default (reduxForm({
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        showRegistrationModal: () => navigationActions.showModal({
+            name: 'registration'
+        })
+    }, dispatch);
+}
+
+export default connect(null, mapDispatchToProps)(reduxForm({
     form: 'login'
 })(LoginForm));

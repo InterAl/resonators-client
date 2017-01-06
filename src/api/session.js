@@ -17,3 +17,11 @@ export function logout(id) {
         emptyResponse: true
     });
 }
+
+export function register(email, name, password) {
+    return fetcher.post(`/users.json`, {
+        email,
+        name,
+        password
+    });
+}
