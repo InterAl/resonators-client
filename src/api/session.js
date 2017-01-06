@@ -19,7 +19,7 @@ export function logout(id) {
 }
 
 export function register(email, name, password) {
-    return fetcher.post(`/users.json`, {
+    return fetcher.post('/users.json', {
         email,
         name,
         password

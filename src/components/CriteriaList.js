@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import {actions} from '../actions/criteriaActions';
 import {actions as navigationActions} from '../actions/navigationActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
@@ -50,7 +49,7 @@ class CriteriaList extends Component {
     }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state) {
     return {
         criteria: state.criteria.criteria
     };

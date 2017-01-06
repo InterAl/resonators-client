@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -23,7 +24,7 @@ export default class ResonatorCriteria extends Component {
         browserHistory.push(`/react/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
     }
 
-    handleDownloadChart(criterionId) {
+    handleDownloadChart() {
 
     }
 

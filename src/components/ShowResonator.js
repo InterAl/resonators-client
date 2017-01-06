@@ -1,12 +1,6 @@
 import _ from 'lodash';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import EntityTable from './EntityTable';
-import {actions} from '../actions/followersActions';
-import ResonatorImage from './ResonatorImage' ;
-import ResonatorCriteria from './ResonatorCriteria';
-import {browserHistory} from 'react-router';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
 import ExpandableCard from './ExpandableCard';

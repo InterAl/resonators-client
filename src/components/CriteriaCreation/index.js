@@ -1,9 +1,9 @@
+import _ from 'lodash';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../../actions/criteriaActions';
-import TextField from '../FormComponents/TextField';
-import {reduxForm, Field, formValueSelector} from 'redux-form';
+import {reduxForm, formValueSelector} from 'redux-form';
 import ClinicSelect from '../FormComponents/ClinicSelect';
 import TextBox from '../FormComponents/TextBox';
 import Select from '../FormComponents/Select';
@@ -33,13 +33,10 @@ class CriteriaCreation extends Component {
         switch (formValues.question_kind) {
             case 'numeric':
                 return NumericCreation;
-                break;
             case 'boolean':
                 return BooleanCreation;
-                break;
             case 'valuelist':
                 return ValueListCreation;
-                break;
         }
     }
 

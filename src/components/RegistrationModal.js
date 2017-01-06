@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {actions as sessionActions} from '../actions/sessionActions';
@@ -57,8 +56,8 @@ class RegistrationModal extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {}
+function mapStateToProps() {
+    return {};
 }
 
 function mapDispatchToProps(dispatch) {

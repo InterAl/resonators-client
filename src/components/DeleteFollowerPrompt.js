@@ -4,7 +4,6 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../actions/followersActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
-import FlatButton from 'material-ui/FlatButton';
 import DeletePrompt from './DeletePrompt';
 
 class DeleteFollowerPrompt extends Component {

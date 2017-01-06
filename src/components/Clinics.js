@@ -4,11 +4,7 @@ import {actions} from '../actions/clinicActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
-import Toggle from 'material-ui/Toggle';
 import EntityTable from './EntityTable';
-import {Link} from 'react-router';
 // import './Clinics.scss';
 
 class Clinics extends Component {

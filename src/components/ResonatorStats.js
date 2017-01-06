@@ -4,7 +4,7 @@ import {actions as statsActions} from '../actions/resonatorStatsActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
 import ExpandableCard from './ExpandableCard';
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';

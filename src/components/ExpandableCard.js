@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions} from '../actions/cardActions';
-import {Card, CardHeader, CardText, CardMedia} from 'material-ui/Card';
+import {Card, CardHeader, CardMedia} from 'material-ui/Card';
 import React, {Component} from 'react';
 
 class ExpandableCard extends Component {
