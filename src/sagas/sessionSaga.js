@@ -52,11 +52,13 @@ handle(types.LOGOUT, function*() {
 
 handle(types.REGISTER, function*(sagaParams, {payload}) {
     try {
+        yield put(updateState({ registrationFailed: false }));
         let user = yield call(sessionApi.register, payload.email, payload.name, payload.password);
         yield updateUser(user);
         yield put(navigationActions.hideModal());
     } catch (err) {
         console.error('registration failed', err);
+        yield put(updateState({ registrationFailed: true }));
     }
 });
 

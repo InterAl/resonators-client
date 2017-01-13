@@ -7,6 +7,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextBox from './FormComponents/TextBox';
 import {reduxForm} from 'redux-form';
 import * as validations from './FormComponents/Validations';
+import './RegistrationModal.scss';
 
 class RegistrationModal extends Component {
     constructor() {
@@ -45,19 +46,25 @@ class RegistrationModal extends Component {
                 actions={this.renderModalButtons()}
                 onRequestClose={this.props.onClose}
             >
-                <form>
+                <form className='registration-form'>
                     <TextBox type='email' name='email' placeholder='Email' />
                     <TextBox name='name' placeholder='Name' />
                     <TextBox type='password' name='password' placeholder='Password' />
                     <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
+                    {this.props.registrationFailed &&
+                    <div className='error'>
+                        Registration failed
+                    </div>}
                 </form>
             </Dialog>
         );
     }
 }
 
-function mapStateToProps() {
-    return {};
+function mapStateToProps(state) {
+    return {
+        registrationFailed: state.session.registrationFailed
+    };
 }
 
 function mapDispatchToProps(dispatch) {
