@@ -32,13 +32,22 @@ class LoginForm extends Component {
                                 primary={true} />
                         </div>
 
-                        <Button
-                            type="button"
-                            onTouchTap={this.props.showRegistrationModal}
-                            className="registerBtn"
-                            labelStyle={{fontSize: 12}}
-                            label='No account? Register here'
-                        />
+                        <div style={{display: 'flex', flexDirection: 'row'}}>
+                            <Button
+                                type="button"
+                                onTouchTap={this.props.showRegistrationModal}
+                                className="registerBtn"
+                                labelStyle={{fontSize: 12, padding: 0}}
+                                label='Registration'
+                            />
+                            <Button
+                                type="button"
+                                onTouchTap={this.props.showForgotPasswordModal}
+                                className="registerBtn"
+                                labelStyle={{fontSize: 12, padding: 0}}
+                                label='Forgot password?'
+                            />
+                        </div>
                     </form>
                 </CardText>
             </Card>
@@ -50,6 +59,10 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         showRegistrationModal: () => navigationActions.showModal({
             name: 'registration'
+        }),
+
+        showForgotPasswordModal: () => navigationActions.showModal({
+            name: 'forgotPassword'
         })
     }, dispatch);
 }

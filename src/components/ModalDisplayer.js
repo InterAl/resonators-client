@@ -7,12 +7,16 @@ import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 import DeleteCriterionPrompt from './DeleteCriterionPrompt';
 import RegistrationModal from './RegistrationModal';
+import ForgotPasswordModal from './ForgotPasswordModal';
+import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 
 const modalMap = {
     'editFollower': EditFollowerModal,
     'deleteFollower': DeleteFollowerPrompt,
     'deleteCriterion': DeleteCriterionPrompt,
-    'registration': RegistrationModal
+    'registration': RegistrationModal,
+    'forgotPassword': ForgotPasswordModal,
+    'forgotPasswordSuccess': ForgotPasswordSuccess
 };
 
 class ModalDisplayer extends Component {

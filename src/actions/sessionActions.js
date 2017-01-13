@@ -5,7 +5,8 @@ const actionsList = [
     'LOGOUT',
     'RESUME',
     'LOGIN_SUCCESS',
-    'REGISTER'
+    'REGISTER',
+    'RECOVER_PASSWORD'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'SESSION_');

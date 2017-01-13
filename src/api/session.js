@@ -25,3 +25,9 @@ export function register(email, name, password) {
         password
     });
 }
+
+export function recoverPassword(email) {
+    return fetcher.post('./user_password_resets.json', {
+        email
+    });
+}

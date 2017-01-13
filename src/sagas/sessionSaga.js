@@ -62,6 +62,21 @@ handle(types.REGISTER, function*(sagaParams, {payload}) {
     }
 });
 
+handle(types.RECOVER_PASSWORD, function*(sagaParams, {payload}) {
+    try {
+        yield put(updateState({ forgotPasswordSpinner: true, forgotPasswordFailed: false }));
+        yield call(sessionApi.recoverPassword, payload.email);
+        yield put(navigationActions.hideModal());
+        yield put(navigationActions.showModal({
+            name: 'forgotPasswordSuccess'
+        }));
+        yield put(updateState({ forgotPasswordSpinner: false }));
+    } catch (err) {
+        console.error('password recovery failed', err);
+        yield put(updateState({ forgotPasswordSpinner: false, forgotPasswordFailed: true}));
+    }
+});
+
 function* updateUser(user = {}) {
     const loggedIn = new Date(user.expires_at) > new Date();
 

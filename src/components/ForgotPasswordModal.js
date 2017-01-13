@@ -7,9 +7,9 @@ import FlatButton from 'material-ui/FlatButton';
 import TextBox from './FormComponents/TextBox';
 import {reduxForm} from 'redux-form';
 import * as validations from './FormComponents/Validations';
-import './RegistrationModal.scss';
+import CircularProgress from 'material-ui/CircularProgress';
 
-class RegistrationModal extends Component {
+class ForgotPasswordModal extends Component {
     constructor() {
         super();
 
@@ -17,7 +17,7 @@ class RegistrationModal extends Component {
     }
 
     handleSubmit(form) {
-        this.props.register(form);
+        this.props.recoverPassword(form);
     }
 
     renderModalButtons() {
@@ -30,7 +30,7 @@ class RegistrationModal extends Component {
             <FlatButton
                 onTouchTap={this.props.handleSubmit(this.handleSubmit)}
                 type='submit'
-                label="Register"
+                label="Submit"
                 primary={true}
                 keyboardFocused={true}
             />
@@ -41,20 +41,19 @@ class RegistrationModal extends Component {
         return (
             <Dialog
                 open={this.props.open}
-                title='Register'
+                title='Password Recovery'
                 modal={false}
                 actions={this.renderModalButtons()}
                 onRequestClose={this.props.onClose}
             >
-                <form autoComplete={false} className='registration-form'>
-                    <TextBox autocorrect="off" autocomplete="gaga" type='email' name='email' placeholder='Email' />
-                    <TextBox name='name' placeholder='Name' />
-                    <TextBox type='password' name='password' placeholder='Password' />
-                    <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
-                    {this.props.registrationFailed &&
-                    <div className='error'>
-                        Registration failed
+                <form className='forgot-password-form'>
+                    <TextBox name='email' placeholder='Email' />
+                    {this.props.forgotPasswordFailed &&
+                    <div style={{color: 'red'}}>
+                        Password recovery failed
                     </div>}
+                    {this.props.forgotPasswordSpinner &&
+                    <CircularProgress/>}
                 </form>
             </Dialog>
         );
@@ -63,32 +62,24 @@ class RegistrationModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        registrationFailed: state.session.registrationFailed
+        forgotPasswordFailed: state.session.forgotPasswordFailed,
+        forgotPasswordSpinner: state.session.forgotPasswordSpinner
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        register: sessionActions.register
+        recoverPassword: sessionActions.recoverPassword
     }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     reduxForm({
-      form: 'registration',
+      form: 'forgotPassword',
       validate(form) {
           let errors = {};
-
-          errors.confirmPassword = validations.required(form.confirmPassword);
-
-          if (form.password !== form.confirmPassword)
-              errors['confirmPassword'] = 'Passwords do not match';
-
-          errors.name = validations.required(form.name);
           errors.email = validations.email(form.email) || validations.required(form.email);
-          errors.password = validations.required(form.password);
-
           return errors;
       }
-    })(RegistrationModal),
+    })(ForgotPasswordModal),
 );
