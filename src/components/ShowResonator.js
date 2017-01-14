@@ -24,8 +24,8 @@ class ShowResonator extends Component {
         let {scrollWidth, scrollHeight} = ev.target.contentWindow.document.body;
 
         this.setState({
-            iframeWidth: scrollWidth,
-            iframeHeight: scrollHeight
+            iframeWidth: scrollWidth * 1.04,
+            iframeHeight: scrollHeight + 21
         });
     }
 
@@ -45,17 +45,19 @@ class ShowResonator extends Component {
                         onExpandChange={expanded => !expanded && this.setState({
                             iframeWidth: 0, iframeHeight: 0
                         })}
+                        width={this.state.iframeWidth || 497}
+                        height={this.state.iframeHeight || 60}
                         id={`resonatorPreview-${resonatorId}`}
                         title='Resonator Preview'
                         avatar={<ShowIcon/>}
                     >
-                        <div>
+                        <div style={{height: this.state.iframeHeight}}>
                             {!this.state.iframeHeight &&
                             <CircularProgress style={{margin: '0 auto', display: 'block'}}/>}
 
                             <iframe
                                 onLoad={this.handleIframeLoad}
-                                style={{border: 0, height: this.state.iframeHeight}}
+                                style={{border: 0, height: '100%', width: '100%'}}
                                 src={`/reminders/${resonatorId}/render`}
                             />
                         </div>

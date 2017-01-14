@@ -56,7 +56,7 @@ class ExpandableCard extends Component {
                     showExpandableButton={true}
                     expanded={this.props.cardData}
                 />
-                <CardMedia expandable={true}>
+                <CardMedia expandable={true} style={{height: this.props.height}}>
                     {this.props.children}
                 </CardMedia>
             </Card>
