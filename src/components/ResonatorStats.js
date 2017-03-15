@@ -94,8 +94,9 @@ class ResonatorStats extends Component {
     }
 
     render() {
+        const stats = _.map(this.props.stats, this.renderCard);
         return <div className='resonator-stats-wrapper'>
-                   {_.map(this.props.stats, this.renderCard)}
+                   {stats ? stats : 'No stats are available.'}
                </div>
     }
 }

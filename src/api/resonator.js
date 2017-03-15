@@ -14,6 +14,10 @@ export function update(followerId, resonator) {
     return fetcher.put(`/leader_followers/${followerId}/reminders/${resonator.id}.json`, resonator);
 }
 
+export function remove(followerId, resonatorId) {
+    return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}.json`);
+}
+
 export function create(followerId, resonator) {
     return fetcher.post(`/leader_followers/${followerId}/reminders.json`, resonator);
 }

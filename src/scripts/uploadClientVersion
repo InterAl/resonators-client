@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+var asset_id = 'resonators-client';
+var path = require('path');
+var request = require('request');
+var attachmentPath = path.resolve(__dirname, '../../dist/assets/app.js');
+var fs = require('fs');
+var secrets = require('../config/secrets');
+
+var formData = {
+    asset_id: asset_id,
+    secret: secrets.uploadClientVersionSecret,
+    media_data: fs.createReadStream(attachmentPath)
+};
+
+console.log('uploading client version...');
+
+request
+.post({url:'http://' + secrets.host + '/versionable_assets/upload', formData},
+      function (err, resp, body) {
+          console.log('uploaded.');
+
+          if (err)
+              console.error('err?', err);
+
+          console.log('link', JSON.parse(body).link);
+      });

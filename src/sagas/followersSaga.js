@@ -2,6 +2,7 @@ import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
+import { types as resonatorTypes } from '../actions/resonatorActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
 
@@ -59,6 +60,22 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
 
 handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
     yield fetchFollowerResonators(payload);
+});
+
+handle(resonatorTypes.REMOVE, function*(sagaParams, {payload}) {
+    yield call(followerApi.remove, payload.followerId, payload.resonatorId);
+    let followers = yield select(followersSelector);
+
+    let follower = _.find(followers, f => f.id === payload.followerId);
+
+    followers = _.reject(followers, f => f.id === payload.followerId)
+                 .concat({...follower,
+                          resonators: _.reject(follower.resonators,
+                                                r => r.id === payload.resonatorId)})
+
+    yield put(updateState({
+        followers
+    }));
 });
 
 export function* waitForFollowers() {
