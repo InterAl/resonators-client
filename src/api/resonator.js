@@ -1,6 +1,6 @@
 import fetcher from './fetcher';
 
-export function uploadMedia(followerId, resonatorId, file, mediaKind = 'image') {
+export function uploadMedia(followerId, resonatorId, file, mediaKind = 'picture') {
     let formData = new FormData();
     formData.append('follower_id', followerId);
     formData.append('reminder_id', resonatorId);

@@ -8,6 +8,11 @@ export default resonator => {
         .sortBy(i => new Date(i.created_at))
         .last();
 
-    return lastPicture ? `https://reminders-uploads.s3.amazonaws.com/${lastPicture.media_id}.jpg` :
-                         null;
+    if (lastPicture) {
+        if (lastPicture.link)
+            return lastPicture.link;
+        else
+            return `https://reminders-uploads.s3.amazonaws.com/${lastPicture.media_id}.jpg`;
+    } else
+        return null;
 }
