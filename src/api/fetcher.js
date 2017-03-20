@@ -5,9 +5,7 @@ function fetcher(url, options={}) {
 
     return fetch(`${baseUrl}${url}`, {
                 credentials: 'same-origin',
-                headers: {
-                    'Authorization': localStorage.getItem('auth_token')
-                },
+                headers: getDefaultHeaders(),
                 ...options
             })
             .then(response => {
@@ -33,6 +31,7 @@ fetcher.post = (url, body, emptyResponse = false) => {
     return fetcher(url, {
         method: 'POST',
         headers: {
+            ...getDefaultHeaders(),
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
@@ -44,6 +43,7 @@ fetcher.upload = (url, body) => {
     return fetcher(url, {
         method: 'POST',
         headers: {
+            ...getDefaultHeaders(),
             Accept: 'application/json, text/plain, */*'
         },
         body
@@ -54,6 +54,7 @@ fetcher.put = (url, body) => {
     return fetcher(url, {
         method: 'PUT',
         headers: {
+            ...getDefaultHeaders(),
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(body)
@@ -62,9 +63,16 @@ fetcher.put = (url, body) => {
 
 fetcher.delete = (url) => {
     return fetcher(url, {
+        ...getDefaultHeaders(),
         method: 'DELETE',
         emptyResponse: true
     });
 };
+
+function getDefaultHeaders() {
+    return {
+        'Authorization': localStorage.getItem('auth_token')
+    };
+}
 
 export default fetcher;
