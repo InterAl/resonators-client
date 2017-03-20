@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "copy": "copyfiles -f ./src/index.html ./dist && copyfiles -u 1 \"./src/static/**\" ./dist",
-    "dist": "npm run clean && npm run copy && webpack --progress --bail --env dist -p && cp dist/assets/app.js ../../../../../public/app.js",
+    "dist": "npm run clean && npm run copy && webpack --progress --bail --env dist -p",
     "lint": "eslint ./src",
     "posttest": "npm run lint",
     "release:major": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
@@ -17,7 +17,7 @@
     "serve:dist": "webpack-dev-server --open --env dist -p --progress",
     "start": "npm run serve:dev",
     "test": "cross-env NODE_ENV=test karma start",
-    "release:prod": "npm run dist && git add ../../../../../public/app.js && git commit -m \"client version\" && git push prod master",
+    "release:prod": "npm run dist && ./scripts/uploadClientVersion",
     "test:watch": "cross-env NODE_ENV=test karma start --autoWatch=true --singleRun=false --reporters=mocha,coverage"
   },
   "repository": "",

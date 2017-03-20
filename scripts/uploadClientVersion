@@ -4,9 +4,9 @@ var asset_id = 'resonators-client';
 var path = require('path');
 var execSync = require('child_process').execSync;
 var request = require('request');
-var attachmentPath = path.resolve(__dirname, '../../dist/assets/app.js');
+var attachmentPath = path.resolve(__dirname, '../dist/assets/app.js');
 var fs = require('fs');
-var secrets = require('../config/secrets');
+var secrets = require('../src/config/secrets');
 
 var commitHash = execSync('git rev-parse --verify HEAD');
 var commitTime = execSync('git show -s --format=%ci HEAD');
@@ -23,10 +23,11 @@ console.log('uploading client version...');
 request
 .post({url:'http://' + secrets.host + '/versionable_assets/upload', formData},
       function (err, resp, body) {
-          console.log('uploaded.');
 
           if (err)
               console.error('err?', err);
+          else
+              console.log('uploaded.');
 
           console.log('link', JSON.parse(body).link);
       });
