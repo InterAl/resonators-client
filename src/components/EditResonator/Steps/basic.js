@@ -37,9 +37,6 @@ export default StepBase({
         if (!formData.description)
             errors.description = 'Required';
 
-        if (!formData.link)
-            errors.link = 'Required';
-
         return errors;
     }
 })(EditResonatorBasic);
