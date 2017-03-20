@@ -1,6 +1,13 @@
+import cfg from 'config';
+
 function fetcher(url, options={}) {
-    return fetch(url, {
+    const baseUrl = cfg.baseUrl || '';
+
+    return fetch(`${baseUrl}${url}`, {
                 credentials: 'same-origin',
+                headers: {
+                    'Authorization': localStorage.getItem('auth_token')
+                },
                 ...options
             })
             .then(response => {

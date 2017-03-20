@@ -16,11 +16,16 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 });
 
 handle(types.RESUME, function*() {
-    let user = yield call(sessionApi.get);
-    let loggedIn = yield updateUser(user);
+    try {
+        let user = yield call(sessionApi.get);
+        let loggedIn = yield updateUser(user);
 
-    if (!loggedIn)
+        if (!loggedIn)
+            yield put(navigationActions.navigate('login'));
+    } catch (err) {
+        console.log('resuming session failed', err);
         yield put(navigationActions.navigate('login'));
+    }
 });
 
 handle(types.LOGIN, function*(sagaParams, action) {
@@ -33,6 +38,12 @@ handle(types.LOGIN, function*(sagaParams, action) {
     } catch (err) {
         console.warn('login failed', err);
     }
+
+    let {auth_token} = user;
+
+    saveAuthToken(auth_token);
+
+    user = _.omit(user, 'auth_token');
 
     let loggedIn = yield updateUser(user);
 
@@ -94,6 +105,10 @@ function* updateUser(user = {}) {
     }
 
     return loggedIn;
+}
+
+function saveAuthToken(auth_token) {
+    localStorage.setItem('auth_token', auth_token);
 }
 
 export default {saga, reducer};
