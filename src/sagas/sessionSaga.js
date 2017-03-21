@@ -1,5 +1,6 @@
 import SagaReducerFactory from 'saga-reducer-factory';
 import { put, call, select } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
 import { actions, types } from '../actions/sessionActions';
 import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';
@@ -85,6 +86,34 @@ handle(types.RECOVER_PASSWORD, function*(sagaParams, {payload}) {
     } catch (err) {
         console.error('password recovery failed', err);
         yield put(updateState({ forgotPasswordSpinner: false, forgotPasswordFailed: true}));
+    }
+});
+
+handle(types.RESET_PASSWORD, function*(sagaParams, {payload}) {
+    const spin = active => put(updateState({ resetPasswordSpinner: active }));
+
+    try {
+        yield spin(true);
+
+        const token = yield select(state => state.init.query.token);
+
+        const result = yield sessionApi.resetPassword({
+            password: payload,
+            token
+        });
+
+        yield put(updateState({
+            resetPasswordSuccessful: true
+        }));
+        yield delay(3500);
+        yield spin(false);
+        yield put(navigationActions.navigate('login'));
+    } catch (err) {
+        console.error('password reset failed', err);
+        yield spin(false);
+        yield put(updateState({
+            resetPasswordSuccessful: false
+        }));
     }
 });
 

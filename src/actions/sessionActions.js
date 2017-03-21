@@ -6,7 +6,8 @@ const actionsList = [
     'RESUME',
     'LOGIN_SUCCESS',
     'REGISTER',
-    'RECOVER_PASSWORD'
+    'RECOVER_PASSWORD',
+    'RESET_PASSWORD'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'SESSION_');

@@ -13,6 +13,7 @@ import ShowResonator from './ShowResonator';
 import ResonatorStats from './ResonatorStats';
 import CriteriaList from './CriteriaList';
 import CriteriaCreation from './CriteriaCreation/index';
+import ResetPasword from './ResetPassword';
 
 const {PropTypes} = React;
 
@@ -26,6 +27,7 @@ class AppComponent extends React.Component {
     return (
       <Router history={browserHistory}>
           <Route path="/" component={Layout}>
+              <Route path="resetPassword" component={ResetPasword} />
               <Route path="react" component={Visitor} />
               <Route path="react/followers" component={Followers} />
               <Route path="react/followers/:followerId/resonators/new" component={EditResonator} />

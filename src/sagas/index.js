@@ -19,6 +19,7 @@ export const sagas = createRootSaga([
 ], {});
 
 export const reducers = combineReducers({
+    init: require('./initSaga').default.reducer,
     session: require('../sagas/sessionSaga').default.reducer,
     menu: require('./sideMenuSaga').default.reducer,
     clinics: require('./clinicsSaga').default.reducer,
