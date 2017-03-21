@@ -89,8 +89,14 @@ function syncResonatorCriteria(resonator, newCriteria) {
     let resonatorQuestions = _.map(resonator.questions, 'question_id');
     let addedQids = _.difference(newCriteria, resonatorQuestions);
     let removedQids = _.difference(resonatorQuestions, newCriteria);
-    let addQuestionsPromises = _.map(addedQids, qid => resonatorApi.addCriterion(resonator.id, qid));
-    let removedQuestionsPromises = _.map(removedQids, qid => resonatorApi.removeCriterion(resonator.id, qid));
+
+    let addQuestionsPromises = _.map(addedQids, qid => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid));
+
+    let removedQuestionsPromises = _.map(removedQids, qid => {
+        let rqid = _.find(resonator.questions, rq => rq.question_id === qid).id;
+        return resonatorApi.removeCriterion(resonator.follower_id, resonator.id, rqid);
+    });
+
     return addQuestionsPromises.concat(removedQuestionsPromises);
 }
 
