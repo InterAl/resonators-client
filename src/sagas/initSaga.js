@@ -18,7 +18,8 @@ handle(types.INIT_APP, function*() {
         query
     }));
 
-    if (_.startsWith(location.pathname, '/resetPassword'))
+    if (_.startsWith(location.pathname, '/resetPassword') ||
+        _.endsWith(location.pathname, '/criteria/submit'))
         return;
 
     yield put(sessionActions.resume());
