@@ -2,6 +2,7 @@ import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/resonatorCreationActions';
+import { actions as navigationActions } from '../actions/navigationActions';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 import {waitForFollowers, fetchFollowerResonators, updateResonator} from './followersSaga';
 import * as resonatorApi from '../api/resonator';
@@ -46,6 +47,9 @@ handle(types.UPDATE_FINAL, function*() {
     yield call(() => Promise.all(promises));
     yield updateResonator(followerId, resonator);
     yield put(updateState({ showSpinnerFinalUpdate: false }));
+    yield put(navigationActions.navigate({
+        route: 'followerResonators', routeParams: {followerId}
+    }));
 });
 
 handle(types.UPDATE_CREATION_STEP, function*(sagaParams, {payload}) {
