@@ -129,7 +129,7 @@ export function* updateResonator(followerId, resonator) {
     let updatedResonators = _.reject(follower.resonators, r => r.id === resonator.id)
                              .concat(resonator);
 
-    let updatedFollower = {...follower, updatedResonators};
+    let updatedFollower = {...follower, resonators: updatedResonators};
 
     let updatedFollowers = _.reject(followers, f => f.id === followerId)
                             .concat(updatedFollower);
