@@ -3,13 +3,13 @@ import { put, call, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/feedbackActions';
 import * as resonatorFeedbackApi from '../api/resonatorFeedbackApi';
 
-const pageResonator = window.pageData.resonator;
+const pageResonator = window.pageData && window.pageData.resonator;
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
-        resonator: window.pageData && window.pageData.resonator,
+        resonator: pageResonator,
         answered: {},
         currentQuestionIdx: _.size(pageResonator.questions) - 2
     }
