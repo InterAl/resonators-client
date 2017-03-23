@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
+import DeleteResonatorPrompt from './DeleteResonatorPrompt';
 import DeleteCriterionPrompt from './DeleteCriterionPrompt';
 import RegistrationModal from './RegistrationModal';
 import ForgotPasswordModal from './ForgotPasswordModal';
@@ -13,6 +14,7 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 const modalMap = {
     'editFollower': EditFollowerModal,
     'deleteFollower': DeleteFollowerPrompt,
+    'deleteResonator': DeleteResonatorPrompt,
     'deleteCriterion': DeleteCriterionPrompt,
     'registration': RegistrationModal,
     'forgotPassword': ForgotPasswordModal,

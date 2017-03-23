@@ -63,15 +63,18 @@ handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
 });
 
 handle(resonatorTypes.REMOVE, function*(sagaParams, {payload}) {
-    yield call(followerApi.remove, payload.followerId, payload.resonatorId);
+    const {resonator: {id, follower_id}} = payload;
+
+    yield call(followerApi.deleteResonator, follower_id, id);
+
     let followers = yield select(followersSelector);
 
-    let follower = _.find(followers, f => f.id === payload.followerId);
+    let follower = _.find(followers, f => f.id === follower_id);
 
-    followers = _.reject(followers, f => f.id === payload.followerId)
+    followers = _.reject(followers, f => f.id === follower_id)
                  .concat({...follower,
                           resonators: _.reject(follower.resonators,
-                                                r => r.id === payload.resonatorId)})
+                                                r => r.id === id)})
 
     yield put(updateState({
         followers

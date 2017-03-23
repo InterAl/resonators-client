@@ -69,12 +69,13 @@ class EditResonatorSchedule extends Component {
                         name='time'
                         label='Sending time'
                         component={
-                            ({input: {value, onChange}}) =>
+                            ({input: {value, onChange}, meta: {touched, error}}) =>
                             <TimePicker
                                 autoOk={true}
                                 hintText='Sending Time'
                                 onChange={(e, date) => onChange(date)}
                                 value={value}
+                                errorText={touched && error}
                             />
                             }
                         />
@@ -100,7 +101,15 @@ class EditResonatorSchedule extends Component {
 
 EditResonatorSchedule = StepBase({
     noNext: true,
-    noBack: true
+    noBack: true,
+    validate(formData) {
+        let errors = {};
+
+        if (!formData.time)
+            errors.time = 'Required';
+
+        return errors;
+    }
 })(EditResonatorSchedule);
 
 EditResonatorSchedule = connect(state => ({

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
 import {actions} from '../actions/followersActions';
+import {actions as navigationActions} from '../actions/navigationActions';
 import ResonatorImage from './ResonatorImage' ;
 // import moment from 'moment';
 import {browserHistory} from 'react-router';
@@ -11,6 +12,8 @@ import {browserHistory} from 'react-router';
 class FollowerResonators extends Component {
     constructor(props) {
         super(props);
+
+        this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
     }
 
     componentDidMount() {
@@ -27,6 +30,10 @@ class FollowerResonators extends Component {
         return [
             'Resonator'
         ];
+    }
+
+    handleRemoveResonator(id) {
+        this.props.showDeleteResonatorPrompt(id);
     }
 
     renderColumn(resonator) {
@@ -63,7 +70,7 @@ class FollowerResonators extends Component {
                 selectable={false}
                 onAdd={() => browserHistory.push(addRoute)}
                 onEdit={id => browserHistory.push(getEditRoute(id))}
-                onRemove={() => console.log('removing')}
+                onRemove={this.handleRemoveResonator}
                 onShow={id => browserHistory.push(showRoute(id))}
                 addButton={true}
                 rowActions={['show', 'edit', 'remove']}
@@ -87,7 +94,13 @@ function mapStateToProps(state, {params: {followerId}}) {
 
 function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
     return bindActionCreators({
-        fetchFollowerResonators: actions.fetchFollowerResonators
+        fetchFollowerResonators: actions.fetchFollowerResonators,
+        showDeleteResonatorPrompt: resonatorId => navigationActions.showModal({
+            name: 'deleteResonator',
+            props: {
+                resonatorId
+            }
+        })
     }, dispatch);
 }
 
