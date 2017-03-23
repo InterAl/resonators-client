@@ -11,7 +11,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     initState: {
         resonator: pageResonator,
         answered: {},
-        currentQuestionIdx: _.size(pageResonator.questions) - 2
+        currentQuestionIdx: pageResonator && _.size(pageResonator.questions) - 2
     }
 });
 
