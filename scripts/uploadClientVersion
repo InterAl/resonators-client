@@ -21,7 +21,7 @@ var formData = {
 console.log('uploading client version...');
 
 request
-.post({url:'http://' + secrets.host + '/versionable_assets/upload', formData},
+.post({url:'http://' + secrets.host + '/api/versionable_assets/upload', formData},
       function (err, resp, body) {
 
           if (err)
