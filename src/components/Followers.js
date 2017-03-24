@@ -86,7 +86,7 @@ class Followers extends Component {
     getRows() {
         return _.reduce(this.props.followers, (acc, f) => {
             let cols = [];
-            cols.push(<Link to={`/react/followers/${f.id}/resonators`}>{f.user.name}</Link>);
+            cols.push(<Link to={`/followers/${f.id}/resonators`}>{f.user.name}</Link>);
             this.state.showEmails && cols.push(f.user.email);
             cols.push(f.clinicName);
             acc[f.id] = cols;

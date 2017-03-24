@@ -21,7 +21,7 @@ export default class ResonatorCriteria extends Component {
 
     handleShowChart(criterionId) {
         let {follower_id, id: resonatorId} = this.props.resonator;
-        browserHistory.push(`/react/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
+        browserHistory.push(`/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
     }
 
     handleDownloadChart() {

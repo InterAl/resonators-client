@@ -10,7 +10,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     initState: {
         menu: {
             'clinic': {
-                route: '/react/clinic'
+                route: '/clinic'
             }
         },
         isOpen: false

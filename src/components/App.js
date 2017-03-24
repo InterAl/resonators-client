@@ -30,18 +30,18 @@ class AppComponent extends React.Component {
           <Route path="/" component={Layout}>
               <Route path="resetPassword" component={ResetPasword} />
               <Route path="*/criteria/submit" component={ResonatorFeedback} />
-              <Route path="react" component={Visitor} />
-              <Route path="react/followers" component={Followers} />
-              <Route path="react/followers/:followerId/resonators/new" component={EditResonator} />
-              <Route path="react/followers/:followerId/resonators/:resonatorId/show" component={ShowResonator}/>
-              <Route path="react/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
-              <Route path="react/followers/:followerId/resonators" component={FollowerResonators}/>
-              <Route path="react/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
-              <Route path="react/clinics" component={Clinics}/>
-              <Route path="react/clinics/criteria/new" component={CriteriaCreation}/>
-              <Route path="react/clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
-              <Route path="react/clinics/criteria" component={CriteriaList}/>
-              <Route path="/*" component={NoMatch} />
+              <Route path="followers" component={Followers} />
+              <Route path="followers/:followerId/resonators/new" component={EditResonator} />
+              <Route path="followers/:followerId/resonators/:resonatorId/show" component={ShowResonator}/>
+              <Route path="followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
+              <Route path="followers/:followerId/resonators" component={FollowerResonators}/>
+              <Route path="followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
+              <Route path="clinics" component={Clinics}/>
+              <Route path="clinics/criteria/new" component={CriteriaCreation}/>
+              <Route path="clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
+              <Route path="clinics/criteria" component={CriteriaList}/>
+              <Route path="/*" component={Visitor} />
+              {/* <Route path="/*" component={NoMatch} /> */}
           </Route>
       </Router>
     );

@@ -1,7 +1,7 @@
 import cfg from 'config';
 
 function fetcher(url, options={}) {
-    const baseUrl = cfg.baseUrl || '';
+    const baseUrl = (cfg.baseUrl || '') + '/api';
 
     return fetch(`${baseUrl}${url}`, {
                 credentials: 'same-origin',

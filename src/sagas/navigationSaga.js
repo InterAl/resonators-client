@@ -15,31 +15,31 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 
 const screenToRoute = {
     'followers': {
-        route: '/react/followers',
+        route: '/followers',
         title: 'Followers'
     },
     'clinics': {
-        route: '/react/clinics',
+        route: '/clinics',
         title: 'Clinics'
     },
     'followerResonators': {
-        route: '/react/followers/:followerId/resonators',
+        route: '/followers/:followerId/resonators',
         title: 'Resonators'
     },
     'login': {
-        route: '/react',
+        route: '/',
         title: 'Resonators'
     },
     'logout': {
-        route: '/react/',
+        route: '/',
         title: 'Resonators'
     },
     'criteriaCreation': {
-        route: '/react/clinics/criteria/new',
+        route: '/clinics/criteria/new',
         title: 'Clinics'
     },
     'criteriaList': {
-        route: '/react/clinics/criteria',
+        route: '/clinics/criteria',
         title: 'Clinic Criteria'
     }
 };

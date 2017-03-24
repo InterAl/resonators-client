@@ -128,8 +128,8 @@ function* updateUser(user = {}) {
     if (loggedIn) {
         yield put(actions.loginSuccess());
 
-        if (browserHistory.getCurrentLocation().pathname === '/react' ||
-            browserHistory.getCurrentLocation().pathname === '/react/')
+        if (browserHistory.getCurrentLocation().pathname === '/' ||
+            browserHistory.getCurrentLocation().pathname === '/')
             yield put(navigationActions.navigate('followers'));
     }
 
