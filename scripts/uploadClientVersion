@@ -21,13 +21,15 @@ var formData = {
 console.log('uploading client version...');
 
 request
-.post({url:'http://' + secrets.host + '/api/versionable_assets/upload', formData},
-      function (err, resp, body) {
+    .post({
+        url: 'http://' + secrets.host + '/api/versionable_assets/upload',
+        formData
+    },
+    function (err, resp, body) {
+        if (err)
+            console.error('err?', err);
+        else
+            console.log('uploaded.');
 
-          if (err)
-              console.error('err?', err);
-          else
-              console.log('uploaded.');
-
-          console.log('link', JSON.parse(body).link);
-      });
+        console.log('link', JSON.parse(body).link);
+    });

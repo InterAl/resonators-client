@@ -27,11 +27,11 @@ const screenToRoute = {
         title: 'Resonators'
     },
     'login': {
-        route: '/',
+        route: '/login',
         title: 'Resonators'
     },
     'logout': {
-        route: '/',
+        route: '/login',
         title: 'Resonators'
     },
     'criteriaCreation': {

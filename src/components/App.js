@@ -40,7 +40,7 @@ class AppComponent extends React.Component {
               <Route path="clinics/criteria/new" component={CriteriaCreation}/>
               <Route path="clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
               <Route path="clinics/criteria" component={CriteriaList}/>
-              <Route path="/*" component={Visitor} />
+              <Route path="login" component={Visitor} />
               {/* <Route path="/*" component={NoMatch} /> */}
           </Route>
       </Router>

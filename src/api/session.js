@@ -12,7 +12,7 @@ export function create(email, password) {
 }
 
 export function logout(id) {
-    return fetcher(`/user_sessions/${id}.json`, {
+    return fetcher(`/user_sessions`, {
         method: 'DELETE',
         emptyResponse: true
     });
