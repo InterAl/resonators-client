@@ -58,7 +58,7 @@ class ShowResonator extends Component {
                             <iframe
                                 onLoad={this.handleIframeLoad}
                                 style={{border: 0, height: '100%', width: '100%'}}
-                                src={`/reminders/${resonatorId}/render`}
+                                src={`/api/reminders/${resonatorId}/render`}
                             />
                         </div>
                     </ExpandableCard>

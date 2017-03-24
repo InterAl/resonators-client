@@ -23,8 +23,8 @@ class ResonatorFeedback extends Component {
     }
 
     renderAnswer(q, a, idx) {
-        const showSpinner = this.props.answered[q.id] === a.id;
-
+        // const showSpinner = this.props.answered[q.id] === a.id;
+        //
         return (
             <div key={`${q.id}#${a.id}`}>
                 <RaisedButton
@@ -65,7 +65,7 @@ class ResonatorFeedback extends Component {
     }
 
     render() {
-        const {resonator, question} = this.props;
+        const {question} = this.props;
 
         return (
             <div className='row' style={{'display': 'flex', width: '100%', marginTop: 30}}>

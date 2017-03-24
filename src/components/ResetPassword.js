@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, {Component} from 'react';
 import {actions} from '../actions/sessionActions';
 import {bindActionCreators} from 'redux';

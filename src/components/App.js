@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { Router, Route, browserHistory } from 'react-router';
 import Layout from './Layout';
@@ -41,7 +40,7 @@ class AppComponent extends React.Component {
               <Route path="clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
               <Route path="clinics/criteria" component={CriteriaList}/>
               <Route path="login" component={Visitor} />
-              {/* <Route path="/*" component={NoMatch} /> */}
+              <Route path="/*" component={NoMatch} />
           </Route>
       </Router>
     );

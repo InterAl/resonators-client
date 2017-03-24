@@ -11,7 +11,7 @@ export function create(email, password) {
     });
 }
 
-export function logout(id) {
+export function logout() {
     return fetcher(`/user_sessions`, {
         method: 'DELETE',
         emptyResponse: true

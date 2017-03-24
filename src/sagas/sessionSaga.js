@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { put, call, select } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
@@ -54,8 +55,7 @@ handle(types.LOGIN, function*(sagaParams, action) {
 
 handle(types.LOGOUT, function*() {
     try {
-        let sessionId = yield select(state => state.session.user.id);
-        yield call(sessionApi.logout, sessionId);
+        yield call(sessionApi.logout);
         yield put(navigationActions.navigate('logout'));
     } catch (err) {
         console.warn('logout failed', err);
@@ -97,7 +97,7 @@ handle(types.RESET_PASSWORD, function*(sagaParams, {payload}) {
 
         const token = yield select(state => state.init.query.token);
 
-        const result = yield sessionApi.resetPassword({
+        yield sessionApi.resetPassword({
             password: payload,
             token
         });
