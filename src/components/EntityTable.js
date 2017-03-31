@@ -71,8 +71,11 @@ export default class EntityTable extends Component {
         );
     }
 
-    renderAction(actionName, id) {
-        switch (actionName) {
+    renderAction(action, id) {
+        if (typeof action === 'function')
+            return action(id);
+
+        switch (action) {
             case 'edit':
                 return (
                     <IconButton onTouchTap={() => this.props.onEdit(id)}>
@@ -110,8 +113,8 @@ export default class EntityTable extends Component {
 
                             {this.props.rowActions &&
                             <TableRowColumn key='actions' className='editColumn'>
-                                {this.props.rowActions.map(actionName => {
-                                    return this.renderAction(actionName, id);
+                                {this.props.rowActions.map(action => {
+                                    return this.renderAction(action, id);
                                 })}
                             </TableRowColumn>}
                         </TableRow>

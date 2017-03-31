@@ -6,10 +6,11 @@ import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
 import EntityTable from './EntityTable';
 import {Link} from 'react-router';
+import MoreOptionsMenu from './MoreOptionsMenu';
+import MenuItem from 'material-ui/MenuItem';
 import './Followers.scss';
 
 class Followers extends Component {
@@ -17,7 +18,8 @@ class Followers extends Component {
         super();
 
         this.state = {
-            showEmails: false
+            showEmails: false,
+            openedMoreOptionsMenuFollowerId: null
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -45,6 +47,12 @@ class Followers extends Component {
 
     handleRemoveFollower(id) {
         this.props.showDeleteFollowerPrompt(id);
+    }
+
+    toggleMoreOptionsMenu(followerId) {
+        this.setState({
+            openedMoreOptionsMenuFollowerId: followerId
+        });
     }
 
     renderClinicFilter() {
@@ -100,10 +108,32 @@ class Followers extends Component {
         };
     }
 
+    renderMoreOptionsMenu() {
+        return followerId => (
+            <MoreOptionsMenu
+                open={followerId === this.state.openedMoreOptionsMenuFollowerId}
+                onRequestChange={() => this.toggleMoreOptionsMenu(followerId)}
+                onBlur={() => this.toggleMoreOptionsMenu(null)}
+                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            >
+                <MenuItem
+                    primaryText='Freeze'
+                    onClick={() => this.handleFreezeFollower(followerId)}
+                />
+                <MenuItem
+                    primaryText='Delete'
+                    onClick={() => this.handleRemoveFollower(followerId)}
+                />
+            </MoreOptionsMenu>
+        );
+    }
+
     render() {
         let header = this.getHeader();
         let rows = this.getRows();
         let toolbox = this.getToolbox();
+        let moreOptionsMenu = this.renderMoreOptionsMenu();
 
         return (
             <EntityTable
@@ -111,11 +141,10 @@ class Followers extends Component {
                 rows={rows}
                 toolbox={toolbox}
                 addButton={true}
-                rowActions={['edit', 'remove']}
+                rowActions={['edit', moreOptionsMenu]}
                 className='followers'
                 onAdd={this.handleAddFollower}
                 onEdit={this.handleEditFollower}
-                onRemove={this.handleRemoveFollower}
             />
         );
     }
