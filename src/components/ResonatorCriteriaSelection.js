@@ -30,12 +30,16 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     isCriterionAttached(criterion) {
-        return _.find(this.props.selectedCriteria,
+        return !!_.find(this.props.selectedCriteria,
                       id => id === criterion.id)
     }
 
     renderCriteria() {
-        return this.props.criteria.map((criterion, idx) => {
+        const sortedCriteria = _.orderBy(this.props.criteria, c => {
+            return this.isCriterionAttached(c) ? 0 : 1;
+        });
+
+        return sortedCriteria.map((criterion, idx) => {
             return (
                 <ListItem
                     key={idx}
@@ -43,7 +47,7 @@ class ResonatorCriteriaSelection extends Component {
                     primaryText={criterion.title}
                     leftCheckbox={
                         <Checkbox
-                            defaultChecked={!!this.isCriterionAttached(criterion)}
+                            defaultChecked={this.isCriterionAttached(criterion)}
                             onCheck={(e, c) => this.handleCheck(criterion.id, c)}
                         />
                     }
