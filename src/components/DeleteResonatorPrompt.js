@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../actions/resonatorActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
-import DeletePrompt from './DeletePrompt';
+import SimplePrompt from './SimplePrompt';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 
 class DeleteResonatorPrompt extends Component {
@@ -24,10 +24,11 @@ class DeleteResonatorPrompt extends Component {
         let {resonator: {title}} = this.props;
 
         return (
-            <DeletePrompt
+            <SimplePrompt
                 title='Delete Resonator'
                 text={`Delete ${title}?`}
-                onDelete={this.handleRemoveClick}
+                acceptText='Delete'
+                onAccept={this.handleRemoveClick}
                 onClose={this.props.onClose}
                 open={this.props.open}
             />

@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../actions/followersActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
-import DeletePrompt from './DeletePrompt';
+import SimplePrompt from './SimplePrompt';
 
 class DeleteFollowerPrompt extends Component {
     constructor() {
@@ -23,10 +23,11 @@ class DeleteFollowerPrompt extends Component {
         let {follower: {user: {name}}} = this.props;
 
         return (
-            <DeletePrompt
+            <SimplePrompt
                 title='Delete Follower'
+                acceptText='Delete'
                 text={`Delete ${name}?`}
-                onDelete={this.handleRemoveClick}
+                onAccept={this.handleRemoveClick}
                 onClose={this.props.onClose}
                 open={this.props.open}
             />

@@ -2,21 +2,22 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class DeletePrompt extends Component {
+export default class SimplePrompt extends Component {
     static propTypes: {
-        onDelete: React.PropTypes.func.isRequired,
+        onAccept: React.PropTypes.func.isRequired,
         text: React.PropTypes.string.isRequired,
+        acceptText: React.PropTypes.string.isRequired,
         title: React.PropTypes.string.isRequired
     }
 
     constructor() {
         super();
 
-        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+        this.handleAcceptClick = this.handleAcceptClick.bind(this);
     }
 
-    handleRemoveClick() {
-        this.props.onClose(this.props.onDelete);
+    handleAcceptClick() {
+        this.props.onClose(this.props.onAccept);
     }
 
     renderModalButtons() {
@@ -25,12 +26,12 @@ export default class DeletePrompt extends Component {
                 onTouchTap={this.props.onClose}
                 label="Cancel"
                 primary={true}
+                keyboardFocused={true}
             />,
             <FlatButton
-                onTouchTap={this.handleRemoveClick}
-                label="Remove"
+                onTouchTap={this.handleAcceptClick}
+                label={this.props.acceptText}
                 primary={true}
-                keyboardFocused={true}
             />
         ];
     }

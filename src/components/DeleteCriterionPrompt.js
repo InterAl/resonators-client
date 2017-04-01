@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../actions/criteriaActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
-import DeletePrompt from './DeletePrompt';
+import SimplePrompt from './SimplePrompt';
 
 class DeleteCriterionPrompt extends Component {
     constructor() {
@@ -23,10 +23,11 @@ class DeleteCriterionPrompt extends Component {
         let {criterion: {title}} = this.props;
 
         return (
-            <DeletePrompt
+            <SimplePrompt
                 title='Delete Criterion?'
+                acceptText='Delete'
                 text={`Delete ${title}?`}
-                onDelete={this.handleRemoveClick}
+                onAccept={this.handleRemoveClick}
                 onClose={this.props.onClose}
                 open={this.props.open}
             />
