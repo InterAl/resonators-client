@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import onClickOutside from 'react-onclickoutside';
 
 class MoreOptionsMenu extends Component {
     static propTypes = {
@@ -18,10 +17,6 @@ class MoreOptionsMenu extends Component {
         super(props);
     }
 
-    handleClickOutside() {
-        this.props.onBlur();
-    }
-
     render() {
         return (
             <IconMenu
@@ -34,4 +29,4 @@ class MoreOptionsMenu extends Component {
     }
 }
 
-export default onClickOutside(MoreOptionsMenu);
+export default MoreOptionsMenu;

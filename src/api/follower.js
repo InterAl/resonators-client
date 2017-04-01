@@ -31,6 +31,14 @@ export function deleteFollower(id) {
     return fetcher.delete(`/leader_followers/${id}`);
 }
 
+export function freezeFollower(id) {
+    return fetcher.post(`/leader_followers/${id}/freeze`);
+}
+
+export function unfreezeFollower(id) {
+    return fetcher.post(`/leader_followers/${id}/unfreeze`);
+}
+
 export function deleteResonator(followerId, resonatorId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}`);
 }

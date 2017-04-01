@@ -8,6 +8,7 @@ export default createSelector(
     (followers, clinics) => {
         return {
             followers: _(followers.followers)
+                                .filter(f => followers.displayFrozen || !f.frozen)
                                 .filter(f => filterByClinicId(followers, f))
                                 .map(f => ({
                                     ...f,
@@ -16,7 +17,8 @@ export default createSelector(
                                 .sortBy('created_at')
                                 .value(),
             clinics,
-            clinicIdFilter: followers.filterByClinicId
+            clinicIdFilter: followers.filterByClinicId,
+            displayFrozen: followers.displayFrozen
         };
     }
 );

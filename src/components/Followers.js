@@ -49,6 +49,10 @@ class Followers extends Component {
         this.props.showDeleteFollowerPrompt(id);
     }
 
+    handleFreezeFollower(id) {
+        this.props.showFreezeFollowerPrompt(id);
+    }
+
     toggleMoreOptionsMenu(followerId) {
         this.setState({
             openedMoreOptionsMenuFollowerId: followerId
@@ -76,10 +80,21 @@ class Followers extends Component {
         return (
             <Toggle
                 toggled={this.state.showEmails}
-                style={{top: 8}}
+                style={{top: 8, width: 150, marginRight: 100}}
                 label="Show emails"
                 labelPosition='right'
                 onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
+        );
+    }
+
+    renderShowFrozenToggle() {
+        return (
+            <Toggle
+                toggled={this.props.displayFrozen}
+                style={{top: 8}}
+                label="Show frozen followers"
+                labelPosition='right'
+                onToggle={this.props.toggleDisplayFrozen} />
         );
     }
 
@@ -104,29 +119,51 @@ class Followers extends Component {
 
     getToolbox() {
         return {
-            left: [this.renderClinicFilter(), this.renderShowEmailsToggle()]
+            left: [
+                this.renderClinicFilter(),
+                this.renderShowEmailsToggle(),
+                this.renderShowFrozenToggle()
+            ]
         };
     }
 
     renderMoreOptionsMenu() {
-        return followerId => (
-            <MoreOptionsMenu
-                open={followerId === this.state.openedMoreOptionsMenuFollowerId}
-                onRequestChange={() => this.toggleMoreOptionsMenu(followerId)}
-                onBlur={() => this.toggleMoreOptionsMenu(null)}
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-            >
+        return followerId => {
+            const follower = this.props.getFollower(followerId);
+
+            const freezeUnfreezeMenuItem = follower.frozen ? (
+                <MenuItem
+                    primaryText='Unfreeze'
+                    onClick={() => this.props.unfreezeFollower(followerId)}
+                />
+            ) : (
                 <MenuItem
                     primaryText='Freeze'
                     onClick={() => this.handleFreezeFollower(followerId)}
                 />
-                <MenuItem
-                    primaryText='Delete'
-                    onClick={() => this.handleRemoveFollower(followerId)}
-                />
-            </MoreOptionsMenu>
-        );
+            );
+
+            return (
+                <MoreOptionsMenu
+                    open={followerId === this.state.openedMoreOptionsMenuFollowerId}
+                    onRequestChange={() => this.toggleMoreOptionsMenu(followerId)}
+                    onBlur={() => this.toggleMoreOptionsMenu(null)}
+                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                >
+                    <MenuItem
+                        primaryText='Edit'
+                        onClick={() => this.handleEditFollower(followerId)}
+                    />
+                    {freezeUnfreezeMenuItem}
+                    <MenuItem
+                        primaryText='Delete'
+                        onClick={() => this.handleRemoveFollower(followerId)}
+                        style={{color: 'red'}}
+                    />
+                </MoreOptionsMenu>
+            );
+        }
     }
 
     render() {
@@ -141,10 +178,9 @@ class Followers extends Component {
                 rows={rows}
                 toolbox={toolbox}
                 addButton={true}
-                rowActions={['edit', moreOptionsMenu]}
+                rowActions={[moreOptionsMenu]}
                 className='followers'
                 onAdd={this.handleAddFollower}
-                onEdit={this.handleEditFollower}
             />
         );
     }
@@ -154,14 +190,17 @@ function mapStateToProps(state) {
     let followersData = followersSelector(state);
 
     return {
-        ...followersData
+        ...followersData,
+        getFollower: followerId => _.find(followersData.followers, f => f.id === followerId)
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         editFollower: actions.edit,
+        unfreezeFollower: actions.unfreeze,
         filterByClinicId: actions.filterByClinicId,
+        toggleDisplayFrozen: actions.toggleDisplayFrozen,
         showEditFollowerModal: followerId => navigationActions.showModal({
             name: 'editFollower',
             props: {
@@ -181,7 +220,13 @@ function mapDispatchToProps(dispatch) {
                 followerId
             }
         }),
-        selectFollower: actions.selectFollower
+        showFreezeFollowerPrompt: followerId => navigationActions.showModal({
+            name: 'freezeFollower',
+            props: {
+                followerId
+            }
+        }),
+        selectFollower: actions.selectFollower,
     }, dispatch);
 }
 

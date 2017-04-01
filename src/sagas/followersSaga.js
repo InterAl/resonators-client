@@ -42,6 +42,40 @@ handle(types.DELETE, function*(sagaParams, {payload}) {
     }));
 });
 
+handle(types.FREEZE, function*(sagaParams, {payload}) {
+    yield call(followerApi.freezeFollower, payload);
+    const followers = yield select(followersSelector);
+    const follower = yield getFollower(payload);
+
+    const updatedFollower = {
+        ...follower,
+        frozen: true
+    };
+
+    yield updateStateWithNewFollower(updatedFollower);
+});
+
+handle(types.UNFREEZE, function*(sagaParams, {payload}) {
+    yield call(followerApi.unfreezeFollower, payload);
+    const followers = yield select(followersSelector);
+    const follower = yield getFollower(payload);
+
+    const updatedFollower = {
+        ...follower,
+        frozen: false
+    };
+
+    yield updateStateWithNewFollower(updatedFollower);
+});
+
+handle(types.TOGGLE_DISPLAY_FROZEN, function*(sagaParams, {payload}) {
+    const {displayFrozen} = yield select(state => state.followers);
+
+    yield put(updateState({
+        displayFrozen: !displayFrozen
+    }));
+});
+
 handle(types.UPDATE, function*(sagaParams, {payload}) {
     yield call(followerApi.edit, payload);
     let follower = yield getFollower(payload.id);
