@@ -80,7 +80,7 @@ class Followers extends Component {
         return (
             <Toggle
                 toggled={this.state.showEmails}
-                style={{top: 8, width: 150, marginRight: 100}}
+                style={{top: 8, width: 150}}
                 label="Show emails"
                 labelPosition='right'
                 onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
@@ -91,7 +91,7 @@ class Followers extends Component {
         return (
             <Toggle
                 toggled={this.props.displayFrozen}
-                style={{top: 8}}
+                style={{top: 8, width: '80%'}}
                 label="Show frozen followers"
                 labelPosition='right'
                 onToggle={this.props.toggleDisplayFrozen} />
