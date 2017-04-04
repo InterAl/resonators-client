@@ -11,11 +11,20 @@ var secrets = require('../src/config/secrets');
 var commitHash = execSync('git rev-parse --verify HEAD');
 var commitTime = execSync('git show -s --format=%ci HEAD');
 
+try {
+    execSync('gzip -9 ' + attachmentPath + ' -k');
+} catch (err) {
+    console.error('failed gzipping', err);
+}
+
+attachmentPath += '.gz';
+
 var formData = {
     asset_id: asset_id,
     secret: secrets.uploadClientVersionSecret,
     media_data: fs.createReadStream(attachmentPath),
-    tag: commitHash + ' | ' + commitTime
+    tag: commitHash + ' | ' + commitTime,
+    contentEncoding: 'gzip'
 };
 
 console.log('uploading client version...');
