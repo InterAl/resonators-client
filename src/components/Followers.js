@@ -144,13 +144,7 @@ class Followers extends Component {
             );
 
             return (
-                <MoreOptionsMenu
-                    open={followerId === this.state.openedMoreOptionsMenuFollowerId}
-                    onRequestChange={open => open && this.toggleMoreOptionsMenu(followerId)}
-                    onBlur={() => setTimeout(() => this.toggleMoreOptionsMenu(null), 100)}
-                    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-                    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                >
+                <MoreOptionsMenu>
                     <MenuItem
                         primaryText='Edit'
                         onTouchTap={() => this.handleEditFollower(followerId)}
