@@ -54,6 +54,9 @@ class Followers extends Component {
     }
 
     toggleMoreOptionsMenu(followerId) {
+        if (!followerId && !this.state.openedMoreOptionsMenuFollowerId)
+            return; //prevent stack overflow
+
         this.setState({
             openedMoreOptionsMenuFollowerId: followerId
         });
@@ -134,31 +137,31 @@ class Followers extends Component {
             const freezeUnfreezeMenuItem = follower.frozen ? (
                 <MenuItem
                     primaryText='Unfreeze'
-                    onClick={() => this.props.unfreezeFollower(followerId)}
+                    onTouchTap={() => this.props.unfreezeFollower(followerId)}
                 />
             ) : (
                 <MenuItem
                     primaryText='Freeze'
-                    onClick={() => this.handleFreezeFollower(followerId)}
+                    onTouchTap={() => this.handleFreezeFollower(followerId)}
                 />
             );
 
             return (
                 <MoreOptionsMenu
                     open={followerId === this.state.openedMoreOptionsMenuFollowerId}
-                    onRequestChange={() => this.toggleMoreOptionsMenu(followerId)}
-                    onBlur={() => this.toggleMoreOptionsMenu(null)}
+                    onRequestChange={open => open && this.toggleMoreOptionsMenu(followerId)}
+                    onBlur={() => setTimeout(() => this.toggleMoreOptionsMenu(null), 100)}
                     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                     targetOrigin={{horizontal: 'right', vertical: 'top'}}
                 >
                     <MenuItem
                         primaryText='Edit'
-                        onClick={() => this.handleEditFollower(followerId)}
+                        onTouchTap={() => this.handleEditFollower(followerId)}
                     />
                     {freezeUnfreezeMenuItem}
                     <MenuItem
                         primaryText='Delete'
-                        onClick={() => this.handleRemoveFollower(followerId)}
+                        onTouchTap={() => this.handleRemoveFollower(followerId)}
                         style={{color: 'red'}}
                     />
                 </MoreOptionsMenu>
