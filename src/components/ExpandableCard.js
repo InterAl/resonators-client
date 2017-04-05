@@ -44,7 +44,7 @@ class ExpandableCard extends Component {
         let {expanded} = this.props.cardData;
 
         return (
-            <Card style={{width: this.props.width, margin: this.props.margin, ...this.props.style}}
+            <Card style={{maxWidth: '100vw', width: this.props.width, margin: this.props.margin, ...this.props.style}}
                   expanded={expanded}
                   onExpandChange={this.handleExpandChange}
             >
