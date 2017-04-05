@@ -40,12 +40,6 @@ export default class EntityTable extends Component {
                 </ToolbarGroup>
                 <ToolbarGroup>
                     {_.get(this.props, 'toolbox.right')}
-                    {this.props.addButton &&
-                    <FloatingActionButton
-                        mini={true}
-                        onTouchTap={this.props.onAdd}>
-                        <ContentAdd />
-                    </FloatingActionButton>}
                 </ToolbarGroup>
             </Toolbar>
         );
@@ -135,6 +129,13 @@ export default class EntityTable extends Component {
                         {this.renderBody()}
                     </Table>
                 </div>
+                {this.props.addButton &&
+                    <div className='add-btn'>
+                        <FloatingActionButton
+                            onTouchTap={this.props.onAdd}>
+                            <ContentAdd />
+                        </FloatingActionButton>
+                    </div>}
             </div>
         );
     }

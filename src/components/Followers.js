@@ -62,6 +62,10 @@ class Followers extends Component {
         });
     }
 
+    toggleShowEmails() {
+        this.setState({showEmails: !this.state.showEmails});
+    }
+
     renderClinicFilter() {
         return (
             <SelectField
@@ -76,28 +80,6 @@ class Followers extends Component {
                 ))
             }
             </SelectField>
-        );
-    }
-
-    renderShowEmailsToggle() {
-        return (
-            <Toggle
-                toggled={this.state.showEmails}
-                style={{top: 8, width: 150}}
-                label="Show emails"
-                labelPosition='right'
-                onToggle={() => this.setState({showEmails: !this.state.showEmails})} />
-        );
-    }
-
-    renderShowFrozenToggle() {
-        return (
-            <Toggle
-                toggled={this.props.displayFrozen}
-                style={{top: 8, width: '80%'}}
-                label="Show frozen followers"
-                labelPosition='right'
-                onToggle={this.props.toggleDisplayFrozen} />
         );
     }
 
@@ -121,11 +103,26 @@ class Followers extends Component {
     }
 
     getToolbox() {
+        const moreOptions = [];
+
+        if (this.state.showEmails)
+            moreOptions.push('showEmails');
+
+        if (this.props.displayFrozen)
+            moreOptions.push('showFrozen');
+
         return {
             left: [
-                this.renderClinicFilter(),
-                this.renderShowEmailsToggle(),
-                this.renderShowFrozenToggle()
+                this.renderClinicFilter()
+            ],
+            right: [
+                <MoreOptionsMenu
+                    multiple
+                    value={moreOptions}
+                >
+                    <MenuItem onTouchTap={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
+                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()} primaryText='Show Frozen' value='showFrozen'/>
+                </MoreOptionsMenu>
             ]
         };
     }

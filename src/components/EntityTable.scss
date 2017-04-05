@@ -7,4 +7,19 @@
     a {
         cursor: pointer;
     }
+
+    .add-btn {
+        position: fixed;
+        bottom: 12px;
+
+        @media (min-width: 0px)  {
+            right: 5px;
+        }
+        @media (min-width: 767px)  {
+            right: 88px;
+        }
+        @media (min-width: 992px) {
+            right: 186px;
+        }
+    }
 }
