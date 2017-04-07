@@ -61,9 +61,9 @@ class FollowerResonators extends Component {
     render() {
         let rows = this.getRows();
         let header = this.getHeader();
-        let addRoute = location.pathname + '/new';
-        let getEditRoute = id => `${location.pathname}/${id}/edit`;
-        let showRoute = id => `${location.pathname}/${id}/show`;
+        let addRoute = `/followers/${this.props.match.params.followerId}/resonators/new`;
+        let getEditRoute = id => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
+        let showRoute = id => `/followers/${this.props.match.params.followerId}/resonators/${id}/show`;
 
         return (
             <EntityTable

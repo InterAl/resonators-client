@@ -91,30 +91,35 @@ const tree = {
                 "followers": {
                     title: "Followers",
                     routes: {
-                        "/:followerId/resonators": {
+                        "/:followerId": {
                             title: (state, routeParams) => {
                                 const follower = followerSelector(state, routeParams.followerId);
-                                return follower.user.name;
+                                return _.get(follower, 'user.name');
                             },
                             routes: {
-                                "/:resonatorId": {
-                                    title: (state, routeParams) => {
-                                        const resonator = resonatorSelector(state, routeParams.resonatorId);
-                                        return resonator.title;
-                                    },
+                                "/resonators": {
+                                    title: 'Resonators',
                                     routes: {
-                                        "/stats/:qid": {
-                                            title: 'Criterion stats'
-                                        },
-                                        "/edit": {
-                                            title: 'Edit'
-                                        },
-                                        "/show": {
-                                            title: 'Preview'
-                                        },
                                         "/new": {
                                             title: 'Create'
-                                        }
+                                        },
+                                        "/:resonatorId": {
+                                            title: (state, routeParams) => {
+                                                const resonator = resonatorSelector(state, routeParams.resonatorId);
+                                                return _.get(resonator, 'title', 'Resonator');
+                                            },
+                                            routes: {
+                                                "/stats/:qid": {
+                                                    title: 'Criterion stats'
+                                                },
+                                                "/edit": {
+                                                    title: 'Edit'
+                                                },
+                                                "/show": {
+                                                    title: 'Preview'
+                                                },
+                                            }
+                                        },
                                     }
                                 }
                             }
