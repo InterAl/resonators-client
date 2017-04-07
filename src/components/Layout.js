@@ -20,6 +20,7 @@ class Layout extends Component {
             <MuiThemeProvider>
                 <div className='mainContainer'>
                     <AppBar
+                      style={{position: 'fixed'}}
                       showMenuIconButton={this.props.navigationInfo.showHamburger}
                       iconElementLeft={
                           <IconButton onTouchTap={this.props.toggleMenu}>
