@@ -162,6 +162,8 @@ const tree = {
                                         return criterion.title;
                                     },
 
+                                    stubRoute: true,
+
                                     routes: {
                                         "/edit": {
                                             title: 'Edit'
