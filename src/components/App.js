@@ -1,5 +1,7 @@
 import React from 'react';
-import { Router, Route, browserHistory } from 'react-router';
+import { Route, Switch } from 'react-router';
+import { ConnectedRouter } from 'react-router-redux';
+import history from '../stores/history';
 import Layout from './Layout';
 import '../static/bootstrap/css/bootstrap.min.css';
 import Followers from './Followers';
@@ -24,26 +26,31 @@ class AppComponent extends React.Component {
   };
 
   render() {
-    return (
-      <Router history={browserHistory}>
-          <Route path="/" component={Layout}>
-              <Route path="resetPassword" component={ResetPasword} />
-              <Route path="*/criteria/submit" component={ResonatorFeedback} />
-              <Route path="followers" component={Followers} />
-              <Route path="followers/:followerId/resonators/new" component={EditResonator} />
-              <Route path="followers/:followerId/resonators/:resonatorId/show" component={ShowResonator}/>
-              <Route path="followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
-              <Route path="followers/:followerId/resonators" component={FollowerResonators}/>
-              <Route path="followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
-              <Route path="clinics" component={Clinics}/>
-              <Route path="clinics/criteria/new" component={CriteriaCreation}/>
-              <Route path="clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
-              <Route path="clinics/criteria" component={CriteriaList}/>
-              <Route path="login" component={Visitor} />
-              <Route path="/*" component={NoMatch} />
-          </Route>
-      </Router>
-    );
+      return (
+          <ConnectedRouter history={history}>
+              <Route path='/'>
+                  <Layout>
+                      <Switch>
+                          <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
+                          <Route exact path="/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
+                          <Route exact path="/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
+                          <Route exact path="/followers/:followerId/resonators" component={FollowerResonators}/>
+                          <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator}/>
+                          <Route exact path="/followers" component={Followers} />
+
+                          <Route exact path="/resetPassword" component={ResetPasword} />
+                          <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
+                          <Route exact path="/clinics" component={Clinics}/>
+                          <Route exact path="/clinics/criteria/new" component={CriteriaCreation}/>
+                          <Route exact path="/clinics/criteria/:criterionId/edit" component={CriteriaCreation}/>
+                          <Route exact path="/clinics/criteria" component={CriteriaList}/>
+                          <Route exact path="/login" component={Visitor} />
+                          <Route component={NoMatch} />
+                      </Switch>
+                  </Layout>
+              </Route>
+          </ConnectedRouter>
+      );
   }
 }
 

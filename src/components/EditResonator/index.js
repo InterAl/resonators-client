@@ -49,7 +49,7 @@ class EditResonator extends Component {
     }
 
     componentDidMount() {
-        const {followerId, resonatorId} = this.props.params;
+        const {followerId, resonatorId} = this.props.match.params;
         this.props.reset({followerId, resonatorId});
     }
 

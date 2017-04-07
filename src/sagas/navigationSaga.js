@@ -2,64 +2,49 @@ import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { put } from 'redux-saga/effects';
 import { actions, types } from '../actions/navigationActions';
-import {browserHistory} from 'react-router';
+import { push } from 'react-router-redux';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
-        title: 'Resonators',
         modal: null
     }
 });
 
 const screenToRoute = {
     'followers': {
-        route: '/followers',
-        title: 'Followers'
+        route: '/followers'
     },
     'clinics': {
-        route: '/clinics',
-        title: 'Clinics'
+        route: '/clinics'
     },
     'followerResonators': {
         route: '/followers/:followerId/resonators',
-        title: 'Resonators'
     },
     'login': {
         route: '/login',
-        title: 'Resonators'
     },
     'logout': {
         route: '/login',
-        title: 'Resonators'
     },
     'criteriaCreation': {
         route: '/clinics/criteria/new',
-        title: 'Clinics'
     },
     'criteriaList': {
         route: '/clinics/criteria',
-        title: 'Clinic Criteria'
     }
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {
-    let {requestedRoute, routeParams, requestedTitle} = parseNavigationRequestPayload(payload);
-    let {route, title} = getScreenRoute(requestedRoute);
+    let {requestedRoute, routeParams} = parseNavigationRequestPayload(payload);
+    let {route} = getScreenRoute(requestedRoute);
 
     if (routeParams) {
         route = resolveParameterizedRoute(route, routeParams);
     }
 
-    if (payload.replace)
-        browserHistory.replace(route);
-    else
-        browserHistory.push(route);
-
-    yield put(updateState({
-        title: requestedTitle || title
-    }));
+    yield put(push(route));
 });
 
 handle(types.SHOW_MODAL, function*(sagaParams, {payload}) {
@@ -78,15 +63,15 @@ handle(types.HIDE_MODAL, function*() {
 });
 
 function parseNavigationRequestPayload(payload) {
-    let replace, route, routeParams, requestedTitle;
+    let replace, route, routeParams;
 
     if (typeof payload === 'string') {
         route = payload;
     } else {
-        ({replace, route, routeParams, title: requestedTitle} = payload);
+        ({replace, route, routeParams} = payload);
     }
 
-    return { requestedRoute: route, replace, routeParams, requestedTitle };
+    return { requestedRoute: route, replace, routeParams };
 }
 
 function getScreenRoute(screen) {

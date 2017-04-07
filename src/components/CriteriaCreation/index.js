@@ -22,7 +22,7 @@ class CriteriaCreation extends Component {
     constructor(props) {
         super(props);
 
-        this.editMode = !!props.params.criterionId;
+        this.editMode = !!props.match.params.criterionId;
 
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -43,7 +43,7 @@ class CriteriaCreation extends Component {
     handleSubmit(form) {
         if (this.editMode) {
             this.props.updateCriterion({
-                criterionId: this.props.params.criterionId,
+                criterionId: this.props.match.params.criterionId,
                 ...form
             });
         } else {
@@ -121,7 +121,7 @@ function getInitialValues(criterion) {
 
 function mapStateToProps(state, ownProps) {
     const criterion = _.find(state.criteria.criteria,
-                             c => c.id === ownProps.params.criterionId);
+                             c => c.id === ownProps.match.params.criterionId);
 
     const initialValues = criterion && getInitialValues(criterion);
 

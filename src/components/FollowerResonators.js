@@ -6,8 +6,8 @@ import EntityTable from './EntityTable';
 import {actions} from '../actions/followersActions';
 import {actions as navigationActions} from '../actions/navigationActions';
 import ResonatorImage from './ResonatorImage' ;
+import { push } from 'react-router-redux';
 // import moment from 'moment';
-import {browserHistory} from 'react-router';
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -61,17 +61,17 @@ class FollowerResonators extends Component {
     render() {
         let rows = this.getRows();
         let header = this.getHeader();
-        let addRoute = browserHistory.getCurrentLocation().pathname + '/new';
-        let getEditRoute = id => `${browserHistory.getCurrentLocation().pathname}/${id}/edit`;
-        let showRoute = id => `${browserHistory.getCurrentLocation().pathname}/${id}/show`;
+        let addRoute = location.pathname + '/new';
+        let getEditRoute = id => `${location.pathname}/${id}/edit`;
+        let showRoute = id => `${location.pathname}/${id}/show`;
 
         return (
             <EntityTable
                 selectable={false}
-                onAdd={() => browserHistory.push(addRoute)}
-                onEdit={id => browserHistory.push(getEditRoute(id))}
+                onAdd={() => this.props.push(addRoute)}
+                onEdit={id => this.props.push(getEditRoute(id))}
                 onRemove={this.handleRemoveResonator}
-                onShow={id => browserHistory.push(showRoute(id))}
+                onShow={id => this.props.push(showRoute(id))}
                 addButton={true}
                 rowActions={['show', 'edit', 'remove']}
                 header={header}
@@ -81,7 +81,7 @@ class FollowerResonators extends Component {
     }
 }
 
-function mapStateToProps(state, {params: {followerId}}) {
+function mapStateToProps(state, {match: {params: {followerId}}}) {
     if (!followerId) return {};
 
     let follower = _.find(state.followers.followers, f => f.id === followerId);
@@ -100,7 +100,8 @@ function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
             props: {
                 resonatorId
             }
-        })
+        }),
+        push
     }, dispatch);
 }
 

@@ -10,15 +10,11 @@ import Hamburger from 'material-ui/svg-icons/navigation/menu';
 import ModalDisplayer from './ModalDisplayer';
 import navigationSelector from '../selectors/navigationSelector';
 import {actions as menuActions} from '../actions/menuActions';
+import {withRouter} from 'react-router';
+import renderBreadcrumbs from './routes/breadcrumbs';
 import './app.css';
 
 class Layout extends Component {
-    componentDidUpdate({params: {followerId} = {}}) {
-        if (followerId) {
-            this.props.fetchFollowerResonators(followerId);
-        }
-    }
-
     render() {
         return (
             <MuiThemeProvider>
@@ -30,7 +26,8 @@ class Layout extends Component {
                               <Hamburger />
                           </IconButton>
                       }
-                      title={this.props.navigationInfo.title}/>
+                      title={this.props.breadcrumbs}
+                  />
                     <SideMenu />
                     <div className='screenWrapper'>
                         {this.props.children}
@@ -42,9 +39,10 @@ class Layout extends Component {
     }
 }
 
-export default connect(state => ({
-    navigationInfo: navigationSelector(state)
+export default withRouter(connect(state => ({
+    navigationInfo: navigationSelector(state),
+    breadcrumbs: renderBreadcrumbs(state)
 }), dispatch => bindActionCreators({
     toggleMenu: menuActions.toggleMenu,
     fetchFollowerResonators: followersActions.fetchFollowerResonators
-}, dispatch))(Layout);
+}, dispatch))(Layout));

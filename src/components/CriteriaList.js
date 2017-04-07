@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
-import {browserHistory} from 'react-router';
+import {push} from 'react-router-redux';
 
 class CriteriaList extends Component {
     constructor(props) {
@@ -31,14 +31,14 @@ class CriteriaList extends Component {
 
     render() {
         let rows = this.getRows();
-        let addRoute = browserHistory.getCurrentLocation().pathname + '/new';
-        let getEditRoute = id => `${browserHistory.getCurrentLocation().pathname}/${id}/edit`;
+        let addRoute = location.pathname + '/new';
+        let getEditRoute = id => `${location.pathname}/${id}/edit`;
 
         return (
             <EntityTable
                 selectable={false}
-                onAdd={() => browserHistory.push(addRoute)}
-                onEdit={id => browserHistory.push(getEditRoute(id))}
+                onAdd={() => this.props.push(addRoute)}
+                onEdit={id => this.props.push(getEditRoute(id))}
                 onRemove={id => this.props.showDeleteCriterionPrompt(id)}
                 addButton={true}
                 rowActions={['edit', 'remove']}
@@ -62,7 +62,8 @@ function mapDispatchToProps(dispatch) {
             props: {
                 criterionId
             }
-        })
+        }),
+        push
     }, dispatch);
 }
 

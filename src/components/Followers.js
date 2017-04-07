@@ -8,7 +8,7 @@ import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
 import Toggle from 'material-ui/Toggle';
 import EntityTable from './EntityTable';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import MoreOptionsMenu from './MoreOptionsMenu';
 import MenuItem from 'material-ui/MenuItem';
 import './Followers.scss';
@@ -224,4 +224,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Followers);
+export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Followers);

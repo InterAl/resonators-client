@@ -1,14 +1,16 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import DownloadChartIcon from 'material-ui/svg-icons/file/file-download';
+import { push } from 'react-router-redux';
 import './ResonatorCriteria.scss';
-import {browserHistory} from 'react-router';
 
-export default class ResonatorCriteria extends Component {
+class ResonatorCriteria extends Component {
     static propTypes = {
         resonator: React.PropTypes.object
     }
@@ -21,7 +23,7 @@ export default class ResonatorCriteria extends Component {
 
     handleShowChart(criterionId) {
         let {follower_id, id: resonatorId} = this.props.resonator;
-        browserHistory.push(`/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
+        this.props.push(`/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
     }
 
     handleDownloadChart() {
@@ -71,3 +73,7 @@ export default class ResonatorCriteria extends Component {
         );
     }
 }
+
+export default connect(null, dispatch => bindActionCreators({
+    push
+}, dispatch))(ResonatorCriteria);

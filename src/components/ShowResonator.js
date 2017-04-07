@@ -30,13 +30,13 @@ class ShowResonator extends Component {
     }
 
     render() {
-        if (!_.get(this.props, 'params.resonatorId'))
+        if (!_.get(this.props, 'match.params.resonatorId'))
             return null;
 
         if (!this.props.resonator)
             return null;
 
-        let resonatorId = this.props.params.resonatorId;
+        let resonatorId = this.props.match.params.resonatorId;
 
         return (
             <div className='showResonator col-xs-12 col-md-10 col-md-offset-1 col-sm-offset-2 col-sm-8'>
@@ -68,7 +68,7 @@ class ShowResonator extends Component {
                         <hr/>
                         <h2 style={{textAlign: 'center'}}>Criteria</h2>
                         <ResonatorStats
-                            resonatorId={this.props.params.resonatorId}
+                            resonatorId={this.props.match.params.resonatorId}
                         />
                     </div>
                 )}
@@ -81,7 +81,7 @@ function mapStateToProps(state, ownProps) {
     let resonators = resonatorsSelector(state);
 
     return {
-        resonator: _.find(resonators, r => r.id === ownProps.params.resonatorId)
+        resonator: _.find(resonators, r => r.id === ownProps.match.params.resonatorId)
     };
 }
 
