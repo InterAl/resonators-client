@@ -23,7 +23,7 @@ class ResonatorFeedback extends Component {
     }
 
     renderAnswer(q, a, idx) {
-        const label = q.kind  === 'numeric' ? `${a.rank} - ${a.body}` : a.body;
+        const label = q.question_kind  === 'numeric' ? `${a.rank} - ${a.body}` : a.body;
 
         return (
             <div key={`${q.id}#${a.id}`}>
