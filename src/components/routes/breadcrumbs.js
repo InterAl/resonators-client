@@ -4,6 +4,7 @@ import { matchPath } from 'react-router'
 import {Link} from 'react-router-dom';
 import followerSelector from '../../selectors/followerSelector';
 import resonatorSelector from '../../selectors/resonatorSelector';
+import criterionSelector from '../../selectors/criterionSelector';
 import './breadcrumbs.scss';
 
 export default function renderBreadcrumbs(state) {
@@ -137,8 +138,17 @@ const tree = {
                                 "/new": {
                                     title: 'Create'
                                 },
-                                "/:criterionId/edit": {
-                                    title: 'Edit criterion'
+                                "/:criterionId": {
+                                    title: (state, routeParams) => {
+                                        const criterion = criterionSelector(state, routeParams.criterionId);
+                                        return criterion.title;
+                                    },
+
+                                    routes: {
+                                        "/edit": {
+                                            title: 'Edit'
+                                        }
+                                    }
                                 }
                             }
                         }
