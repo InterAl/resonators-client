@@ -23,14 +23,14 @@ class ResonatorFeedback extends Component {
     }
 
     renderAnswer(q, a, idx) {
-        // const showSpinner = this.props.answered[q.id] === a.id;
-        //
+        const label = q.kind  === 'numeric' ? `${a.rank} - ${a.body}` : a.body;
+
         return (
             <div key={`${q.id}#${a.id}`}>
                 <RaisedButton
                     primary
                     key={idx}
-                    label={a.body}
+                    label={label}
                     onClick={() => this.handleAnswerClick(q.id, a.id)}
                     style={{ marginBottom: 30 }}
                 />
