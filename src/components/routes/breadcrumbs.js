@@ -13,8 +13,11 @@ export default function renderBreadcrumbs(state) {
     routeStack = routeStack.length > 1 ? routeStack.slice(1) : routeStack;
 
     const parts = _.flatMap(routeStack, (route, idx) => {
+        let link = route.stubRoute ? _.get(routeStack, `[${idx + 1}].route`) : route.route;
+        link = link || '';
+
         return [
-            <Link className='breadcrumb-part' key={idx} to={route.route}>
+            <Link className='breadcrumb-part' key={idx} to={link}>
                 {_.truncate(route.title)}
             </Link>,
             <span className='breadcrumb-part-arrow'>
@@ -37,6 +40,7 @@ function getRouteStack(state) {
 
     return routeStack.map(r => ({
         route: r.match.url,
+        stubRoute: r.stubRoute,
         title: r.title(state)
     }));
 }
@@ -45,7 +49,7 @@ function resolveRouteStack(fullPathname, pathname, tree) {
     if (!tree)
         return [];
 
-    let childRoute, childKey, childMatch, childTitle;
+    let childRoute, childKey, childMatch, childTitle, stubRoute;
 
     for (let route of _.keys(tree.routes)) {
         const r = pathname + route;
@@ -56,18 +60,25 @@ function resolveRouteStack(fullPathname, pathname, tree) {
             strict: false
         });
 
+        const routeData = tree.routes[route];
+
         if (match) {
             childRoute = r;
             childKey = route;
             childMatch = match;
-            childTitle = resolveChildTitle(tree.routes[childKey].title, match);
+            childTitle = resolveChildTitle(routeData.title, match);
+            stubRoute = routeData.stubRoute
             break;
         }
     }
 
     if (childMatch) {
         const downStack = resolveRouteStack(fullPathname, childRoute, tree.routes[childKey]);
-        return [{match: childMatch, title: childTitle}].concat(downStack);
+        return [{
+            match: childMatch,
+            title: childTitle,
+            stubRoute
+        }].concat(downStack);
     }
 
     return [];
@@ -96,6 +107,7 @@ const tree = {
                                 const follower = followerSelector(state, routeParams.followerId);
                                 return _.get(follower, 'user.name');
                             },
+                            stubRoute: true,
                             routes: {
                                 "/resonators": {
                                     title: 'Resonators',
@@ -106,8 +118,9 @@ const tree = {
                                         "/:resonatorId": {
                                             title: (state, routeParams) => {
                                                 const resonator = resonatorSelector(state, routeParams.resonatorId);
-                                                return _.get(resonator, 'title', 'Resonator');
+                                                return _.truncate(_.get(resonator, 'title', 'Resonator'), {length: 13});
                                             },
+                                            stubRoute: true,
                                             routes: {
                                                 "/stats/:qid": {
                                                     title: 'Criterion stats'
