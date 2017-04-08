@@ -60,8 +60,8 @@ class CriteriaCreation extends Component {
                     <Paper className='card col-xs-12'>
                         <Subheader>Criterion Creation</Subheader>
                         <ClinicSelect/>
-                        <TextBox name='title' placeholder='Title'/>
-                        <TextBox name='description' placeholder='Description'/>
+                        <TextBox multiLine name='title' placeholder='Title'/>
+                        <TextBox multiLine name='description' placeholder='Description'/>
                         <Select name='question_kind' label='Criteria Type'>
                             <MenuItem value='numeric' primaryText='Numeric' />
                             <MenuItem value='boolean' primaryText='True / False' />
