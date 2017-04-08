@@ -28,7 +28,7 @@ handle(types.UPDATE_FINAL, function*() {
 
     function syncMedia() {
         if (formData.imageFile) {
-            return [resonatorApi.uploadMedia(followerId, resonator.id, formData.imageFile)];
+            return resonatorApi.uploadMedia(followerId, resonator.id, formData.imageFile);
         }
     }
 
