@@ -12,7 +12,7 @@ import navigationSelector from '../selectors/navigationSelector';
 import {actions as menuActions} from '../actions/menuActions';
 import {withRouter} from 'react-router';
 import renderBreadcrumbs from './routes/breadcrumbs';
-import './app.css';
+import './app.scss';
 
 class Layout extends Component {
     render() {

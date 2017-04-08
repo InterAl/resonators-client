@@ -1,35 +1,32 @@
 import React, {Component} from 'react';
 import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {actions} from '../actions/menuActions';
+import {actions} from '../../actions/menuActions';
 import {List, ListItem} from 'material-ui/List';
-import IconButton from 'material-ui/IconButton';
 import Divider from 'material-ui/Divider';
 import FollowerIcon from 'material-ui/svg-icons/maps/directions-walk';
 import ClinicIcon from 'material-ui/svg-icons/content/weekend';
 import CriteriaIcon from 'material-ui/svg-icons/notification/event-note';
 import ListIcon from 'material-ui/svg-icons/action/list';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
 import LogoutIcon from 'material-ui/svg-icons/action/exit-to-app';
-import navigationInfoSelector from '../selectors/navigationSelector';
-import './SideMenu.css';
+import navigationInfoSelector from '../../selectors/navigationSelector';
+import AppBar from './AppBar';
+import isMobile from '../isMobile';
+import classNames from 'classnames';
+import './index.scss';
 
 class SideMenu extends Component {
     render() {
         return (
             <Drawer
                 open={this.props.navigationInfo.menuOpen}
+                containerStyle={{marginTop: isMobile() ? 0 : 66}}
             >
-                <div className='sideMenu'>
-                    <AppBar
-                        iconElementLeft={
-                            <IconButton onTouchTap={this.props.toggleMenu}>
-                                <CloseIcon />
-                            </IconButton>
-                        }
-                    />
+                <div>
+                    {isMobile() &&
+                    <AppBar onClose={this.props.toggleMenu}/>}
+
                     <List>
                         <ListItem onTouchTap={() => this.props.clickMenuItem('followers')}
                                   primaryText='Followers'
