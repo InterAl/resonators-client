@@ -11,12 +11,32 @@ class EditResonatorMedia extends Component {
         super();
 
         this.handleFileChange = this.handleFileChange.bind(this);
+
+        this.state = {
+            previewImage: null
+        };
     }
 
     handleFileChange(ev) {
+        const file = ev.target.files[0];
+
         this.props.updateCreationStep({
-            imageFile: ev.target.files[0]
+            imageFile: file
         });
+
+        this.setImagePreview(file);
+    }
+
+    setImagePreview(file) {
+        var reader = new FileReader();
+
+        reader.onload = e => {
+            this.setState({
+                previewImage: e.target.result
+            });
+        }
+
+        reader.readAsDataURL(file);
     }
 
     render() {
@@ -24,7 +44,10 @@ class EditResonatorMedia extends Component {
             <div>
                 <Subheader>Upload an image</Subheader>
 
-                <ResonatorImage resonator={this.props.resonator} />
+                <ResonatorImage
+                    resonator={this.props.resonator}
+                    preview={this.state.previewImage}
+                />
 
                 <br/>
 
