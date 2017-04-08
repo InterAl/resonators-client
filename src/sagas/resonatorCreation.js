@@ -44,8 +44,8 @@ handle(types.UPDATE_FINAL, function*() {
     }
 
     let promises = [syncMedia(), syncCriteria(), syncResonatorData()];
-    yield call(() => Promise.all(promises));
-    yield updateResonator(followerId, resonator);
+    const [r1, r2, updatedResonator] = yield call(() => Promise.all(promises));
+    yield updateResonator(followerId, updatedResonator);
     yield put(updateState({ showSpinnerFinalUpdate: false }));
     yield put(navigationActions.navigate({
         route: 'followerResonators', routeParams: {followerId}

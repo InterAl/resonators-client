@@ -35,7 +35,6 @@ class EditResonator extends Component {
 
         this.steps = [
             this.renderBasic.bind(this),
-            this.renderActivation.bind(this),
             this.renderSchedule.bind(this),
             this.renderMedia.bind(this),
             this.renderCriteria.bind(this),
@@ -130,6 +129,7 @@ class EditResonator extends Component {
         return {
             label: 'Final',
             content: <div className='finalUpdateStep'>
+                        <ActivationStep/>
                         <RaisedButton
                             primary={true}
                             label='Submit'

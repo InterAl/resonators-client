@@ -25,4 +25,7 @@ class EditResonatorActivation extends Component {
     }
 }
 
-export default StepBase()(EditResonatorActivation);
+export default StepBase({
+    noNext: true,
+    noBack: true,
+})(EditResonatorActivation);
