@@ -48,6 +48,9 @@ class ShowResonator extends Component {
                         width={this.state.iframeWidth || 497}
                         height={this.state.iframeHeight || 60}
                         id={`resonatorPreview-${resonatorId}`}
+                        defaultCardData={{
+                            expanded: _.size(this.props.resonator.questions) === 0
+                        }}
                         title='Resonator Preview'
                         avatar={<ShowIcon/>}
                     >
