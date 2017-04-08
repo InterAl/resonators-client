@@ -47,7 +47,7 @@ class ResonatorCriteriaSelection extends Component {
                     primaryText={criterion.title}
                     leftCheckbox={
                         <Checkbox
-                            defaultChecked={this.isCriterionAttached(criterion)}
+                            checked={this.isCriterionAttached(criterion)}
                             onCheck={(e, c) => this.handleCheck(criterion.id, c)}
                         />
                     }
