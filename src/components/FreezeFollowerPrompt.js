@@ -24,15 +24,15 @@ class FreezeFollowerPrompt extends Component {
 
         return (
             <SimplePrompt
-                title='Freeze Follower'
-                acceptText='Freeze'
-                text={[<div>
-                    {`Freeze ${name}?`}
-                </div>,
-                <br/>,
+                title='Deactivate Follower'
+                acceptText='Confirm'
+                text={
                 <div>
-                    You will no longer see him in your followers list (by default), and no resonators will be sent to him.
-                </div>]}
+                    {`${name} will no longer receive Resonators assigned by you. Continue?`}
+                    <br/>
+                    <br/>
+                    (Note: inactive followers can be filtered in/out at the top of this page)
+                </div>}
                 onAccept={this.handleFreezeClick}
                 onClose={this.props.onClose}
                 open={this.props.open}

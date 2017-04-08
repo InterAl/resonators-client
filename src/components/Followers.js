@@ -94,7 +94,16 @@ class Followers extends Component {
     getRows() {
         return _.reduce(this.props.followers, (acc, f) => {
             let cols = [];
-            cols.push(<Link to={`/followers/${f.id}/resonators`}>{f.user.name}</Link>);
+            cols.push(
+                <Link
+                    to={`/followers/${f.id}/resonators`}
+                    style={{
+                        color: f.frozen ? 'rgb(157, 155, 155)' : ''
+                    }}
+                >
+                    {f.user.name}
+                </Link>
+            );
             this.state.showEmails && cols.push(f.user.email);
             cols.push(f.clinicName);
             acc[f.id] = cols;
@@ -133,12 +142,12 @@ class Followers extends Component {
 
             const freezeUnfreezeMenuItem = follower.frozen ? (
                 <MenuItem
-                    primaryText='Unfreeze'
+                    primaryText='Activate'
                     onTouchTap={() => this.props.unfreezeFollower(followerId)}
                 />
             ) : (
                 <MenuItem
-                    primaryText='Freeze'
+                    primaryText='Deactivate'
                     onTouchTap={() => this.handleFreezeFollower(followerId)}
                 />
             );
