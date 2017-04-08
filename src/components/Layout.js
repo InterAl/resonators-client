@@ -11,7 +11,9 @@ import ModalDisplayer from './ModalDisplayer';
 import navigationSelector from '../selectors/navigationSelector';
 import {actions as menuActions} from '../actions/menuActions';
 import {withRouter} from 'react-router';
+import HeaderLogo from './HeaderLogo';
 import renderBreadcrumbs from './routes/breadcrumbs';
+import isMobile from './isMobile';
 import './app.scss';
 
 class Layout extends Component {
@@ -27,6 +29,8 @@ class Layout extends Component {
                               <Hamburger />
                           </IconButton>
                       }
+                      iconElementRight={<HeaderLogo/>}
+                      iconStyleRight={{ margin: 'auto', display: isMobile() ? 'none' : 'block' }}
                       title={this.props.breadcrumbs}
                   />
                     <SideMenu />
