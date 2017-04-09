@@ -12,8 +12,8 @@
     "release:major": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
     "release:minor": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
     "release:patch": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
-    "serve:dev": "webpack-dev-server --open --env dev",
-    "serve:dist": "webpack-dev-server --open --env dist -p --progress",
+    "serve:dev": "webpack-dev-server --env dev",
+    "serve:dist": "webpack-dev-server --env dist -p --progress",
     "start": "npm run serve:dev",
     "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
     "release:prod": "npm run dist && ./scripts/uploadClientVersion"

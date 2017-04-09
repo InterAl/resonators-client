@@ -37,7 +37,7 @@ function executeCommand(cmd) {
     switch (cmd) {
         case 'restart':
             console.log('restarting mocha');
-            mochaProcess.kill();
+            process.kill(-mochaProcess.pid);
             runMocha();
             break;
     }
@@ -48,9 +48,12 @@ function runMocha() {
     const args = process.argv.slice(2);
     const argsTxt = args.join(' ');
 
-    return childProcess.spawn('mocha', args, {
-        stdio: 'inherit'
+    mochaProcess = childProcess.spawn('mocha', args, {
+        stdio: 'inherit',
+        detached: true
     });
+
+    return mochaProcess;
 }
 
 function initBabel() {

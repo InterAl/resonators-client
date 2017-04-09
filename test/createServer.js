@@ -47,12 +47,12 @@ export default async function createServer() {
 
     const clientProcess = childProcess.spawn('npm', ['start']);
 
-    const serverPromise = readStdOutUntil(serverProcess, 'Node app is running')
+    const serverPromise = readStdOutUntil(serverProcess, 'Node app is running', '[SERVER]', '\x1b[33m%s\x1b[0m:')
         .then(() => {
             console.log('server is ready');
         });
 
-    const clientPromise = readStdOutUntil(clientProcess, 'webpack: Compiled')
+    const clientPromise = readStdOutUntil(clientProcess, 'webpack: Compiled', '[CLIENT]', '\x1b[36m%s\x1b[0m')
         .then(() => {
             console.log('client is ready');
         });
@@ -64,21 +64,21 @@ export default async function createServer() {
         });
 }
 
-function readStdOutUntil(process, str) {
+function readStdOutUntil(process, str, prefix, color) {
     return new Promise((res, rej) => {
         process.stdout.setEncoding('utf8');
 
         process.stdout.on('data', function(data) {
             var line = data.toString();
 
-            console.log(line);
+            console.log(color, prefix, line);
 
             if (line.indexOf(str) !== -1)
                 res();
         });
 
         process.stderr.on('data', function(data) {
-            console.log(data.toString());
+            console.log(color, prefix, data.toString());
         });
     });
 }
