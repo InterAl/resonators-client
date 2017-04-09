@@ -15,7 +15,7 @@
     "serve:dev": "webpack-dev-server --open --env dev",
     "serve:dist": "webpack-dev-server --open --env dist -p --progress",
     "start": "npm run serve:dev",
-    "test": "mocha --require test/setup.js \"test/**/*.test.js\" --watch",
+    "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
     "release:prod": "npm run dist && ./scripts/uploadClientVersion"
   },
   "repository": "",

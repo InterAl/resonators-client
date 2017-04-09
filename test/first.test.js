@@ -1,4 +1,5 @@
 import nightmare from './nightmare';
+import {assert} from 'chai';
 
 describe('gg', () => {
     beforeEach(() => {
@@ -6,11 +7,13 @@ describe('gg', () => {
     });
 
     it('description', function() {
-        this.timeout(20000);
-
         return nightmare()
             .goto('/login')
             .end()
-            .then(result => console.log('result', result));
+            .then(result => console.log('result', result))
+            .catch(err => {
+                console.error(err);
+                throw err;
+            });
     });
 });

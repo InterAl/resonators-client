@@ -9,7 +9,6 @@ export function initNightmare(endpoint) {
     const baseUrl = `http://${endpoint}`;
 
     nightmare.goto = (url, ...rest) => {
-        console.log('nnnnnnnn', baseUrl+url);
         return oldGoto.call(nightmare, baseUrl + url, ...rest);
     };
 };

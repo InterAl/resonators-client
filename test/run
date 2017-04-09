@@ -1,0 +1,62 @@
+#!/usr/bin/env node
+
+initBabel();
+
+const childProcess = require('child_process');
+const createServer = require('./createServer').default;
+const nightmare = require('./nightmare');
+const readline = require('readline');
+
+let mochaProcess;
+
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+createServer()
+.then(endpoint => {
+    return nightmare.initNightmare(endpoint);
+})
+.then(() => {
+    mochaProcess = runMocha();
+    return mochaProcess;
+})
+.then(() => {
+    repl();
+})
+
+function repl() {
+    rl.question('> ', cmd => {
+        executeCommand(cmd);
+        repl();
+    });
+}
+
+function executeCommand(cmd) {
+    switch (cmd) {
+        case 'restart':
+            console.log('restarting mocha');
+            mochaProcess.kill();
+            runMocha();
+            break;
+    }
+}
+
+
+function runMocha() {
+    const args = process.argv.slice(2);
+    const argsTxt = args.join(' ');
+
+    return childProcess.spawn('mocha', args, {
+        stdio: 'inherit'
+    });
+}
+
+function initBabel() {
+    require('./setup');
+}
+
+(function wait () {
+   if (true) setTimeout(wait, 1000);
+})();
