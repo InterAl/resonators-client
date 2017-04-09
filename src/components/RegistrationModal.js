@@ -47,7 +47,7 @@ class RegistrationModal extends Component {
                 onRequestClose={this.props.onClose}
             >
                 <form autoComplete={false} className='registration-form'>
-                    <TextBox autocorrect="off" autocomplete="gaga" type='email' name='email' placeholder='Email' />
+                    <TextBox autocorrect="off" type='email' name='email' placeholder='Email' />
                     <TextBox name='name' placeholder='Name' />
                     <TextBox type='password' name='password' placeholder='Password' />
                     <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />

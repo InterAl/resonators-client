@@ -55,6 +55,9 @@ handle(types.LOGIN, function*(sagaParams, action) {
 handle(types.LOGOUT, function*() {
     try {
         yield call(sessionApi.logout);
+        yield put(updateState({
+            loggedIn: false
+        }));
         yield put(navigationActions.navigate('logout'));
     } catch (err) {
         console.warn('logout failed', err);

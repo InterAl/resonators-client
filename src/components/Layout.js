@@ -14,6 +14,7 @@ import {withRouter} from 'react-router';
 import HeaderLogo from './HeaderLogo';
 import renderBreadcrumbs from './routes/breadcrumbs';
 import isMobile from './isMobile';
+import classNames from 'classnames';
 import './app.scss';
 
 class Layout extends Component {
@@ -34,7 +35,9 @@ class Layout extends Component {
                       title={this.props.breadcrumbs}
                   />
                     <SideMenu />
-                    <div className='screenWrapper'>
+                    <div className={classNames('screenWrapper', {
+                        menuClosed: !this.props.navigationInfo.menuOpen
+                    })}>
                         {this.props.children}
                         <ModalDisplayer modal={this.props.navigationInfo.modal} />
                     </div>

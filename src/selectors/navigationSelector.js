@@ -10,7 +10,7 @@ export default createSelector(
 
     (loginInfo, menu, navigation) => ({
         showHamburger: isMobile() && Boolean(loginInfo.loggedIn),
-        menuOpen: !isMobile() || Boolean(menu.isOpen),
+        menuOpen: loginInfo.loggedIn && (!isMobile() || Boolean(menu.isOpen)),
         title: navigation.title,
         modal: navigation.modal,
         modalProps: _.get(navigation.modal, 'props')
