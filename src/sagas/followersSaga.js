@@ -115,6 +115,12 @@ handle(resonatorTypes.REMOVE, function*(sagaParams, {payload}) {
     }));
 });
 
+handle(types.FILTER_BY_CLINIC_ID, function*(sagaParams, {payload}) {
+    yield put(updateState({
+        filterByClinicId: payload
+    }));
+});
+
 export function* waitForFollowers() {
     let followers;
 
