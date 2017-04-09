@@ -130,7 +130,7 @@ class Followers extends Component {
                     value={moreOptions}
                 >
                     <MenuItem onTouchTap={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
-                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()} primaryText='Show Frozen' value='showFrozen'/>
+                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()} primaryText='Show Deactivated' value='showFrozen'/>
                 </MoreOptionsMenu>
             ]
         };
