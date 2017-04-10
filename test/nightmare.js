@@ -1,16 +1,21 @@
 import Nightmare from 'nightmare';
 import path from 'path';
 
-let nightmare;
+let endpoint;
 
-export function initNightmare(endpoint) {
-    nightmare = Nightmare({
+export function initNightmare(e) {
+    endpoint = e;
+};
+
+export default function() {
+    const nightmare = Nightmare({
         typeInterval: 20
     });
 
     patchGoto(nightmare, endpoint);
     patchScreenshot(nightmare);
-};
+    return nightmare;
+}
 
 function patchGoto(nightmare, endpoint) {
     const baseUrl = `http://${endpoint}`;
@@ -29,5 +34,3 @@ function patchScreenshot(nightmare) {
                                   ...rest);
     };
 }
-
-export default () => nightmare;
