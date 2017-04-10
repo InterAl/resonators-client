@@ -36,3 +36,4 @@ dist/
 .idea/
 
 secrets.js
+.DS_Store

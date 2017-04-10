@@ -29,6 +29,7 @@ class RegistrationModal extends Component {
             />,
             <FlatButton
                 onTouchTap={this.props.handleSubmit(this.handleSubmit)}
+                className='registration-submit'
                 type='submit'
                 label="Register"
                 primary={true}

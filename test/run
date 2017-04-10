@@ -19,6 +19,9 @@ createServer()
     return nightmare.initNightmare(endpoint);
 })
 .then(() => {
+    return childProcess.execSync('pgre -f mocha | xargs kill -9');
+})
+.then(() => {
     mochaProcess = runMocha();
     return mochaProcess;
 })
@@ -37,7 +40,7 @@ function executeCommand(cmd) {
     switch (cmd) {
         case 'restart':
             console.log('restarting mocha');
-            process.kill(-mochaProcess.pid);
+            mochaProcess.kill('SIGINT');
             runMocha();
             break;
     }
@@ -49,8 +52,7 @@ function runMocha() {
     const argsTxt = args.join(' ');
 
     mochaProcess = childProcess.spawn('mocha', args, {
-        stdio: 'inherit',
-        detached: true
+        stdio: 'inherit'
     });
 
     return mochaProcess;
