@@ -1,60 +1,63 @@
-import getNightmare from '../nightmare';
+import test from 'ava';
+import createNightmare from '../nightmare';
 import {assert} from 'chai';
 import register from '../operations/register';
 import login from '../operations/login';
 
-describe('first page', function() {
-    this.timeout(8000);
+test('title should be Resonators', async t => {
+    const nightmare = createNightmare();
 
-    let nightmare;
-
-    before(() => {
-        nightmare = getNightmare().goto('/login');
-    });
-
-    after(() => {
-        nightmare.end().then(() => 'ended');
-    })
-
-    it('title should be Resonators', function() {
-        return nightmare.evaluate(() => document.title)
-            .then(title => {
-                assert.equal(title, 'Resonators');
-            });
-    });
-
-    it('login form frame', function() {
-        return nightmare.evaluate(() => {
-            return document.querySelector('.loginForm').innerText;
-        }).then(txt => {
-            const t = txt.toLowerCase();
-            assert.include(t, 'submit');
-            assert.include(t, 'registration');
-            assert.include(t, 'forgot password?');
-        });
-    });
-
-    describe('registration', () => {
-        before(() => {
-            nightmare = nightmare.mouseup('.registerBtn');
+    await nightmare.goto('/login').evaluate(() => document.title)
+        .then(title => {
+            assert.equal(title, 'Resonators');
         });
 
-        it('registration form appears after clicking register', () => {
-            return nightmare.exists('.registration-form').then(assert.isTrue);
-        });
+    await nightmare.end();
 
-        it('register', async function() {
-            this.timeout(5000);
+    t.pass();
+});
 
-            const {nightmare, authToken} = await register();
-            return nightmare.screenshot('post-submission').end();
-        });
+test('login form frame', async t => {
+    const nightmare = createNightmare();
+
+    const txt = await nightmare
+    .goto('/login')
+    .evaluate(() => {
+        return document.querySelector('.loginForm').innerText;
     });
 
-    it('login with registered user', async () => {
-        const {user, name, email, password, nightmare} = await register();
-        await nightmare.end();
-        await login(email, password);
-        await nightmare.end();
-    });
+    const tl = txt.toLowerCase();
+    assert.include(tl, 'submit');
+    assert.include(tl, 'registration');
+    assert.include(tl, 'forgot password?');
+
+    await nightmare.end();
+
+    t.pass();
+});
+
+test('registration form appears after clicking register', async t => {
+    const nightmare = createNightmare();
+
+    const exists = await nightmare
+        .goto('/login')
+        .mouseup('.registerBtn')
+        .exists('.registration-form');
+
+    assert.isTrue(exists);
+
+    await nightmare.end();
+
+    t.pass();
+});
+
+test('register', async t => {
+    const {nightmare, authToken} = await register();
+    return nightmare.screenshot('post-submission').end();
+});
+
+test('login with registered user', async t => {
+    const {user, name, email, password, nightmare} = await register();
+    await login(email, password);
+    await nightmare.end();
 });

@@ -7,3 +7,9 @@ var _ = require('lodash');
 _.mixin({
     omitDeep: require('omit-deep-lodash')
 });
+
+var createServer = require('./createServer');
+var initNightmare = require('./nightmare').initNightmare;
+
+var endpoint = 'localhost:45033';
+initNightmare(endpoint);

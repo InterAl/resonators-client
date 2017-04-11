@@ -15,7 +15,7 @@
     "serve:dev": "webpack-dev-server --env dev",
     "serve:dist": "webpack-dev-server --env dist -p --progress",
     "start": "npm run serve:dev",
-    "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
+    "test": "./test/run --timeout=10s --watch --verbose",
     "release:prod": "npm run dist && ./scripts/uploadClientVersion"
   },
   "repository": "",
@@ -87,5 +87,24 @@
     "saga-reducer-factory": "^1.0.2",
     "webpack": "^2.1.0-beta.6",
     "whatwg-fetch": "^2.0.1"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ],
+    "source": [
+      "**/*.{js,jsx}",
+      "!dist/**/*"
+    ],
+    "concurrency": 5,
+    "failFast": true,
+    "failWithoutAssertions": false,
+    "tap": true,
+    "powerAssert": false,
+    "require": [
+      "babel-register",
+      "./test/setup.js"
+    ],
+    "babel": "inherit"
   }
 }

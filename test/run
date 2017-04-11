@@ -60,14 +60,14 @@ function executeCommand(cmd) {
 }
 
 function killMochaProcess() {
-    return childProcess.execSync('pgrep -f mocha | xargs kill -9');
+    return childProcess.execSync('pgrep -f ava | xargs kill -9');
 }
 
 function runMocha() {
     const args = process.argv.slice(2);
     const argsTxt = args.join(' ');
 
-    mochaProcess = childProcess.spawn('mocha', args, {
+    mochaProcess = childProcess.spawn('ava', args, {
         stdio: 'inherit'
     });
 
