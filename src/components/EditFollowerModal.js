@@ -63,6 +63,7 @@ class EditFollowerModal extends Component {
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
+                className='create-follower-btn'
             />
         ];
     }
@@ -79,8 +80,12 @@ class EditFollowerModal extends Component {
                    required={true}
                    component={SelectField}>
             {
-                this.props.clinics.map(clinic => (
-                    <MenuItem value={clinic.id} primaryText={clinic.name} />
+                this.props.clinics.map((clinic, idx) => (
+                    <MenuItem
+                        className={`select-clinic-option-${idx}`}
+                        value={clinic.id}
+                        primaryText={clinic.name}
+                    />
                 ))
             }
             </Field>
@@ -112,6 +117,7 @@ class EditFollowerModal extends Component {
                 title={this.cfg.title}
                 modal={false}
                 actions={this.renderModalButtons()}
+                className='edit-follower-modal'
             >
                 {this.renderForm()}
             </Dialog>

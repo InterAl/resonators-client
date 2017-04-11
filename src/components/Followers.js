@@ -153,13 +153,17 @@ class Followers extends Component {
             );
 
             return (
-                <MoreOptionsMenu>
+                <MoreOptionsMenu
+                    className='more-options-btn'
+                >
                     <MenuItem
+                        className='edit-follower-btn'
                         primaryText='Edit'
                         onTouchTap={() => this.handleEditFollower(followerId)}
                     />
                     {freezeUnfreezeMenuItem}
                     <MenuItem
+                        className='delete-follower-btn'
                         primaryText='Delete'
                         onTouchTap={() => this.handleRemoveFollower(followerId)}
                         style={{color: 'red'}}

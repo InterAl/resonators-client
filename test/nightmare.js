@@ -9,7 +9,8 @@ export function initNightmare(e) {
 
 export default function() {
     const nightmare = Nightmare({
-        typeInterval: 20
+        typeInterval: 1,
+        show: false
     });
 
     patchGoto(nightmare, endpoint);

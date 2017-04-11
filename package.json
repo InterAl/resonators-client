@@ -22,6 +22,7 @@
   "keywords": [],
   "author": "Your name here",
   "devDependencies": {
+    "ava": "^0.19.1",
     "babel-core": "^6.7.6",
     "babel-eslint": "^7.1.0",
     "babel-loader": "^6.2.4",

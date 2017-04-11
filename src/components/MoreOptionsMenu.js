@@ -6,7 +6,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class MoreOptionsMenu extends Component {
     static propTypes = {
-        onBlur: React.PropTypes.func
+        onBlur: React.PropTypes.func,
+        className: React.PropTypes.string
     }
 
     static defaultProps = {

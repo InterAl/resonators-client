@@ -1,7 +1,7 @@
-import getNightmare from './nightmare';
+import getNightmare from '../nightmare';
 import {assert} from 'chai';
-import register from './operations/register';
-import login from './operations/login';
+import register from '../operations/register';
+import login from '../operations/login';
 
 describe('first page', function() {
     this.timeout(8000);
@@ -55,5 +55,6 @@ describe('first page', function() {
         const {user, name, email, password, nightmare} = await register();
         await nightmare.end();
         await login(email, password);
+        await nightmare.end();
     });
 });
