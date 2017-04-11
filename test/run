@@ -9,18 +9,20 @@ const readline = require('readline');
 
 let mochaProcess;
 
+let serverOptions = {
+    showServerLogs: false
+};
+
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-createServer()
+createServer(serverOptions)
 .then(endpoint => {
     return nightmare.initNightmare(endpoint);
 })
-.then(() => {
-    return childProcess.execSync('pgre -f mocha | xargs kill -9');
-})
+.then(killMochaProcess)
 .then(() => {
     mochaProcess = runMocha();
     return mochaProcess;
@@ -43,9 +45,23 @@ function executeCommand(cmd) {
             mochaProcess.kill('SIGINT');
             runMocha();
             break;
+        case 'show server':
+            console.log('showing server logs');
+            serverOptions.showServerLogs = true;
+            break;
+        case 'hide server':
+            console.log('hiding server logs');
+            serverOptions.showServerLogs = false;
+            break;
+        default:
+            console.log('unknown command');
+            break;
     }
 }
 
+function killMochaProcess() {
+    return childProcess.execSync('pgrep -f mocha | xargs kill -9');
+}
 
 function runMocha() {
     const args = process.argv.slice(2);
