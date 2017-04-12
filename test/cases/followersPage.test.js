@@ -6,22 +6,22 @@ import {editFollower} from '../operations/followerRowOptions';
 import textFieldTestkit from '../testkits/textField';
 import {assert} from 'chai';
 
-describe('followers page', function() {
-    this.timeout(8000);
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
+describe('followers page', function() {
     let nightmare;
 
     beforeEach(() => {
         nightmare = createNightmare();
     });
 
-    it('create follower', async () => {
+    test('create follower', async () => {
         const {nightmare, email, password} = await register();
         await createFollower({nightmare});
         await nightmare.end();
     });
 
-    it('edit follower details', async () => {
+    test('edit follower details', async () => {
         const {nightmare, email, password} = await register();
         const follower = await createFollower({nightmare});
         const nameSelector = ".edit-follower-modal input[name='name']";
@@ -53,4 +53,4 @@ describe('followers page', function() {
 
         await nightmare.end();
     });
-});
+}, 10000);

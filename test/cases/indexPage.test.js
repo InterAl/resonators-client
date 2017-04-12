@@ -4,15 +4,13 @@ import register from '../operations/register';
 import login from '../operations/login';
 
 describe('first page', function() {
-    this.timeout(8000);
-
     let nightmare;
 
-    before(() => {
+    beforeAll(() => {
         nightmare = getNightmare().goto('/login');
     });
 
-    after(() => {
+    afterAll(() => {
         nightmare.end().then(() => 'ended');
     })
 
@@ -35,7 +33,7 @@ describe('first page', function() {
     });
 
     describe('registration', () => {
-        before(() => {
+        beforeAll(() => {
             nightmare = nightmare.mouseup('.registerBtn');
         });
 
@@ -44,8 +42,6 @@ describe('first page', function() {
         });
 
         it('register', async function() {
-            this.timeout(5000);
-
             const {nightmare, authToken} = await register();
             return nightmare.screenshot('post-submission').end();
         });
@@ -57,4 +53,4 @@ describe('first page', function() {
         await login(email, password);
         await nightmare.end();
     });
-});
+}, 10000);

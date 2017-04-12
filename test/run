@@ -7,7 +7,7 @@ const createServer = require('./createServer').default;
 const nightmare = require('./nightmare');
 const readline = require('readline');
 
-let mochaProcess;
+let testProcess;
 
 let serverOptions = {
     showServerLogs: false
@@ -19,17 +19,14 @@ const rl = readline.createInterface({
 });
 
 createServer(serverOptions)
-.then(endpoint => {
-    return nightmare.initNightmare(endpoint);
-})
-.then(killMochaProcess)
-.then(() => {
-    mochaProcess = runMocha();
-    return mochaProcess;
-})
-.then(() => {
-    repl();
-})
+    .then(killTestProcess)
+    .then(() => {
+        testProcess = runTest();
+        return testProcess;
+    })
+    .then(() => {
+        repl();
+    });
 
 function repl() {
     rl.question('> ', cmd => {
@@ -41,9 +38,9 @@ function repl() {
 function executeCommand(cmd) {
     switch (cmd) {
         case 'restart':
-            console.log('restarting mocha');
-            mochaProcess.kill('SIGINT');
-            runMocha();
+            console.log('restarting test');
+            testProcess.kill('SIGINT');
+            runTest();
             break;
         case 'show server':
             console.log('showing server logs');
@@ -59,19 +56,19 @@ function executeCommand(cmd) {
     }
 }
 
-function killMochaProcess() {
-    return childProcess.execSync('pgrep -f mocha | xargs kill -9');
+function killTestProcess() {
+    return childProcess.execSync('sudo pgrep -f jest | xargs kill -9');
 }
 
-function runMocha() {
+function runTest() {
     const args = process.argv.slice(2);
     const argsTxt = args.join(' ');
 
-    mochaProcess = childProcess.spawn('mocha', args, {
-        stdio: 'inherit'
+    testProcess = childProcess.spawn('jest', args, {
+        stdio: [null, process.stdout, process.stderr]
     });
 
-    return mochaProcess;
+    return testProcess;
 }
 
 function initBabel() {

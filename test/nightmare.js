@@ -1,11 +1,7 @@
 import Nightmare from 'nightmare';
 import path from 'path';
 
-let endpoint;
-
-export function initNightmare(e) {
-    endpoint = e;
-};
+let endpoint = 'localhost:45033';
 
 export default function() {
     const nightmare = Nightmare({
