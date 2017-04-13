@@ -24,6 +24,7 @@ class DeleteFollowerPrompt extends Component {
 
         return (
             <SimplePrompt
+                className='delete-follower-modal'
                 title='Delete Follower'
                 acceptText='Delete'
                 text={`Delete ${name}?`}

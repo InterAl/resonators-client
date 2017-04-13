@@ -7,7 +7,8 @@ export default class SimplePrompt extends Component {
         onAccept: React.PropTypes.func.isRequired,
         text: React.PropTypes.string.isRequired,
         acceptText: React.PropTypes.string.isRequired,
-        title: React.PropTypes.string.isRequired
+        title: React.PropTypes.string.isRequired,
+        className: React.PropTypes.string
     }
 
     constructor() {
@@ -32,6 +33,7 @@ export default class SimplePrompt extends Component {
                 onTouchTap={this.handleAcceptClick}
                 label={this.props.acceptText}
                 primary={true}
+                className='confirmBtn'
             />
         ];
     }
@@ -44,6 +46,7 @@ export default class SimplePrompt extends Component {
                 modal={false}
                 actions={this.renderModalButtons()}
                 onRequestClose={this.props.onClose}
+                className={this.props.className}
             >
                 {this.props.text}
             </Dialog>

@@ -68,7 +68,7 @@ function runMocha() {
     const argsTxt = args.join(' ');
 
     mochaProcess = childProcess.spawn('mocha', args, {
-        stdio: 'inherit'
+        stdio: [null, process.stdout, process.stderr]
     });
 
     return mochaProcess;
