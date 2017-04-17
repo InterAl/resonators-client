@@ -18,23 +18,6 @@ class ResonatorFeedback extends Component {
         this.handleAnswerClick = this.handleAnswerClick.bind(this);
     }
 
-    shouldDisplayRtl() {
-        function isHebrewLetter(letter) {
-            const code = letter.charCodeAt(0);
-            return code === 32 || code >= 1488 && code <= 1514;
-        }
-
-        const text = _.get(this.props, 'question.question.title', '');
-        const textArr = text.split('');
-
-        const hebrewLettersCount = _.reduce(textArr, (acc, letter) => {
-            return acc + (isHebrewLetter(letter) ? 1 : 0);
-        }, 0);
-
-        const isHebrew = hebrewLettersCount / textArr.length > 0.5;
-        return isHebrew;
-    }
-
     handleAnswerClick(questionId, answerId) {
         this.props.sendAnswer({
             questionId,
@@ -57,12 +40,15 @@ class ResonatorFeedback extends Component {
 
         return (
             <RaisedButton
-                className={styles.answerButton}
-                primary
+                className={classNames(styles.answerButton, {
+                    [styles.selectedAnswer]: this.props.answered[q.id] === a.id
+                })}
+                buttonStyle={{textAlign: this.props.rtl ? 'right' : 'left'}}
                 key={idx}
                 label={label}
                 onClick={() => this.handleAnswerClick(q.id, a.id)}
                 style={{ marginBottom: 30 }}
+                primary
             />
         );
     }
@@ -89,7 +75,7 @@ class ResonatorFeedback extends Component {
         return current > 1 && (
             <FlatButton
                 style={{marginTop: 24}}
-                label={this.shouldDisplayRtl() ? 'חזור' : 'Back'}
+                label={this.props.rtl ? 'חזור' : 'Back'}
                 onClick={this.props.showPreviousQuestion}
             />
         );
@@ -98,7 +84,7 @@ class ResonatorFeedback extends Component {
     renderQuestion(q) {
         const {question} = q;
         const answers = _.orderBy(question.answers, a => a.rank);
-        const rtl = this.shouldDisplayRtl();
+        const {rtl} = this.props;
 
         return (
             <Card key={q.id}>
@@ -139,7 +125,7 @@ class ResonatorFeedback extends Component {
                 display: 'flex',
                 width: '100%',
                 marginTop: 30,
-                direction: this.shouldDisplayRtl() ? 'rtl' : 'ltr'
+                direction: this.props.rtl ? 'rtl' : 'ltr'
             }}>
                 <div className='center-block'>
                     {question ? this.renderQuestion(question) :
@@ -160,7 +146,25 @@ function mapStateToProps(state) {
         question,
         currentQuestionIdx,
         questionsCount: resonator.questions.length,
+        rtl: question && shouldDisplayRtl(question.question)
     };
+}
+
+function shouldDisplayRtl(question) {
+    function isHebrewLetter(letter) {
+        const code = letter.charCodeAt(0);
+        return code === 32 || code >= 1488 && code <= 1514;
+    }
+
+    const text = question.title || '';
+    const textArr = text.split('');
+
+    const hebrewLettersCount = _.reduce(textArr, (acc, letter) => {
+        return acc + (isHebrewLetter(letter) ? 1 : 0);
+    }, 0);
+
+    const isHebrew = hebrewLettersCount / textArr.length > 0.5;
+    return isHebrew;
 }
 
 function mapDispatchToProps(dispatch) {

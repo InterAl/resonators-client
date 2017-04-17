@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
+import { delay } from 'redux-saga';
 import { put, call, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/feedbackActions';
 import * as resonatorFeedbackApi from '../api/resonatorFeedbackApi';
@@ -25,6 +26,15 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
         const {sent_resonator_id} = yield select(state => state.init.query);
         yield showSpinner(questionId, answerId);
 
+        yield put(updateState({
+            answered: {
+                ...answered,
+                [questionId]: answerId
+            }
+        }));
+
+        yield delay(750);
+
         yield call(resonatorFeedbackApi.sendAnswer, {
             resonatorId: resonator.id,
             questionId,
@@ -33,10 +43,6 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
         });
 
         yield put(updateState({
-            answered: {
-                ...answered,
-                questionId: answerId
-            },
             currentQuestionIdx: currentQuestionIdx - 1
         }));
         yield showSpinner(null);

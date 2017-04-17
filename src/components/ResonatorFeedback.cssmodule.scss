@@ -33,3 +33,10 @@
 .done {
     color: #05c514 !important;
 }
+
+.selectedAnswer {
+    button {
+        background-color: rgb(0, 119, 135) !important;
+        transition: all 1s;
+    }
+}
