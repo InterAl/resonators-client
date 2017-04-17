@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import {actions} from '../actions/feedbackActions';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import styles from './ResonatorFeedback.cssmodule.scss';
 import React, {Component} from 'react';
 import classNames from 'classnames';
@@ -81,6 +82,19 @@ class ResonatorFeedback extends Component {
         );
     }
 
+    renderBackButton() {
+        const total = this.props.questionsCount - 1;
+        const current = total - this.props.currentQuestionIdx;
+
+        return current > 1 && (
+            <FlatButton
+                style={{marginTop: 24}}
+                label={this.shouldDisplayRtl() ? 'חזור' : 'Back'}
+                onClick={this.props.showPreviousQuestion}
+            />
+        );
+    }
+
     renderQuestion(q) {
         const {question} = q;
         const answers = _.orderBy(question.answers, a => a.rank);
@@ -99,6 +113,7 @@ class ResonatorFeedback extends Component {
                 />
                 <CardText>
                     {_.map(answers, a => this.renderAnswer(question, a))}
+                    {this.renderBackButton()}
                 </CardText>
             </Card>
         );
@@ -109,6 +124,8 @@ class ResonatorFeedback extends Component {
             <Card key='done'>
                 <CardText>
                     Your feedback was successfully recorded.
+                    <br/>
+                    {this.renderBackButton()}
                 </CardText>
             </Card>
         );
@@ -148,7 +165,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        sendAnswer: actions.sendAnswer
+        sendAnswer: actions.sendAnswer,
+        showPreviousQuestion: actions.showPreviousQuestion
     }, dispatch);
 }
 

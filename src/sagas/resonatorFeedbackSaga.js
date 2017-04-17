@@ -46,6 +46,24 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
     }
 });
 
+handle(types.SHOW_PREVIOUS_QUESTION, function*() {
+    const {currentQuestionIdx, resonator} = yield selectResonatorFeedback();
+    const totalQuestionsCount = resonator.questions.length - 1;
+
+    yield put(updateState({
+        currentQuestionIdx: Math.min(currentQuestionIdx + 1, totalQuestionsCount - 1)
+    }));
+});
+
+handle(types.SHOW_NEXT_QUESTION, function*() {
+    const {currentQuestionIdx, resonator} = yield selectResonatorFeedback();
+    const totalQuestionsCount = resonator.questions.length - 1;
+
+    yield put(updateState({
+        currentQuestionIdx: Math.max(currentQuestionIdx - 1, 0)
+    }));
+});
+
 function showSpinner(questionId, answerId) {
     return put(updateState({ showSpinner: {questionId, answerId} }));
 }
