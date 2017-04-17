@@ -1,13 +1,22 @@
-.resonatorTitleRtl {
+.questionDescriptionRtl {
     >div {
         padding-right: 0 !important;
         padding-left: 90px;
     }
+
+    text-align: right;
 }
 
-.resonatorTitleLtr {
+.questionDescriptionLtr {
     >div {
         padding-left: 0 !important;
         padding-right: 90px;
     }
+
+    text-align: left;
+}
+
+.questionDescriptionCount {
+    direction: ltr;
+    font-size: 12px;
 }

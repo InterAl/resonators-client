@@ -67,6 +67,21 @@ class ResonatorFeedback extends Component {
         );
     }
 
+    renderQuestionDescription(description) {
+        const total = this.props.questionsCount - 1;
+        const current = total - this.props.currentQuestionIdx;
+
+        return (
+            <div>
+                <div className={styles.questionDescriptionCount}>
+                    {`(${current} / ${total})`}
+                </div>
+
+                {description}
+            </div>
+        );
+    }
+
     renderQuestion(q) {
         const {question} = q;
         const answers = _.orderBy(question.answers, a => a.rank);
@@ -77,11 +92,11 @@ class ResonatorFeedback extends Component {
                 <CardHeader
                     className={
                         classNames({
-                            [styles.resonatorTitleRtl]: rtl,
-                            [styles.resonatorTitleLtr]: !rtl
+                            [styles.questionDescriptionRtl]: rtl,
+                            [styles.questionDescriptionLtr]: !rtl
                         })
                     }
-                    title={question.description}
+                    title={this.renderQuestionDescription(question.description)}
                 />
                 <CardText>
                     {_.map(answers, a => this.renderAnswer(question, a))}
@@ -123,7 +138,13 @@ function mapStateToProps(state) {
     const {resonator, answered, currentQuestionIdx} = state.resonatorFeedback;
     const question = resonator.questions[currentQuestionIdx];
 
-    return {resonator, answered, question};
+    return {
+        resonator,
+        answered,
+        question,
+        currentQuestionIdx,
+        questionsCount: resonator.questions.length
+    };
 }
 
 function mapDispatchToProps(dispatch) {
