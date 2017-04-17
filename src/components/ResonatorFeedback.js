@@ -122,7 +122,7 @@ class ResonatorFeedback extends Component {
     renderDone() {
         return (
             <Card key='done'>
-                <CardText>
+                <CardText className={styles.done}>
                     Your feedback was successfully recorded.
                     <br/>
                     {this.renderBackButton()}
