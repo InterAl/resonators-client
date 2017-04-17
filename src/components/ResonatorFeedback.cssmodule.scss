@@ -1,3 +1,7 @@
+.questionDescription {
+    max-width: 400px;
+}
+
 .questionDescriptionRtl {
     >div {
         padding-right: 0 !important;
@@ -19,4 +23,9 @@
 .questionDescriptionCount {
     direction: ltr;
     font-size: 12px;
+}
+
+.answerButton {
+    display: block !important;
+    max-width: 400px;
 }

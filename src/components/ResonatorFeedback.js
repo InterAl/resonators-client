@@ -44,26 +44,25 @@ class ResonatorFeedback extends Component {
     renderAnswer(q, a, idx) {
         let label;
 
-        if (q.question_kind  === 'numeric') {
-            if (!a.body) {
-                label = a.rank;
-            } else {
-                label = `${a.rank} - ${a.body}`;
-            }
+       if (q.question_kind  === 'numeric') {
+           if (!a.body) {
+               label = a.rank;
+           } else {
+               label = `${a.rank} - ${a.body}`;
+           }
         } else {
             label = a.body;
         }
 
         return (
-            <div key={`${q.id}#${a.id}`}>
-                <RaisedButton
-                    primary
-                    key={idx}
-                    label={label}
-                    onClick={() => this.handleAnswerClick(q.id, a.id)}
-                    style={{ marginBottom: 30 }}
-                />
-            </div>
+            <RaisedButton
+                className={styles.answerButton}
+                primary
+                key={idx}
+                label={label}
+                onClick={() => this.handleAnswerClick(q.id, a.id)}
+                style={{ marginBottom: 30 }}
+            />
         );
     }
 
@@ -91,7 +90,7 @@ class ResonatorFeedback extends Component {
             <Card key={q.id}>
                 <CardHeader
                     className={
-                        classNames({
+                        classNames(styles.questionDescription, {
                             [styles.questionDescriptionRtl]: rtl,
                             [styles.questionDescriptionLtr]: !rtl
                         })
@@ -143,7 +142,7 @@ function mapStateToProps(state) {
         answered,
         question,
         currentQuestionIdx,
-        questionsCount: resonator.questions.length
+        questionsCount: resonator.questions.length,
     };
 }
 
