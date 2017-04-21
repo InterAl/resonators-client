@@ -17,6 +17,12 @@ class EditResonatorMedia extends Component {
         };
     }
 
+    componentDidMount() {
+        if (this.props.image) {
+            this.setImagePreview(this.props.image);
+        }
+    }
+
     handleFileChange(ev) {
         const file = ev.target.files[0];
 
@@ -58,8 +64,10 @@ class EditResonatorMedia extends Component {
                 <br/>
 
                 {!this.props.editMode &&
-                    <NavButtons onNext={this.props.onNext}
-                           onBack={this.props.onBack}/>
+                    <NavButtons
+                        onNext={this.props.onNext}
+                        onBack={this.props.onBack}
+                    />
                 }
             </div>
         );
@@ -74,7 +82,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        resonator: state.resonatorCreation.resonator
+        resonator: state.resonatorCreation.resonator,
+        image: state.resonatorCreation.formData.imageFile
     };
 }
 
