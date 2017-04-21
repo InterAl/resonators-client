@@ -54,7 +54,7 @@ class ResonatorFeedback extends Component {
     }
 
     renderQuestionDescription(description) {
-        const total = this.props.questionsCount - 1;
+        const total = this.props.questionsCount;
         const current = total - this.props.currentQuestionIdx;
 
         return (
