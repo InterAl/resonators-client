@@ -40,6 +40,10 @@ class ShowResonator extends Component {
 
         return (
             <div className='showResonator col-xs-12 col-md-10 col-md-offset-1 col-sm-offset-2 col-sm-8'>
+                <div className='row sectionTitle'>
+                    {this.props.resonator.title}
+                </div>
+                <hr/>
                 <div className='row'>
                     <ExpandableCard
                         onExpandChange={expanded => !expanded && this.setState({
@@ -66,15 +70,17 @@ class ShowResonator extends Component {
                         </div>
                     </ExpandableCard>
                 </div>
-                {_.size(this.props.resonator.questions) > 0 && (
-                    <div>
-                        <hr/>
-                        <h2 style={{textAlign: 'center'}}>Criteria</h2>
-                        <ResonatorStats
-                            resonatorId={this.props.match.params.resonatorId}
-                        />
-                    </div>
-                )}
+                <div style={{marginTop: 30}}>
+                    {_.size(this.props.resonator.questions) > 0 && (
+                        <div>
+                            <div className='sectionTitle'>Criteria</div>
+                            <hr/>
+                            <ResonatorStats
+                                resonatorId={this.props.match.params.resonatorId}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
         );
     }
