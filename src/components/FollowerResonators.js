@@ -7,6 +7,7 @@ import {actions} from '../actions/followersActions';
 import {actions as navigationActions} from '../actions/navigationActions';
 import ResonatorImage from './ResonatorImage' ;
 import { push } from 'react-router-redux';
+import * as utils from './utils';
 // import moment from 'moment';
 
 class FollowerResonators extends Component {
@@ -37,14 +38,22 @@ class FollowerResonators extends Component {
     }
 
     renderColumn(resonator) {
+        const dir = utils.getResonatorDirection(resonator);
+
         return (
             <div className='row'>
                 <div className='image col-lg-2 col-sm-3 col-xs-6'>
                     <ResonatorImage width={80} height={80} resonator={resonator} />
                 </div>
-                <div className='name col-lg-10 col-sm-9 col-xs-6'>
+                <div className='name col-lg-10 col-sm-9 col-xs-6'
+                    style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        direction: dir,
+                        textAlign: dir === 'rtl' ? 'right' : 'left'
+                    }}>
                     <b>{resonator.title}</b><br/>
-                    {resonator.title}
+                    {resonator.content}
                 </div>
             </div>
         );
