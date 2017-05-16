@@ -53,7 +53,7 @@ class EditResonatorSchedule extends Component {
                 className='day'
                 name={`day${i}`}
                 component={CheckboxField}
-                style={{width: 8}}
+                style={{width: 'initial'}}
                 label={moment().startOf('w').add(i, 'd').format('dddd')}
                 iconStyle={{marginRight: 1}}
             />
@@ -69,7 +69,7 @@ class EditResonatorSchedule extends Component {
     render() {
         return (
             <div className='edit-resonator-schedule row'>
-                <div className='col-sm-8'>
+                <div className='col-sm-12'>
                     <div className='subheader'>
                         Days active:
                     </div>
