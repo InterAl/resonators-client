@@ -2,6 +2,7 @@
     .days {
         display: flex;
         flex-direction: row;
+        flex-wrap: wrap;
 
         .day {
             margin-left: 5px;
