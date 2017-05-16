@@ -18,6 +18,7 @@ class EditResonatorSchedule extends Component {
 
         this.handleCreate = this.handleCreate.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleSelectTime = this.handleSelectTime.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,6 +34,16 @@ class EditResonatorSchedule extends Component {
     handleUpdate(formData) {
         this.props.updateCreationStep(formData);
         this.props.onNext();
+    }
+
+    handleSelectTime(dateTime, changeField) {
+        const now = moment();
+
+        //So the server won't immediately send it
+        if (dateTime < now)
+            dateTime = moment(dateTime).clone().add(1, 'd').toDate();
+
+        changeField(dateTime);
     }
 
     renderDays() {
@@ -54,6 +65,7 @@ class EditResonatorSchedule extends Component {
             <Divider style={{marginTop: 20, marginBottom: 20}}/>
         );
     }
+
     render() {
         return (
             <div className='edit-resonator-schedule row'>
@@ -73,7 +85,7 @@ class EditResonatorSchedule extends Component {
                             <TimePicker
                                 autoOk={true}
                                 hintText='Sending Time'
-                                onChange={(e, date) => onChange(date)}
+                                onChange={(e, date) => this.handleSelectTime(date, onChange)}
                                 value={value}
                                 errorText={touched && error}
                             />
