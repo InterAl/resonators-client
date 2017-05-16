@@ -16,7 +16,7 @@
     "serve:dist": "webpack-dev-server --env dist -p --progress",
     "start": "nvm use && npm run serve:dev",
     "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
-    "release:prod": "nvm use && npm run dist && ./scripts/uploadClientVersion"
+    "release:prod": "npm run dist && ./scripts/uploadClientVersion"
   },
   "repository": "",
   "keywords": [],
