@@ -86,26 +86,38 @@ class CriteriaCreation extends Component {
     }
 }
 
-function getInitialValues(criterion) {
+function initializeNumeric(criterion, formValues) {
+    const answers = _.reduce(criterion.answers, (acc, cur) => {
+        acc[`num${cur.rank}`] = cur.body;
+        return acc;
+    }, {});
+
+    let numMax = _(criterion.answers).map('rank').max();
+    let numMin = _(criterion.answers).map('rank').min();
+
+    return {answers, numMax, numMin};
+}
+
+function initializeBoolean(criterion) {
+    const answers = _.reduce(criterion.answers, (acc, cur) => {
+        if (cur.rank === 0)
+            acc.false = cur.body;
+        else
+            acc.true = cur.body;
+
+        return acc;
+    }, {});
+
+    return {answers};
+}
+
+function getInitialValues(criterion, formValues) {
     let answers, numMin, numMax;
 
     if (criterion.question_kind === 'numeric') {
-        answers = _.reduce(criterion.answers, (acc, cur) => {
-            acc[`num${cur.rank}`] = cur.body;
-            return acc;
-        }, {});
-
-        numMax = _(criterion.answers).map('rank').max();
-        numMin = _(criterion.answers).map('rank').min();
+        ({answers, numMin, numMax} = initializeNumeric(criterion, formValues));
     } else if (criterion.question_kind === 'boolean') {
-        answers = _.reduce(criterion.answers, (acc, cur) => {
-            if (cur.rank === 0)
-                acc.false = cur.body;
-            else
-                acc.true = cur.body;
-
-            return acc;
-        }, {});
+        ({answers} = initializeBoolean(criterion));
     }
 
     return {
@@ -123,17 +135,19 @@ function mapStateToProps(state, ownProps) {
     const criterion = _.find(state.criteria.criteria,
                              c => c.id === ownProps.match.params.criterionId);
 
-    const initialValues = criterion && getInitialValues(criterion);
-
-    return {
-        initialValues,
-        formValues: formSelector(state,
+    const formValues = formSelector(state,
                                  'title',
                                  'description',
                                  'question_kind',
                                  'answers',
                                  'numMin',
-                                 'numMax')
+                                 'numMax');
+
+    const initialValues = criterion && getInitialValues(criterion, formValues);
+
+    return {
+        initialValues,
+        formValues
     };
 }
 

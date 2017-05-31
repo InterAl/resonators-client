@@ -70,24 +70,40 @@ handle(types.DELETE_CRITERION, function*(sagaParams, {payload}) {
 
 function formToCriterion(form) {
     let answers = [];
+    const formAnswersEmpty = _.isEmpty(_.keys(form.answers));
 
     if (form.question_kind === 'numeric') {
-        _.each(form.answers, (v, k) => {
-            const key = k.substring(3);
+        if (!formAnswersEmpty) {
+            _.each(form.answers, (v, k) => {
+                const key = k.substring(3);
 
-            answers.push({
-                rank: parseInt(key),
-                body: v
+                answers.push({
+                    rank: parseInt(key),
+                    body: v
+                });
             });
-        });
+        } else {
+            _.each(_.range(parseInt(form.numMin), parseInt(form.numMax) + 1),
+                   rank => answers.push({ rank, body: ''}));
+        }
     } else if (form.question_kind === 'boolean') {
-        answers.push({
-            rank: 0,
-            body: form.answers.false
-        }, {
-            rank: 1,
-            body: form.answers.true
-        });
+        if (!formAnswersEmpty) {
+            answers.push({
+                rank: 0,
+                body: form.answers.false
+            }, {
+                rank: 1,
+                body: form.answers.true
+            });
+        } else {
+            answers.push({
+                rank: 0,
+                body: 'No'
+            }, {
+                rank: 1,
+                body: 'Yes'
+            });
+        }
     }
 
     return {
