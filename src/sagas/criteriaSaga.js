@@ -74,14 +74,30 @@ function formToCriterion(form) {
 
     if (form.question_kind === 'numeric') {
         if (!formAnswersEmpty) {
-            _.each(form.answers, (v, k) => {
+            const rankMap = _.reduce(form.answers, (acc, v, k) => {
                 const key = k.substring(3);
+                const rank = parseInt(key);
+                if (!isNaN(rank)) {
+                    acc[rank] = {
+                        rank,
+                        body: v
+                    };
+                }
+                return acc;
+            }, {});
 
-                answers.push({
-                    rank: parseInt(key),
-                    body: v
+            const ranks = _.values(rankMap).map(a => a.rank);
+
+            const hasMissingAnswers = ranks[1] - ranks[0] > 1;
+
+            //fill missing answers
+            if (hasMissingAnswers) {
+                _.each(_.range(ranks[0] + 1, ranks[1]), rank => {
+                    rankMap[rank] = {rank, body: ''};
                 });
-            });
+            }
+
+            answers = _.values(rankMap);
         } else {
             _.each(_.range(parseInt(form.numMin), parseInt(form.numMax) + 1),
                    rank => answers.push({ rank, body: ''}));
