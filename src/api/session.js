@@ -38,3 +38,7 @@ export function resetPassword({ password, token }) {
         password
     });
 }
+
+export function startGoogleLogin() {
+    return fetcher('/startGoogleLogin');
+}

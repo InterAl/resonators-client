@@ -55,7 +55,7 @@ class ResonatorFeedback extends Component {
 
     renderQuestionDescription(description) {
         const total = this.props.questionsCount;
-        const current = total - this.props.currentQuestionIdx;
+        const current = this.props.currentQuestionIdx + 1;
 
         return (
             <div>
@@ -69,10 +69,7 @@ class ResonatorFeedback extends Component {
     }
 
     renderBackButton() {
-        const total = this.props.questionsCount - 1;
-        const current = total - this.props.currentQuestionIdx;
-
-        return current > 1 && (
+        return this.props.currentQuestionIdx > 1 && (
             <FlatButton
                 style={{marginTop: 24}}
                 label={this.props.rtl ? 'חזור' : 'Back'}

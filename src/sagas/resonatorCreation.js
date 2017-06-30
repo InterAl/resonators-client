@@ -96,7 +96,9 @@ function syncResonatorCriteria(resonator, newCriteria) {
     let addedQids = _.difference(newCriteria, resonatorQuestions);
     let removedQids = _.difference(resonatorQuestions, newCriteria);
 
-    let addQuestionsPromises = _.map(addedQids, qid => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid));
+    //why setTimeout? because the insert time is our only way of ordering the
+    //questions in the server. A dirty hack indeed.
+    let addQuestionsPromises = _.map(addedQids, (qid, idx) => delay(() => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid), (idx + 1) * 10));
 
     let removedQuestionsPromises = _.map(removedQids, qid => {
         let rqid = _.find(resonator.questions, rq => rq.question_id === qid).id;
@@ -155,6 +157,20 @@ function convertResonatorToForm(resonator) {
     }
 
     return form;
+}
+
+function delay(fn, timeout) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            try {
+                fn();
+            } catch (err) {
+                return reject(err);
+            }
+
+            resolve();
+        }, timeout);
+    });
 }
 
 export default {saga, reducer};

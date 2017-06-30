@@ -6,6 +6,7 @@ const actionsList = [
     'RESUME',
     'LOGIN_SUCCESS',
     'REGISTER',
+    'GOOGLE_LOGIN',
     'RECOVER_PASSWORD',
     'RESET_PASSWORD'
 ];

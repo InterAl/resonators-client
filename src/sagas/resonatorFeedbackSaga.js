@@ -13,7 +13,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     initState: {
         resonator: pageResonator,
         answered: {},
-        currentQuestionIdx: pageResonator && _.size(pageResonator.questions) - 2
+        currentQuestionIdx: pageResonator && _.size(pageResonator.questions) && 1
     }
 });
 
@@ -43,8 +43,9 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
         });
 
         yield put(updateState({
-            currentQuestionIdx: currentQuestionIdx - 1
+            currentQuestionIdx: currentQuestionIdx + 1
         }));
+
         yield showSpinner(null);
     } catch (err) {
         console.log('sending resonator answer failed', err);
@@ -54,10 +55,9 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
 
 handle(types.SHOW_PREVIOUS_QUESTION, function*() {
     const {currentQuestionIdx, resonator} = yield selectResonatorFeedback();
-    const totalQuestionsCount = resonator.questions.length - 1;
 
     yield put(updateState({
-        currentQuestionIdx: Math.min(currentQuestionIdx + 1, totalQuestionsCount - 1)
+        currentQuestionIdx: Math.max(currentQuestionIdx - 1, 1)
     }));
 });
 
@@ -66,7 +66,7 @@ handle(types.SHOW_NEXT_QUESTION, function*() {
     const totalQuestionsCount = resonator.questions.length - 1;
 
     yield put(updateState({
-        currentQuestionIdx: Math.max(currentQuestionIdx - 1, 0)
+        currentQuestionIdx: Math.min(currentQuestionIdx + 1, totalQuestionsCount)
     }));
 });
 

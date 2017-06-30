@@ -76,6 +76,15 @@ handle(types.REGISTER, function*(sagaParams, {payload}) {
     }
 });
 
+handle(types.GOOGLE_LOGIN, function*() {
+    try {
+        const {url} = yield call(sessionApi.startGoogleLogin);
+        location.href = url;
+    } catch (err) {
+        console.error('google login failed', err);
+    }
+});
+
 handle(types.RECOVER_PASSWORD, function*(sagaParams, {payload}) {
     try {
         yield put(updateState({ forgotPasswordSpinner: true, forgotPasswordFailed: false }));

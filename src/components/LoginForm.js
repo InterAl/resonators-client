@@ -2,13 +2,25 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions as navigationActions} from '../actions/navigationActions';
+import {actions as sessionActions} from '../actions/sessionActions';
 import {Card, CardHeader, CardText} from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
 import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
+import googleIcon from './Icons/GoogleIcon';
 import './LoginForm.scss';
 
 class LoginForm extends Component {
+    constructor() {
+        super();
+
+        this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
+    }
+
+    handleGoogleLogin() {
+        this.props.googleLogin();
+    }
+
     render() {
         return (
             <Card className='loginForm col-sm-3'>
@@ -47,6 +59,15 @@ class LoginForm extends Component {
                                 label='Forgot password?'
                             />
                         </div>
+                        <div style={{width: '100%'}}>
+                            <Button
+                                type='button'
+                                onTouchTap={this.handleGoogleLogin}
+                                label='Sign in with Google'
+                                icon={googleIcon}
+                                style={{width: '100%', marginTop: 12}}
+                            />
+                        </div>
                     </form>
                 </CardText>
             </Card>
@@ -62,7 +83,9 @@ function mapDispatchToProps(dispatch) {
 
         showForgotPasswordModal: () => navigationActions.showModal({
             name: 'forgotPassword'
-        })
+        }),
+
+        googleLogin: sessionActions.googleLogin
     }, dispatch);
 }
 
