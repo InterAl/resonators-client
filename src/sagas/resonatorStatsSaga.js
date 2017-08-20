@@ -18,10 +18,11 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     let stats = yield select(state => state.resonatorStats.stats);
     let {questions, answers} = yield call(statsApi.get, resonatorId);
 
-    let aggregatedChart = aggregateChart(answers);
+    answers = getUniqueAnswersPerDay(answers, questions);
+
+    let aggregatedChart = aggregateChart(answers, questions);
     questions.push(aggregatedChart.question);
     answers = answers.concat(aggregatedChart.answers);
-    // debugger
 
     questions.sort((a,b) => moment(a.updated_at) - moment(b.updated_at));
 
@@ -41,7 +42,7 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     }));
 });
 
-function aggregateChart(allAnswers) {
+function aggregateChart(allAnswers, allQuestions) {
     let timeToAnswers = _.reduce(allAnswers, (acc, a) => {
         let time = moment(a.time).format('YYYY-MM-DD');
         acc[time] = (acc[time] || []).concat({...a, time});
@@ -60,7 +61,7 @@ function aggregateChart(allAnswers) {
         return acc;
     }, []);
 
-    let ranks = _.map(aggregatedAnswers, a => a.rank);
+    let maxRank = _(allQuestions).map('answers').flatten().map('rank').max();
 
     let question = {
         id: 'sumAggregation',
@@ -70,7 +71,7 @@ function aggregateChart(allAnswers) {
             rank: 0
         }, {
             body: '',
-            rank: _.max(ranks)
+            rank: maxRank
         }],
         updated_at: moment(0).toISOString()
     };
@@ -84,6 +85,13 @@ function transformAnswer(answer) {
         rank: answer.rank,
         question_id: answer.question_id
     };
+}
+
+function getUniqueAnswersPerDay(answers) {
+    return _(answers)
+        .orderBy(a => moment(a.time), ['desc'])
+        .sortedUniqBy(a => `${a.question_id}#${moment(a.time).format('D/M/YY')}`)
+        .value();
 }
 
 export default {saga, reducer};
