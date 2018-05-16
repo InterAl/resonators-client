@@ -69,11 +69,13 @@ class EditFollowerModal extends Component {
     }
 
     renderRegisterControls() {
-        return [
+		/*
             <Field type='password'
                 placeholder='Password'
                 name='password'
                 component={TextField} />,
+		*/
+        return [
 
             <Field name='clinic'
                    label='Clinic'
@@ -139,9 +141,11 @@ let Form = reduxForm({
             errors.email = 'Invalid email address'
         }
 
-        if (!formData.password)
+        /*
+		if (!formData.password)
             errors.password = 'Required'
-
+		*/
+		
         if (!formData.clinic)
             errors.clinic = 'Required';
 
