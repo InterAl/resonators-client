@@ -1,11 +1,18 @@
 import _ from 'lodash';
 import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import React, {Component} from 'react';
+import { push } from 'react-router-redux';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
+import NextIcon from 'material-ui/svg-icons/av/skip-next';
+import PrevIcon from 'material-ui/svg-icons/av/skip-previous';
+import EditIcon from 'material-ui/svg-icons/image/edit';
+import IconButton from 'material-ui/IconButton';
 import ExpandableCard from './ExpandableCard';
 import ResonatorStats from './ResonatorStats';
 import CircularProgress from 'material-ui/CircularProgress';
+import {actions} from '../actions/followersActions';
 import './ShowResonator.scss';
 
 class ShowResonator extends Component {
@@ -29,6 +36,24 @@ class ShowResonator extends Component {
         });
     }
 
+    componentDidMount() {
+    }
+
+    nextView(ev) {
+        let showRoute = (followerId,resonatorId) => `/followers/${followerId}/resonators/${resonatorId}/show`;
+        this.props.push(showRoute(this.props.resonator.follower_id,this.nextId));
+    }
+
+    prevView(ev) {
+        let showRoute = (followerId,resonatorId) => `/followers/${followerId}/resonators/${resonatorId}/show`;
+        this.props.push(showRoute(this.props.resonator.follower_id,this.prevId));
+    }
+
+    switchEdit(ev) {
+        let getEditRoute = (followerId,resonatorId) => `/followers/${followerId}/resonators/${resonatorId}/edit`;
+        this.props.push(getEditRoute(this.props.resonator.follower_id,this.props.resonator.id))
+    }
+
     render() {
         if (!_.get(this.props, 'match.params.resonatorId'))
             return null;
@@ -37,10 +62,35 @@ class ShowResonator extends Component {
             return null;
 
         let resonatorId = this.props.match.params.resonatorId;
+        let followerId = this.props.resonator.follower_id;
+
+        //Calc prev and next resonators
+        let prevId = null;
+        let nextId = null;
+        let getNext = false;
+        _.each(this.props.resonators,function(val){
+            if (val.follower_id !== followerId) return;
+            if (getNext) {
+                nextId = val.id;
+                return false;
+            }
+            if (val.id == resonatorId) {
+                getNext = true;
+            } else {
+                prevId = val.id;
+            }
+        });
+        this.prevId = prevId;
+        this.nextId = nextId;
 
         return (
             <div className='showResonator col-xs-12 col-md-10 col-md-offset-1 col-sm-offset-2 col-sm-8'>
                 <div className='row sectionTitle'>
+                    <div className='navButtonsView'>
+                        <IconButton onClick={ () => this.prevView() } disabled={this.prevId === null} >< PrevIcon /></IconButton>
+                        <IconButton onClick={ () => this.switchEdit() } >< EditIcon /></IconButton>
+                        <IconButton onClick={ () => this.nextView() } disabled={this.nextId === null} >< NextIcon /></IconButton>
+                    </div>
                     {this.props.resonator.title}
                 </div>
                 <hr/>
@@ -90,12 +140,15 @@ function mapStateToProps(state, ownProps) {
     let resonators = resonatorsSelector(state);
 
     return {
+        resonators,
         resonator: _.find(resonators, r => r.id === ownProps.match.params.resonatorId)
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {dispatch};
+    return bindActionCreators({
+        push
+    },dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowResonator);
