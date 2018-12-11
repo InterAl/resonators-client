@@ -153,6 +153,7 @@ function mapStateToProps(state) {
     let {modalProps: {followerId, editMode}} = navigationInfoSelector(state);
     let follower = _.find(state.followers.followers, f => f.id === followerId);
     let clinics = state.clinics.clinics;
+    let default_clinic_id =  state.leaders.leaders.default_clinic_id;
 
     let ret = {
         follower,
@@ -161,11 +162,18 @@ function mapStateToProps(state) {
     };
 
     if (follower)
+    {
         ret.initialValues = {
             name: follower.user.name,
             email: follower.user.email
         };
-
+    }
+    else
+    {
+        ret.initialValues = {
+            clinic: default_clinic_id
+        };
+    }
     return ret;
 }
 

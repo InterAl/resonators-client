@@ -143,8 +143,7 @@ function mapStateToProps(state, ownProps) {
                                  'numMin',
                                  'numMax');
 
-    const initialValues = criterion && getInitialValues(criterion, formValues);
-
+    const initialValues = criterion !== undefined ? getInitialValues(criterion, formValues) : { clinic_id : state.leaders.leaders.default_clinic_id};
     return {
         initialValues,
         formValues
