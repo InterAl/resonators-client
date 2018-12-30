@@ -98,14 +98,19 @@ function syncResonatorCriteria(resonator, newCriteria) {
 
     //why setTimeout? because the insert time is our only way of ordering the
     //questions in the server. A dirty hack indeed.
-    let addQuestionsPromises = _.map(addedQids, (qid, idx) => delay(() => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid), (idx + 1) * 10));
-
+   // let addQuestionsPromises = _.map(addedQids, (qid, idx) => delay(() => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid), (idx + 1) * 10));
+    var promisesStack = [];
+    let addQuestionsPromises = resonatorApi.addBulkCriterion(resonator.follower_id, resonator.id, addedQids);
+    promisesStack.push(addQuestionsPromises);
     let removedQuestionsPromises = _.map(removedQids, qid => {
         let rqid = _.find(resonator.questions, rq => rq.question_id === qid).id;
         return resonatorApi.removeCriterion(resonator.follower_id, resonator.id, rqid);
     });
-
-    return addQuestionsPromises.concat(removedQuestionsPromises);
+    if(removedQuestionsPromises.length > 0 )
+    {
+        promisesStack.push(removedQuestionsPromises);
+    }
+    return promisesStack;
 }
 
 function* getFormData() {

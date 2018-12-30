@@ -28,7 +28,12 @@ export function addCriterion(followerId, resonatorId, criterionId) {
         reminder_id: resonatorId
     }, true);
 }
-
+export function addBulkCriterion(followerId, resonatorId, criterionId) {
+    return fetcher.post(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria`, {
+        question_id: criterionId,
+        reminder_id: resonatorId
+    }, true);
+}
 export function removeCriterion(followerId, resonatorId, reminderCriterionId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
 }
