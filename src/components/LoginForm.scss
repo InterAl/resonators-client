@@ -7,7 +7,7 @@
         display: flex;
         flex-direction: column;
     }
-
+    
     .submitBtn {
         align-self: center;
         width: 100%;
@@ -21,6 +21,11 @@
     }
 
     .submitBtnWrapper {
+        margin-top: 20px;
+    }
+    .signInDesclaimer{
+        font-size: 16px;
+        margin-bottom: 20px;
         margin-top: 20px;
     }
 }

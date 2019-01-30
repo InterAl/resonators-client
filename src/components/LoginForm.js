@@ -9,7 +9,6 @@ import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
 import googleIcon from './Icons/GoogleIcon';
 import './LoginForm.scss';
-
 class LoginForm extends Component {
     constructor() {
         super();
@@ -22,11 +21,12 @@ class LoginForm extends Component {
     }
 
     render() {
+        const isLoginFormRequired = false;
         return (
             <Card className='loginForm col-sm-3'>
-                <CardHeader title="Login" />
+                {isLoginFormRequired && <CardHeader title="Login" />}
                 <CardText className='cardText'>
-                    <form onSubmit={this.props.handleSubmit}>
+                    {isLoginFormRequired && <form onSubmit={this.props.handleSubmit}>
                         <Field type='email' name='email' component={TextField}
                                props={{ placeholder: 'Email' }}
                         />
@@ -59,7 +59,14 @@ class LoginForm extends Component {
                                 label='Forgot password?'
                             />
                         </div>
-                        <div style={{width: '100%'}}>
+                    </form>}
+                    {!isLoginFormRequired && <div className="signInDesclaimer">
+                        <span>Dear Psysession user,
+                            Starting Jan 1st 2019, Login and Registration to Psysession.com is enabled with a Google account only.
+
+                        </span>
+                    </div>}
+                    <div style={{width: '100%'}}>
                             <Button
                                 type='button'
                                 onTouchTap={this.handleGoogleLogin}
@@ -68,7 +75,6 @@ class LoginForm extends Component {
                                 style={{width: '100%', marginTop: 12}}
                             />
                         </div>
-                    </form>
                 </CardText>
             </Card>
         );
