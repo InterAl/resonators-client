@@ -1,16 +1,18 @@
-import React, {Component} from 'react';
-import {actions} from '../../../actions/resonatorCreationActions';
+import React, { Component } from 'react';
+import { actions } from '../../../actions/resonatorCreationActions';
 import Subheader from 'material-ui/Subheader';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import NavButtons from './navButtons';
 import ResonatorImage from '../../ResonatorImage';
+import RaisedButton from 'material-ui/RaisedButton';
 
 class EditResonatorMedia extends Component {
     constructor() {
         super();
 
         this.handleFileChange = this.handleFileChange.bind(this);
+        this.handleRemoveImage = this.handleRemoveImage.bind(this);
 
         this.state = {
             previewImage: null
@@ -45,6 +47,20 @@ class EditResonatorMedia extends Component {
         reader.readAsDataURL(file);
     }
 
+    handleRemoveImage(ev) { 
+        ev.reset;
+
+        // this.props.image = null;
+        this.props.updateCreationStep({
+            imageFile: null,
+            removeOldFile : true
+        });
+        this.setState({
+            previewImage: null
+        });
+        this.imageFileInput.value = "";
+    }
+
     render() {
         return (
             <div>
@@ -55,13 +71,20 @@ class EditResonatorMedia extends Component {
                     preview={this.state.previewImage}
                 />
 
-                <br/>
+                <br />
 
                 <input type="file"
-                       onChange={this.handleFileChange}
-                       accept="image/*" />
+                    onChange={this.handleFileChange}
+                    accept="image/*" 
+                    ref={el => this.imageFileInput = el}/>
 
-                <br/>
+                <br />
+
+                <RaisedButton
+                    label='Remove Image'
+                    onClick={this.handleRemoveImage}
+                    style={{ marginTop: 30, marginBottom: 30 }}
+                />
 
                 {!this.props.editMode &&
                     <NavButtons

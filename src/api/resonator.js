@@ -37,3 +37,9 @@ export function addBulkCriterion(followerId, resonatorId, criterionId) {
 export function removeCriterion(followerId, resonatorId, reminderCriterionId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
 }
+
+export function cleanupOldFile(followerId, resonatorId)
+{
+    return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/removeImage`);
+}
+

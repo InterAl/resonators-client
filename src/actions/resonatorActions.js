@@ -3,7 +3,8 @@ import {ActionCreatorHelper} from 'saga-reducer-factory';
 const actionsList = [
     'CREATE',
     'ADD_CRITERION',
-    'REMOVE'
+    'REMOVE',
+    "ACTIVATE"
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'RESONATOR_');

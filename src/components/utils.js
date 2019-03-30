@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export function getResonatorDirection(resonator) {
     const text = (resonator.content + resonator.description) || '';
     return getDir(text);
