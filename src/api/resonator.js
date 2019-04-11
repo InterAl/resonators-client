@@ -38,8 +38,8 @@ export function removeCriterion(followerId, resonatorId, reminderCriterionId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
 }
 
-export function cleanupOldFile(followerId, resonatorId)
+export function cleanupOldFile(followerId, resonatorId, itemId)
 {
-    return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/removeImage`);
+    return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/removeImage/${itemId}`);
 }
 

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { actions } from '../../../actions/resonatorCreationActions';
 import Subheader from 'material-ui/Subheader';
@@ -47,18 +48,24 @@ class EditResonatorMedia extends Component {
         reader.readAsDataURL(file);
     }
 
-    handleRemoveImage(ev) { 
+    handleRemoveImage(ev) {
         ev.reset;
 
-        // this.props.image = null;
+        let lastPicture = _(this.props.resonator.items)
+            .filter(i => i.media_kind === 'picture')
+            .sortBy(i => new Date(i.created_at))
+            .last();
+        if (lastPicture)
+            lastPicture.visible = 0;
+            
         this.props.updateCreationStep({
             imageFile: null,
-            removeOldFile : true
+            removeOldFile: true
         });
         this.setState({
             previewImage: null
         });
-        this.imageFileInput.value = "";
+        this.imageFileInput.value = '';
     }
 
     render() {
@@ -75,8 +82,8 @@ class EditResonatorMedia extends Component {
 
                 <input type="file"
                     onChange={this.handleFileChange}
-                    accept="image/*" 
-                    ref={el => this.imageFileInput = el}/>
+                    accept="image/*"
+                    ref={el => this.imageFileInput = el} />
 
                 <br />
 

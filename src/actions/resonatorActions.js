@@ -4,7 +4,7 @@ const actionsList = [
     'CREATE',
     'ADD_CRITERION',
     'REMOVE',
-    "ACTIVATE"
+    'ACTIVATE'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'RESONATOR_');

@@ -10,8 +10,8 @@ import ResonatorImage from './ResonatorImage';
 import { push } from 'react-router-redux';
 import * as utils from './utils';
 // import moment from 'moment';
-import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
-import IconButton from 'material-ui/IconButton';
+//import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
+//import IconButton from 'material-ui/IconButton';
 import MoreOptionsMenu from './MoreOptionsMenu';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -21,7 +21,7 @@ class FollowerResonators extends Component {
         super(props);
 
         this.state = {
-            showDisabled: false
+            showDisabled: true
         }
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
@@ -86,7 +86,7 @@ class FollowerResonators extends Component {
 
     getRows() {
         const orderedResonators = _.orderBy(this.props.resonators, r => (!r.pop_email));
-        var gotDisabledOne = false;
+        //var gotDisabledOne = false;
         return _.reduce(orderedResonators, (acc, r) => {
             // let updatedAt = moment(r.updated_at).format('DD/MM/YYYY hh:mm');
             // if (r.pop_email === false && !gotDisabledOne) {

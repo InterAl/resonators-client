@@ -29,7 +29,13 @@ handle(types.UPDATE_FINAL, function* () {
 
     function cleanupOldFile() {
         if (formData.removeOldFile) {
-            return resonatorApi.cleanupOldFile(followerId, resonator.id);
+
+            let lastPicture = _(resonator.items)
+                .filter(i => i.media_kind === 'picture')
+                .sortBy(i => new Date(i.created_at))
+                .last();
+            if (lastPicture)
+                return resonatorApi.cleanupOldFile(followerId, resonator.id, lastPicture.id);
         }
     }
 
