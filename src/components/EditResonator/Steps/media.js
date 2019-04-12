@@ -33,6 +33,13 @@ class EditResonatorMedia extends Component {
             imageFile: file
         });
 
+        let lastPicture = _(this.props.resonator.items)
+            .filter(i => i.media_kind === 'picture')
+            .sortBy(i => new Date(i.created_at))
+            .last();
+        if (lastPicture)
+            lastPicture.visible = 1;
+
         this.setImagePreview(file);
     }
 
@@ -57,7 +64,7 @@ class EditResonatorMedia extends Component {
             .last();
         if (lastPicture)
             lastPicture.visible = 0;
-            
+
         this.props.updateCreationStep({
             imageFile: null,
             removeOldFile: true
