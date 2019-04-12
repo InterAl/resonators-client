@@ -1,9 +1,10 @@
 FROM node
 
+RUN mkdir -p /usr/app
 WORKDIR /usr/app
 
 COPY package*.json ./
-RUN npm i
+RUN npm i -q
 
 COPY . ./
 
