@@ -8,7 +8,7 @@ export default ({onTouchTap, style}) => {
             label='Back'
             primary={false}
             onTouchTap={onTouchTap}
-            style={[{marginRight: 8}, style]}
+            style={style}
         />
     );
 };

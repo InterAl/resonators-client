@@ -81,22 +81,24 @@ class EditResonatorSchedule extends Component {
                         name='time'
                         label='Sending time'
                         component={
-                            ({input: {value, onChange}, meta: {touched, error}}) =>
-                            <TimePicker
-                                autoOk={true}
-                                hintText='Sending Time'
-                                onChange={(e, date) => this.handleSelectTime(date, onChange)}
-                                value={value}
-                                errorText={touched && error}
-                            />
-                            }
-                        />
-                        {!this.props.editMode &&
+                            ({ input: { value, onChange }, meta: { touched, error } }) =>
+                                <TimePicker
+                                    autoOk={true}
+                                    hintText='Sending Time'
+                                    onChange={(e, date) => this.handleSelectTime(date, onChange)}
+                                    value={new Date(value || 0)}
+                                    errorText={touched && error}
+                                />
+                        }
+                    />
+                    {!this.props.editMode &&
                         <div className='navButton'>
-                            <BackButton onTouchTap={this.props.onBack} />
+                            <BackButton onTouchTap={this.props.onBack}
+                                style={{ marginRight: 8 }} />
                             {<RaisedButton
-                                primary
+                                primary={true}
                                 label='Next'
+                                style={{ marginRight: 8 }}
                                 onTouchTap={
                                     this.props.handleSubmit(
                                         this.props.resonatorCreated ?
