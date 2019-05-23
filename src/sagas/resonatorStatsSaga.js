@@ -44,7 +44,7 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
 
 function aggregateChart(allAnswers, allQuestions) {
     let timeToAnswers = _.reduce(allAnswers, (acc, a) => {
-        let time = moment(a.time).format('YYYY-MM-DD');
+        let time = moment(a.time).format('YYYY-MM-DD HH:mm');
         acc[time] = (acc[time] || []).concat({...a, time});
         return acc;
     }, {});
@@ -81,7 +81,7 @@ function aggregateChart(allAnswers, allQuestions) {
 
 function transformAnswer(answer) {
     return {
-        time: moment(answer.time).format('D/M/YY'),
+        time: moment(answer.time).format('D/M/YY HH:mm'),
         rank: answer.rank,
         question_id: answer.question_id
     };
@@ -90,7 +90,7 @@ function transformAnswer(answer) {
 function getUniqueAnswersPerDay(answers) {
     return _(answers)
         .orderBy(a => moment(a.time), ['desc'])
-        .sortedUniqBy(a => `${a.question_id}#${moment(a.time).format('D/M/YY')}`)
+        .sortedUniqBy(a => `${a.question_id}#${moment(a.time).format('D/M/YY HH:mm')}`)
         .value();
 }
 

@@ -8,6 +8,7 @@ import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
 import ExpandableCard from './ExpandableCard';
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';
+import moment from 'moment';
 
 class ResonatorStats extends Component {
     static defaultProps = {
@@ -25,7 +26,9 @@ class ResonatorStats extends Component {
             resonatorId: this.props.resonatorId
         });
     }
-
+    formatXAxis(tickItem) {
+        return moment(tickItem).format('D/M/YY')
+    }
     renderQuestionLegend(question) {
         return (
             <Table style={{width:500, margin: '0 auto', marginTop: 36}}>
@@ -50,7 +53,7 @@ class ResonatorStats extends Component {
             <div style={{height: 500, paddingRight: 30}}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
-                        <XAxis dataKey="time"/>
+                        <XAxis dataKey="time" tickFormatter={this.formatXAxis}/>
                         <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]}/>
                         <Tooltip/>
                         <Legend/>
