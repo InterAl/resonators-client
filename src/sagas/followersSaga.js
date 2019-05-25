@@ -3,12 +3,12 @@ import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as resonatorTypes } from '../actions/resonatorActions';
-import { types as sessionActionTypes} from '../actions/sessionActions';
+import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
 
 let followersSelector = state => state.followers.followers;
 
-let {handle, updateState, saga, reducer} = SagaReducerFactory({
+let { handle, updateState, saga, reducer } = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
@@ -17,7 +17,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
     }
 });
 
-handle(sessionActionTypes.LOGIN_SUCCESS, function*() {
+handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
     let followers = yield call(followerApi.get);
 
     yield put(updateState({
@@ -25,14 +25,14 @@ handle(sessionActionTypes.LOGIN_SUCCESS, function*() {
     }));
 });
 
-handle(types.CREATE, function*(sagaParams, {payload}) {
+handle(types.CREATE, function* (sagaParams, { payload }) {
     let follower = yield call(followerApi.create, payload);
 
     follower.user.email = payload.email;
     yield updateStateWithNewFollower(follower);
 });
 
-handle(types.DELETE, function*(sagaParams, {payload}) {
+handle(types.DELETE, function* (sagaParams, { payload }) {
     yield call(followerApi.deleteFollower, payload);
     let followers = yield select(followersSelector);
     let followersWithoutDeleted = _.reject(followers, f => f.id === payload);
@@ -42,7 +42,7 @@ handle(types.DELETE, function*(sagaParams, {payload}) {
     }));
 });
 
-handle(types.FREEZE, function*(sagaParams, {payload}) {
+handle(types.FREEZE, function* (sagaParams, { payload }) {
     yield call(followerApi.freezeFollower, payload);
     const followers = yield select(followersSelector);
     const follower = yield getFollower(payload);
@@ -55,7 +55,7 @@ handle(types.FREEZE, function*(sagaParams, {payload}) {
     yield updateStateWithNewFollower(updatedFollower);
 });
 
-handle(types.UNFREEZE, function*(sagaParams, {payload}) {
+handle(types.UNFREEZE, function* (sagaParams, { payload }) {
     yield call(followerApi.unfreezeFollower, payload);
     const followers = yield select(followersSelector);
     const follower = yield getFollower(payload);
@@ -68,15 +68,15 @@ handle(types.UNFREEZE, function*(sagaParams, {payload}) {
     yield updateStateWithNewFollower(updatedFollower);
 });
 
-handle(types.TOGGLE_DISPLAY_FROZEN, function*(sagaParams, {payload}) {
-    const {displayFrozen} = yield select(state => state.followers);
+handle(types.TOGGLE_DISPLAY_FROZEN, function* (sagaParams, { payload }) {
+    const { displayFrozen } = yield select(state => state.followers);
 
     yield put(updateState({
         displayFrozen: !displayFrozen
     }));
 });
 
-handle(types.UPDATE, function*(sagaParams, {payload}) {
+handle(types.UPDATE, function* (sagaParams, { payload }) {
     yield call(followerApi.edit, payload);
     let follower = yield getFollower(payload.id);
 
@@ -92,12 +92,12 @@ handle(types.UPDATE, function*(sagaParams, {payload}) {
     yield updateStateWithNewFollower(updatedFollower);
 });
 
-handle(types.FETCH_FOLLOWER_RESONATORS, function*(sagaParams, {payload}) {
+handle(types.FETCH_FOLLOWER_RESONATORS, function* (sagaParams, { payload }) {
     yield fetchFollowerResonators(payload);
 });
 
-handle(resonatorTypes.REMOVE, function*(sagaParams, {payload}) {
-    const {resonator: {id, follower_id}} = payload;
+handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
+    const { resonator: { id, follower_id } } = payload;
 
     yield call(followerApi.deleteResonator, follower_id, id);
 
@@ -106,16 +106,20 @@ handle(resonatorTypes.REMOVE, function*(sagaParams, {payload}) {
     let follower = _.find(followers, f => f.id === follower_id);
 
     followers = _.reject(followers, f => f.id === follower_id)
-                 .concat({...follower,
-                          resonators: _.reject(follower.resonators,
-                                                r => r.id === id)})
+        .concat({
+            ...follower,
+            resonators: _.reject(follower.resonators,
+                r => r.id === id)
+        })
 
     yield put(updateState({
         followers
     }));
 });
 
-handle(types.FILTER_BY_CLINIC_ID, function*(sagaParams, {payload}) {
+
+
+handle(types.FILTER_BY_CLINIC_ID, function* (sagaParams, { payload }) {
     yield put(updateState({
         filterByClinicId: payload
     }));
@@ -157,7 +161,7 @@ function* updateStateWithNewFollower(follower) {
     let lastFollowers = yield select(followersSelector);
 
     let followers = _.reject(lastFollowers, f => f.id === follower.id)
-                     .concat(follower);
+        .concat(follower);
 
     yield put(updateState({
         followers
@@ -170,12 +174,12 @@ export function* updateResonator(followerId, resonator) {
     let follower = _.find(followers, f => f.id === followerId);
 
     let updatedResonators = _.reject(follower.resonators, r => r.id === resonator.id)
-                             .concat(resonator);
+        .concat(resonator);
 
-    let updatedFollower = {...follower, resonators: updatedResonators};
+    let updatedFollower = { ...follower, resonators: updatedResonators };
 
     let updatedFollowers = _.reject(followers, f => f.id === followerId)
-                            .concat(updatedFollower);
+        .concat(updatedFollower);
 
     yield put(updateState({
         followers: updatedFollowers
@@ -187,4 +191,4 @@ function* getFollower(id) {
     return _.find(followers, f => f.id === id);
 }
 
-export default {saga, reducer};
+export default { saga, reducer };

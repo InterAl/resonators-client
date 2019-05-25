@@ -8,7 +8,7 @@ export default resonator => {
         .sortBy(i => new Date(i.created_at))
         .last();
 
-    if (lastPicture) {
+    if (lastPicture != null && lastPicture.visible) {
         if (lastPicture.link)
             return lastPicture.link;
         else

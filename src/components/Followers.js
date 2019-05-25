@@ -74,11 +74,11 @@ class Followers extends Component {
                 onChange={this.handleClinicFilterChange}
             >
                 <MenuItem value='all' primaryText='All' />
-            {
-                this.props.clinics.map(clinic => (
-                    <MenuItem value={clinic.id} primaryText={clinic.name} />
-                ))
-            }
+                {
+                    this.props.clinics.map((clinic, i) => (
+                        <MenuItem value={clinic.id} primaryText={clinic.name} key={i} />
+                    ))
+                }
             </SelectField>
         );
     }
