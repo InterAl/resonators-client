@@ -27,7 +27,7 @@ class ResonatorStats extends Component {
         });
     }
     formatXAxis(tickItem) {
-        return moment(tickItem).format('D/M/YY')
+        return moment(tickItem).format('MM/DD/YY')
     }
     renderQuestionLegend(question) {
         return (
