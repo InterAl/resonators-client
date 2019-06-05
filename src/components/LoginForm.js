@@ -20,8 +20,8 @@ class LoginForm extends Component {
         this.props.googleLogin();
     }
 
-    render() { 
-        const isLoginFormRequired = true;
+    render() {
+        const isLoginFormRequired = false;
         return (
             <Card className='loginForm col-sm-3'>
                 {isLoginFormRequired && <CardHeader title="Login" />}
