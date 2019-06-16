@@ -88,7 +88,7 @@ class Clinics extends Component {
             <EntityTable
                 header={header}
                 rows={rows}
-                addButton={true}
+                addButton={false}
                 rowActions={[moreOptionsMenu]}
                 className='clinics'
                 onAdd={this.handleAddClinic}
