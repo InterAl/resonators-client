@@ -9,7 +9,12 @@ export function create(name) {
         name
     });
 }
-
+export function addLeaderToClinic(email, clinic_id) {
+    return fetcher.post('/leader_clinics.json', {
+        email,
+        clinic_id
+    });
+}
 export function edit({
     id,
     name

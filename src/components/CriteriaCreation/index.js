@@ -59,7 +59,7 @@ class CriteriaCreation extends Component {
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                     <Paper className='card col-xs-12'>
                         <Subheader>Criterion Creation</Subheader>
-                        <ClinicSelect/>
+                        {/* <ClinicSelect/> */}
                         <TextBox multiLine name='title' placeholder='Title'/>
                         <TextBox multiLine name='description' placeholder='Description'/>
                         <Select name='question_kind' label='Criteria Type'>
@@ -171,8 +171,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
         if (!form.criteriaType)
             errors.criteriaType = 'Required';
 
-        if (!form.clinic)
-            errors.clinic = 'Required';
+        // if (!form.clinic)
+        //     errors.clinic = 'Required';
 
         if (form.criteriaType === 'numeric') {
             if (!form.numMin)

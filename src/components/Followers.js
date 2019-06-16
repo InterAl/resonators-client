@@ -121,9 +121,9 @@ class Followers extends Component {
             moreOptions.push('showFrozen');
 
         return {
-            left: [
-                this.renderClinicFilter()
-            ],
+            // left: [
+            //     this.renderClinicFilter()
+            // ],
             right: [
                 <MoreOptionsMenu
                     multiple
