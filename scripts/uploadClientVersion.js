@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+
+var asset_id = 'resonators-client';
+var path = require('path');
+var execSync = require('child_process').execSync;
+var request = require('request');
+var attachmentPath = path.resolve(__dirname, '../dist/assets/app.js');
+var fs = require('fs');
+var secrets = require('../src/config/secrets');
+
+var commitHash = execSync('git rev-parse --verify HEAD');
+var commitTime = execSync('git show -s --format=%ci HEAD');
+
+try {
+    execSync('gzip -9 ' + attachmentPath + ' -k');
+} catch (err) {
+    console.error('failed gzipping', err);
+}
+
+attachmentPath += '.gz';
+
+var formData = {
+    asset_id: asset_id,
+    secret: secrets.uploadClientVersionSecret,
+    media_data: fs.createReadStream(attachmentPath),
+    tag: commitHash + ' | ' + commitTime,
+    contentEncoding: 'gzip'
+};
+
+console.log('uploading client version...');
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0'
+
+request
+    .post({
+        url: 'https://' + secrets.host + '/api/versionable_assets/upload',
+        formData
+    },
+    function (err, resp, body) {
+        if (err)
+            console.error('err?', err);
+        else
+            console.log('uploaded.');
+
+        console.log('link', JSON.parse(body).link);
+    });

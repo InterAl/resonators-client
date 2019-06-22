@@ -159,11 +159,15 @@ function convertFormToPayload(followerId, formData) {
         follower_id: followerId,
         title: formData.title,
         content: formData.description,
+        one_off: formData.oneOff === 'on',
         repeat_days,
+        interaction_type: formData.interactionType,
         disable_copy_to_leader: formData.sendMeCopy !== 'on',
         link: formData.link,
         pop_email: formData.activated === 'on',
         pop_time: formData.time.toISOString(),
+        selected_questionnaire: formData.selectedQuestionnaire,
+        questionnaire_details: formData.questionnaireDetails
     };
 
     return payload;
@@ -180,10 +184,14 @@ function convertResonatorToForm(resonator) {
         title: resonator.title,
         description: resonator.content,
         sendMeCopy: resonator.disable_copy_to_leader ? 'off' : 'on',
+        interactionType: resonator.interaction_type ? 0 : resonator.interaction_type,
         link: resonator.link,
         activated: resonator.pop_email ? 'on' : 'off',
         time: new Date(resonator.pop_time),
-        criteria: _.map(resonator.questions, 'question_id')
+        criteria: _.map(resonator.questions, 'question_id'),
+        oneOff: resonator.one_off ? 'on' : 'off',
+        selectedQuestionnaire: resonator.selected_questionnaire,
+        questionnaireDetails: resonator.questionnaire_details
     }
 
     return form;

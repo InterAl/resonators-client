@@ -7,13 +7,16 @@ import ScheduleStep from './Steps/schedule';
 import ActivationStep from './Steps/activation';
 import MediaStep from './Steps/media';
 import CriteriaStep from './Steps/Criteria';
+import InteractionTypes from './Steps/InteractionTypes';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import {
-  Stepper, StepLabel, StepContent, Step
+    Stepper, StepLabel, StepContent, Step
 } from 'material-ui/Stepper';
 import './index.scss';
+import Questionnaire from './Steps/Questionnaire';
+import DailyDiary from './Steps/DailyDiary';
 
 class EditResonator extends Component {
     static propTypes = {
@@ -30,6 +33,8 @@ class EditResonator extends Component {
         this.state = {
             activeStep: 0,
             noCreationStep: props.resonator,
+            interactionTypeUsed: 0,
+            oneOffValue: 'off',
             maxCompletedStep: null
         };
 
@@ -37,7 +42,8 @@ class EditResonator extends Component {
             this.renderBasic.bind(this),
             this.renderSchedule.bind(this),
             this.renderMedia.bind(this),
-            this.renderCriteria.bind(this),
+            this.renderInteractionTypes.bind(this),
+            this.renderInteraction.bind(this),
             this.renderFinal.bind(this)
         ];
 
@@ -45,6 +51,12 @@ class EditResonator extends Component {
         this.handleBack = this.handleBack.bind(this);
         this.updateActiveStep = this.updateActiveStep.bind(this);
         this.handleFinalUpdate = this.handleFinalUpdate.bind(this);
+        this.updateIntractionType = this.updateIntractionType.bind(this);
+        this.updateOneOff = this.updateOneOff.bind(this);
+        this.renderCriteria = this.renderCriteria.bind(this);
+        this.renderQuestionnaire = this.renderQuestionnaire.bind(this);
+        this.renderDailyDiary = this.renderDailyDiary.bind(this);
+
     }
 
     componentDidMount() {
@@ -69,6 +81,16 @@ class EditResonator extends Component {
             activeStep,
             maxCompletedStep: Math.max(this.state.maxCompletedStep, activeStep - 1)
         })
+    }
+
+    updateIntractionType = (interactionTypeUsed) => {
+        this.setState({ interactionTypeUsed});
+        if (this.formData !== undefined)
+            this.formData.interactionType = interactionTypeUsed;
+    }
+
+    updateOneOff = (oneOffValue) => {
+        this.setState({ oneOffValue });
     }
 
     renderBasic() {
@@ -99,6 +121,7 @@ class EditResonator extends Component {
                 editMode={this.props.editMode}
                 onNext={this.handleNext}
                 onBack={this.handleBack}
+                updateOneOff={this.updateOneOff}
             />
         };
     }
@@ -114,10 +137,53 @@ class EditResonator extends Component {
         };
     }
 
+    renderInteractionTypes() {
+        return {
+            label: 'Interaction Type',
+            content: <InteractionTypes
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+                updateIntractionType={this.updateIntractionType}
+            />
+        };
+    }
+
+    renderInteraction() {
+        if ((this.state.interactionTypeUsed === undefined) || this.state.interactionTypeUsed == 0)
+            return this.renderCriteria();
+        else if (this.state.interactionTypeUsed == 1)
+            return this.renderQuestionnaire()
+        else if (this.state.interactionTypeUsed == 2)
+            return this.renderDailyDiary()
+    }
+
     renderCriteria() {
         return {
             label: 'Criteria',
             content: <CriteriaStep
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+            />
+        };
+    }
+
+    renderQuestionnaire() {
+        return {
+            label: 'Questionnaire',
+            content: <Questionnaire
+                editMode={this.props.editMode}
+                onNext={this.handleNext}
+                onBack={this.handleBack}
+            />
+        };
+    }
+
+    renderDailyDiary() {
+        return {
+            label: 'Daily Diary',
+            content: <DailyDiary
                 editMode={this.props.editMode}
                 onNext={this.handleNext}
                 onBack={this.handleBack}
@@ -151,8 +217,7 @@ class EditResonator extends Component {
                 <StepContent {...activeProp}>
                     {content}
                 </StepContent>
-            </Step>
-        );
+            </Step>);
     }
 
     render() {
@@ -178,7 +243,9 @@ function mapStateToProps(state) {
     return {
         resonator: state.resonatorCreation.resonator,
         editMode: state.resonatorCreation.editMode,
-        showSpinnerFinalUpdate: state.resonatorCreation.showSpinnerFinalUpdate
+        interactionType: state.resonatorCreation.interactionType,
+        showSpinnerFinalUpdate: state.resonatorCreation.showSpinnerFinalUpdate,
+        formData: state.resonatorCreation.formData
     };
 }
 

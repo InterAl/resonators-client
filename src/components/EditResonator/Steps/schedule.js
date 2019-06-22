@@ -7,12 +7,21 @@ import TimePicker from 'material-ui/TimePicker';
 import BackButton from './backButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
-import CheckboxField from '../../FormComponents/CheckboxField';
+import Toggle from 'material-ui/Toggle';
+import Checkbox from 'material-ui/Checkbox';
+
 import StepBase from './stepBase';
 import moment from 'moment';
 import './schedule.scss';
 
+var selectedDayIndex = -1;
+
 class EditResonatorSchedule extends Component {
+
+    static propTypes = {
+        updateIntractionType: React.PropTypes.func
+    }
+
     constructor() {
         super();
 
@@ -46,14 +55,25 @@ class EditResonatorSchedule extends Component {
         changeField(dateTime);
     }
 
+    handleSelectDay(checked, onChange, selectedIndex) {
+        selectedDayIndex = selectedIndex;
+        onChange(checked);
+    }
+
     renderDays() {
         return [0,1,2,3,4,5,6].map(i => (
             <Field
                 key={i}
                 className='day'
                 name={`day${i}`}
-                component={CheckboxField}
-                style={{width: 'initial'}}
+                component={({ input: { onChange, value }, meta, ...custom }) => (
+                    <Checkbox
+                        checked={!!value}
+                        onCheck={(ev, checked) => this.handleSelectDay(checked, onChange, i)}
+                        {...custom}
+                    />
+                )}
+                style={{ width: 'initial' }}
                 label={moment().startOf('w').add(i, 'd').format('dddd')}
                 iconStyle={{marginRight: 1}}
             />
@@ -66,10 +86,33 @@ class EditResonatorSchedule extends Component {
         );
     }
 
+    handleSelectOneOff(value, onChange) {
+        let result = value === 'on' ? 'off' : 'on'
+        onChange(result);
+    }
+
+    renderOneOff() {
+        return (
+            <Field name='oneOff'
+                component={({ input: { onChange, value }, meta, ...custom }) => (
+                    <Toggle
+                        toggled={value === 'on'}
+                        onToggle={() => this.handleSelectOneOff(value, onChange)}
+                        {...custom}
+                    />)}
+                style={{ top: 8, marginBottom: 16 }}
+                label='One Off'
+                labelPosition='right'
+            />);
+    }
+
     render() {
         return (
             <div className='edit-resonator-schedule row'>
                 <div className='col-sm-12'>
+                    <div className='days'>
+                        {this.renderOneOff()}
+                    </div>
                     <div className='subheader'>
                         Days active:
                     </div>
@@ -86,7 +129,7 @@ class EditResonatorSchedule extends Component {
                                     autoOk={true}
                                     hintText='Sending Time'
                                     onChange={(e, date) => this.handleSelectTime(date, onChange)}
-                                    value={new Date(value || 0)}
+                                    value={(value ? new Date(value) : new Date())}
                                     errorText={touched && error}
                                 />
                         }
@@ -117,11 +160,25 @@ class EditResonatorSchedule extends Component {
 EditResonatorSchedule = StepBase({
     noNext: true,
     noBack: true,
-    validate(formData) {
+    validate(formData, props) {
         let errors = {};
 
-        if (!formData.time)
-            errors.time = 'Required';
+        if (!formData.time) {
+            formData.time = new Date();
+            // errors.time = 'Required';
+        }
+
+        if (formData.oneOff === 'on') {
+            var selectedOne = false;
+            [0, 1, 2, 3, 4, 5, 6].forEach((item, i, ar) => {
+                if (formData[`day${item}`] && !selectedOne && (selectedDayIndex >= 0 && selectedDayIndex == i))
+                    selectedOne = true;
+                else
+                    formData[`day${item}`] = false
+            });
+        }
+
+        // props.updateIntractionType(parseInt(formData.interactionType));
 
         return errors;
     }
