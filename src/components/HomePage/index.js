@@ -16,10 +16,6 @@ export default class HomePage extends Component {
             <div className="home-page">
                 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&display=swap" rel="stylesheet" />
                 <section className="fold">
-                <img src={bgImg}
-                     srcset={`${bgImg2} 2x
-                     ${bgImg3} 3x`}
-                     className="header-bg" />
 
                   <header className='header side-padding'>
 

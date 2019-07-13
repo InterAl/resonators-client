@@ -9,6 +9,7 @@ $slate-light: #4D5254;
 $green: #29866B;
 
 $primary: $blue;
+$primary-light: $light-blue;
 $secondary: $slate;
 $secondary-light: $slate-light;
 $background: $light-grey;
@@ -16,6 +17,11 @@ $text-primary: $white;
 $text-secondary: $slate;
 $border-primary: $green;
 
+$breakpoint-md: 630px;
+$breakpoint-lg: 1920px;
+
+$media-md: "only screen and (min-width: #{$breakpoint-md})";
+$media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
 .home-page {
   color: $text-primary;
@@ -56,8 +62,14 @@ $border-primary: $green;
   }
 
   .fold {
-    position: relative;
-    overflow: hidden;
+    background: url(./assets/bg.jpg) center / cover no-repeat;
+    @media #{$media-md} {
+      background-image: url(./assets/bg@2x.jpg);
+    }
+
+    @media #{$media-lg} {
+      background-image: url(./assets/bg@3x.jpg);
+    }
   }
 
   .btn-primary {
@@ -66,15 +78,10 @@ $border-primary: $green;
     border: none;
     outline: none;
     padding: 5px 20px;
-  }
 
-  .header-bg {
-    position: absolute;
-    top: 0;
-    left: -50%;
-    z-index: -1;
-    height: 100%;
-    background-position: center;
+    &:hover {
+      background: $primary-light;
+    }
   }
 
   .header {
