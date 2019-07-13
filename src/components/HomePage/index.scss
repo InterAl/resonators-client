@@ -35,6 +35,10 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     margin: 0;
   }
 
+  a {
+    color: $text-primary;
+  }
+
   p {
     line-height: 20px;
     margin: 0;
@@ -73,11 +77,13 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   }
 
   .btn-primary {
+    display: inline-block;
     background: $primary;
     border-radius: 22px;
     border: none;
     outline: none;
     padding: 5px 20px;
+    transition: background 0.2s ease-in-out;
 
     &:hover {
       background: $primary-light;
@@ -98,8 +104,14 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
   .menu-icon {
     padding-top: 6px;
+    cursor: pointer;
+
+    &:hover .menu-icon-bar {
+      background: $primary-light;
+    }
 
     .menu-icon-bar {
+      transition: background 0.2s ease-in-out;
       height: 2px;
       width: 25px;
       background: $primary;
@@ -109,5 +121,19 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
   .menu-links {
     display: none;
+  }
+
+  .what-is-psysession {
+    letter-spacing: normal;
+    background: $primary;
+    position: relative;
+    padding: 100px 0 50px;
+
+    &-image {
+      position: absolute;
+      top: -10%;
+      right: 4%;
+      height: 170px;
+    }
   }
 }
