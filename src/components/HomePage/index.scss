@@ -13,8 +13,7 @@ $primary-light: $light-blue;
 $secondary: $slate;
 $secondary-light: $slate-light;
 $background: $light-grey;
-$text-primary: $white;
-$text-secondary: $slate;
+$accent: $white;
 $border-primary: $green;
 
 $breakpoint-md: 630px;
@@ -24,7 +23,7 @@ $media-md: "only screen and (min-width: #{$breakpoint-md})";
 $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
 .home-page {
-  color: $text-primary;
+  color: $accent;
   font: 300 16px 'Montserrat', sans-serif;
   letter-spacing: -0.45px;
 
@@ -36,7 +35,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   }
 
   a {
-    color: $text-primary;
+    color: $accent;
   }
 
   p {
@@ -44,25 +43,40 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     margin: 0;
   }
 
+  .text-primary {
+    color: $primary
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  $spacing: (
+    "small": 6px,
+    "normal": 15px,
+    "medium": 20px,
+    "large": 50px,
+  );
+
   .side-padding {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: map_get($spacing, "medium");
+    padding-right: map_get($spacing, "medium");
   }
 
-  .vertical-space-small {
-    margin-bottom: 6px;
-  }
+  // Generate spacing utility classes. Margin & Padding.
+  @each $name, $size in $spacing {
+    $suffix: "";
+    @if $name != "normal" {
+      $suffix: "-#{$name}"
+    }
 
-  .vertical-space {
-    margin-bottom: 15px;
-  }
-
-  .vertical-space-medium {
-    margin-bottom: 20px;
-  }
-
-  .vertical-space-large {
-    margin-bottom: 50px;
+    @each $type in "margin", "padding" {
+      @each $location in "top", "bottom" {
+        .#{$type}-#{$location}#{$suffix} {
+          #{$type}-#{$location}: $size;
+        }
+      }
+    }
   }
 
   .fold {
@@ -87,6 +101,33 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
     &:hover {
       background: $primary-light;
+    }
+  }
+
+  .btn-plus {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
+
+    &:before, &:after {
+      content: "";
+      display: inline-block;
+      width: 2px;
+      height: 50%;
+      background: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:after {
+      transform: translate(-50%, -50%) rotate(-90deg);
     }
   }
 
@@ -135,5 +176,13 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
       right: 4%;
       height: 170px;
     }
+  }
+
+  .how-it-works {
+    position: relative;
+  }
+
+  .how-it-works-illustration {
+    width: 100%;
   }
 }
