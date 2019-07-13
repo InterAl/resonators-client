@@ -1,3 +1,106 @@
-.home-page {
+// Color palette
+$blue: #00C4F2;
+$light-blue: #55ecff;
+$grey: #7C7C7C;
+$white: #FFF;
+$light-grey: #F7F7F7;
+$slate: #363A3B;
+$slate-light: #4D5254;
+$green: #29866B;
 
+$primary: $blue;
+$secondary: $slate;
+$secondary-light: $slate-light;
+$background: $light-grey;
+$text-primary: $white;
+$text-secondary: $slate;
+$border-primary: $green;
+
+
+.home-page {
+  color: $text-primary;
+  font: 300 16px 'Montserrat', sans-serif;
+  letter-spacing: -0.45px;
+
+  h1, h2 {
+    font-weight: 300;
+	  font-size: 22px;
+	  line-height: 26px;
+    margin: 0;
+  }
+
+  p {
+    line-height: 20px;
+    margin: 0;
+  }
+
+  .side-padding {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .vertical-space-small {
+    margin-bottom: 6px;
+  }
+
+  .vertical-space {
+    margin-bottom: 15px;
+  }
+
+  .vertical-space-medium {
+    margin-bottom: 20px;
+  }
+
+  .vertical-space-large {
+    margin-bottom: 50px;
+  }
+
+  .fold {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    background: $primary;
+    border-radius: 22px;
+    border: none;
+    outline: none;
+    padding: 5px 20px;
+  }
+
+  .header-bg {
+    position: absolute;
+    top: 0;
+    left: -50%;
+    z-index: -1;
+    height: 100%;
+    background-position: center;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    padding-bottom: 125px;
+  }
+
+  .logo {
+    max-width: 140px;
+  }
+
+  .menu-icon {
+    padding-top: 6px;
+
+    .menu-icon-bar {
+      height: 2px;
+      width: 25px;
+      background: $primary;
+      margin-bottom: 6px;
+    }
+  }
+
+  .menu-links {
+    display: none;
+  }
 }
