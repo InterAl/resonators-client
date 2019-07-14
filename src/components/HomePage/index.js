@@ -138,8 +138,22 @@ export default class HomePage extends Component {
                 <section className="subscribe-section text-center padding-top-large padding-bottom-large side-padding">
                   <h2 className="padding-bottom-medium">Stay up to date</h2>
                   <form action="/subscribe">
-                    <input type="text" placeholder="Your E-mail" className="subscribe-section-input margin-bottom-medium"/>
+                    <input type="text" name="email" placeholder="Your E-mail" className="subscribe-section-input margin-bottom-medium"/>
                     <button className="subscribe-section-button">Subscribe</button>
+                  </form>
+                </section>
+
+                <section className="contact-section padding-top-large padding-bottom-large side-padding">
+                  <h2 className="padding-bottom-medium text-primary">Contact us</h2>
+                  <p className="padding-bottom-medium">We’re happy to hear from you! Contact us today and speak with one of our customer service representatives — and make your experience with us that much more pleasant!</p>
+                  <p className="margin-bottom-large"><b>BuizDev@PsySession.com? <a href="tel:+972-556600420">(+972)-55-660-0420</a></b></p>
+                  <form className="contact-form" action="/subscribe">
+                    <input type="text" id="contact-form-name" name="name" placeholder="Name" className="subscribe-section-input margin-bottom-medium"/>
+                    <input type="text" id="contact-form-country" name="country" placeholder="Country" className="subscribe-section-input margin-bottom-medium" />
+                    <input type="text" id="contact-form-phone" name="phone" placeholder="Phone" className="subscribe-section-input margin-bottom-medium"/>
+                    <input type="text" id="contact-form-email" name="email" placeholder="Email" className="subscribe-section-input margin-bottom-medium"/>
+                    <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="subscribe-section-input margin-bottom-medium"></textarea>
+                    <button className="contact-form-btn btn-primary">Send</button>
                   </form>
                 </section>
             </div>

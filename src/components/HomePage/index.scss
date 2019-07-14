@@ -235,7 +235,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     width: 100%;
     border: 0.8px solid $border-primary;
     border-radius: 4px;
-    padding: 20px;
+    padding: 15px 20px;
     background-color: $accent;
   }
 
@@ -247,5 +247,38 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     border-radius: 4px;
     background-color: $secondary;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
+
+  .contact-section {
+    background: $secondary;
+  }
+
+  .contact-form {
+    position: relative;
+    background: $secondary-light;
+    padding: 50px 15px 20px;
+    border-radius: 5px;
+
+    input, select, textarea {
+      &::placeholder {
+        color: $accent;
+      }
+
+      background: $secondary-light;
+      border: 1px solid $accent-secondary;
+    }
+
+    textarea {
+      height: 140px;
+    }
+  }
+
+  .contact-form-btn {
+    width: 80%;
+    padding: 10px;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
