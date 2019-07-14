@@ -237,6 +237,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     border-radius: 4px;
     padding: 15px 20px;
     background-color: $accent;
+    color: $accent-secondary;
   }
 
   .subscribe-section-button {
@@ -280,5 +281,12 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     bottom: -20px;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  .footer {
+    color: $accent-secondary;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 12px;
   }
 }

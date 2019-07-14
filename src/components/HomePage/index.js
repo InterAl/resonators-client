@@ -156,6 +156,10 @@ export default class HomePage extends Component {
                     <button className="contact-form-btn btn-primary">Send</button>
                   </form>
                 </section>
+
+                <footer className="footer">
+                  Copyright © 2019 PsySession. All rights reserved.
+                </footer>
             </div>
         );
     }
