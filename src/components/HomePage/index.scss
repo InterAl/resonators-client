@@ -225,4 +225,27 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   .effectiveness-graph {
     width: 100%;
   }
+
+  .subscribe-section {
+    background: $primary;
+  }
+
+  .subscribe-section-input {
+    height: 56px;
+    width: 100%;
+    border: 0.8px solid $border-primary;
+    border-radius: 4px;
+    padding: 20px;
+    background-color: $accent;
+  }
+
+  .subscribe-section-button {
+    font-weight: bold;
+    height: 56px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    background-color: $secondary;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  }
 }

@@ -134,6 +134,14 @@ export default class HomePage extends Component {
                   <h3>Quantifying and measuring</h3>
                   <img className="effectiveness-graph" src={graph} alt="graph illustration"/>
                 </section>
+
+                <section className="subscribe-section text-center padding-top-large padding-bottom-large side-padding">
+                  <h2 className="padding-bottom-medium">Stay up to date</h2>
+                  <form action="/subscribe">
+                    <input type="text" placeholder="Your E-mail" className="subscribe-section-input margin-bottom-medium"/>
+                    <button className="subscribe-section-button">Subscribe</button>
+                  </form>
+                </section>
             </div>
         );
     }
