@@ -7,6 +7,13 @@ import illustrationImg3 from "./assets/group-33@3x.png";
 import hIWIllustrationImg from "./assets/group-272.png";
 import hIWIllustrationImg2 from "./assets/group-272@2x.png";
 import hIWIllustrationImg3 from "./assets/group-272@3x.png";
+import feature2 from "./assets/feature-2.svg";
+import feature3 from "./assets/feature-3.svg";
+import feature4 from "./assets/feature-4.svg";
+import feature5 from "./assets/feature-5.svg";
+import feature6 from "./assets/feature-6.svg";
+import feature7 from "./assets/feature-7.svg";
+import feature8 from "./assets/feature-8.svg";
 
 export default class HomePage extends Component {
 
@@ -19,9 +26,7 @@ export default class HomePage extends Component {
             <div className="home-page">
                 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400&display=swap" rel="stylesheet" />
                 <section className="fold">
-
                   <header className='header side-padding'>
-
                     <img src={logoImg} alt="" className="logo" />
                     <nav>
                       <div className="menu-icon">
@@ -72,6 +77,45 @@ export default class HomePage extends Component {
                          alt="How psysession platform works illustration"/>
                     <a href={hIWIllustrationImg3} className="btn-primary btn-plus"></a>
                   </article>
+                </section>
+
+                <section className="system-features text-center padding-top-large padding-bottom-large side-padding">
+                  <h2 className="text-primary padding-bottom-large side-padding">System features include</h2>
+                  <ul className="system-features-grid">
+                    <li>
+                      <img className="padding-bottom-medium" src={feature2} alt=""/>
+                      <p>Mobile communication in between sessions</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature2} />
+                      <p>Therapy progress measurement tools</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature3} />
+                      <p>Daily therapeutic reminders (Resonators)</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature4} />
+                      <p>Therapist-Patient communication automation tools</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature5} />
+                      <p>Patient status and followup control panel</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature6} />
+                      <p>Tools for personalizing the above for every specific patient</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature7} />
+                      <p>Psychology questionnaires</p>
+                    </li>
+                    <li>
+                      <img className="padding-bottom-medium" src={feature8} />
+                      <p>CBT-like homework forms</p>
+                    </li>
+                  </ul>
+                  <a href="/login" className="btn-primary margin-bottom-medium">Try it now</a>
                 </section>
             </div>
         );
