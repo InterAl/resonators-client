@@ -40,12 +40,16 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   }
 
   p {
-    line-height: 20px;
+    line-height: 24px;
     margin: 0;
   }
 
   .text-primary {
     color: $primary
+  }
+
+  .text-accent-secondary {
+    color: $accent-secondary
   }
 
   .text-center {
@@ -210,5 +214,15 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
       height: 240px;
       padding-right: 20px;
     }
+  }
+
+  .effectiveness-img {
+    border-radius: 5px;
+    box-shadow: 0 20px 40px 0 rgba(0,0,0,0.2);
+    width: 100%;
+  }
+
+  .effectiveness-graph {
+    width: 100%;
   }
 }

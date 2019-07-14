@@ -14,6 +14,7 @@ import feature5 from "./assets/feature-5.svg";
 import feature6 from "./assets/feature-6.svg";
 import feature7 from "./assets/feature-7.svg";
 import feature8 from "./assets/feature-8.svg";
+import graph from "./assets/graph.svg";
 
 export default class HomePage extends Component {
 
@@ -24,7 +25,7 @@ export default class HomePage extends Component {
     render() {
         return (
             <div className="home-page">
-                <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400&display=swap" rel="stylesheet" />
+                <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700&display=swap" rel="stylesheet" />
                 <section className="fold">
                   <header className='header side-padding'>
                     <img src={logoImg} alt="" className="logo" />
@@ -116,6 +117,22 @@ export default class HomePage extends Component {
                     </li>
                   </ul>
                   <a href="/login" className="btn-primary margin-bottom-medium">Try it now</a>
+                </section>
+
+                <section className="effectiveness padding-top-large padding-bottom-large side-padding text-accent-secondary">
+                  <img className="effectiveness-img margin-bottom-large"
+                       width="200px"
+                       src={illustrationImg}
+                       srcSet={`${illustrationImg2} 2x, ${illustrationImg3} 3x`}
+                  />
+                  <h2 className="text-primary padding-bottom">Why is it so effective?</h2>
+                  <p>
+                    The daily interaction with PsySession creates a stronger emotional bond between the patient and the therapeutic content enhancing therapy effectiveness. The data accumulated also
+                    helps the therapist identify what’s working and what needs to be improved with each patient, creating an optimal platform for progress.
+                  </p>
+
+                  <h3>Quantifying and measuring</h3>
+                  <img className="effectiveness-graph" src={graph} alt="graph illustration"/>
                 </section>
             </div>
         );
