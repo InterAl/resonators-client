@@ -1,6 +1,6 @@
 // Color palette
 $blue: #00C4F2;
-$light-blue: #55ecff;
+$light-blue: #00d1ff;
 $grey: #7C7C7C;
 $white: #FFF;
 $light-grey: #F7F7F7;
@@ -17,9 +17,11 @@ $accent: $white;
 $accent-secondary: $grey;
 $border-primary: $green;
 
-$breakpoint-md: 630px;
-$breakpoint-lg: 1920px;
+$breakpoint-sm: 630px;
+$breakpoint-md: 1000px;
+$breakpoint-lg: 1320px;
 
+$media-sm: "only screen and (min-width: #{$breakpoint-sm})";
 $media-md: "only screen and (min-width: #{$breakpoint-md})";
 $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
 
@@ -28,11 +30,27 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   font: 300 16px 'Montserrat', sans-serif;
   letter-spacing: -0.45px;
 
+  @media #{$media-md} {
+    font: 300 28px 'Montserrat', sans-serif;
+    letter-spacing: normal;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   h1, h2 {
     font-weight: 300;
 	  font-size: 22px;
 	  line-height: 26px;
     margin: 0;
+    
+    @media #{$media-md} {
+      font-size: 46px;
+      line-height: 1.26;
+    }
   }
 
   a {
@@ -40,7 +58,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   }
 
   p {
-    line-height: 24px;
+    line-height: 1.5;
     margin: 0;
   }
 
@@ -63,9 +81,23 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     "large": 50px,
   );
 
+  $spacing-lg: (
+    "small": 15px,
+    "normal": 30px,
+    "medium": 50px,
+    "large": 80px,
+  );
+
   .side-padding {
     padding-left: map_get($spacing, "medium");
     padding-right: map_get($spacing, "medium");
+
+    @media #{$media-md} {
+      padding-left: map_get($spacing-lg, "medium");
+      padding-right: map_get($spacing-lg, "medium");
+      max-width: 1600px;
+      margin: auto;
+    }
   }
 
   // Generate spacing utility classes. Margin & Padding.
@@ -83,16 +115,47 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
       }
     }
   }
+  
+  // Generate spacing utility classes. Margin & Padding.
+  @each $name, $size in $spacing-lg {
+    $suffix: "";
+    @if $name != "normal" {
+      $suffix: "-#{$name}"
+    }
+
+    @each $type in "margin", "padding" {
+      @each $location in "top", "bottom" {
+        .#{$type}-#{$location}#{$suffix} {
+          @media #{$media-md} {
+            #{$type}-#{$location}: $size;
+          }
+        }
+      }
+    }
+  }
 
   .fold {
     background: url(./assets/bg.jpg) center / cover no-repeat;
-    @media #{$media-md} {
+    @media #{$media-sm} {
       background-image: url(./assets/bg@2x.jpg);
+    }
+
+    @media #{$media-md} {
+      height: 560px;
     }
 
     @media #{$media-lg} {
       background-image: url(./assets/bg@3x.jpg);
+      height: 1080px;
     }
+  }
+
+  .fold-title {
+    max-width: 745px;
+  }
+
+  .fold-subtext {
+    max-width: 630px;
   }
 
   .btn-primary {
@@ -107,6 +170,10 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     &:hover {
       background: $primary-light;
     }
+
+    @media #{$media-md} {
+      padding: 10px 50px;
+    }
   }
 
   .btn-plus {
@@ -118,6 +185,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     left: 50%;
     transform: translate(-50%, -50%);
     box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
+    padding: 0;
 
     &:before, &:after {
       content: "";
@@ -140,8 +208,18 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-top: 20px;
-    padding-bottom: 125px;
+    padding: 20px 20px 125px;
+    max-width: 1830px;
+    margin: auto;
+    font-size: 15px;
+
+    @media #{$media-sm} {
+      padding: 35px 45px 200px;
+    }
+
+    @media #{$media-lg} {
+      padding: 35px 45px 400px;
+    }
   }
 
   .logo {
@@ -163,10 +241,27 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
       background: $primary;
       margin-bottom: 6px;
     }
+
+    @media #{$media-md} {
+      display: none;
+    }
   }
 
   .menu-links {
     display: none;
+    color: $secondary;
+
+    li:not(:last-of-type) {
+      margin-right: 20px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    @media #{$media-md} {
+      display: flex;
+    }
   }
 
   .what-is-psysession {
@@ -204,7 +299,6 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   .system-features-grid {
     color: $accent-secondary;
     display: flex;
-    list-style: none;
     flex-wrap: wrap;
     padding: 0;
     margin: 0 -20px 0 0;
