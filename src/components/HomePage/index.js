@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import './index.scss';
-import logoImg from "./assets/logo.svg";
-import illustrationImg from "./assets/group-33.png";
-import illustrationImg2 from "./assets/group-33@2x.png";
-import illustrationImg3 from "./assets/group-33@3x.png";
-import hIWIllustrationImg from "./assets/group-272.png";
-import hIWIllustrationImg2 from "./assets/group-272@2x.png";
-import hIWIllustrationImg3 from "./assets/group-272@3x.png";
-import feature2 from "./assets/feature-2.svg";
-import feature3 from "./assets/feature-3.svg";
-import feature4 from "./assets/feature-4.svg";
-import feature5 from "./assets/feature-5.svg";
-import feature6 from "./assets/feature-6.svg";
-import feature7 from "./assets/feature-7.svg";
-import feature8 from "./assets/feature-8.svg";
-import graph from "./assets/graph.svg";
+import logoImg from './assets/logo.svg';
+import illustrationImg from './assets/group-33.png';
+import illustrationImg2 from './assets/group-33@2x.png';
+import illustrationImg3 from './assets/group-33@3x.png';
+import hIWIllustrationImg from './assets/group-272.png';
+import hIWIllustrationImg2 from './assets/group-272@2x.png';
+import hIWIllustrationImg3 from './assets/group-272@3x.png';
+import feature1 from './assets/feature-1.svg';
+import feature2 from './assets/feature-2.svg';
+import feature3 from './assets/feature-3.svg';
+import feature4 from './assets/feature-4.svg';
+import feature5 from './assets/feature-5.svg';
+import feature6 from './assets/feature-6.svg';
+import feature7 from './assets/feature-7.svg';
+import feature8 from './assets/feature-8.svg';
+import graph from './assets/graph.svg';
 
 export default class HomePage extends Component {
 
@@ -85,10 +86,10 @@ export default class HomePage extends Component {
 
         <section id="system-features" className="system-features text-center">
           <article className="padding-top-large padding-bottom-large side-padding">
-            <h2 className="text-primary padding-bottom-large side-padding">System features include</h2>
+            <h1 className="text-primary padding-bottom-large side-padding">System features include</h1>
             <ul className="system-features-grid">
               <li>
-                <img className="padding-bottom-medium" src={feature2} alt=""/>
+                <img className="padding-bottom-medium" src={feature1} alt=""/>
                 <p>Mobile communication in between sessions</p>
               </li>
               <li>
