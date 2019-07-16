@@ -19,7 +19,8 @@ handle(types.INIT_APP, function*() {
     }));
 
     if (_.startsWith(location.pathname, '/resetPassword') ||
-        _.endsWith(location.pathname, '/criteria/submit'))
+        _.endsWith(location.pathname, '/criteria/submit') ||
+        location.pathname === '/')
         return;
 
     yield put(sessionActions.resume());

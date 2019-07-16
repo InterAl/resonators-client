@@ -1,0 +1,464 @@
+// Color palette
+$blue: #00C4F2;
+$light-blue: #00d1ff;
+$grey: #7C7C7C;
+$white: #FFF;
+$light-grey: #F7F7F7;
+$slate: #363A3B;
+$slate-light: #4D5254;
+$green: #29866B;
+
+$primary: $blue;
+$primary-light: $light-blue;
+$secondary: $slate;
+$secondary-light: $slate-light;
+$background: $light-grey;
+$accent: $white;
+$accent-secondary: $grey;
+$border-primary: $green;
+
+$breakpoint-sm: 630px;
+$breakpoint-md: 1000px;
+$breakpoint-lg: 1320px;
+
+$media-sm: "only screen and (min-width: #{$breakpoint-sm})";
+$media-md: "only screen and (min-width: #{$breakpoint-md})";
+$media-lg: "only screen and (min-width: #{$breakpoint-lg})";
+
+.home-page {
+  color: $accent;
+  font: 300 16px 'Montserrat', sans-serif;
+  letter-spacing: -0.45px;
+
+  @media #{$media-md} {
+    font: 300 20px 'Montserrat', sans-serif;
+    letter-spacing: normal;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2 {
+    font-weight: 300;
+	  font-size: 22px;
+	  line-height: 26px;
+    margin: 0;
+    @media #{$media-md} {
+      line-height: 1.26;
+    }
+  }
+
+  h1 {
+    @media #{$media-md} {
+      font-size: 46px;
+    }
+  }
+
+  h2 {
+    @media #{$media-md} {
+      font-size: 34px;
+    }
+  }
+
+  a {
+    color: $accent;
+  }
+
+  p {
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .text-primary {
+    color: $primary
+  }
+
+  .text-accent-secondary {
+    color: $accent-secondary
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  $spacing: (
+    "small": 6px,
+    "normal": 15px,
+    "medium": 20px,
+    "large": 50px,
+  );
+
+  $spacing-lg: (
+    "small": 15px,
+    "normal": 30px,
+    "medium": 50px,
+    "large": 80px,
+  );
+
+  .side-padding {
+    padding-left: map_get($spacing, "medium");
+    padding-right: map_get($spacing, "medium");
+
+    @media #{$media-md} {
+      padding-left: map_get($spacing-lg, "medium");
+      padding-right: map_get($spacing-lg, "medium");
+      max-width: 1600px;
+      margin: auto;
+    }
+  }
+
+  // Generate spacing utility classes. Margin & Padding.
+  @each $name, $size in $spacing {
+    $suffix: "";
+    @if $name != "normal" {
+      $suffix: "-#{$name}"
+    }
+
+    @each $type in "margin", "padding" {
+      @each $location in "top", "bottom" {
+        .#{$type}-#{$location}#{$suffix} {
+          #{$type}-#{$location}: $size;
+        }
+      }
+    }
+  }
+  
+  // Generate spacing utility classes. Margin & Padding.
+  @each $name, $size in $spacing-lg {
+    $suffix: "";
+    @if $name != "normal" {
+      $suffix: "-#{$name}"
+    }
+
+    @each $type in "margin", "padding" {
+      @each $location in "top", "bottom" {
+        .#{$type}-#{$location}#{$suffix} {
+          @media #{$media-md} {
+            #{$type}-#{$location}: $size;
+          }
+        }
+      }
+    }
+  }
+
+  .fold {
+    background: url(./assets/bg.jpg) center / cover no-repeat;
+    @media #{$media-sm} {
+      background-image: url(./assets/bg@2x.jpg);
+    }
+
+    @media #{$media-lg} {
+      background-image: url(./assets/bg@3x.jpg);
+      height: 1080px;
+    }
+  }
+
+  .fold-title {
+    max-width: 745px;
+  }
+
+  .fold-subtext {
+    max-width: 630px;
+    @media #{$media-md} {
+      font-size: 28px;
+    }
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: $primary;
+    border-radius: 26px;
+    border: none;
+    outline: none;
+    padding: 5px 20px;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+      background: $primary-light;
+    }
+
+    @media #{$media-md} {
+      padding: 10px 50px;
+    }
+  }
+
+  .btn-plus {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
+    padding: 0;
+
+    &:before, &:after {
+      content: "";
+      display: inline-block;
+      width: 2px;
+      height: 50%;
+      background: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &:after {
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px 125px;
+    max-width: 1830px;
+    margin: auto;
+    font-size: 15px;
+
+    @media #{$media-sm} {
+      padding: 35px 45px 200px;
+    }
+
+    @media #{$media-lg} {
+      padding: 35px 45px 400px;
+    }
+  }
+
+  .logo {
+    max-width: 140px;
+    @media #{$media-md} {
+      max-width: 240px;
+    }
+  }
+
+  .menu-icon {
+    padding-top: 6px;
+    cursor: pointer;
+
+    &:hover .menu-icon-bar {
+      background: $primary-light;
+    }
+
+    .menu-icon-bar {
+      transition: background 0.2s ease-in-out;
+      height: 2px;
+      width: 25px;
+      background: $primary;
+      margin-bottom: 6px;
+    }
+
+    @media #{$media-md} {
+      display: none;
+    }
+  }
+
+  .menu-links {
+    display: none;
+    color: $secondary;
+
+    li:not(:last-of-type) {
+      margin-right: 20px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    @media #{$media-md} {
+      display: flex;
+    }
+  }
+
+  .what-is-psysession {
+    letter-spacing: normal;
+    background: $primary;
+    position: relative;
+    padding: 100px 0 50px;
+
+    @media #{$media-lg} {
+      padding: 80px 0;
+    }
+
+    &-image {
+      position: absolute;
+      top: -10%;
+      right: 4%;
+      height: 170px;
+
+      @media #{$media-lg} {
+        position: static;
+        height: 670px;
+        margin-top: -270px;
+        margin-bottom: -70px;
+      }
+    }
+  }
+
+  .what-is-psysession-title {
+    max-width: 100px;
+    @media #{$media-md} {
+      max-width: none;
+    }
+  }
+
+  .what-is-psysession-container {
+    @media #{$media-lg} {
+      display: flex;
+    }
+  }
+
+  .how-it-works {
+    position: relative;
+  }
+
+  .how-it-works-illustration {
+    width: 100%;
+  }
+
+  .how-it-works-btn {
+    @media #{$media-md} {
+      display: none;
+    }
+  }
+
+  .system-features {
+    background: $background;
+
+    .btn-primary {
+      padding: 10px 65px;
+      width: 100%;
+      box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2);
+
+      @media #{$media-md} {
+        width: auto;
+        margin-top: 70px;
+      }
+    }
+  }
+
+  .system-features-grid {
+    color: $accent-secondary;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0 -20px 0 0;
+
+    > li {
+      width: 50%;
+      height: 240px;
+      padding-right: 20px;
+
+      @media only screen and (min-width: 573px) {
+        width: 33%;
+      }
+
+      @media only screen and (min-width: 768px) {
+        width: 25%;
+      }
+    }
+  }
+
+  .effectiveness-container {
+    @media #{$media-md} {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .effectiveness-img {
+    border-radius: 5px;
+    box-shadow: 0 20px 40px 0 rgba(0,0,0,0.2);
+    width: 100%;
+
+    @media #{$media-md} {
+      width: 50%;
+      display: flex;
+      margin: 0 145px 0 0;
+    }
+
+  }
+
+  .effectiveness-graph {
+    width: 100%;
+  }
+
+  .contact-section-container {
+    @media #{$media-md} {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .contact-section-text {
+    @media #{$media-md} {
+      max-width: 472px;
+    }
+  }
+
+  .contact-form {
+    @media #{$media-md} {
+      max-width: 680px;
+    }
+  }
+
+  .contact-section-input {
+    height: 56px;
+    width: 100%;
+    border: 0.8px solid $border-primary;
+    border-radius: 4px;
+    padding: 15px 20px;
+    background-color: $accent;
+    color: $accent;
+  }
+
+  .contact-section {
+    background: $secondary;
+
+    .tel {
+      white-space: nowrap;
+    }
+  }
+
+  .contact-form {
+    position: relative;
+    background: $secondary-light;
+    padding: 50px 15px 20px;
+    border-radius: 5px;
+
+    input, select, textarea {
+      &::placeholder {
+        color: $accent;
+      }
+
+      background: $secondary-light;
+      border: 1px solid $accent-secondary;
+    }
+
+    textarea {
+      height: 140px;
+    }
+  }
+
+  .contact-form-btn {
+    width: 80%;
+    padding: 10px;
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .footer {
+    color: $accent-secondary;
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
