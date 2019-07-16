@@ -169,7 +169,7 @@ export default class HomePage extends Component {
               <input type="text" id="contact-form-name" name="name" placeholder="Name" className="contact-section-input margin-bottom-medium" required/>
               <input type="text" id="contact-form-country" name="country" placeholder="Country" className="contact-section-input margin-bottom-medium"/>
               <input type="text" id="contact-form-phone" name="phone" placeholder="Phone" className="contact-section-input margin-bottom-medium"/>
-              <input type="text" id="contact-form-email" name="email" placeholder="Email" className="contact-section-input margin-bottom-medium" required/>
+              <input type="email" id="contact-form-email" name="email" placeholder="Email" className="contact-section-input margin-bottom-medium" required/>
               <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="contact-section-input margin-bottom-medium"></textarea>
               <button className="contact-form-btn btn-primary" >Send</button>
             </form>
