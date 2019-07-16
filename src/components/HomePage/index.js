@@ -56,17 +56,19 @@ export default class HomePage extends Component {
         </section>
 
         <section id="what-is-psysession" className="what-is-psysession">
-          <article className="side-padding">
+          <article className="side-padding what-is-psysession-container">
             <img className="what-is-psysession-image"
                  src={illustrationImg}
                  srcSet={`${illustrationImg2} 2x, ${illustrationImg3} 3x`}
                  alt="psysession platform illustration"/>
-            <h2 className="margin-bottom">What is <br/> PsySession?</h2>
-            <p className="margin-bottom-medium">
-              Breakthrough therapeutic sessions are exciting, but preserving their impact is difficult without continuous daily work. In most cases, the patient is likely to put aside important
-              session content and forget about it until the next session. This impedes therapeutic progress.
-            </p>
-            <p><strong>This is where PsySession - a mobile and desktop cloud-based system - comes in.</strong></p>
+            <div>
+              <h2 className="what-is-psysession-title margin-bottom">What is PsySession?</h2>
+              <p className="margin-bottom-medium">
+                Breakthrough therapeutic sessions are exciting, but preserving their impact is difficult without continuous daily work. In most cases, the patient is likely to put aside important
+                session content and forget about it until the next session. This impedes therapeutic progress.
+              </p>
+              <p><strong>This is where PsySession - a mobile and desktop cloud-based system - comes in.</strong></p>
+            </div>
           </article>
         </section>
 
@@ -77,7 +79,7 @@ export default class HomePage extends Component {
                  src={hIWIllustrationImg}
                  srcSet={`${hIWIllustrationImg2} 2x, ${hIWIllustrationImg3} 3x`}
                  alt="How psysession platform works illustration"/>
-            <a href={hIWIllustrationImg3} className="btn-primary btn-plus"></a>
+            <a href={hIWIllustrationImg3} className="how-it-works-btn btn-primary btn-plus"></a>
           </article>
         </section>
 
