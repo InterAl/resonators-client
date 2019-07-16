@@ -365,10 +365,24 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     }
   }
 
+  .effectiveness-container {
+    @media #{$media-md} {
+      display: flex;
+      align-items: center;
+    }
+  }
+
   .effectiveness-img {
     border-radius: 5px;
     box-shadow: 0 20px 40px 0 rgba(0,0,0,0.2);
     width: 100%;
+
+    @media #{$media-md} {
+      width: 50%;
+      display: flex;
+      margin: 0 145px 0 0;
+    }
+
   }
 
   .effectiveness-graph {

@@ -7,6 +7,7 @@ import illustrationImg3 from './assets/group-33@3x.png';
 import hIWIllustrationImg from './assets/group-272.png';
 import hIWIllustrationImg2 from './assets/group-272@2x.png';
 import hIWIllustrationImg3 from './assets/group-272@3x.png';
+import hIWIllustrationImgWhite from './assets/group-272-white@3x.jpg';
 import feature1 from './assets/feature-1.svg';
 import feature2 from './assets/feature-2.svg';
 import feature3 from './assets/feature-3.svg';
@@ -16,6 +17,7 @@ import feature6 from './assets/feature-6.svg';
 import feature7 from './assets/feature-7.svg';
 import feature8 from './assets/feature-8.svg';
 import graph from './assets/graph.svg';
+import sessionIllustration from './assets/sessionIllustration.jpg';
 
 export default class HomePage extends Component {
 
@@ -80,7 +82,7 @@ export default class HomePage extends Component {
                  src={hIWIllustrationImg}
                  srcSet={`${hIWIllustrationImg2} 2x, ${hIWIllustrationImg3} 3x`}
                  alt="How psysession platform works illustration"/>
-            <a href={hIWIllustrationImg3} className="how-it-works-btn btn-primary btn-plus"></a>
+            <a href={hIWIllustrationImgWhite} className="how-it-works-btn btn-primary btn-plus"></a>
           </article>
         </section>
 
@@ -126,20 +128,21 @@ export default class HomePage extends Component {
         </section>
 
         <section id="effective" className="effectiveness text-accent-secondary">
-          <article className="padding-top-large padding-bottom-large side-padding">
+          <article className="effectiveness-container padding-top-large padding-bottom-large side-padding">
             <img className="effectiveness-img margin-bottom-large"
                  width="200px"
-                 src={illustrationImg}
-                 srcSet={`${illustrationImg2} 2x, ${illustrationImg3} 3x`}
+                 src={sessionIllustration}
             />
-            <h2 className="text-primary padding-bottom">Why is it so effective?</h2>
-            <p>
-              The daily interaction with PsySession creates a stronger emotional bond between the patient and the therapeutic content enhancing therapy effectiveness. The data accumulated also
-              helps the therapist identify what’s working and what needs to be improved with each patient, creating an optimal platform for progress.
-            </p>
+            <div>
+              <h2 className="text-primary padding-bottom">Why is it so effective?</h2>
+              <p>
+                The daily interaction with PsySession creates a stronger emotional bond between the patient and the therapeutic content enhancing therapy effectiveness. The data accumulated also
+                helps the therapist identify what’s working and what needs to be improved with each patient, creating an optimal platform for progress.
+              </p>
 
-            <h3>Quantifying and measuring</h3>
-            <img className="effectiveness-graph" src={graph} alt="graph illustration"/>
+              <h3>Quantifying and measuring</h3>
+              <img className="effectiveness-graph" src={graph} alt="graph illustration"/>
+            </div>
           </article>
         </section>
 
