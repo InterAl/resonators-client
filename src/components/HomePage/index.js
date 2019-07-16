@@ -18,11 +18,22 @@ import feature7 from './assets/feature-7.svg';
 import feature8 from './assets/feature-8.svg';
 import graph from './assets/graph.svg';
 import sessionIllustration from './assets/sessionIllustration.jpg';
+import { sendContactForm } from '../../api/sendContactForm';
 
 export default class HomePage extends Component {
 
   constructor(props) {
     super(props);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const serializedData = [ ...formData ].reduce((acc, [ key, val ]) => {
+      acc[key] = val;
+      return acc;
+    }, {});
+    sendContactForm({ formData: serializedData })
   }
 
   render() {
@@ -154,13 +165,13 @@ export default class HomePage extends Component {
                 more pleasant!</p>
               <p className="margin-bottom-large"><b>BuizDev@PsySession.com? <a className="tel" href="tel:+972-556600420">(+972)-55-660-0420</a></b></p>
             </div>
-            <form className="contact-form" action="/subscribe">
-              <input type="text" id="contact-form-name" name="name" placeholder="Name" className="contact-section-input margin-bottom-medium"/>
+            <form className="contact-form" onSubmit={this.handleSubmit}>
+              <input type="text" id="contact-form-name" name="name" placeholder="Name" className="contact-section-input margin-bottom-medium" required/>
               <input type="text" id="contact-form-country" name="country" placeholder="Country" className="contact-section-input margin-bottom-medium"/>
               <input type="text" id="contact-form-phone" name="phone" placeholder="Phone" className="contact-section-input margin-bottom-medium"/>
-              <input type="text" id="contact-form-email" name="email" placeholder="Email" className="contact-section-input margin-bottom-medium"/>
+              <input type="text" id="contact-form-email" name="email" placeholder="Email" className="contact-section-input margin-bottom-medium" required/>
               <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="contact-section-input margin-bottom-medium"></textarea>
-              <button className="contact-form-btn btn-primary">Send</button>
+              <button className="contact-form-btn btn-primary" >Send</button>
             </form>
           </article>
         </section>
