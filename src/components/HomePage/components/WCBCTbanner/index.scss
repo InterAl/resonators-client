@@ -1,0 +1,30 @@
+.wcbct-banner {
+  padding: 0 20px;
+
+  p {
+    &:not(:last-child) {
+      margin-bottom: 10px;
+
+      @media only screen and (min-width: 600px) {
+        margin-bottom: 0;
+      }
+
+    }
+  }
+}
+
+.wcbct-container {
+  background: #f8ca14;
+  color: #26302d;
+  padding: 20px;
+  max-width: 700px;
+  margin-bottom: 45px;
+
+}
+
+.wcbct-image {
+  float: left;
+  height: 83px;
+  margin-right: 20px;
+  border: 2px solid #fa9a05;
+}
