@@ -217,17 +217,17 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px 125px;
+    padding: 20px 20px 80px;
     max-width: 1830px;
     margin: auto;
     font-size: 15px;
 
     @media #{$media-sm} {
-      padding: 35px 45px 200px;
+      padding: 35px 45px 155px;
     }
 
     @media #{$media-lg} {
-      padding: 35px 45px 400px;
+      padding: 35px 45px 355px;
     }
   }
 

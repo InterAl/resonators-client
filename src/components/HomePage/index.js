@@ -19,6 +19,7 @@ import feature8 from './assets/feature-8.svg';
 import graph from './assets/graph.svg';
 import sessionIllustration from './assets/sessionIllustration.jpg';
 import { sendContactForm } from '../../api/sendContactForm';
+import { WCBCT } from './components/WCBCTbanner'
 
 export default class HomePage extends Component {
 
@@ -59,6 +60,8 @@ export default class HomePage extends Component {
               </ul>
             </nav>
           </header>
+
+          <WCBCT></WCBCT>
 
           <article className="side-padding">
             <h1 className="fold-title margin-bottom-small">
