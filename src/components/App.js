@@ -18,6 +18,7 @@ import ResetPasword from './ResetPassword';
 import ResonatorFeedback from './ResonatorFeedback';
 import QuestionnaireFeedback from './QuestionnaireFeedback';
 import HomePage from './HomePage';
+import DailyDiaryFeedback from './DailyDiaryFeedback';
 
 const { PropTypes } = React;
 
@@ -48,6 +49,7 @@ class AppComponent extends React.Component {
                 <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation}/>
                 <Route exact path="/clinics/criteria" component={CriteriaList}/>
                 <Route exact path="*/questionnaire/submit" component={QuestionnaireFeedback} />
+                <Route exact path="*/diary/submit" component={DailyDiaryFeedback} />
                 <Route exact path="/login" component={Visitor}/>
                 <Route component={NoMatch}/>
               </Switch>
