@@ -157,7 +157,7 @@ class DailyDiaryFeedback extends Component {
                     <Paper zDepth={1} width={500}>
                         <RadioButtonGroup
                             valueSelected={answer}
-                        //onChange={(event, value) => this.handleAnswerClick(value)}
+                            onChange={(event, value) => this.handleAnswerClick(value)}
                         >
                             {_.map(options, op => (
                                 <RadioButton value={op[2]} label={op[1]} valueSelected={answer == op[2]} />
