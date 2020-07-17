@@ -38,3 +38,15 @@ if (module.hot) {
         document.getElementById('app'));
     });
 }
+
+window.addEventListener("load", () => {
+    if (navigator.serviceWorker) {
+        console.log("Registering service worker...")
+        navigator.serviceWorker.register("./serviceWorker.js")
+        .then(() => console.log("Service worker registered!"))
+        .catch(() => console.log("Service worker registration failed :("))
+    }
+    else {
+        console.log("Service workers are unsupported by this browser")
+    }
+})
