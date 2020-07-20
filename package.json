@@ -14,7 +14,7 @@
     "release:patch": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
     "serve:dev": "webpack-dev-server --env dev",
     "serve:dist": "webpack-dev-server --env dist -p --progress",
-    "start": "source ~/.nvm/nvm.sh && nvm use && npm run serve:dev",
+    "start": ". ~/.nvm/nvm.sh && nvm use && npm run serve:dev",
     "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
     "release:prod": "npm run dist && ./scripts/uploadClientVersion"
   },
