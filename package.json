@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "npm run nvm:setup && npm run serve:dev",
-    "dist": "npm run nvm:setup && npm run clean && npm run copy && webpack --progress --bail --env dist -p",
+    "dist": "npm run nvm:setup && npm run clean && npm run copy && npm run build",
     "release:major": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
     "release:minor": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
     "release:patch": "npm version prerelease && git push --follow-tags && npm publish --tag beta",
@@ -15,7 +15,8 @@
     "serve:dist": "webpack-dev-server --env dist -p --progress",
     "test": "./test/run --require test/setup.js \"test/**/*.test.js\" --watch",
     "nvm:setup": ". ~/.nvm/nvm.sh && nvm use",
-    "copy": "copyfiles -f ./src/index.html ./dist && copyfiles -u 1 \"./src/static/**\" ./dist",
+    "build": "webpack --progress --bail --env dist -p",
+    "copy": "copyup ./src/index.html \"./src/static/**\" ./dist",
     "clean": "rimraf dist/*",
     "lint": "eslint ./src"
   },
