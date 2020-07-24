@@ -8,7 +8,7 @@ import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import DownloadChartIcon from 'material-ui/svg-icons/file/file-download';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import './ResonatorCriteria.scss';
 
 class ResonatorCriteria extends Component {

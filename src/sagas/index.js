@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router';
 
 const createRootSaga = (sagas, sagaParams) => function*() {
     yield sagas.map(saga => saga(sagaParams));
@@ -21,7 +21,7 @@ export const sagas = createRootSaga([
     require('./resonatorFeedbackSaga').default.saga
 ], {});
 
-export const reducers = combineReducers({
+export const createReducers = history => combineReducers({
     init: require('./initSaga').default.reducer,
     session: require('../sagas/sessionSaga').default.reducer,
     menu: require('./sideMenuSaga').default.reducer,
@@ -35,5 +35,5 @@ export const reducers = combineReducers({
     cards: require('./cardSaga').default.reducer,
     form: formReducer,
     resonatorFeedback: require('./resonatorFeedbackSaga').default.reducer,
-    routing: routerReducer
+    router: connectRouter(history)
 });

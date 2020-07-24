@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import EntityTable from './EntityTable';
-import {push} from 'react-router-redux';
+import {push} from 'connected-react-router';
 
 class CriteriaList extends Component {
     constructor(props) {

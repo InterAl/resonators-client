@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
 import history from '../stores/history';
 import Layout from './Layout';
 import '../static/bootstrap/css/bootstrap.min.css';

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { put } from 'redux-saga/effects';
 import { actions, types } from '../actions/navigationActions';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,

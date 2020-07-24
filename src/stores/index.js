@@ -1,19 +1,24 @@
-import { createStore, applyMiddleware } from 'redux';
-import { routerMiddleware } from 'react-router-redux';
+import { createStore, applyMiddleware, compose } from 'redux';
+import { routerMiddleware } from 'connected-react-router';
 import history from './history';
 import createSagaMiddleware from 'redux-saga';
-import { sagas, reducers } from '../sagas';
+import { sagas, createReducers } from '../sagas';
 import logger from 'redux-logger';
 
 function reduxStore(initialState) {
   const sagaMiddleware = createSagaMiddleware();
 
-  const store = createStore(reducers, initialState,
-    applyMiddleware(
-      sagaMiddleware,
-      logger,
-      routerMiddleware(history)
-    ));
+  const store = createStore(
+    createReducers(history),
+    initialState,
+    compose(
+      applyMiddleware(
+        sagaMiddleware,
+        logger,
+        routerMiddleware(history)
+      )
+    )
+  );
 
   sagaMiddleware.run(sagas);
 

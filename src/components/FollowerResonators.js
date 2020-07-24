@@ -7,7 +7,7 @@ import { actions } from '../actions/followersActions';
 import { actions as navigationActions } from '../actions/navigationActions';
 import { actions as resonatorActions } from '../actions/resonatorActions';
 import ResonatorImage from './ResonatorImage';
-import { push } from 'react-router-redux';
+import { push } from 'connected-react-router';
 import * as utils from './utils';
 // import moment from 'moment';
 //import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
