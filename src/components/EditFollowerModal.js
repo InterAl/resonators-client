@@ -14,7 +14,7 @@ import navigationInfoSelector from '../selectors/navigationSelector';
 const {PropTypes} = React;
 
 class EditFollowerModal extends Component {
-    static propTypes: {
+    static propTypes = {
         editMode: PropTypes.bool,
         open: PropTypes.bool.isRequired,
         onClose: PropTypes.func.isRequired

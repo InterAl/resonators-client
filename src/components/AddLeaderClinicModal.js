@@ -14,7 +14,7 @@ import navigationInfoSelector from '../selectors/navigationSelector';
 const {PropTypes} = React;
 
 class AddLeaderClinicModal extends Component {
-    static propTypes: {
+    static propTypes = {
         open: PropTypes.bool.isRequired,
         onClose: PropTypes.func.isRequired
     };

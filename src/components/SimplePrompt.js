@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 export default class SimplePrompt extends Component {
-    static propTypes: {
+    static propTypes = {
         onAccept: React.PropTypes.func.isRequired,
         text: React.PropTypes.string.isRequired,
         acceptText: React.PropTypes.string.isRequired,

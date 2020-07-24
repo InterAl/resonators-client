@@ -71,9 +71,10 @@ class WebpackBaseConfig {
    */
   get defaultSettings() {
     const cssModulesQuery = {
-      modules: true,
+      modules: {
+        localIdentName: '[name]-[local]-[hash:base64:5]'
+      },
       importLoaders: 1,
-      localIdentName: '[name]-[local]-[hash:base64:5]'
     };
 
     return {
@@ -100,7 +101,7 @@ class WebpackBaseConfig {
             loaders: [{
                 loader: 'babel-loader',
                 query: {
-                  presets: ['es2015', 'stage-0']
+                  presets: ['@babel/preset-env']
                 }
             }, {
                 loader: 'eslint-loader'
