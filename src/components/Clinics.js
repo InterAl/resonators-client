@@ -7,8 +7,6 @@ import {actions as navigationActions} from '../actions/navigationActions';
 import EntityTable from './EntityTable';
 import MoreOptionsMenu from './MoreOptionsMenu';
 import MenuItem from 'material-ui/MenuItem';
-import {Field} from 'redux-form';
-import CheckboxField from './FormComponents/CheckboxField';
 import Checkbox from 'material-ui/Checkbox';
 import PrimaryClinicIcon from 'material-ui/svg-icons/action/label';
 
@@ -122,13 +120,13 @@ class Clinics extends Component {
                     onTouchTap={() => this.handleSelectClinic(clinicId)}
                 />
             ) : ""
-            return (                  
+            return (
                 <MoreOptionsMenu
                     className='more-options-btn'
                 >
                     {showMakeAsCurrentClinicAction}
-                    {showHideDetachClinciAction}     
-                    {showHideAddClinciAction}     
+                    {showHideDetachClinciAction}
+                    {showHideAddClinciAction}
                 </MoreOptionsMenu>
             );
         }

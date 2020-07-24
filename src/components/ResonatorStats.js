@@ -8,7 +8,6 @@ import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
 import ExpandableCard from './ExpandableCard';
 import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';
-import moment from 'moment';
 
 class ResonatorStats extends Component {
     static defaultProps = {

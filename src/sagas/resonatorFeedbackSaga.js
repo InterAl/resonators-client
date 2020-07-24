@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
-import { delay } from 'redux-saga';
-import { put, call, select } from 'redux-saga/effects';
+import { put, call, select, delay } from 'redux-saga/effects';
 import { actions, types } from '../actions/feedbackActions';
 import * as resonatorFeedbackApi from '../api/resonatorFeedbackApi';
 
@@ -54,7 +53,7 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
 });
 
 handle(types.SHOW_PREVIOUS_QUESTION, function*() {
-    const {currentQuestionIdx, resonator} = yield selectResonatorFeedback();
+    const {currentQuestionIdx} = yield selectResonatorFeedback();
 
     yield put(updateState({
         currentQuestionIdx: Math.max(currentQuestionIdx - 1, 1)

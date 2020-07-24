@@ -5,10 +5,8 @@ import {bindActionCreators} from 'redux';
 import {actions} from '../actions/followersActions';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import MenuItem from 'material-ui/MenuItem';
 import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
-import SelectField from './FormComponents/SelectField';
 import navigationInfoSelector from '../selectors/navigationSelector';
 
 const {PropTypes} = React;

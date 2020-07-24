@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
-import { put, call, select } from 'redux-saga/effects';
-import { delay } from 'redux-saga';
+import { put, call, select, delay } from 'redux-saga/effects';
 import { actions, types } from '../actions/sessionActions';
 import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';

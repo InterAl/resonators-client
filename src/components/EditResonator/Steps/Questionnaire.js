@@ -128,12 +128,12 @@ class EditResonatorQuestionnaire extends Component {
         );
     }
 }
-function mapStateToProps(state) {
-    return {
-        resonator: state.resonatorCreation.resonator,
-        editMode: state.resonatorCreation.editMode,
-    }
-}
+// function mapStateToProps(state) {
+//     return {
+//         resonator: state.resonatorCreation.resonator,
+//         editMode: state.resonatorCreation.editMode,
+//     }
+// }
 export default StepBase({
     noBack: true,
     validate(formData) {

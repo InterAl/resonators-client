@@ -221,7 +221,4 @@ function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
     }, dispatch);
 }
 
-function test(id) {
-
-}
 export default connect(mapStateToProps, mapDispatchToProps)(FollowerResonators);

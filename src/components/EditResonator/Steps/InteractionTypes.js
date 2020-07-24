@@ -4,9 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from '../../../actions/resonatorCreationActions';
 
-import TextField from '../../FormComponents/TextField';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
-import NavButtons from './navButtons';
 import BackButton from './backButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -83,7 +81,7 @@ function mapDispatchToProps(dispatch) {
 EditResonatorInteractionTypes = StepBase({
     noBack: true,
     noNext: true,
-    validate(formData, props) {
+    validate(formData, /* props */) {
         let errors = {};
         /*
         if (formData.interactionType === undefined) {

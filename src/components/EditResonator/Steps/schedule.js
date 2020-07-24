@@ -160,7 +160,7 @@ class EditResonatorSchedule extends Component {
 EditResonatorSchedule = StepBase({
     noNext: true,
     noBack: true,
-    validate(formData, props) {
+    validate(formData, /* props */) {
         let errors = {};
 
         if (!formData.time) {
@@ -170,7 +170,7 @@ EditResonatorSchedule = StepBase({
 
         if (formData.oneOff === 'on') {
             var selectedOne = false;
-            [0, 1, 2, 3, 4, 5, 6].forEach((item, i, ar) => {
+            [0, 1, 2, 3, 4, 5, 6].forEach((item, i) => {
                 if (formData[`day${item}`] && !selectedOne && (selectedDayIndex >= 0 && selectedDayIndex == i))
                     selectedOne = true;
                 else

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import SagaReducerFactory from 'saga-reducer-factory';
 import { call, put } from 'redux-saga/effects';
 import { actions, types } from '../actions/leaderActions';

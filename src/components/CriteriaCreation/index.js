@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions} from '../../actions/criteriaActions';
 import {reduxForm, formValueSelector} from 'redux-form';
-import ClinicSelect from '../FormComponents/ClinicSelect';
+// import ClinicSelect from '../FormComponents/ClinicSelect';
 import TextBox from '../FormComponents/TextBox';
 import Select from '../FormComponents/Select';
 import MenuItem from 'material-ui/MenuItem';

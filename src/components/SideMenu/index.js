@@ -13,7 +13,6 @@ import LogoutIcon from 'material-ui/svg-icons/action/exit-to-app';
 import navigationInfoSelector from '../../selectors/navigationSelector';
 import AppBar from './AppBar';
 import isMobile from '../isMobile';
-import classNames from 'classnames';
 import './index.scss';
 
 class SideMenu extends Component {

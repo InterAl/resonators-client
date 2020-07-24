@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
 import SelectField from 'material-ui/SelectField';
-import Toggle from 'material-ui/Toggle';
 import EntityTable from './EntityTable';
 import {Link} from 'react-router-dom';
 import MoreOptionsMenu from './MoreOptionsMenu';

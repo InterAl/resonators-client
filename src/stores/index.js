@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux';
+import { routerMiddleware } from 'react-router-redux';
 import history from './history';
 import createSagaMiddleware from 'redux-saga';
 import {sagas, reducers} from '../sagas';
