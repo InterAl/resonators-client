@@ -52,7 +52,6 @@
     "null-loader": "^4.0.0",
     "omit-deep-lodash": "^1.1.4",
     "phantomjs-prebuilt": "^2.1.16",
-    "react-addons-test-utils": "^15.6.2",
     "rimraf": "^3.0.2",
     "sass-loader": "^9.0.2",
     "sinon": "^9.0.2",
@@ -87,5 +86,8 @@
     "reselect": "^4.0.0",
     "saga-reducer-factory": "^1.6.0",
     "whatwg-fetch": "^3.2.0"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.1.3"
   }
 }
