@@ -1,7 +1,8 @@
 {
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react",
+    "react-hooks"
   ],
   "parserOptions": {
     "ecmaVersion": 6,
@@ -27,7 +28,9 @@
     "no-unreachable": 1,
     "no-alert": 0,
     "react/jsx-uses-react": 1,
-    "react/jsx-uses-vars": 1
+    "react/jsx-uses-vars": 1,
+    "react-hooks/rules-of-hooks": "warn",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "globals": {
       "google": true,

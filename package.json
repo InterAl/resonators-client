@@ -44,6 +44,7 @@
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
     "file-loader": "^6.0.0",
     "mocha": "^8.0.1",
     "nightmare": "^3.0.2",
@@ -64,6 +65,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.10.4",
     "cross-env": "^7.0.2",
+    "history": "^5.0.0",
     "material-ui": "^0.20.2",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
