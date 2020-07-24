@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
 export default class SimplePrompt extends Component {
     static propTypes = {
-        onAccept: React.PropTypes.func.isRequired,
-        text: React.PropTypes.string.isRequired,
-        acceptText: React.PropTypes.string.isRequired,
-        title: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string
+        onAccept: PropTypes.func.isRequired,
+        text: PropTypes.string.isRequired,
+        acceptText: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        className: PropTypes.string
     }
 
     constructor() {

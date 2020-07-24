@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions} from '../actions/followersActions';
@@ -9,7 +10,6 @@ import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
 import navigationInfoSelector from '../selectors/navigationSelector';
 
-const {PropTypes} = React;
 
 class EditFollowerModal extends Component {
     static propTypes = {

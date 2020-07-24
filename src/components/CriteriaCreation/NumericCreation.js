@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import Subheader from 'material-ui/Subheader';
 import TextBox from '../FormComponents/TextBox';
@@ -5,7 +6,7 @@ import {List, ListItem} from 'material-ui/List';
 
 export default class NumericCreation extends Component {
     static propTypes = {
-        formValues: React.PropTypes.object
+        formValues: PropTypes.object
     };
 
     renderList(min, max) {

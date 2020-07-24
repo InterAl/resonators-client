@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {List, ListItem} from 'material-ui/List';
@@ -9,9 +10,9 @@ import './ResonatorCriteriaSelection.scss';
 
 class ResonatorCriteriaSelection extends Component {
     static propTypes = {
-        selectedCriteria: React.PropTypes.array,
-        onAddCriterion: React.PropTypes.func,
-        onRemoveCriterion: React.PropTypes.func
+        selectedCriteria: PropTypes.array,
+        onAddCriterion: PropTypes.func,
+        onRemoveCriterion: PropTypes.func
     }
 
     static defaultProps = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
 import history from '../stores/history';
@@ -18,7 +19,6 @@ import ResetPasword from './ResetPassword';
 import ResonatorFeedback from './ResonatorFeedback';
 import HomePage from './HomePage';
 
-const { PropTypes } = React;
 
 class AppComponent extends React.Component {
   static propTypes = {

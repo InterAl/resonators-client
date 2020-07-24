@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import IconMenu from 'material-ui/IconMenu';
 import IconButton from 'material-ui/IconButton';
@@ -6,8 +7,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
 class MoreOptionsMenu extends Component {
     static propTypes = {
-        onBlur: React.PropTypes.func,
-        className: React.PropTypes.string
+        onBlur: PropTypes.func,
+        className: PropTypes.string
     }
 
     static defaultProps = {

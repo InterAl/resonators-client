@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
 import ClearIcon from 'material-ui/svg-icons/content/clear';
 import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
@@ -10,7 +11,6 @@ import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import './EntityTable.scss';
 
-const {PropTypes} = React;
 
 export default class EntityTable extends Component {
     static propTypes = {

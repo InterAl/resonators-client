@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux'
 import {actions} from '../../actions/resonatorCreationActions';
@@ -20,7 +21,7 @@ import DailyDiary from './Steps/DailyDiary';
 
 class EditResonator extends Component {
     static propTypes = {
-        editMode: React.PropTypes.bool
+        editMode: PropTypes.bool
     }
 
     static defaultProps = {

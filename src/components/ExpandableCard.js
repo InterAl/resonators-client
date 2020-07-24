@@ -4,17 +4,18 @@ import {bindActionCreators} from 'redux';
 import {actions} from '../actions/cardActions';
 import {Card, CardHeader, CardMedia} from 'material-ui/Card';
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class ExpandableCard extends Component {
     static propTypes = {
-        title: React.PropTypes.string,
-        subtitle: React.PropTypes.string,
-        width: React.PropTypes.number,
-        margin: React.PropTypes.any,
-        style: React.PropTypes.object,
-        avatar: React.PropTypes.any,
-        id: React.PropTypes.string,
-        onExpandChange: React.PropTypes.func
+        title: PropTypes.string,
+        subtitle: PropTypes.string,
+        width: PropTypes.number,
+        margin: PropTypes.any,
+        style: PropTypes.object,
+        avatar: PropTypes.any,
+        id: PropTypes.string,
+        onExpandChange: PropTypes.func
     };
 
     static defaultProps = {

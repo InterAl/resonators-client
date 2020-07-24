@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,7 +14,7 @@ import StepBase from './stepBase';
 class EditResonatorInteractionTypes extends Component {
 
     static propTypes = {
-        updateIntractionType: React.PropTypes.func
+        updateIntractionType: PropTypes.func
     }
 
     constructor() {

@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -12,7 +13,7 @@ import './ResonatorCriteria.scss';
 
 class ResonatorCriteria extends Component {
     static propTypes = {
-        resonator: React.PropTypes.object
+        resonator: PropTypes.object
     }
 
     constructor(props) {
