@@ -26,7 +26,7 @@ class Layout extends Component {
                       style={{position: 'fixed'}}
                       showMenuIconButton={this.props.navigationInfo.showHamburger}
                       iconElementLeft={
-                          <IconButton onTouchTap={this.props.toggleMenu}>
+                          <IconButton onClick={this.props.toggleMenu}>
                               <Hamburger />
                           </IconButton>
                       }

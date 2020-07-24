@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {actions as sessionActions} from '../actions/sessionActions';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { actions as sessionActions } from '../actions/sessionActions';
+import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextBox from './FormComponents/TextBox';
-import {reduxForm} from 'redux-form';
+import { reduxForm } from 'redux-form';
 import * as validations from './FormComponents/Validations';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -23,12 +23,12 @@ class ForgotPasswordModal extends Component {
     renderModalButtons() {
         return [
             <FlatButton
-                onTouchTap={this.props.onClose}
+                onClick={this.props.onClose}
                 label="Cancel"
                 primary={true}
             />,
             <FlatButton
-                onTouchTap={this.props.handleSubmit(this.handleSubmit)}
+                onClick={this.props.handleSubmit(this.handleSubmit)}
                 type='submit'
                 label="Submit"
                 primary={true}
@@ -49,11 +49,11 @@ class ForgotPasswordModal extends Component {
                 <form className='forgot-password-form'>
                     <TextBox name='email' placeholder='Email' />
                     {this.props.forgotPasswordFailed &&
-                    <div style={{color: 'red'}}>
-                        Password recovery failed
+                        <div style={{ color: 'red' }}>
+                            Password recovery failed
                     </div>}
                     {this.props.forgotPasswordSpinner &&
-                    <CircularProgress/>}
+                        <CircularProgress />}
                 </form>
             </Dialog>
         );
@@ -75,11 +75,11 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     reduxForm({
-      form: 'forgotPassword',
-      validate(form) {
-          let errors = {};
-          errors.email = validations.email(form.email) || validations.required(form.email);
-          return errors;
-      }
+        form: 'forgotPassword',
+        validate(form) {
+            let errors = {};
+            errors.email = validations.email(form.email) || validations.required(form.email);
+            return errors;
+        }
     })(ForgotPasswordModal),
 );

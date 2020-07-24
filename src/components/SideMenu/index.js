@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Drawer from 'material-ui/Drawer';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {actions} from '../../actions/menuActions';
-import {List, ListItem} from 'material-ui/List';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { actions } from '../../actions/menuActions';
+import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FollowerIcon from 'material-ui/svg-icons/maps/directions-walk';
 import ClinicIcon from 'material-ui/svg-icons/content/weekend';
@@ -20,37 +20,37 @@ class SideMenu extends Component {
         return (
             <Drawer
                 open={this.props.navigationInfo.menuOpen}
-                containerStyle={{marginTop: isMobile() ? 0 : 66}}
+                containerStyle={{ marginTop: isMobile() ? 0 : 66 }}
             >
                 <div>
                     {isMobile() &&
-                    <AppBar onClose={this.props.toggleMenu}/>}
+                        <AppBar onClose={this.props.toggleMenu} />}
 
                     <List>
-                        <ListItem onTouchTap={() => this.props.clickMenuItem('followers')}
-                                  primaryText='Followers'
-                                  leftIcon={<FollowerIcon/>} />
+                        <ListItem onClick={() => this.props.clickMenuItem('followers')}
+                            primaryText='Followers'
+                            leftIcon={<FollowerIcon />} />
                         <ListItem
-                                  primaryText='Clinic'
-                                  leftIcon={<ClinicIcon/>}
-                                  primaryTogglesNestedList
-                                  initiallyOpen
-                                  nestedItems={[
-                                      <ListItem
-                                          onTouchTap={() => this.props.clickMenuItem('clinics')}
-                                          primaryText='Clinics List'
-                                          leftIcon={<ListIcon/>}/>,
-                                      <ListItem
-                                          onTouchTap={() => this.props.clickMenuItem('criteriaList')}
-                                          primaryText='Criteria List'
-                                          leftIcon={<CriteriaIcon/>}/>
-                                  ]}
+                            primaryText='Clinic'
+                            leftIcon={<ClinicIcon />}
+                            primaryTogglesNestedList
+                            initiallyOpen
+                            nestedItems={[
+                                <ListItem
+                                    onClick={() => this.props.clickMenuItem('clinics')}
+                                    primaryText='Clinics List'
+                                    leftIcon={<ListIcon />} />,
+                                <ListItem
+                                    onClick={() => this.props.clickMenuItem('criteriaList')}
+                                    primaryText='Criteria List'
+                                    leftIcon={<CriteriaIcon />} />
+                            ]}
                         />
-                        <Divider style={{marginTop: 12, marginBottom: 12}}/>
-                        <ListItem onTouchTap={() => this.props.clickMenuItem('logout')}
-                                  primaryText='Logout'
-                                  style={{color: '#ff4444'}}
-                                  leftIcon={<LogoutIcon color='#ff4444'/>}/>
+                        <Divider style={{ marginTop: 12, marginBottom: 12 }} />
+                        <ListItem onClick={() => this.props.clickMenuItem('logout')}
+                            primaryText='Logout'
+                            style={{ color: '#ff4444' }}
+                            leftIcon={<LogoutIcon color='#ff4444' />} />
                     </List>
                 </div>
             </Drawer>

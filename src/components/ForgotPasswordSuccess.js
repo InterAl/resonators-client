@@ -8,7 +8,7 @@ export default props => {
             open={props.open}
             actions={[
                 <FlatButton
-                    onTouchTap={props.onClose}
+                    onClick={props.onClose}
                     label="OK"
                     primary={true}
                 />

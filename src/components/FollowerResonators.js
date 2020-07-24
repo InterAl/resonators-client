@@ -120,7 +120,7 @@ class FollowerResonators extends Component {
                     multiple
                     value={moreOptions}
                 >
-                    <MenuItem onTouchTap={() => this.toggleShowInactive()} primaryText={text} value='showFrozen' />
+                    <MenuItem onClick={() => this.toggleShowInactive()} primaryText={text} value='showFrozen' />
                 </MoreOptionsMenu>
             ]
         };
@@ -149,12 +149,12 @@ class FollowerResonators extends Component {
             const freezeUnfreezeMenuItem = resonator.pop_email ? (
                 <MenuItem
                     primaryText='Deactivate'
-                    onTouchTap={() => this.handleDeactivateResonator(resonatorId)}
+                    onClick={() => this.handleDeactivateResonator(resonatorId)}
                 />
             ) : (
                     <MenuItem
                         primaryText='Activate'
-                        onTouchTap={() => this.handleActivateResonator(resonatorId)}
+                        onClick={() => this.handleActivateResonator(resonatorId)}
                     />
                 );
 

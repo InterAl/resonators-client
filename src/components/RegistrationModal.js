@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {actions as sessionActions} from '../actions/sessionActions';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { actions as sessionActions } from '../actions/sessionActions';
+import { connect } from 'react-redux';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextBox from './FormComponents/TextBox';
-import {reduxForm} from 'redux-form';
+import { reduxForm } from 'redux-form';
 import * as validations from './FormComponents/Validations';
 import './RegistrationModal.scss';
 
@@ -23,12 +23,12 @@ class RegistrationModal extends Component {
     renderModalButtons() {
         return [
             <FlatButton
-                onTouchTap={this.props.onClose}
+                onClick={this.props.onClose}
                 label="Cancel"
                 primary={true}
             />,
             <FlatButton
-                onTouchTap={this.props.handleSubmit(this.handleSubmit)}
+                onClick={this.props.handleSubmit(this.handleSubmit)}
                 className='registration-submit'
                 type='submit'
                 label="Register"
@@ -53,8 +53,8 @@ class RegistrationModal extends Component {
                     <TextBox type='password' name='password' placeholder='Password' />
                     <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
                     {this.props.registrationFailed &&
-                    <div className='error'>
-                        Registration failed
+                        <div className='error'>
+                            Registration failed
                     </div>}
                 </form>
             </Dialog>
@@ -76,20 +76,20 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(
     reduxForm({
-      form: 'registration',
-      validate(form) {
-          let errors = {};
+        form: 'registration',
+        validate(form) {
+            let errors = {};
 
-          errors.confirmPassword = validations.required(form.confirmPassword);
+            errors.confirmPassword = validations.required(form.confirmPassword);
 
-          if (form.password !== form.confirmPassword)
-              errors['confirmPassword'] = 'Passwords do not match';
+            if (form.password !== form.confirmPassword)
+                errors['confirmPassword'] = 'Passwords do not match';
 
-          errors.name = validations.required(form.name);
-          errors.email = validations.email(form.email) || validations.required(form.email);
-          errors.password = validations.required(form.password);
+            errors.name = validations.required(form.name);
+            errors.email = validations.email(form.email) || validations.required(form.email);
+            errors.password = validations.required(form.password);
 
-          return errors;
-      }
+            return errors;
+        }
     })(RegistrationModal),
 );

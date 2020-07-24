@@ -128,8 +128,8 @@ class Followers extends Component {
                     multiple
                     value={moreOptions}
                 >
-                    <MenuItem onTouchTap={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
-                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()} primaryText='Show Deactivated' value='showFrozen'/>
+                    <MenuItem onClick={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
+                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()} primaryText='Show Deactivated' value='showFrozen'/>
                 </MoreOptionsMenu>
             ]
         };
@@ -142,12 +142,12 @@ class Followers extends Component {
             const freezeUnfreezeMenuItem = follower.frozen ? (
                 <MenuItem
                     primaryText='Activate'
-                    onTouchTap={() => this.props.unfreezeFollower(followerId)}
+                    onClick={() => this.props.unfreezeFollower(followerId)}
                 />
             ) : (
                 <MenuItem
                     primaryText='Deactivate'
-                    onTouchTap={() => this.handleFreezeFollower(followerId)}
+                    onClick={() => this.handleFreezeFollower(followerId)}
                 />
             );
 
@@ -158,13 +158,13 @@ class Followers extends Component {
                     <MenuItem
                         className='edit-follower-btn'
                         primaryText='Edit'
-                        onTouchTap={() => this.handleEditFollower(followerId)}
+                        onClick={() => this.handleEditFollower(followerId)}
                     />
                     {freezeUnfreezeMenuItem}
                     <MenuItem
                         className='delete-follower-btn'
                         primaryText='Delete'
-                        onTouchTap={() => this.handleRemoveFollower(followerId)}
+                        onClick={() => this.handleRemoveFollower(followerId)}
                         style={{color: 'red'}}
                     />
                 </MoreOptionsMenu>

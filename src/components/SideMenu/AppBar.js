@@ -8,7 +8,7 @@ export default function _AppBar(props) {
         <div>
             <AppBar
                 iconElementLeft={
-                    <IconButton onTouchTap={props.onClose}>
+                    <IconButton onClick={props.onClose}>
                         <CloseIcon/>
                     </IconButton>
                 }

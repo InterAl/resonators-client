@@ -113,7 +113,7 @@ class EditResonatorDailyDiary extends Component {
                     <FlatButton
                         label="Choose"
                         primary={true}
-                        onTouchTap={this.ChooseFile}
+                        onClick={this.ChooseFile}
                     />
                 }
 

@@ -8,9 +8,9 @@ export default ({onNext, onBack, noBack, noNext}) => {
         <div className='navButtons'>
             {!noBack && <BackButton
                 className='backBtn'
-                onTouchTap={onBack}
+                onClick={onBack}
                 style={{marginRight: 6}}/>}
-            {!noNext && <NextButton className='nextBtn ' onTouchTap={onNext}/>}
+            {!noNext && <NextButton className='nextBtn ' onClick={onNext}/>}
         </div>
     );
 }

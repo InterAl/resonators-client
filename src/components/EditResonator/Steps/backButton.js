@@ -1,13 +1,13 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default ({onTouchTap, style}) => {
+export default ({onClick, style}) => {
     return (
         <RaisedButton
             type='button'
             label='Back'
             primary={false}
-            onTouchTap={onTouchTap}
+            onClick={onClick}
             style={style}
         />
     );

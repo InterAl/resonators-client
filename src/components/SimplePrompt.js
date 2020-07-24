@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -25,13 +25,13 @@ export default class SimplePrompt extends Component {
     renderModalButtons() {
         return [
             <FlatButton
-                onTouchTap={this.props.onClose}
+                onClick={this.props.onClose}
                 label="Cancel"
                 primary={true}
                 keyboardFocused={true}
             />,
             <FlatButton
-                onTouchTap={this.handleAcceptClick}
+                onClick={this.handleAcceptClick}
                 label={this.props.acceptText}
                 primary={true}
                 className='confirmBtn'

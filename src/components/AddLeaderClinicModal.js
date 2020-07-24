@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {actions} from '../actions/leaderClinicsActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions } from '../actions/leaderClinicsActions';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { Field, reduxForm } from 'redux-form';
@@ -43,10 +43,10 @@ class AddLeaderClinicModal extends Component {
             <FlatButton
                 label="Cancel"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onClick={this.handleClose}
             />,
             <FlatButton
-                onTouchTap={this.props.handleSubmit(this.handleSubmit)}
+                onClick={this.props.handleSubmit(this.handleSubmit)}
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
@@ -58,11 +58,11 @@ class AddLeaderClinicModal extends Component {
     renderForm() {
         return (
             <form autoComplete='off'>
-
-                <Field type='email'
-                       placeholder='Email'
-                       name='email'
-                       component={TextField} />
+                <Field
+                    type='email'
+                    placeholder='Email'
+                    name='email'
+                    component={TextField} />
             </form>
         );
     }
@@ -74,8 +74,7 @@ class AddLeaderClinicModal extends Component {
                 title={this.cfg.title}
                 modal={false}
                 actions={this.renderModalButtons()}
-                className='edit-follower-modal'
-            >
+                className='edit-follower-modal'>
                 {this.renderForm()}
             </Dialog>
         );
@@ -97,7 +96,7 @@ let Form = reduxForm({
 })(AddLeaderClinicModal);
 
 function mapStateToProps(state) {
-    let {modalProps: {clinicId}} = navigationInfoSelector(state);
+    let { modalProps: { clinicId } } = navigationInfoSelector(state);
 
     let ret = {};
     ret.initialValues = {

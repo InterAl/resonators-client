@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {actions} from '../actions/followersActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions } from '../actions/followersActions';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { Field, reduxForm } from 'redux-form';
@@ -42,7 +42,7 @@ class EditFollowerModal extends Component {
 
     handleSubmit(formData) {
         if (this.props.editMode)
-            this.props.update({...formData, id: this.props.followerId});
+            this.props.update({ ...formData, id: this.props.followerId });
         else
             this.props.create(formData);
 
@@ -54,10 +54,10 @@ class EditFollowerModal extends Component {
             <FlatButton
                 label="Cancel"
                 primary={true}
-                onTouchTap={this.handleClose}
+                onClick={this.handleClose}
             />,
             <FlatButton
-                onTouchTap={this.props.handleSubmit(this.handleSubmit)}
+                onClick={this.props.handleSubmit(this.handleSubmit)}
                 label={this.cfg.doneBtn}
                 primary={true}
                 keyboardFocused={true}
@@ -95,16 +95,16 @@ class EditFollowerModal extends Component {
         return (
             <form autoComplete='off'>
                 <Field type='text'
-                       placeholder='Name'
-                       name='name'
-                       component={TextField} />
+                    placeholder='Name'
+                    name='name'
+                    component={TextField} />
 
                 <Field type='email'
-                       placeholder='Email'
-                       name='email'
-                       component={TextField} />
+                    placeholder='Email'
+                    name='email'
+                    component={TextField} />
 
-               {!this.props.editMode && this.renderRegisterControls()}
+                {!this.props.editMode && this.renderRegisterControls()}
             </form>
         );
     }
@@ -149,10 +149,10 @@ let Form = reduxForm({
 })(EditFollowerModal);
 
 function mapStateToProps(state) {
-    let {modalProps: {followerId, editMode}} = navigationInfoSelector(state);
+    let { modalProps: { followerId, editMode } } = navigationInfoSelector(state);
     let follower = _.find(state.followers.followers, f => f.id === followerId);
     let clinics = state.clinics.clinics;
-    let current_clinic_id =  state.leaders.leaders.current_clinic_id;
+    let current_clinic_id = state.leaders.leaders.current_clinic_id;
 
     let ret = {
         follower,
@@ -160,15 +160,13 @@ function mapStateToProps(state) {
         editMode
     };
 
-    if (follower)
-    {
+    if (follower) {
         ret.initialValues = {
             name: follower.user.name,
             email: follower.user.email
         };
     }
-    else
-    {
+    else {
         ret.initialValues = {
             clinic: current_clinic_id
         };

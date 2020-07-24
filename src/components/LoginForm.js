@@ -46,14 +46,14 @@ class LoginForm extends Component {
                         <div style={{display: 'flex', flexDirection: 'row'}}>
                             <Button
                                 type="button"
-                                onTouchTap={this.props.showRegistrationModal}
+                                onClick={this.props.showRegistrationModal}
                                 className="registerBtn"
                                 labelStyle={{fontSize: 12, padding: 0}}
                                 label='Registration'
                             />
                             <Button
                                 type="button"
-                                onTouchTap={this.props.showForgotPasswordModal}
+                                onClick={this.props.showForgotPasswordModal}
                                 className="registerBtn"
                                 labelStyle={{fontSize: 12, padding: 0}}
                                 label='Forgot password?'
@@ -69,7 +69,7 @@ class LoginForm extends Component {
                     <div style={{width: '100%'}}>
                             <Button
                                 type='button'
-                                onTouchTap={this.handleGoogleLogin}
+                                onClick={this.handleGoogleLogin}
                                 label='Sign in with Google'
                                 icon={googleIcon}
                                 style={{width: '100%', marginTop: 12}}

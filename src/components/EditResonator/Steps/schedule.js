@@ -137,13 +137,13 @@ class EditResonatorSchedule extends Component {
                     />
                     {!this.props.editMode &&
                         <div className='navButton'>
-                            <BackButton onTouchTap={this.props.onBack}
+                            <BackButton onClick={this.props.onBack}
                                 style={{ marginRight: 8 }} />
                             {<RaisedButton
                                 primary={true}
                                 label='Next'
                                 style={{ marginRight: 8 }}
-                                onTouchTap={
+                                onClick={
                                     this.props.handleSubmit(
                                         this.props.resonatorCreated ?
                                             this.handleUpdate :

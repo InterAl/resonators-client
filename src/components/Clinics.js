@@ -102,14 +102,14 @@ class Clinics extends Component {
                 <MenuItem
                 className='delete-follower-btn'
                 primaryText='Detach Clinic'
-                // onTouchTap={() => this.handleEditFollower(followerId)}
+                // onClick={() => this.handleEditFollower(followerId)}
             />
             ) : ""
             var showHideAddClinciAction = clinic.isPrimary ? (
                 <MenuItem
             className='add-follower-btn'
             primaryText='Add Leader to clinic'
-            onTouchTap={() => this.handleAddLeaderToClinic(clinicId)}
+            onClick={() => this.handleAddLeaderToClinic(clinicId)}
             style={{color: 'red'}}
         />
             ) : ""
@@ -117,7 +117,7 @@ class Clinics extends Component {
                 <MenuItem
                     className='edit-follower-btn'
                     primaryText='Make as Current Clinic'
-                    onTouchTap={() => this.handleSelectClinic(clinicId)}
+                    onClick={() => this.handleSelectClinic(clinicId)}
                 />
             ) : ""
             return (

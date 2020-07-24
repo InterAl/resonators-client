@@ -72,21 +72,21 @@ export default class EntityTable extends Component {
         switch (action) {
             case 'edit':
                 return (
-                    <IconButton onTouchTap={() => this.props.onEdit(id)}>
+                    <IconButton onClick={() => this.props.onEdit(id)}>
                         <EditIcon/>
                     </IconButton>
                 );
 
             case 'remove':
                 return (
-                    <IconButton onTouchTap={() => this.props.onRemove(id)}>
+                    <IconButton onClick={() => this.props.onRemove(id)}>
                         <ClearIcon/>
                     </IconButton>
                 );
 
             case 'show':
                 return (
-                    <IconButton onTouchTap={() => this.props.onShow(id)}>
+                    <IconButton onClick={() => this.props.onShow(id)}>
                         <ShowIcon/>
                     </IconButton>
                 );
@@ -132,7 +132,7 @@ export default class EntityTable extends Component {
                 {this.props.addButton &&
                     <div className='add-btn'>
                         <FloatingActionButton
-                            onTouchTap={this.props.onAdd}>
+                            onClick={this.props.onAdd}>
                             <ContentAdd />
                         </FloatingActionButton>
                     </div>}
