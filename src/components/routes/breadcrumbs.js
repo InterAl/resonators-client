@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { matchPath } from 'react-router'
 import {Link} from 'react-router-dom';
 import followerSelector from '../../selectors/followerSelector';
+import followerGroupSelector from '../../selectors/followerGroupSelector';
 import resonatorSelector from '../../selectors/resonatorSelector';
 import criterionSelector from '../../selectors/criterionSelector';
 import './breadcrumbs.scss';
@@ -106,6 +107,46 @@ const tree = {
                             title: (state, routeParams) => {
                                 const follower = followerSelector(state, routeParams.followerId);
                                 return _.get(follower, 'user.name');
+                            },
+                            stubRoute: true,
+                            routes: {
+                                "/resonators": {
+                                    title: 'Resonators',
+                                    routes: {
+                                        "/new": {
+                                            title: 'Create'
+                                        },
+                                        "/:resonatorId": {
+                                            title: (state, routeParams) => {
+                                                const resonator = resonatorSelector(state, routeParams.resonatorId);
+                                                return _.truncate(_.get(resonator, 'title', 'Resonator'), {length: 13});
+                                            },
+                                            stubRoute: true,
+                                            routes: {
+                                                "/stats/:qid": {
+                                                    title: 'Criterion stats'
+                                                },
+                                                "/edit": {
+                                                    title: 'Edit'
+                                                },
+                                                "/show": {
+                                                    title: 'Preview'
+                                                },
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                'followerGroups': {
+                    title: 'Follower Groups',
+                    routes: {
+                        '/:followerGroupId': {
+                            title: (state, routeParams) => {
+                                const followerGroup = followerGroupSelector(state, routeParams.followerGroupId);
+                                return _.get(followerGroup, 'group_name');
                             },
                             stubRoute: true,
                             routes: {

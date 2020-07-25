@@ -6,6 +6,9 @@ import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 import FreezeFollowerPrompt from './FreezeFollowerPrompt';
+import EditFollowerGroupModal from './EditFollowerGroupModal';
+import DeleteFollowerGroupPrompt from './DeleteFollowerGroupPrompt';
+import FreezeFollowerGroupPrompt from './FreezeFollowerGroupPrompt';
 import DeleteResonatorPrompt from './DeleteResonatorPrompt';
 import DeleteCriterionPrompt from './DeleteCriterionPrompt';
 import RegistrationModal from './RegistrationModal';
@@ -17,6 +20,9 @@ const modalMap = {
     'editFollower': EditFollowerModal,
     'deleteFollower': DeleteFollowerPrompt,
     'freezeFollower': FreezeFollowerPrompt,
+    'editFollowerGroup': EditFollowerGroupModal,
+    'deleteFollowerGroup': DeleteFollowerGroupPrompt,
+    'freezeFollowerGroup': FreezeFollowerGroupPrompt,
     'deleteResonator': DeleteResonatorPrompt,
     'deleteCriterion': DeleteCriterionPrompt,
     'registration': RegistrationModal,

@@ -33,6 +33,12 @@ const screenToRoute = {
     },
     'criteriaList': {
         route: '/clinics/criteria',
+    },
+    'followerGroups': {
+        route: '/followerGroups'
+    },
+    'followerGroupResonators': {
+        route: '/followerGroups/:followerGroupId/resonators',
     }
 };
 

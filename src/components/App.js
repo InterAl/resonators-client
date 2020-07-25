@@ -5,10 +5,12 @@ import history from '../stores/history';
 import Layout from './Layout';
 import '../static/bootstrap/css/bootstrap.min.css';
 import Followers from './Followers';
+import FollowerGroups from './FollowerGroups';
 import Clinics from './Clinics';
 import NoMatch from './NoMatch';
 import Visitor from './Visitor';
 import FollowerResonators from './FollowerResonators';
+import FollowerGroupResonators from './FollowerGroupResonators';
 import EditResonator from './EditResonator';
 import ShowResonator from './ShowResonator';
 import ResonatorStats from './ResonatorStats';
@@ -39,6 +41,13 @@ class AppComponent extends React.Component {
                 <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator}/>
                 <Route path="/followers/:followerId" component={FollowerResonators}/>
                 <Route exact path="/followers" component={Followers}/>
+
+                <Route exact path="/followerGroups/:followerGroupId/resonators/new" component={EditResonator}/>
+                <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/edit" component={EditResonator}/>
+                <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
+                <Route path="/followerGroups/:followerGroupId/resonators/:resonatorId" component={ShowResonator}/>
+                <Route path="/followerGroups/:followerGroupId" component={FollowerGroupResonators}/>
+                <Route exact path="/followerGroups" component={FollowerGroups}/>
 
                 <Route exact path="/resetPassword" component={ResetPasword}/>
                 <Route exact path="*/criteria/submit" component={ResonatorFeedback}/>

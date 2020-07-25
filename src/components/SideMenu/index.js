@@ -6,6 +6,7 @@ import {actions} from '../../actions/menuActions';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FollowerIcon from 'material-ui/svg-icons/maps/directions-walk';
+import GroupIcon from 'material-ui/svg-icons/social/group';
 import ClinicIcon from 'material-ui/svg-icons/content/weekend';
 import CriteriaIcon from 'material-ui/svg-icons/notification/event-note';
 import ListIcon from 'material-ui/svg-icons/action/list';
@@ -30,7 +31,15 @@ class SideMenu extends Component {
                     <List>
                         <ListItem onTouchTap={() => this.props.clickMenuItem('followers')}
                                   primaryText='Followers'
-                                  leftIcon={<FollowerIcon/>} />
+                                  leftIcon={<FollowerIcon/>}
+                                  primaryTogglesNestedList={false}
+                                  initiallyOpen
+                                  nestedItems={this.props.leader.group_permissions ? [
+                                      <ListItem
+                                          onTouchTap={() => this.props.clickMenuItem('followerGroups')}
+                                          primaryText='Follower Groups'
+                                          leftIcon={<GroupIcon/>}/>
+                                  ] : false}/>
                         <ListItem
                                   primaryText='Clinic'
                                   leftIcon={<ClinicIcon/>}
@@ -61,7 +70,8 @@ class SideMenu extends Component {
 
 export default connect(
     state => ({
-        navigationInfo: navigationInfoSelector(state)
+        navigationInfo: navigationInfoSelector(state),
+        leader: state.leaders.leaders
     }),
     dispatch => bindActionCreators({
         toggleMenu: actions.toggleMenu,
