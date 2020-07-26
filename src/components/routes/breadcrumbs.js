@@ -14,16 +14,16 @@ export default function renderBreadcrumbs(state) {
 
     const parts = _.flatMap(routeStack, (route, idx) => {
         let link = route.stubRoute ? _.get(routeStack, `[${idx + 1}].route`) : route.route;
-        link = link || '';
+        link = link || "";
 
-        return [
-            <Link className='breadcrumb-part' key={idx} to={link}>
-                {_.truncate(route.title)}
-            </Link>,
-            <span className='breadcrumb-part-arrow'>
-                &gt;
+        return (
+            <span key={idx}>
+                <Link className="breadcrumb-part" to={link}>
+                    {_.truncate(route.title)}
+                </Link>
+                <span className="breadcrumb-part-arrow">&gt;</span>
             </span>
-        ];
+        );
     });
 
     return (

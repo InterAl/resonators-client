@@ -15,24 +15,26 @@ import HeaderLogo from './HeaderLogo';
 import renderBreadcrumbs from './routes/breadcrumbs';
 import isMobile from './isMobile';
 import classNames from 'classnames';
+import theme from './theme';
 import './app.scss';
 
 
 class Layout extends Component {
     render() {
         return (
-            <ThemeProvider>
+            <ThemeProvider theme={theme}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <div className='mainContainer'>
                         <AppBar>
                             <Toolbar>
-                                {this.props.navigationInfo.showHamburger}
-                                ? <IconButton onClick={this.props.toggleMenu} edge="start"><Menu /></IconButton>
-                                : {null}
-                                <Typography variant="h1" style={{ flexGrow: 1 }}>{this.props.breadcrumbs}</Typography>
+                                {this.props.navigationInfo.showHamburger
+                                    ? <IconButton onClick={this.props.toggleMenu} edge="start"><Menu /></IconButton>
+                                    : null}
+                                <Typography variant="h5" style={{ flexGrow: 1 }}>{this.props.breadcrumbs}</Typography>
                                 <HeaderLogo style={{ margin: 'auto', display: isMobile() ? 'none' : 'block' }} />
                             </Toolbar>
                         </AppBar>
+                        <Toolbar />  {/* placeholder to keep the main content below the app bar */}
                         <SideMenu />
                         <div className={classNames('screenWrapper', {
                             menuClosed: !this.props.navigationInfo.menuOpen
@@ -47,10 +49,19 @@ class Layout extends Component {
     }
 }
 
-export default withRouter(connect(state => ({
-    navigationInfo: navigationSelector(state),
-    breadcrumbs: renderBreadcrumbs(state)
-}), dispatch => bindActionCreators({
-    toggleMenu: menuActions.toggleMenu,
-    fetchFollowerResonators: followersActions.fetchFollowerResonators
-}, dispatch))(Layout));
+export default withRouter(
+    connect(
+        (state) => ({
+            navigationInfo: navigationSelector(state),
+            breadcrumbs: renderBreadcrumbs(state),
+        }),
+        (dispatch) =>
+            bindActionCreators(
+                {
+                    toggleMenu: menuActions.toggleMenu,
+                    fetchFollowerResonators: followersActions.fetchFollowerResonators,
+                },
+                dispatch
+            )
+    )(Layout)
+);

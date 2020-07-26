@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import history from '../stores/history';
 import Layout from './Layout';
-import '../static/bootstrap/css/bootstrap.min.css';
 import Followers from './Followers';
 import Clinics from './Clinics';
 import NoMatch from './NoMatch';

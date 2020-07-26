@@ -1,9 +1,9 @@
 .breadcrumbs {
     .breadcrumb-part {
         color: #fff;
+        text-decoration: none !important;
 
         &:hover {
-            text-decoration: none;
             color: darken(#fff, 15%);
         }
     }
