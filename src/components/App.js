@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -23,11 +22,6 @@ import HomePage from './HomePage';
 
 
 class AppComponent extends React.Component {
-  static propTypes = {
-    loginInfo: PropTypes.object.isRequired,
-    navigationInfo: PropTypes.object.isRequired,
-  };
-
   render() {
     return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
