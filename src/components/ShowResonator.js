@@ -2,10 +2,10 @@ import _ from 'lodash';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import resonatorsSelector from '../selectors/resonatorsSelector';
-import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
 import ExpandableCard from './ExpandableCard';
 import ResonatorStats from './ResonatorStats';
-import CircularProgress from 'material-ui/CircularProgress';
+import { CircularProgress } from '@material-ui/core';
+import { RemoveRedEye } from '@material-ui/icons';
 import './ShowResonator.scss';
 
 class ShowResonator extends Component {
@@ -56,7 +56,7 @@ class ShowResonator extends Component {
                             expanded: _.size(this.props.resonator.questions) === 0
                         }}
                         title='Resonator Preview'
-                        avatar={<ShowIcon/>}
+                        avatar={<RemoveRedEye/>}
                     >
                         <div style={{height: this.state.iframeHeight}}>
                             {!this.state.iframeHeight &&

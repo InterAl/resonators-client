@@ -1,14 +1,13 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 
 export default ({onClick, style}) => {
     return (
-        <RaisedButton
+        <Button
             type='button'
-            label='Back'
-            primary={false}
             onClick={onClick}
-            style={style}
-        />
+            style={style}>
+            Back
+        </Button>
     );
 };

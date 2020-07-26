@@ -1,10 +1,8 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {List, ListItem} from 'material-ui/List';
-import Checkbox from 'material-ui/Checkbox';
-import Subheader from 'material-ui/Subheader';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { List, ListItem, ListSubheader, ListItemText, ListItemIcon, Checkbox } from '@material-ui/core';
 import criteriaSelector from '../selectors/criteriaSelector';
 import './ResonatorCriteriaSelection.scss';
 
@@ -32,7 +30,7 @@ class ResonatorCriteriaSelection extends Component {
 
     isCriterionAttached(criterion) {
         return !!_.find(this.props.selectedCriteria,
-                      id => id === criterion.id)
+            id => id === criterion.id)
     }
 
     renderCriteria() {
@@ -44,15 +42,15 @@ class ResonatorCriteriaSelection extends Component {
             return (
                 <ListItem
                     key={idx}
-                    className='criterion-selection-item'
-                    primaryText={criterion.title}
-                    leftCheckbox={
+                    className='criterion-selection-item'>
+                    <ListItemIcon>
                         <Checkbox
+                            edge="start"
                             checked={this.isCriterionAttached(criterion)}
-                            onCheck={(e, c) => this.handleCheck(criterion.id, c)}
-                        />
-                    }
-                />
+                            onChange={(e, c) => this.handleCheck(criterion.id, c)} />
+                    </ListItemIcon>
+                    <ListItemText primary={criterion.title} />
+                </ListItem>
             );
         });
     }
@@ -60,10 +58,9 @@ class ResonatorCriteriaSelection extends Component {
     render() {
         return (
             <div className='resonator-criteria-selection col-xs-12'>
-                <Subheader>
-                    Attach criteria to the resonator (optional)
-                </Subheader>
-                <List>
+                <List subheader={
+                    <ListSubheader>Attach criteria to the resonator (optional)</ListSubheader>
+                }>
                     {this.renderCriteria()}
                 </List>
             </div>

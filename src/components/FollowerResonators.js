@@ -10,10 +10,8 @@ import ResonatorImage from './ResonatorImage';
 import { push } from 'connected-react-router';
 import * as utils from './utils';
 // import moment from 'moment';
-//import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
-//import IconButton from 'material-ui/IconButton';
 import MoreOptionsMenu from './MoreOptionsMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem } from '@material-ui/core';
 
 class FollowerResonators extends Component {
 
@@ -118,9 +116,10 @@ class FollowerResonators extends Component {
             right: [
                 <MoreOptionsMenu
                     multiple
-                    value={moreOptions}
-                >
-                    <MenuItem onClick={() => this.toggleShowInactive()} primaryText={text} value='showFrozen' />
+                    value={moreOptions}>
+                    <MenuItem onClick={this.toggleShowInactive} value='showFrozen'>
+                        {text}
+                    </MenuItem>
                 </MoreOptionsMenu>
             ]
         };

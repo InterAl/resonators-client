@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
-import Subheader from 'material-ui/Subheader';
+import { Typography, List, ListItem } from '@material-ui/core';
 import TextBox from '../FormComponents/TextBox';
-import {List, ListItem} from 'material-ui/List';
+
 
 export default class NumericCreation extends Component {
     static propTypes = {
@@ -32,9 +32,9 @@ export default class NumericCreation extends Component {
 
         return (
             <div className='numeric-creation'>
-                <Subheader>
+                <Typography variant="subtitle1">
                     Numeric Criteria Creation
-                </Subheader>
+                </Typography>
 
                 <div className='minmax'>
                     <div>

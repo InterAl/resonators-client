@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import TextField from '../../FormComponents/TextField';
 import NavButtons from './navButtons';
-import FlatButton from 'material-ui/FlatButton';
+import { Button } from '@material-ui/core';
 
 import StepBase from './stepBase';
 // import gapi from 'googleapis';
@@ -107,11 +107,11 @@ class EditResonatorQuestionnaire extends Component {
                     component={TextField} />
 
                 {
-                    <FlatButton
-                        label="Choose"
-                        primary={true}
-                        onClick={this.ChooseFile}
-                    />
+                    <Button
+                        color="primary"
+                        onClick={this.ChooseFile}>
+                        Choose
+                    </Button>
                 }
                 <Field name='questionnaireDetails'
                     placeholder='Details:'

@@ -1,14 +1,8 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import EditIcon from 'material-ui/svg-icons/editor/mode-edit';
-import ClearIcon from 'material-ui/svg-icons/content/clear';
-import ShowIcon from 'material-ui/svg-icons/image/remove-red-eye';
-import IconButton from 'material-ui/IconButton';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import {Toolbar, ToolbarGroup} from 'material-ui/Toolbar';
-import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
+import { Edit, Clear, Add, RemoveRedEye } from '@material-ui/icons';
+import { IconButton, Fab, Toolbar, Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
 import './EntityTable.scss';
 
 
@@ -35,33 +29,23 @@ export default class EntityTable extends Component {
     renderToolbox() {
         return (
             <Toolbar>
-                <ToolbarGroup>
-                    {_.get(this.props, 'toolbox.left')}
-                </ToolbarGroup>
-                <ToolbarGroup>
-                    {_.get(this.props, 'toolbox.right')}
-                </ToolbarGroup>
+                {_.get(this.props, 'toolbox.left')}
+                {_.get(this.props, 'toolbox.right')}
             </Toolbar>
         );
     }
 
     renderHeader() {
         return (
-            <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
+            <TableHead>
                 <TableRow>
-                    {this.props.header.map((col, i) => {
-                        return (
-                            <TableHeaderColumn key={i}>
-                                {col}
-                            </TableHeaderColumn>
-                        );
-                    })}
+                    {this.props.header.map((col, index) =>
+                        <TableCell key={index}>{col}</TableCell>
+                    )}
                     {this.props.rowActions &&
-                    <TableHeaderColumn className='editColumn'>
-                        Actions
-                    </TableHeaderColumn>}
+                        <TableCell className='editColumn'>Actions</TableCell>}
                 </TableRow>
-            </TableHeader>
+            </TableHead>
         );
     }
 
@@ -73,21 +57,21 @@ export default class EntityTable extends Component {
             case 'edit':
                 return (
                     <IconButton onClick={() => this.props.onEdit(id)}>
-                        <EditIcon/>
+                        <Edit />
                     </IconButton>
                 );
 
             case 'remove':
                 return (
                     <IconButton onClick={() => this.props.onRemove(id)}>
-                        <ClearIcon/>
+                        <Clear />
                     </IconButton>
                 );
 
             case 'show':
                 return (
                     <IconButton onClick={() => this.props.onShow(id)}>
-                        <ShowIcon/>
+                        <RemoveRedEye />
                     </IconButton>
                 );
         }
@@ -95,22 +79,20 @@ export default class EntityTable extends Component {
 
     renderBody() {
         return (
-            <TableBody displayRowCheckbox={false}>
-                {_.map(this.props.rows, (v, id) => {
+            <TableBody>
+                {_.map(this.props.rows, (row, id) => {
                     return (
                         <TableRow key={id}>
-                            {_.map(v, (c, i) => (
-                                <TableRowColumn key={i}>
-                                    {c}
-                                </TableRowColumn>
+                            {_.map(row, (column, index) => (
+                                <TableCell key={index}>{column}</TableCell>
                             ))}
 
                             {this.props.rowActions &&
-                            <TableRowColumn key='actions' className='editColumn'>
-                                {this.props.rowActions.map(action => {
-                                    return this.renderAction(action, id);
-                                })}
-                            </TableRowColumn>}
+                                <TableCell key='actions' className='editColumn'>
+                                    {this.props.rowActions.map(action => {
+                                        return this.renderAction(action, id);
+                                    })}
+                                </TableCell>}
                         </TableRow>
                     );
                 })}
@@ -122,19 +104,19 @@ export default class EntityTable extends Component {
         return (
             <div className={`entity-table ${this.props.className}`}>
                 <div className='col-sm-8 col-sm-offset-2'>
-                    {(this.props.addButton || this.props.toolbox) &&
-                     this.renderToolbox()}
-                    <Table selectable={this.props.selectable}>
-                        {this.renderHeader()}
-                        {this.renderBody()}
-                    </Table>
+                    {(this.props.addButton || this.props.toolbox) && this.renderToolbox()}
+                    <TableContainer>
+                        <Table selectable={this.props.selectable}>
+                            {this.renderHeader()}
+                            {this.renderBody()}
+                        </Table>
+                    </TableContainer>
                 </div>
                 {this.props.addButton &&
-                    <div className='add-btn'>
-                        <FloatingActionButton
-                            onClick={this.props.onAdd}>
-                            <ContentAdd />
-                        </FloatingActionButton>
+                    <div color="primary" className='add-btn'>
+                        <Fab onClick={this.props.onAdd}>
+                            <Add />
+                        </Fab>
                     </div>}
             </div>
         );

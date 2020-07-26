@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from '../actions/followersActions';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
 import navigationInfoSelector from '../selectors/navigationSelector';
@@ -51,18 +50,17 @@ class EditFollowerModal extends Component {
 
     renderModalButtons() {
         return [
-            <FlatButton
-                label="Cancel"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-            <FlatButton
+            <Button color="primary" onClick={this.handleClose}>
+                Cancel
+            </Button>,
+            <Button
                 onClick={this.props.handleSubmit(this.handleSubmit)}
-                label={this.cfg.doneBtn}
-                primary={true}
+                color="primary"
+                variant="contained"
                 keyboardFocused={true}
-                className='create-follower-btn'
-            />
+                className='create-follower-btn'>
+                {this.cfg.doneBtn}
+            </Button>
         ];
     }
 
@@ -111,14 +109,14 @@ class EditFollowerModal extends Component {
 
     render() {
         return (
-            <Dialog
-                open={this.props.open}
-                title={this.cfg.title}
-                modal={false}
-                actions={this.renderModalButtons()}
-                className='edit-follower-modal'
-            >
-                {this.renderForm()}
+            <Dialog open={this.props.open} className='edit-follower-modal'>
+                <DialogTitle>{this.cfg.title}</DialogTitle>
+                <DialogContent>
+                    {this.renderForm()}
+                </DialogContent>
+                <DialogActions>
+                    {this.renderModalButtons()}
+                </DialogActions>
             </Dialog>
         );
     }

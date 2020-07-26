@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { actions as sessionActions } from '../actions/sessionActions';
 import { connect } from 'react-redux';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Button, Dialog, DialogActions, DialogTitle, DialogContent, CircularProgress } from '@material-ui/core';
 import TextBox from './FormComponents/TextBox';
 import { reduxForm } from 'redux-form';
 import * as validations from './FormComponents/Validations';
-import CircularProgress from 'material-ui/CircularProgress';
+
 
 class ForgotPasswordModal extends Component {
     constructor() {
@@ -22,39 +21,33 @@ class ForgotPasswordModal extends Component {
 
     renderModalButtons() {
         return [
-            <FlatButton
-                onClick={this.props.onClose}
-                label="Cancel"
-                primary={true}
-            />,
-            <FlatButton
+            <Button onClick={this.props.onClose}>Cancel</Button>,
+            <Button
                 onClick={this.props.handleSubmit(this.handleSubmit)}
                 type='submit'
-                label="Submit"
-                primary={true}
-                keyboardFocused={true}
-            />
+                color="primary"
+                keyboardFocused={true}>
+                Submit
+            </Button>
         ];
     }
 
     render() {
         return (
-            <Dialog
-                open={this.props.open}
-                title='Password Recovery'
-                modal={false}
-                actions={this.renderModalButtons()}
-                onRequestClose={this.props.onClose}
-            >
-                <form className='forgot-password-form'>
-                    <TextBox name='email' placeholder='Email' />
-                    {this.props.forgotPasswordFailed &&
-                        <div style={{ color: 'red' }}>
-                            Password recovery failed
-                    </div>}
-                    {this.props.forgotPasswordSpinner &&
-                        <CircularProgress />}
-                </form>
+            <Dialog open={this.props.open} onClose={this.props.onClose}>
+                <DialogTitle>Password Recovery</DialogTitle>
+                <DialogContent>
+                    <form className='forgot-password-form'>
+                        <TextBox name='email' placeholder='Email' />
+                        {this.props.forgotPasswordFailed &&
+                            <div style={{ color: 'red' }}>Password recovery failed</div>}
+                        {this.props.forgotPasswordSpinner &&
+                            <CircularProgress />}
+                    </form>
+                </DialogContent>
+                <DialogActions>
+                    {this.renderModalButtons()}
+                </DialogActions>
             </Dialog>
         );
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
+
 
 export default class SimplePrompt extends Component {
     static propTypes = {
@@ -24,18 +24,19 @@ export default class SimplePrompt extends Component {
 
     renderModalButtons() {
         return [
-            <FlatButton
+            <Button
                 onClick={this.props.onClose}
-                label="Cancel"
-                primary={true}
-                keyboardFocused={true}
-            />,
-            <FlatButton
+                color="primary"
+                keyboardFocused={true}>
+                Cancel
+            </Button>,
+            <Button
                 onClick={this.handleAcceptClick}
-                label={this.props.acceptText}
-                primary={true}
-                className='confirmBtn'
-            />
+                color="primary"
+                variant="contained"
+                className='confirmBtn'>
+                {this.props.acceptText}
+            </Button>
         ];
     }
 
@@ -43,13 +44,11 @@ export default class SimplePrompt extends Component {
         return (
             <Dialog
                 open={this.props.open}
-                title={this.props.title}
-                modal={false}
-                actions={this.renderModalButtons()}
-                onRequestClose={this.props.onClose}
-                className={this.props.className}
-            >
-                {this.props.text}
+                onClose={this.props.onClose}
+                className={this.props.className}>
+                <DialogTitle>{this.props.title}</DialogTitle>
+                <DialogContent>{this.props.text}</DialogContent>
+                <DialogActions>{this.renderModalButtons()}</DialogActions>
             </Dialog>
         );
     }

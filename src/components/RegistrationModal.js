@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { actions as sessionActions } from '../actions/sessionActions';
 import { connect } from 'react-redux';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@material-ui/core';
 import TextBox from './FormComponents/TextBox';
 import { reduxForm } from 'redux-form';
 import * as validations from './FormComponents/Validations';
@@ -22,41 +21,37 @@ class RegistrationModal extends Component {
 
     renderModalButtons() {
         return [
-            <FlatButton
+            <Button
                 onClick={this.props.onClose}
-                label="Cancel"
-                primary={true}
-            />,
-            <FlatButton
+                color="primary">
+                Cancel
+            </Button>,
+            <Button
                 onClick={this.props.handleSubmit(this.handleSubmit)}
                 className='registration-submit'
                 type='submit'
-                label="Register"
-                primary={true}
-                keyboardFocused={true}
-            />
+                color="primary"
+                keyboardFocused={true}>
+                Register
+            </Button>
         ];
     }
 
     render() {
         return (
-            <Dialog
-                open={this.props.open}
-                title='Register'
-                modal={false}
-                actions={this.renderModalButtons()}
-                onRequestClose={this.props.onClose}
-            >
-                <form autoComplete={false} className='registration-form'>
-                    <TextBox autocorrect="off" type='email' name='email' placeholder='Email' />
-                    <TextBox name='name' placeholder='Name' />
-                    <TextBox type='password' name='password' placeholder='Password' />
-                    <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
-                    {this.props.registrationFailed &&
-                        <div className='error'>
-                            Registration failed
-                    </div>}
-                </form>
+            <Dialog open={this.props.open} onClose={this.props.onClose}>
+                <DialogTitle>Register</DialogTitle>
+                <DialogContent>
+                    <form autoComplete={false} className='registration-form'>
+                        <TextBox autocorrect="off" type='email' name='email' placeholder='Email' />
+                        <TextBox name='name' placeholder='Name' />
+                        <TextBox type='password' name='password' placeholder='Password' />
+                        <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
+                        {this.props.registrationFailed &&
+                            <div className='error'>Registration failed</div>}
+                    </form>
+                </DialogContent>
+                <DialogActions>{this.renderModalButtons()}</DialogActions>
             </Dialog>
         );
     }

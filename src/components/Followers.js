@@ -5,11 +5,10 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
-import SelectField from 'material-ui/SelectField';
+import { MenuItem, Select, InputLabel } from '@material-ui/core';
 import EntityTable from './EntityTable';
 import {Link} from 'react-router-dom';
 import MoreOptionsMenu from './MoreOptionsMenu';
-import MenuItem from 'material-ui/MenuItem';
 import './Followers.scss';
 
 class Followers extends Component {
@@ -66,20 +65,20 @@ class Followers extends Component {
     }
 
     renderClinicFilter() {
-        return (
-            <SelectField
-                floatingLabelText='Clinic'
+        return [
+            <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
+            <Select
+                labelId="clinic-filter-label"
                 value={this.props.clinicIdFilter}
-                onChange={this.handleClinicFilterChange}
-            >
-                <MenuItem value='all' primaryText='All' />
+                onChange={this.handleClinicFilterChange}>
+                <MenuItem value='all'>All</MenuItem>
                 {
                     this.props.clinics.map((clinic, i) => (
-                        <MenuItem value={clinic.id} primaryText={clinic.name} key={i} />
+                        <MenuItem value={clinic.id} key={i}>{clinic.name}</MenuItem>
                     ))
                 }
-            </SelectField>
-        );
+            </Select>
+        ];
     }
 
     getHeader() {
@@ -128,8 +127,8 @@ class Followers extends Component {
                     multiple
                     value={moreOptions}
                 >
-                    <MenuItem onClick={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
-                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()} primaryText='Show Deactivated' value='showFrozen'/>
+                    <MenuItem onClick={() => this.toggleShowEmails()} value='showEmails'>Show Emails</MenuItem>
+                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()} value='showFrozen'>Show Deactivated</MenuItem>
                 </MoreOptionsMenu>
             ]
         };
@@ -140,15 +139,9 @@ class Followers extends Component {
             const follower = this.props.getFollower(followerId);
 
             const freezeUnfreezeMenuItem = follower.frozen ? (
-                <MenuItem
-                    primaryText='Activate'
-                    onClick={() => this.props.unfreezeFollower(followerId)}
-                />
+                <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
             ) : (
-                <MenuItem
-                    primaryText='Deactivate'
-                    onClick={() => this.handleFreezeFollower(followerId)}
-                />
+                <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
             );
 
             return (
@@ -157,16 +150,12 @@ class Followers extends Component {
                 >
                     <MenuItem
                         className='edit-follower-btn'
-                        primaryText='Edit'
-                        onClick={() => this.handleEditFollower(followerId)}
-                    />
+                        onClick={() => this.handleEditFollower(followerId)}>Edit</MenuItem>
                     {freezeUnfreezeMenuItem}
                     <MenuItem
                         className='delete-follower-btn'
-                        primaryText='Delete'
                         onClick={() => this.handleRemoveFollower(followerId)}
-                        style={{color: 'red'}}
-                    />
+                        style={{color: 'red'}}>Delete</MenuItem>
                 </MoreOptionsMenu>
             );
         }

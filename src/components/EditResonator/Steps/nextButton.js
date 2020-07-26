@@ -1,16 +1,16 @@
 import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from '@material-ui/core';
 
 export default ({style, onClick}) => {
     let onClickProp = onClick ? {onClick} : {};
 
     return (
-        <RaisedButton
+        <Button
             type={onClick ? 'button' : 'submit'}
-            label='Next'
-            primary={true}
+            color="primary"
             style={style}
-            {...onClickProp}
-        />
+            {...onClickProp}>
+            Next
+        </Button>
     );
 };

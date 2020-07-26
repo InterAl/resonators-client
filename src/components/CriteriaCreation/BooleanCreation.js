@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import Subheader from 'material-ui/Subheader';
+import { Typography } from '@material-ui/core';
 import TextBox from '../FormComponents/TextBox';
 
 export default class BooleanCreation extends Component {
     render() {
         return (
             <div className='boolean-creation'>
-                <Subheader>
+                <Typography variant="subtitle1">
                     True / False Creation
-                </Subheader>
+                </Typography>
                 <div>
                     <TextBox name='answers.true' placeholder='True answer'/>
                     <TextBox name='answers.false' placeholder='False answer'/>

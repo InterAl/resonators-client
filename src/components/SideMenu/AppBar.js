@@ -1,18 +1,18 @@
 import React from 'react';
-import AppBar from 'material-ui/AppBar';
-import CloseIcon from 'material-ui/svg-icons/navigation/close';
-import IconButton from 'material-ui/IconButton';
+import { AppBar, IconButton, Toolbar } from '@material-ui/core';
+import { Close } from '@material-ui/icons';
+
 
 export default function _AppBar(props) {
     return (
         <div>
-            <AppBar
-                iconElementLeft={
-                    <IconButton onClick={props.onClose}>
-                        <CloseIcon/>
+            <AppBar>
+                <Toolbar>
+                    <IconButton edge="start" onClick={props.onClose}>
+                        <Close />
                     </IconButton>
-                }
-            />
+                </Toolbar>
+            </AppBar>
         </div>
     );
 }

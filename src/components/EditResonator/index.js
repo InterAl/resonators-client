@@ -9,12 +9,7 @@ import ActivationStep from './Steps/activation';
 import MediaStep from './Steps/media';
 import CriteriaStep from './Steps/Criteria';
 import InteractionTypes from './Steps/InteractionTypes';
-import Subheader from 'material-ui/Subheader';
-import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import {
-    Stepper, StepLabel, StepContent, Step
-} from 'material-ui/Stepper';
+import { Typography, Button, CircularProgress, Stepper, Step, StepLabel, StepContent } from '@material-ui/core';
 import './index.scss';
 import Questionnaire from './Steps/Questionnaire';
 import DailyDiary from './Steps/DailyDiary';
@@ -197,10 +192,12 @@ class EditResonator extends Component {
             label: 'Final',
             content: <div className='finalUpdateStep'>
                         <ActivationStep/>
-                        <RaisedButton
-                            primary={true}
-                            label='Submit'
-                            onClick={this.handleFinalUpdate} />
+                        <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={this.handleFinalUpdate}>
+                            Submit
+                        </Button>
                         {this.props.showSpinnerFinalUpdate &&
                          <CircularProgress size={30} thickness={3}/>}
                      </div>
@@ -208,10 +205,11 @@ class EditResonator extends Component {
     }
 
     renderStep(idx, {label, content}) {
-        let activeProp = this.props.editMode ? {active: true} : null;
-
         return (
-            <Step key={idx} completed={idx <= this.state.maxCompletedStep}>
+            <Step
+                key={idx}
+                completed={idx <= this.state.maxCompletedStep}
+                active={this.props.editMode}>
                 <StepLabel>
                     {label}
                 </StepLabel>
@@ -225,11 +223,11 @@ class EditResonator extends Component {
         return (
             <div className='row edit-resonator'>
                 <div className='col-xs-8 col-sm-8 col-sm-offset-2'>
-                    <Subheader>
+                    <Typography variant="subtitle1">
                         {this.props.editMode ? 'Edit Resonator' : 'Create Resonator'}
-                    </Subheader>
+                    </Typography>
                     <Stepper
-                        linear={false}
+                        nonLinear={true}
                         activeStep={this.state.activeStep}
                         orientation='vertical'>
                         {this.steps.map((step, idx) => this.renderStep(idx, step()))}

@@ -1,12 +1,11 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { actions } from '../../../actions/resonatorCreationActions';
-import Subheader from 'material-ui/Subheader';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import NavButtons from './navButtons';
 import ResonatorImage from '../../ResonatorImage';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button, Typography } from '@material-ui/core';
 
 class EditResonatorMedia extends Component {
     constructor() {
@@ -78,7 +77,7 @@ class EditResonatorMedia extends Component {
     render() {
         return (
             <div>
-                <Subheader>Upload an image</Subheader>
+                <Typography variant="subtitle1">Upload an image</Typography>
 
                 <ResonatorImage
                     resonator={this.props.resonator}
@@ -94,11 +93,12 @@ class EditResonatorMedia extends Component {
 
                 <br />
 
-                <RaisedButton
-                    label='Remove Image'
+                <Button
+                    variant="contained"
                     onClick={this.handleRemoveImage}
-                    style={{ marginTop: 30, marginBottom: 30 }}
-                />
+                    style={{ marginTop: 30, marginBottom: 30 }}>
+                    Remove Image
+                </Button>
 
                 {!this.props.editMode &&
                     <NavButtons

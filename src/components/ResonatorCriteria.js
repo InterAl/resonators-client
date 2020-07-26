@@ -1,13 +1,10 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {List, ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import IconButton from 'material-ui/IconButton';
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
-import DownloadChartIcon from 'material-ui/svg-icons/file/file-download';
+import { List, ListItem, ListSubheader, ListItemText, ListItemSecondaryAction, IconButton, Tooltip } from '@material-ui/core';
+import { GetApp, InsertChart } from '@material-ui/icons';
 import { push } from 'connected-react-router';
 import './ResonatorCriteria.scss';
 
@@ -23,7 +20,7 @@ class ResonatorCriteria extends Component {
     }
 
     handleShowChart(criterionId) {
-        let {follower_id, id: resonatorId} = this.props.resonator;
+        let { follower_id, id: resonatorId } = this.props.resonator;
         this.props.push(`/followers/${follower_id}/resonators/${resonatorId}/stats/${criterionId}`);
     }
 
@@ -32,42 +29,51 @@ class ResonatorCriteria extends Component {
     }
 
     renderChartIcon(qid) {
-        return <IconButton onClick={() => this.handleShowChart(qid)}
-                           style={{width:48, height: 48}} tooltip='Show Chart'>
-                   <ChartIcon size='large' style={{width: 128, height: 128}}/>
+        return (
+            <Tooltip title='Show Chart'>
+                <IconButton
+                    onClick={() => this.handleShowChart(qid)}
+                    style={{ width: 48, height: 48 }}>
+                    <InsertChart size='large' style={{ width: 128, height: 128 }} />
                 </IconButton>
+            </Tooltip>
+        )
     }
 
-    renderCriterion({question_id: qid, question}, idx) {
+    renderCriterion({ question_id: qid, question }, idx) {
         return (
             <ListItem
                 disabled={true}
-                key={idx}
-                primaryText={<div className='listitem-text'>{question.title}</div>}
-                rightIcon={
+                key={idx}>
+                <ListItemText primary={question.title} className='listitem-text' />
+                <ListItemSecondaryAction>
                     <div className='buttons-row'>
                         {this.renderChartIcon(qid)}
-                        <IconButton
-                            tooltip='Download Chart'
-                            onClick={() => this.handleDownloadChart(question.id)}>
-                            <DownloadChartIcon />
-                        </IconButton>
+                        <Tooltip title='Download Chart'>
+                            <IconButton onClick={() => this.handleDownloadChart(question.id)}>
+                                <GetApp />
+                            </IconButton>
+                        </Tooltip>
                     </div>
-                }
-            />
+                </ListItemSecondaryAction>
+            </ListItem>
         );
     }
 
     render() {
         return (
             <div className='resonator-criteria row'>
-                <List className='list col-xs-12 col-sm-6 col-sm-offset-3'>
-                    <Subheader>Resonator Criteria - View User Data</Subheader>
-                    <ListItem
-                        disabled={true}
-                        primaryText='All Criteria'
-                        rightIcon={this.renderChartIcon('all')}
-                    />
+                <List
+                    className='list col-xs-12 col-sm-6 col-sm-offset-3'
+                    subheader={
+                        <ListSubheader>Resonator Criteria - View User Data</ListSubheader>
+                    }>
+                    <ListItem disabled={true}>
+                        <ListItemText primary='All Criteria' />
+                        <ListItemSecondaryAction>
+                            {this.renderChartIcon('all')}
+                        </ListItemSecondaryAction>
+                    </ListItem>
                     {_.map(this.props.resonator.questions, this.renderCriterion)}
                 </List>
             </div>

@@ -4,10 +4,8 @@ import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from '../../../actions/resonatorCreationActions';
-
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+import { Button, Radio, RadioGroup, FormControlLabel, FormControl } from '@material-ui/core';
 import BackButton from './backButton';
-import RaisedButton from 'material-ui/RaisedButton';
 
 import StepBase from './stepBase';
 
@@ -37,28 +35,29 @@ class EditResonatorInteractionTypes extends Component {
             <div>
                 <div className='col-sm-12'>
                     <Field name='interactionType' component={({ input: { onChange, value }, meta, ...custom }) => (
-                        <RadioButtonGroup
-                            name='interactionType'
-                            {...custom}
-                            valueSelected={value}
-                            onChange={(event, value) => this.handleInteractionTypeChange(value, onChange)}
-                            disabled={true}
-                        />
-                    )}>
-                        <RadioButton value='0' label='Built-in Criteria' valueSelected={true} />
-                        <RadioButton value='1' label='Questionnaire' disabled={true} />
-                        <RadioButton value='2' label='Follower Diary' disabled={true} />
-                    </Field><br></br></div>
+                        <FormControl>
+                            <RadioGroup
+                                name='interactionType'
+                                {...custom}
+                                value={value}
+                                onChange={(event, value) => this.handleInteractionTypeChange(value, onChange)}>
+                                <FormControlLabel value="0" control={<Radio />} label="Built-in Criteria" checked={true} />
+                                <FormControlLabel value="1" control={<Radio />} label="Questionnaire" disabled={true} />
+                                <FormControlLabel value="2" control={<Radio />} label="Follower Diary" disabled={true} />
+                            </RadioGroup>
+                        </FormControl>
+                    )}></Field>
+                    <br></br></div>
                 {!this.props.editMode &&
                     <div className='navButton'>
                         <BackButton onClick={this.props.onBack}
                             style={{ marginRight: 8 }} />
-                        {<RaisedButton
-                            primary={true}
-                            label='Next'
+                        {<Button
+                            color="primary"
                             style={{ marginRight: 8 }}
-                            onClick={this.props.onNext}
-                        />}
+                            onClick={this.props.onNext}>
+                            Next
+                        </Button>}
                     </div>}
             </div>
         );

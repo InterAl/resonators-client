@@ -4,12 +4,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions} from '../../../actions/resonatorCreationActions';
 import {Field} from 'redux-form';
-import TimePicker from 'material-ui/TimePicker';
 import BackButton from './backButton';
-import RaisedButton from 'material-ui/RaisedButton';
-import Divider from 'material-ui/Divider';
-import Toggle from 'material-ui/Toggle';
-import Checkbox from 'material-ui/Checkbox';
+import { Button, Divider, Switch, Checkbox } from '@material-ui/core';
+import { KeyboardTimePicker } from '@material-ui/pickers';
 
 import StepBase from './stepBase';
 import moment from 'moment';
@@ -70,7 +67,7 @@ class EditResonatorSchedule extends Component {
                 component={({ input: { onChange, value }, meta, ...custom }) => (
                     <Checkbox
                         checked={!!value}
-                        onCheck={(ev, checked) => this.handleSelectDay(checked, onChange, i)}
+                        onChange={(ev, checked) => this.handleSelectDay(checked, onChange, i)}
                         {...custom}
                     />
                 )}
@@ -96,9 +93,9 @@ class EditResonatorSchedule extends Component {
         return (
             <Field name='oneOff'
                 component={({ input: { onChange, value }, meta, ...custom }) => (
-                    <Toggle
-                        toggled={value === 'on'}
-                        onToggle={() => this.handleSelectOneOff(value, onChange)}
+                    <Switch
+                        checked={value === 'on'}
+                        onChange={() => this.handleSelectOneOff(value, onChange)}
                         {...custom}
                     />)}
                 style={{ top: 8, marginBottom: 16 }}
@@ -126,9 +123,9 @@ class EditResonatorSchedule extends Component {
                         label='Sending time'
                         component={
                             ({ input: { value, onChange }, meta: { touched, error } }) =>
-                                <TimePicker
+                                <KeyboardTimePicker
                                     autoOk={true}
-                                    hintText='Sending Time'
+                                    label='Sending Time'
                                     onChange={(e, date) => this.handleSelectTime(date, onChange)}
                                     value={(value ? new Date(value) : new Date())}
                                     errorText={touched && error}
@@ -139,9 +136,9 @@ class EditResonatorSchedule extends Component {
                         <div className='navButton'>
                             <BackButton onClick={this.props.onBack}
                                 style={{ marginRight: 8 }} />
-                            {<RaisedButton
-                                primary={true}
-                                label='Next'
+                            {<Button
+                                color="primary"
+                                variant="contained"
                                 style={{ marginRight: 8 }}
                                 onClick={
                                     this.props.handleSubmit(
@@ -149,8 +146,9 @@ class EditResonatorSchedule extends Component {
                                             this.handleUpdate :
                                             this.handleCreate
                                     )
-                                }
-                            />}
+                                }>
+                                Next
+                                </Button>}
                         </div>}
                     </div>
                 </div>

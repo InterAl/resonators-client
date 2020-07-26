@@ -3,8 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions as navigationActions} from '../actions/navigationActions';
 import {actions as sessionActions} from '../actions/sessionActions';
-import {Card, CardHeader, CardText} from 'material-ui/Card';
-import Button from 'material-ui/FlatButton';
+import {Card, CardHeader, CardContent, Button} from '@material-ui/core';
 import { Field, reduxForm } from 'redux-form';
 import TextField from './FormComponents/TextField';
 import googleIcon from './Icons/GoogleIcon';
@@ -25,7 +24,7 @@ class LoginForm extends Component {
         return (
             <Card className='loginForm col-sm-3'>
                 {isLoginFormRequired && <CardHeader title="Login" />}
-                <CardText className='cardText'>
+                <CardContent className='cardText'>
                     {isLoginFormRequired && <form onSubmit={this.props.handleSubmit}>
                         <Field type='email' name='email' component={TextField}
                                props={{ placeholder: 'Email' }}
@@ -39,25 +38,24 @@ class LoginForm extends Component {
                             <Button
                                 type="submit"
                                 className='submitBtn'
-                                label='submit'
-                                primary={true} />
+                                color="primary">
+                                    submit
+                                </Button>
                         </div>
 
                         <div style={{display: 'flex', flexDirection: 'row'}}>
                             <Button
                                 type="button"
                                 onClick={this.props.showRegistrationModal}
-                                className="registerBtn"
-                                labelStyle={{fontSize: 12, padding: 0}}
-                                label='Registration'
-                            />
+                                className="registerBtn">
+                                Registration
+                            </Button>
                             <Button
                                 type="button"
                                 onClick={this.props.showForgotPasswordModal}
-                                className="registerBtn"
-                                labelStyle={{fontSize: 12, padding: 0}}
-                                label='Forgot password?'
-                            />
+                                className="registerBtn">
+                                Forgot password?
+                            </Button>
                         </div>
                     </form>}
                     {!isLoginFormRequired && <div className="signInDesclaimer">
@@ -70,12 +68,12 @@ class LoginForm extends Component {
                             <Button
                                 type='button'
                                 onClick={this.handleGoogleLogin}
-                                label='Sign in with Google'
-                                icon={googleIcon}
-                                style={{width: '100%', marginTop: 12}}
-                            />
+                                startIcon={googleIcon}
+                                style={{width: '100%', marginTop: 12}}>
+                                Sign in with Google
+                            </Button>
                         </div>
-                </CardText>
+                </CardContent>
             </Card>
         );
     }

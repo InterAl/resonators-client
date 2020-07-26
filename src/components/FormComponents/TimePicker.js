@@ -1,8 +1,8 @@
 import React from 'react';
-import TimePicker from 'material-ui/TimePicker';
+import { KeyboardTimePicker } from '@material-ui/pickers';
 
-export default ({input: {onChange, value}, ...custom}) => (
-    <TimePicker
+export default ({ input: { onChange, value }, ...custom }) => (
+    <KeyboardTimePicker
         hintText="12hr Format"
         onChange={onChange}
         value={value}

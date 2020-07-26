@@ -7,10 +7,7 @@ import {reduxForm, formValueSelector} from 'redux-form';
 // import ClinicSelect from '../FormComponents/ClinicSelect';
 import TextBox from '../FormComponents/TextBox';
 import Select from '../FormComponents/Select';
-import MenuItem from 'material-ui/MenuItem';
-import Paper from 'material-ui/Paper';
-import Subheader from 'material-ui/Subheader';
-import RaisedButton from 'material-ui/RaisedButton';
+import { MenuItem, Paper, Button, Typography } from '@material-ui/core';
 import NumericCreation from './NumericCreation';
 import BooleanCreation from './BooleanCreation';
 import ValueListCreation from './ValueListCreation';
@@ -58,25 +55,27 @@ class CriteriaCreation extends Component {
             <div className='criteria-creation row col-xs-12 col-md-6 col-md-offset-3'>
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                     <Paper className='card col-xs-12'>
-                        <Subheader>Criterion Creation</Subheader>
+                        <Typography variant="subtitle1">Criterion Creation</Typography>
                         {/* <ClinicSelect/> */}
                         <TextBox multiLine name='title' placeholder='Title'/>
                         <TextBox multiLine name='description' placeholder='Description'/>
                         <Select name='question_kind' label='Criteria Type'>
-                            <MenuItem value='numeric' primaryText='Numeric' />
-                            <MenuItem value='boolean' primaryText='True / False' />
-                            {/* <MenuItem value='valuelist' primaryText='Value List' /> */}
+                            <MenuItem value='numeric'>Numeric</MenuItem>
+                            <MenuItem value='boolean'>True / False</MenuItem>
+                            {/* <MenuItem value='valuelist'>Value List</MenuItem> */}
                         </Select>
                     </Paper>
                     {CriterionType &&
                         <div>
                             <Paper className='card col-xs-12'>
-                                <CriterionType formValues={this.props.formValues}/>
-                                <RaisedButton
+                                <CriterionType formValues={this.props.formValues} />
+                                <Button
                                     type='submit'
                                     className='submit'
-                                    primary={true}
-                                    label={this.editMode ? 'Update' : 'Create'}/>
+                                    color="primary"
+                                    variant="contained">
+                                    {this.editMode ? 'Update' : 'Create'}
+                                </Button>
                             </Paper>
                         </div>
                     }

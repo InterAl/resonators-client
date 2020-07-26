@@ -4,9 +4,9 @@ import {actions as statsActions} from '../actions/resonatorStatsActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
-import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
+import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';
 
 class ResonatorStats extends Component {
@@ -30,20 +30,22 @@ class ResonatorStats extends Component {
     }
     renderQuestionLegend(question) {
         return (
-            <Table style={{width:500, margin: '0 auto', marginTop: 36}}>
-                <TableBody displayRowCheckbox={false}>
-                    {_.map(question.answers, a => (
-                        <TableRow>
-                            <TableRowColumn>
-                                {a.rank}
-                            </TableRowColumn>
-                            <TableRowColumn style={{whiteSpace: 'normal', textOverflow: 'inherit'}}>
-                                {a.body}
-                            </TableRowColumn>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <TableContainer>
+                <Table style={{ width: 500, margin: '0 auto', marginTop: 36 }}>
+                    <TableBody>
+                        {_.map(question.answers, a => (
+                            <TableRow>
+                                <TableCell>
+                                    {a.rank}
+                                </TableCell>
+                                <TableCell style={{ whiteSpace: 'normal', textOverflow: 'inherit' }}>
+                                    {a.body}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         );
     }
 
@@ -86,7 +88,7 @@ class ResonatorStats extends Component {
                     title={question.title}
                     subtitle={question.description}
                     width='100%'
-                    avatar={<ChartIcon/>}
+                    avatar={<InsertChart/>}
                 >
                     {_.isEmpty(question.followerAnswers) ?
                         this.renderEmptyState() : this.renderChart(question)}
