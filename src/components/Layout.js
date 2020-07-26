@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions as followersActions } from '../actions/followersActions';
-import { MuiThemeProvider, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { ThemeProvider, AppBar, Toolbar, IconButton, Typography } from '@material-ui/core';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import { Menu } from '@material-ui/icons';
 import SideMenu from './SideMenu';
 import ModalDisplayer from './ModalDisplayer';
@@ -19,26 +21,28 @@ import './app.scss';
 class Layout extends Component {
     render() {
         return (
-            <MuiThemeProvider>
-                <div className='mainContainer'>
-                    <AppBar>
-                        <Toolbar>
-                            {this.props.navigationInfo.showHamburger}
+            <ThemeProvider>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <div className='mainContainer'>
+                        <AppBar>
+                            <Toolbar>
+                                {this.props.navigationInfo.showHamburger}
                                 ? <IconButton onClick={this.props.toggleMenu} edge="start"><Menu /></IconButton>
                                 : {null}
-                            <Typography variant="h1" style={{ flexGrow: 1 }}>{this.props.breadcrumbs}</Typography>
-                            <HeaderLogo style={{ margin: 'auto', display: isMobile() ? 'none' : 'block' }} />
-                        </Toolbar>
-                    </AppBar>
-                    <SideMenu />
-                    <div className={classNames('screenWrapper', {
-                        menuClosed: !this.props.navigationInfo.menuOpen
-                    })}>
-                        {this.props.children}
-                        <ModalDisplayer modal={this.props.navigationInfo.modal} />
+                                <Typography variant="h1" style={{ flexGrow: 1 }}>{this.props.breadcrumbs}</Typography>
+                                <HeaderLogo style={{ margin: 'auto', display: isMobile() ? 'none' : 'block' }} />
+                            </Toolbar>
+                        </AppBar>
+                        <SideMenu />
+                        <div className={classNames('screenWrapper', {
+                            menuClosed: !this.props.navigationInfo.menuOpen
+                        })}>
+                            {this.props.children}
+                            <ModalDisplayer modal={this.props.navigationInfo.modal} />
+                        </div>
                     </div>
-                </div>
-            </MuiThemeProvider>
+                </MuiPickersUtilsProvider>
+            </ThemeProvider>
         );
     }
 }

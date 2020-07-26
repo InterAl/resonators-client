@@ -32,7 +32,7 @@ class SideMenu extends Component {
                             <ListItemIcon><DirectionsWalk /></ListItemIcon>
                             <ListItemText primary="Followers" />
                         </ListItem>
-                        <ListItem button onClick={() => this.setState({clinicMenuOpen: !clinicMenuOpen})}>
+                        <ListItem button onClick={() => this.setState({clinicMenuOpen: !this.state.clinicMenuOpen})}>
                             <ListItemIcon><Weekend /></ListItemIcon>
                             <ListItemText primary="Clinic" />
                             {this.state.clinicMenuOpen ? <ExpandLess /> : <ExpandMore />}
