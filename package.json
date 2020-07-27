@@ -70,7 +70,7 @@
     "babel-runtime": "^6.26.0",
     "connected-react-router": "^6.8.0",
     "fontsource-roboto": "^2.2.6",
-    "history": "^5.0.0",
+    "history": "^4.10.1",
     "immutable": "^4.0.0-rc.12",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
