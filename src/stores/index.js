@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { routerMiddleware } from 'connected-react-router';
 import history from './history';
 import createSagaMiddleware from 'redux-saga';
@@ -11,12 +11,10 @@ function reduxStore(initialState) {
   const store = createStore(
     createReducers(history),
     initialState,
-    compose(
-      applyMiddleware(
-        sagaMiddleware,
-        logger,
-        routerMiddleware(history)
-      )
+    applyMiddleware(
+      routerMiddleware(history),
+      sagaMiddleware,
+      logger,
     )
   );
 

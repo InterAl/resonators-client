@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'saga-reducer-factory';
+import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as resonatorTypes } from '../actions/resonatorActions';
