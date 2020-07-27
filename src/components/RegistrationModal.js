@@ -19,39 +19,33 @@ class RegistrationModal extends Component {
         this.props.register(form);
     }
 
-    renderModalButtons() {
-        return [
-            <Button
-                onClick={this.props.onClose}
-                color="primary">
-                Cancel
-            </Button>,
-            <Button
-                onClick={this.props.handleSubmit(this.handleSubmit)}
-                className='registration-submit'
-                type='submit'
-                color="primary"
-                keyboardFocused={true}>
-                Register
-            </Button>
-        ];
-    }
-
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose}>
                 <DialogTitle>Register</DialogTitle>
                 <DialogContent>
-                    <form autoComplete={false} className='registration-form'>
-                        <TextBox autocorrect="off" type='email' name='email' placeholder='Email' />
-                        <TextBox name='name' placeholder='Name' />
-                        <TextBox type='password' name='password' placeholder='Password' />
-                        <TextBox type='password' name='confirmPassword' placeholder='Confirm Password' />
-                        {this.props.registrationFailed &&
-                            <div className='error'>Registration failed</div>}
+                    <form autoComplete="off" className="registration-form">
+                        <TextBox type="email" name="email" label="Email" />
+                        <TextBox name="name" label="Name" />
+                        <TextBox type="password" name="password" label="Password" />
+                        <TextBox type="password" name="confirmPassword" label="Confirm Password" />
+                        {this.props.registrationFailed && <div className="error">Registration failed</div>}
                     </form>
                 </DialogContent>
-                <DialogActions>{this.renderModalButtons()}</DialogActions>
+                <DialogActions>
+                    <Button onClick={this.props.onClose} color="primary">
+                        Cancel
+                    </Button>
+                    <Button
+                        onClick={this.props.handleSubmit(this.handleSubmit)}
+                        className="registration-submit"
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                    >
+                        Register
+                    </Button>
+                </DialogActions>
             </Dialog>
         );
     }

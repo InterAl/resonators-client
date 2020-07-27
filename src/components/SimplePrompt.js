@@ -26,8 +26,7 @@ export default class SimplePrompt extends Component {
         return [
             <Button
                 onClick={this.props.onClose}
-                color="primary"
-                keyboardFocused={true}>
+                color="primary">
                 Cancel
             </Button>,
             <Button

@@ -19,34 +19,29 @@ class ForgotPasswordModal extends Component {
         this.props.recoverPassword(form);
     }
 
-    renderModalButtons() {
-        return [
-            <Button onClick={this.props.onClose}>Cancel</Button>,
-            <Button
-                onClick={this.props.handleSubmit(this.handleSubmit)}
-                type='submit'
-                color="primary"
-                keyboardFocused={true}>
-                Submit
-            </Button>
-        ];
-    }
-
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose}>
                 <DialogTitle>Password Recovery</DialogTitle>
                 <DialogContent>
-                    <form className='forgot-password-form'>
-                        <TextBox name='email' placeholder='Email' />
-                        {this.props.forgotPasswordFailed &&
-                            <div style={{ color: 'red' }}>Password recovery failed</div>}
-                        {this.props.forgotPasswordSpinner &&
-                            <CircularProgress />}
+                    <form className="forgot-password-form">
+                        <TextBox name="email" placeholder="Email" />
+                        {this.props.forgotPasswordFailed && (
+                            <div style={{ color: "red" }}>Password recovery failed</div>
+                        )}
+                        {this.props.forgotPasswordSpinner && <CircularProgress />}
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    {this.renderModalButtons()}
+                    <Button onClick={this.props.onClose}>Cancel</Button>
+                    <Button
+                        onClick={this.props.handleSubmit(this.handleSubmit)}
+                        type="submit"
+                        color="primary"
+                        variant="contained"
+                    >
+                        Submit
+                    </Button>
                 </DialogActions>
             </Dialog>
         );

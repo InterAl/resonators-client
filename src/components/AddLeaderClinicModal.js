@@ -46,7 +46,6 @@ class AddLeaderClinicModal extends Component {
                 onClick={this.props.handleSubmit(this.handleSubmit)}
                 color="primary"
                 variant="contained"
-                keyboardFocused={true}
                 className='create-follower-btn'>
                 {this.cfg.doneBtn}
             </Button>
