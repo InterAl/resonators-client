@@ -25,8 +25,8 @@ function reduxStore(initialState) {
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../sagas', () => {
-      // We need to require for hot reloadign to work properly.
-      const nextReducer = require('../sagas').reducers;  // eslint-disable-line global-require
+      // We need to require for hot reloading to work properly.
+      const nextReducer = require('../sagas').createReducers(history);  // eslint-disable-line global-require
 
       store.replaceReducer(nextReducer);
     });
