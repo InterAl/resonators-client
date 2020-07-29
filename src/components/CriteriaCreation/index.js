@@ -48,7 +48,13 @@ class CriteriaCreation extends Component {
 
     renderTypeSelector({ input: { value, onChange }, meta: { touched, error }, ...custom }) {
         return (
-            <TextBox select onChange={(event) => onChange(event.target.value)} error={touched && error} {...custom}>
+            <TextBox
+                select
+                onChange={(event) => onChange(event.target.value)}
+                inputProps={{value}}
+                error={touched && error}
+                {...custom}
+            >
                 <MenuItem value="numeric">Numeric</MenuItem>
                 <MenuItem value="boolean">Yes / No</MenuItem>
             </TextBox>
@@ -59,7 +65,7 @@ class CriteriaCreation extends Component {
         const CriterionType = this.getCreationTypeControl();
 
         return (
-            <Card style={{margin: "30px 30%", maxHeight: "100%"}}>
+            <Card style={{ margin: "30px 30%", maxHeight: "100%" }}>
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                     <CardContent>
                         <Typography variant="h6">Create a New Criterion</Typography>
