@@ -61,10 +61,10 @@ handle(types.UPDATE_FINAL, function* () {
 
     const updatedResonator = yield call(() => promise);
     yield updateResonator(followerId, { ...resonator, ...updatedResonator });
-    // yield put(updateState({ showSpinnerFinalUpdate: false }));
-    // yield put(navigationActions.navigate({
-    //     route: 'followerResonators', routeParams: { followerId }
-    // }));
+    yield put(updateState({ showSpinnerFinalUpdate: false }));
+    yield put(navigationActions.navigate({
+        route: 'followerResonators', routeParams: { followerId }
+    }));
 });
 
 handle(types.UPDATE_CREATION_STEP, function* (sagaParams, { payload }) {
