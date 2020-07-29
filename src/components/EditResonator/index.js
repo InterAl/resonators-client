@@ -31,7 +31,7 @@ class EditResonator extends Component {
             noCreationStep: props.resonator,
             interactionTypeUsed: 0,
             oneOffValue: "off",
-            maxCompletedStep: props.editMode ? 100 : -1,
+            maxCompletedStep: 0,
         };
 
         this.steps = [
@@ -173,7 +173,7 @@ class EditResonator extends Component {
                 <div>
                     <ActivationStep />
                     <div className="navButtons">
-                        <BackButton onClick={this.handleBack} style={{marginRight: 8}} />
+                        <BackButton onClick={this.handleBack} style={{ marginRight: 8 }} />
                         <span style={{ position: "relative", width: "max-content" }}>
                             <Button
                                 color="primary"
@@ -206,7 +206,7 @@ class EditResonator extends Component {
         return (
             <Step
                 key={index}
-                completed={index <= this.state.maxCompletedStep}
+                completed={this.props.editMode || index <= this.state.maxCompletedStep}
                 active={this.props.editMode || index === this.state.activeStep}
             >
                 <StepLabel>{label}</StepLabel>
