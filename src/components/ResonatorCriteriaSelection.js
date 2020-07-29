@@ -46,6 +46,7 @@ class ResonatorCriteriaSelection extends Component {
                     <ListItemIcon>
                         <Checkbox
                             edge="start"
+                            color="primary"
                             checked={this.isCriterionAttached(criterion)}
                             onChange={(e, c) => this.handleCheck(criterion.id, c)} />
                     </ListItemIcon>

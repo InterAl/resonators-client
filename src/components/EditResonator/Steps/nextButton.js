@@ -1,15 +1,18 @@
-import React from 'react';
-import { Button } from '@material-ui/core';
+import React from "react";
+import { Button } from "@material-ui/core";
 
-export default ({style, onClick}) => {
-    let onClickProp = onClick ? {onClick} : {};
+export default ({ style, onClick, className = "" }) => {
+    let onClickProp = onClick ? { onClick } : {};
 
     return (
         <Button
-            type={onClick ? 'button' : 'submit'}
+            type={onClick ? "button" : "submit"}
             color="primary"
+            variant="contained"
             style={style}
-            {...onClickProp}>
+            className={className}
+            {...onClickProp}
+        >
             Next
         </Button>
     );

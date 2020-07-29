@@ -17,7 +17,7 @@ class Visitor extends Component {
 
     render() {
         return (
-            <div className='visitorScreen row'>
+            <div className='visitorScreen'>
                 <LoginForm onSubmit={this.handleSubmit} />
             </div>
         );

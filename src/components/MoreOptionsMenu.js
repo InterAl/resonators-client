@@ -31,19 +31,19 @@ class MoreOptionsMenu extends Component {
 
     render() {
         return (
-            <div>
-                <IconButton onClick={this.openMenu}>
+            <span>
+                <IconButton onClick={this.openMenu.bind(this)}>
                     <MoreVert />
                 </IconButton>
                 <Menu
                     keepMounted
                     anchorEl={this.state.menuAnchor}
                     open={Boolean(this.state.menuAnchor)}
-                    onClose={this.closeMenu}
+                    onClose={this.closeMenu.bind(this)}
                     {..._.omit(this.props, 'children')}>
                     {this.props.children}
                 </Menu>
-            </div>
+            </span>
         );
     }
 }

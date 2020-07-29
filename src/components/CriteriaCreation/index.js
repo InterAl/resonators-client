@@ -1,19 +1,17 @@
-import _ from 'lodash';
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {actions} from '../../actions/criteriaActions';
-import {reduxForm, formValueSelector} from 'redux-form';
+import _ from "lodash";
+import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { actions } from "../../actions/criteriaActions";
+import { reduxForm, formValueSelector, Field } from "redux-form";
 // import ClinicSelect from '../FormComponents/ClinicSelect';
-import TextBox from '../FormComponents/TextBox';
-import Select from '../FormComponents/Select';
-import { MenuItem, Paper, Button, Typography } from '@material-ui/core';
-import NumericCreation from './NumericCreation';
-import BooleanCreation from './BooleanCreation';
-import ValueListCreation from './ValueListCreation';
-import './index.scss';
+import TextBox from "../FormComponents/TextBox";
+import { MenuItem, Card, Button, Typography, CardActions, CardContent, Collapse } from "@material-ui/core";
+import NumericCreation from "./NumericCreation";
+import BooleanCreation from "./BooleanCreation";
+import ValueListCreation from "./ValueListCreation";
 
-const formSelector = formValueSelector('criteriaCreation');
+const formSelector = formValueSelector("criteriaCreation");
 
 class CriteriaCreation extends Component {
     constructor(props) {
@@ -25,14 +23,14 @@ class CriteriaCreation extends Component {
     }
 
     getCreationTypeControl() {
-        const {formValues} = this.props;
+        const { formValues } = this.props;
 
         switch (formValues.question_kind) {
-            case 'numeric':
+            case "numeric":
                 return NumericCreation;
-            case 'boolean':
+            case "boolean":
                 return BooleanCreation;
-            case 'valuelist':
+            case "valuelist":
                 return ValueListCreation;
         }
     }
@@ -41,82 +39,89 @@ class CriteriaCreation extends Component {
         if (this.editMode) {
             this.props.updateCriterion({
                 criterionId: this.props.match.params.criterionId,
-                ...form
+                ...form,
             });
         } else {
             this.props.createCriterion(form);
         }
     }
 
+    renderTypeSelector({ input: { value, onChange }, meta: { touched, error }, ...custom }) {
+        return (
+            <TextBox select onChange={(event) => onChange(event.target.value)} error={touched && error} {...custom}>
+                <MenuItem value="numeric">Numeric</MenuItem>
+                <MenuItem value="boolean">Yes / No</MenuItem>
+            </TextBox>
+        );
+    }
+
     render() {
         const CriterionType = this.getCreationTypeControl();
 
         return (
-            <div className='criteria-creation row col-xs-12 col-md-6 col-md-offset-3'>
+            <Card style={{margin: "30px 30%", maxHeight: "100%"}}>
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                    <Paper className='card col-xs-12'>
-                        <Typography variant="subtitle1">Criterion Creation</Typography>
+                    <CardContent>
+                        <Typography variant="h6">Create a New Criterion</Typography>
                         {/* <ClinicSelect/> */}
-                        <TextBox multiLine name='title' placeholder='Title'/>
-                        <TextBox multiLine name='description' placeholder='Description'/>
-                        <Select name='question_kind' label='Criteria Type'>
-                            <MenuItem value='numeric'>Numeric</MenuItem>
-                            <MenuItem value='boolean'>True / False</MenuItem>
-                            {/* <MenuItem value='valuelist'>Value List</MenuItem> */}
-                        </Select>
-                    </Paper>
-                    {CriterionType &&
-                        <div>
-                            <Paper className='card col-xs-12'>
-                                <CriterionType formValues={this.props.formValues} />
-                                <Button
-                                    type='submit'
-                                    className='submit'
-                                    color="primary"
-                                    variant="contained">
-                                    {this.editMode ? 'Update' : 'Create'}
-                                </Button>
-                            </Paper>
-                        </div>
-                    }
+                        <Field name="title" label="Name" component={TextBox} />
+                        <Field name="description" label="Description" multiline component={TextBox} />
+                        <Field name="question_kind" label="Type" component={this.renderTypeSelector} />
+                    </CardContent>
+                    <Collapse in={Boolean(this.props.formValues.question_kind)} unmountOnExit>
+                        <CardContent>
+                            {CriterionType && <CriterionType formValues={this.props.formValues} />}
+                        </CardContent>
+                    </Collapse>
+                    <CardActions style={{ justifyContent: "end" }}>
+                        <Button type="submit" color="primary" variant="contained" disabled={this.props.invalid}>
+                            {this.editMode ? "Update" : "Create"}
+                        </Button>
+                    </CardActions>
                 </form>
-            </div>
+            </Card>
         );
     }
 }
 
 function initializeNumeric(criterion, formValues) {
-    const answers = _.reduce(criterion.answers, (acc, cur) => {
-        acc[`num${cur.rank}`] = cur.body;
-        return acc;
-    }, {});
+    const answers = _.reduce(
+        criterion.answers,
+        (acc, cur) => {
+            acc[`num${cur.rank}`] = cur.body;
+            return acc;
+        },
+        {}
+    );
 
-    let numMax = _(criterion.answers).map('rank').max();
-    let numMin = _(criterion.answers).map('rank').min();
+    let numMax = _(criterion.answers).map("rank").max();
+    let numMin = _(criterion.answers).map("rank").min();
 
-    return {answers, numMax, numMin};
+    return { answers, numMax, numMin };
 }
 
 function initializeBoolean(criterion) {
-    const answers = _.reduce(criterion.answers, (acc, cur) => {
-        if (cur.rank === 0)
-            acc.false = cur.body;
-        else
-            acc.true = cur.body;
+    const answers = _.reduce(
+        criterion.answers,
+        (acc, cur) => {
+            if (cur.rank === 0) acc.false = cur.body;
+            else acc.true = cur.body;
 
-        return acc;
-    }, {});
+            return acc;
+        },
+        {}
+    );
 
-    return {answers};
+    return { answers };
 }
 
 function getInitialValues(criterion, formValues) {
     let answers, numMin, numMax;
 
-    if (criterion.question_kind === 'numeric') {
-        ({answers, numMin, numMax} = initializeNumeric(criterion, formValues));
-    } else if (criterion.question_kind === 'boolean') {
-        ({answers} = initializeBoolean(criterion));
+    if (criterion.question_kind === "numeric") {
+        ({ answers, numMin, numMax } = initializeNumeric(criterion, formValues));
+    } else if (criterion.question_kind === "boolean") {
+        ({ answers } = initializeBoolean(criterion));
     }
 
     return {
@@ -126,61 +131,72 @@ function getInitialValues(criterion, formValues) {
         question_kind: criterion.question_kind,
         answers,
         numMin,
-        numMax
+        numMax,
     };
 }
 
 function mapStateToProps(state, ownProps) {
-    const criterion = _.find(state.criteria.criteria,
-                             c => c.id === ownProps.match.params.criterionId);
+    const criterion = _.find(state.criteria.criteria, (c) => c.id === ownProps.match.params.criterionId);
 
-    const formValues = formSelector(state,
-                                 'title',
-                                 'description',
-                                 'question_kind',
-                                 'answers',
-                                 'numMin',
-                                 'numMax');
+    const formValues = formSelector(state, "title", "description", "question_kind", "answers", "numMin", "numMax");
 
-    const initialValues = criterion !== undefined ? getInitialValues(criterion, formValues) : { clinic_id : state.leaders.leaders.current_clinic_id};
+    const initialValues =
+        criterion !== undefined
+            ? getInitialValues(criterion, formValues)
+            : { clinic_id: state.leaders.leaders.current_clinic_id };
     return {
         initialValues,
-        formValues
+        formValues,
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        createCriterion: actions.createCriterion,
-        updateCriterion: actions.updateCriterion
-    }, dispatch);
+    return bindActionCreators(
+        {
+            createCriterion: actions.createCriterion,
+            updateCriterion: actions.updateCriterion,
+        },
+        dispatch
+    );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
-    form: 'criteriaCreation',
-    validate(form) {
-        let errors = {}
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(
+    reduxForm({
+        form: "criteriaCreation",
+        validate(form) {
+            let errors = {};
 
-        if (!form.title)
-            errors.title = 'Required';
+            if (!form.title) errors.title = "Required";
 
-        if (!form.description)
-            errors.description = 'Required';
+            if (!form.description || !form.description.trim()) errors.description = "Required";
 
-        if (!form.criteriaType)
-            errors.criteriaType = 'Required';
+            if (!form.question_kind) errors.question_kind = "Required";
 
-        // if (!form.clinic)
-        //     errors.clinic = 'Required';
+            // if (!form.clinic)
+            //     errors.clinic = 'Required';
 
-        if (form.criteriaType === 'numeric') {
-            if (!form.numMin)
-                errors.numMin = 'Required';
+            if (form.question_kind === "numeric") {
+                if (!form.numMin) errors.numMin = "Required";
+                if (!form.numMax) errors.numMax = "Required";
+                if (form.numMin && form.numMax) {
+                    const [min, max] = [parseInt(form.numMin), parseInt(form.numMax)];
+                    if (min >= max) {
+                        errors.numMin = "Should be smaller than the maximum";
+                        errors.numMax = "Should be larger then the minimum";
+                    }
+                }
+            }
 
-            if (!form.numMax)
-                errors.numMax = 'Required';
-        }
+            if (form.question_kind === "boolean") {
+                errors.answers = {};
+                if (!(form.answers && form.answers.true)) errors.answers.true = "Required";
+                if (!(form.answers && form.answers.false)) errors.answers.false = "Required";
+            }
 
-        return errors;
-    }
-})(CriteriaCreation));
+            return errors;
+        },
+    })(CriteriaCreation)
+);

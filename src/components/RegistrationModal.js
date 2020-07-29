@@ -33,7 +33,7 @@ class RegistrationModal extends Component {
                     </form>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.props.onClose} color="primary">
+                    <Button onClick={this.props.onClose}>
                         Cancel
                     </Button>
                     <Button

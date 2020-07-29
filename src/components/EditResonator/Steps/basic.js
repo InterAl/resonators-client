@@ -10,19 +10,16 @@ class EditResonatorBasic extends Component {
                 <Field name='title'
                     placeholder='Title'
                     type='text'
-                    multiLine
                     component={TextField} />
 
                 <Field name='description'
                     placeholder='Description'
                     type='text'
-                    multiLine
                     component={TextField} />
 
                 <Field name='link'
                     placeholder='Link'
                     type='text'
-                    multiLine
                     component={TextField} />
             </div>
         );

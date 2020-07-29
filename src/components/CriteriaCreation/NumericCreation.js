@@ -1,62 +1,76 @@
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import { Typography, List, ListItem } from '@material-ui/core';
-import TextBox from '../FormComponents/TextBox';
+import _ from "lodash";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { Typography, List, ListItem, InputAdornment, ListSubheader, withTheme } from "@material-ui/core";
+import TextBox from "../FormComponents/TextBox";
 
-
-export default class NumericCreation extends Component {
+class NumericCreation extends Component {
     static propTypes = {
-        formValues: PropTypes.object
+        formValues: PropTypes.object,
     };
 
     renderList(min, max) {
-        let list = [];
-
-        for (let i = min; i <= max; i++) {
-            list.push(<ListItem>
-                        <div className='numeric-item'>
-                            <div className='numeric-item-label'>
-                                {i}
-                            </div>
-                            <TextBox name={`answers.num${i}`}/>
-                        </div>
-                      </ListItem>
-                )
-        }
-
-        return list;
+        return (
+            <List
+                subheader={
+                    <ListSubheader style={{ backgroundColor: this.props.theme.palette.background.paper }}>
+                        Configure labels (optional)
+                    </ListSubheader>
+                }
+                style={{ overflow: "auto", maxHeight: "40vh" }}
+            >
+                {min < max &&
+                    _.range(min, max + 1).map((value) => (
+                        <ListItem key={value}>
+                            <TextBox
+                                name={`answers.num${value}`}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <Typography variant="body2" color="textSecondary">
+                                                {value}
+                                            </Typography>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        </ListItem>
+                    ))}
+            </List>
+        );
     }
 
     render() {
-        const {formValues} = this.props;
+        const {
+            formValues: { numMin, numMax },
+        } = this.props;
 
         return (
-            <div className='numeric-creation'>
-                <Typography variant="subtitle1">
-                    Numeric Criteria Creation
-                </Typography>
-
-                <div className='minmax'>
-                    <div>
-                        <span>
-                            Min value:
-                        </span>
-                        <TextBox name='numMin' type='number' className='min' placeholder='Min'/>
-                    </div>
-                    <div>
-                        <span>
-                            Max value:
-                        </span>
-                        <TextBox name='numMax' type='number' className='max' placeholder='Max'/>
-                    </div>
+            <div>
+                <Typography variant="subtitle2">Define a Scale</Typography>
+                <div style={{ display: "flex" }}>
+                    <TextBox
+                        name="numMin"
+                        type="number"
+                        label="Minimum"
+                        style={{ marginRight: 16 }}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextBox
+                        name="numMax"
+                        type="number"
+                        label="Maximum"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
                 </div>
-                <div>
-                    <List>
-                        {this.renderList(parseInt(formValues.numMin),
-                                         parseInt(formValues.numMax))}
-                    </List>
-                </div>
+                {numMin && numMax && this.renderList(parseInt(numMin), parseInt(numMax))}
             </div>
         );
     }
 }
+
+export default withTheme(NumericCreation);

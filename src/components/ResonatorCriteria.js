@@ -64,7 +64,7 @@ class ResonatorCriteria extends Component {
         return (
             <div className='resonator-criteria row'>
                 <List
-                    className='list col-xs-12 col-sm-6 col-sm-offset-3'
+                    className='list'
                     subheader={
                         <ListSubheader>Resonator Criteria - View User Data</ListSubheader>
                     }>

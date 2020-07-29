@@ -5,7 +5,7 @@ export default function ({ input, label, meta: { touched, error }, ...custom }) 
   return (
     <TextField
       helperText={touched && error}
-      error={touched && error}
+      error={Boolean(touched && error)}
       fullWidth={true}
       label={label}
       {...input}

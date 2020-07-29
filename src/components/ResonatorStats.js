@@ -4,7 +4,7 @@ import {actions as statsActions} from '../actions/resonatorStatsActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
-import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { TableContainer, Table, TableBody, TableRow, TableCell, Typography } from '@material-ui/core';
 import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
 import './ResonatorStats.scss';
@@ -33,8 +33,8 @@ class ResonatorStats extends Component {
             <TableContainer>
                 <Table style={{ width: 500, margin: '0 auto', marginTop: 36 }}>
                     <TableBody>
-                        {_.map(question.answers, a => (
-                            <TableRow>
+                        {_.map(question.answers, (a) => (
+                            <TableRow key={a.id}>
                                 <TableCell>
                                     {a.rank}
                                 </TableCell>
@@ -51,7 +51,7 @@ class ResonatorStats extends Component {
 
     renderChart(question) {
         return [
-            <div style={{height: 500, paddingRight: 30}}>
+            <div key="chart" style={{height: 500, paddingRight: 30}}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
                         <XAxis dataKey="time" tickFormatter={this.formatXAxis}/>
@@ -66,6 +66,7 @@ class ResonatorStats extends Component {
             <ExpandableCard
                 id={`resonatorStats_${question.id}_legend`}
                 title='Legend'
+                key="card"
             >
                 {this.renderQuestionLegend(question)}
             </ExpandableCard>
@@ -74,20 +75,19 @@ class ResonatorStats extends Component {
 
     renderEmptyState() {
         return (
-            <div style={{textAlign: 'center', padding: 20}}>
+            <Typography style={{textAlign: 'center', padding: 20}}>
                 No feedback has been given for this criterion.
-            </div>
+            </Typography>
         );
     }
 
     renderCard(question) {
         return (
-            <div className='row' style={{marginBottom: 10}}>
+            <div key={question.id} className='row' style={{marginBottom: 10}}>
                 <ExpandableCard
                     id={`resonatorStats_${question.id}`}
                     title={question.title}
                     subtitle={question.description}
-                    width='100%'
                     avatar={<InsertChart/>}
                 >
                     {_.isEmpty(question.followerAnswers) ?

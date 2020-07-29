@@ -62,19 +62,17 @@ class Clinics extends Component {
             let cols = [];
             if (c.isPrimary) {
                 cols.push(
-                    <div>
-                        <div className='primaryClinic'>
-                            <Label className='primaryClinicIcon' style={{ color: '#5DADE2' }} />
-                        </div>
-                        <div>{c.name}</div>
+                    <div key={c.name} className='primary-clinic'>
+                        <Label htmlColor="#5DADE2" fontSize="small" style={{marginRight: 5}} />
+                        <span>{c.name}</span>
                     </div>
                 );
             }
             else {
-                cols.push(<span className='secondaryClinic'>{c.name}</span>);
+                cols.push(<span key={c.name} className='secondaryClinic'>{c.name}</span>);
             }
             cols.push(
-                <Checkbox disabled checked={c.isCurrentClinic} />
+                <Checkbox key={`${c.name}-primary`} disabled checked={c.isCurrentClinic} />
             );
             acc[c.id] = cols;
             return acc;
@@ -125,6 +123,7 @@ class Clinics extends Component {
             ) : ""
             return (
                 <MoreOptionsMenu
+                    key="more-options"
                     className='more-options-btn'>
                     {showMakeAsCurrentClinicAction}
                     {showHideDetachClinciAction}

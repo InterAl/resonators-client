@@ -27,7 +27,7 @@ class LoginForm extends Component {
                 {isLoginFormRequired && <CardHeader title="Login" />}
                 <CardContent>
                     {isLoginFormRequired && (
-                        <form onSubmit={this.props.onSubmit}>
+                        <form onSubmit={this.props.handleSubmit}>
                             <Field
                                 type="email"
                                 name="email"

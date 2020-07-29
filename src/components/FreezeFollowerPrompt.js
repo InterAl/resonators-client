@@ -30,7 +30,6 @@ class FreezeFollowerPrompt extends Component {
                 <div>
                     {`${name} will no longer receive Resonators assigned by you. Continue?`}
                     <br/>
-                    <br/>
                     (Note: inactive followers can be filtered in/out at the top of this page)
                 </div>}
                 onAccept={this.handleFreezeClick}

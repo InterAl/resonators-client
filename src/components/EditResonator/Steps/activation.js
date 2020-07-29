@@ -9,16 +9,12 @@ class EditResonatorActivation extends Component {
             <div>
                 <Field name='activated'
                        component={ToggleField}
-                       style={{top: 8, marginBottom: 16}}
                        label='Activate resonator'
-                       labelPosition='right'
                 />
 
                 <Field name='sendMeCopy'
                        component={ToggleField}
-                       style={{top: 8, marginBottom: 16}}
                        label='Send me a copy'
-                       labelPosition='right'
                 />
             </div>
         );

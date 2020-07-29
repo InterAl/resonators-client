@@ -1,4 +1,6 @@
 .entity-table {
+    margin: 0 15%;
+
     .editColumn {
         text-align: right !important;
     }
@@ -9,7 +11,7 @@
 
     .add-btn {
         position: fixed;
-        bottom: 12px;
+        bottom: 30px;
 
         @media (min-width: 0px)  {
             right: 5px;

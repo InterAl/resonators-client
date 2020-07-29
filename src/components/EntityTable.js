@@ -1,10 +1,20 @@
-import _ from 'lodash';
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Edit, Clear, Add, RemoveRedEye } from '@material-ui/icons';
-import { IconButton, Fab, Toolbar, Table, TableContainer, TableHead, TableBody, TableRow, TableCell } from '@material-ui/core';
-import './EntityTable.scss';
-
+import _ from "lodash";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Edit, Clear, Add, RemoveRedEye } from "@material-ui/icons";
+import {
+    IconButton,
+    Fab,
+    Toolbar,
+    Table,
+    TableContainer,
+    TableHead,
+    TableBody,
+    TableRow,
+    TableCell,
+    Paper,
+} from "@material-ui/core";
+import "./EntityTable.scss";
 
 export default class EntityTable extends Component {
     static propTypes = {
@@ -18,19 +28,17 @@ export default class EntityTable extends Component {
         onRemove: PropTypes.func,
         onShow: PropTypes.func,
         className: PropTypes.string,
-        selectable: PropTypes.bool
     };
 
     static defaultProps = {
-        className: '',
-        selectable: false
+        className: "",
     };
 
     renderToolbox() {
         return (
-            <Toolbar>
-                {_.get(this.props, 'toolbox.left')}
-                {_.get(this.props, 'toolbox.right')}
+            <Toolbar style={{ display: "flex", justifyContent: "space-between", padding: "0 16px" }}>
+                {_.get(this.props, "toolbox.left") || <div />}
+                {_.get(this.props, "toolbox.right") || <div />}
             </Toolbar>
         );
     }
@@ -39,38 +47,36 @@ export default class EntityTable extends Component {
         return (
             <TableHead>
                 <TableRow>
-                    {this.props.header.map((col, index) =>
+                    {this.props.header.map((col, index) => (
                         <TableCell key={index}>{col}</TableCell>
-                    )}
-                    {this.props.rowActions &&
-                        <TableCell className='editColumn'>Actions</TableCell>}
+                    ))}
+                    {this.props.rowActions && <TableCell className="editColumn">Actions</TableCell>}
                 </TableRow>
             </TableHead>
         );
     }
 
     renderAction(action, id) {
-        if (typeof action === 'function')
-            return action(id);
+        if (typeof action === "function") return action(id);
 
         switch (action) {
-            case 'edit':
+            case "edit":
                 return (
-                    <IconButton onClick={() => this.props.onEdit(id)}>
+                    <IconButton key={action} onClick={() => this.props.onEdit(id)}>
                         <Edit />
                     </IconButton>
                 );
 
-            case 'remove':
+            case "remove":
                 return (
-                    <IconButton onClick={() => this.props.onRemove(id)}>
+                    <IconButton key={action} onClick={() => this.props.onRemove(id)}>
                         <Clear />
                     </IconButton>
                 );
 
-            case 'show':
+            case "show":
                 return (
-                    <IconButton onClick={() => this.props.onShow(id)}>
+                    <IconButton key={action} onClick={() => this.props.onShow(id)}>
                         <RemoveRedEye />
                     </IconButton>
                 );
@@ -87,12 +93,13 @@ export default class EntityTable extends Component {
                                 <TableCell key={index}>{column}</TableCell>
                             ))}
 
-                            {this.props.rowActions &&
-                                <TableCell key='actions' className='editColumn'>
-                                    {this.props.rowActions.map(action => {
+                            {this.props.rowActions && (
+                                <TableCell key="actions" className="editColumn">
+                                    {this.props.rowActions.map((action) => {
                                         return this.renderAction(action, id);
                                     })}
-                                </TableCell>}
+                                </TableCell>
+                            )}
                         </TableRow>
                     );
                 })}
@@ -103,21 +110,22 @@ export default class EntityTable extends Component {
     render() {
         return (
             <div className={`entity-table ${this.props.className}`}>
-                <div className='col-sm-8 col-sm-offset-2'>
+                <Paper>
                     {(this.props.addButton || this.props.toolbox) && this.renderToolbox()}
                     <TableContainer>
-                        <Table selectable={this.props.selectable}>
+                        <Table>
                             {this.renderHeader()}
                             {this.renderBody()}
                         </Table>
                     </TableContainer>
-                </div>
-                {this.props.addButton &&
-                    <div color="primary" className='add-btn'>
-                        <Fab onClick={this.props.onAdd}>
+                </Paper>
+                {this.props.addButton && (
+                    <div className="add-btn">
+                        <Fab color="primary" onClick={this.props.onAdd}>
                             <Add />
                         </Fab>
-                    </div>}
+                    </div>
+                )}
             </div>
         );
     }

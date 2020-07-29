@@ -32,6 +32,7 @@ class ExpandableCard extends Component {
         super(props);
 
         this.handleExpandChange = this.handleExpandChange.bind(this);
+        this.toggleExpanded = this.toggleExpanded.bind(this);
         const { initiallyExpanded } = this.props.cardData || this.props.defaultCardData;
 
         this.state = {

@@ -41,19 +41,20 @@ class EditResonatorInteractionTypes extends Component {
                                 {...custom}
                                 value={value}
                                 onChange={(event, value) => this.handleInteractionTypeChange(value, onChange)}>
-                                <FormControlLabel value="0" control={<Radio />} label="Built-in Criteria" checked={true} />
-                                <FormControlLabel value="1" control={<Radio />} label="Questionnaire" disabled={true} />
-                                <FormControlLabel value="2" control={<Radio />} label="Follower Diary" disabled={true} />
+                                <FormControlLabel value="0" control={<Radio color="primary" />} label="Built-in Criteria" checked={true} />
+                                <FormControlLabel value="1" control={<Radio color="primary" />} label="Questionnaire" disabled={true} />
+                                <FormControlLabel value="2" control={<Radio color="primary" />} label="Follower Diary" disabled={true} />
                             </RadioGroup>
                         </FormControl>
                     )}></Field>
                     <br></br></div>
                 {!this.props.editMode &&
-                    <div className='navButton'>
+                    <div className='navButtons'>
                         <BackButton onClick={this.props.onBack}
                             style={{ marginRight: 8 }} />
                         {<Button
                             color="primary"
+                            variant="contained"
                             style={{ marginRight: 8 }}
                             onClick={this.props.onNext}>
                             Next
