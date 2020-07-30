@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { actions } from "../../actions/criteriaActions";
 import { reduxForm, formValueSelector, Field } from "redux-form";
 // import ClinicSelect from '../FormComponents/ClinicSelect';
-import TextBox from "../FormComponents/TextBox";
-import { MenuItem, Card, Button, Typography, CardActions, CardContent, Collapse } from "@material-ui/core";
+import TextField from "../FormComponents/TextField";
+import { MenuItem, Card, Button, Typography, CardActions, CardContent, Collapse, TextField as MuiTextField } from "@material-ui/core";
 import NumericCreation from "./NumericCreation";
 import BooleanCreation from "./BooleanCreation";
 import ValueListCreation from "./ValueListCreation";
@@ -48,7 +48,7 @@ class CriteriaCreation extends Component {
 
     renderTypeSelector({ input: { value, onChange }, meta: { touched, error }, ...custom }) {
         return (
-            <TextBox
+            <MuiTextField
                 select
                 onChange={(event) => onChange(event.target.value)}
                 inputProps={{value}}
@@ -57,7 +57,7 @@ class CriteriaCreation extends Component {
             >
                 <MenuItem value="numeric">Numeric</MenuItem>
                 <MenuItem value="boolean">Yes / No</MenuItem>
-            </TextBox>
+            </MuiTextField>
         );
     }
 
@@ -70,8 +70,8 @@ class CriteriaCreation extends Component {
                     <CardContent>
                         <Typography variant="h6">Create a New Criterion</Typography>
                         {/* <ClinicSelect/> */}
-                        <Field name="title" label="Name" component={TextBox} />
-                        <Field name="description" label="Description" multiline component={TextBox} />
+                        <Field name="title" label="Name" component={TextField} />
+                        <Field name="description" label="Description" multiline component={TextField} />
                         <Field name="question_kind" label="Type" component={this.renderTypeSelector} />
                     </CardContent>
                     <Collapse in={Boolean(this.props.formValues.question_kind)} unmountOnExit>
