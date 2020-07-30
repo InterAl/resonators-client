@@ -38,3 +38,4 @@ dist/
 secrets.js
 .DS_Store
 test/screenshots
+package-lock.json
