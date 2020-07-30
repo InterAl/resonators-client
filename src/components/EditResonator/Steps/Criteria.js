@@ -40,6 +40,7 @@ class EditResonatorCriteria extends Component {
     }
 
     render() {
+        const selectedCriteria = this.props.formData.criteria || [];
         return (
             <div>
                 <ResonatorCriteriaSelection
@@ -50,6 +51,7 @@ class EditResonatorCriteria extends Component {
                 {!this.props.editMode && <NavButtons
                     onNext={this.props.onNext}
                     onBack={this.props.onBack}
+                    nextDisabled={!selectedCriteria.length}
                 />}
             </div>
         );

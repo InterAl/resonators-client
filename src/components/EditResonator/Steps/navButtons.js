@@ -10,13 +10,13 @@ const useStyles = makeStyles(theme =>({
     }
 }))
 
-export default ({ onNext, onBack, noBack, noNext }) => {
+export default ({ onNext, onBack, noBack, noNext, nextDisabled = false }) => {
     const classes = useStyles();
 
     return (
         <div className="navButtons">
             {!noBack && <BackButton onClick={onBack} className={classes.navButton} />}
-            {!noNext && <NextButton onClick={onNext} className={classes.navButton} />}
+            {!noNext && <NextButton onClick={onNext} className={classes.navButton} disabled={nextDisabled} />}
         </div>
     );
 };

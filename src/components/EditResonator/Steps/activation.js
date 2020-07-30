@@ -6,15 +6,14 @@ import ToggleField from '../../FormComponents/ToggleField';
 class EditResonatorActivation extends Component {
     render() {
         return (
-            <div>
+            <div style={{display: "flex", flexDirection: "column"}}>
                 <Field name='activated'
                        component={ToggleField}
                        label='Activate resonator'
                 />
-
                 <Field name='sendMeCopy'
                        component={ToggleField}
-                       label='Send me a copy'
+                       label='Send me copies'
                 />
             </div>
         );

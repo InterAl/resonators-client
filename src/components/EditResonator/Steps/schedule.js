@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { actions } from "../../../actions/resonatorCreationActions";
 import { Field } from "redux-form";
 import BackButton from "./backButton";
-import { Button, Switch, Checkbox, FormControlLabel, FormControl, FormLabel, FormGroup } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel, FormControl, FormLabel, FormGroup } from "@material-ui/core";
 import TimePicker from "../../FormComponents/TimePicker";
 
 import StepBase from "./stepBase";
@@ -80,13 +80,26 @@ class EditResonatorSchedule extends Component {
                                             {...custom}
                                         />
                                     }
-                                    label={moment().startOf("w").add(number, "d").format("dddd")}
+                                    label={moment().startOf("w").add(number, "d").format("ddd")}
                                 />
                             )}
                         />
                     ))}
                 </FormGroup>
             </FormControl>
+        );
+    }
+
+    renderTimeSelector() {
+        return (
+            <Field
+                name="time"
+                component={TimePicker}
+                label="Time of Day (24h format)"
+                style={{ width: "max-content" }}
+                normalize={this.handleSelectTime}
+                validate={(value) => (value ? undefined : "Invalid time format")}
+            />
         );
     }
 
@@ -102,7 +115,7 @@ class EditResonatorSchedule extends Component {
                 component={({ input: { onChange, value }, meta, ...custom }) => (
                     <FormControlLabel
                         control={
-                            <Switch
+                            <Checkbox
                                 color="primary"
                                 checked={value === "on"}
                                 onChange={() => this.handleSelectOneOff(value, onChange)}
@@ -116,25 +129,12 @@ class EditResonatorSchedule extends Component {
         );
     }
 
-    renderTimeSelector() {
-        return (
-            <Field
-                name="time"
-                component={TimePicker}
-                label="Sending Time (24h format)"
-                style={{ width: "max-content" }}
-                normalize={this.handleSelectTime}
-                validate={(value) => (value ? undefined : "Invalid time format")}
-            />
-        );
-    }
-
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "column" }}>
-                {this.renderOneOff()}
                 {this.renderDays()}
                 {this.renderTimeSelector()}
+                {this.renderOneOff()}
                 {!this.props.editMode && (
                     <div className="navButtons">
                         <BackButton onClick={this.props.onBack} style={{ marginRight: 8 }} />
@@ -143,6 +143,7 @@ class EditResonatorSchedule extends Component {
                                 color="primary"
                                 variant="contained"
                                 style={{ marginRight: 8 }}
+                                disabled={this.props.invalid}
                                 onClick={this.props.handleSubmit(
                                     this.props.resonatorCreated ? this.handleUpdate : this.handleCreate
                                 )}
@@ -170,6 +171,18 @@ EditResonatorSchedule = StepBase({
                     selectedOne = true;
                 else formData[`day${item}`] = false;
             });
+        }
+
+        if (![0, 1, 2, 3, 4, 5, 6].some((day) => formData[`day${day}`])) {
+            // TODO: This is a temporary patch to make the Next button disabled.
+            // A correct implementation would separate the week day selection as a separate component
+            // which can be used inside a redux-form Field, and would handle everything internally.
+            // This means that day checkboxes will no longer be separate Fields, and so the saga logic
+            // handling their aggregation (and unpacking from server data) will have to be moved to the
+            // new component.
+            // This approach will also allow to display a selection-wide error message, which is currently
+            // not displayed.
+            errors.day0 = "No day selected";
         }
 
         // props.updateIntractionType(parseInt(formData.interactionType));

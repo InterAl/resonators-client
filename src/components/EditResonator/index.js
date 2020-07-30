@@ -173,7 +173,13 @@ class EditResonator extends Component {
                 <div>
                     <ActivationStep />
                     <div className="navButtons">
-                        <BackButton onClick={this.handleBack} style={{ marginRight: 8 }} />
+                        {!this.props.editMode && (
+                            <BackButton
+                                onClick={this.handleBack}
+                                style={{ marginRight: 8 }}
+                                disabled={this.props.showSpinnerFinalUpdate}
+                            />
+                        )}
                         <span style={{ position: "relative", width: "max-content" }}>
                             <Button
                                 color="primary"
@@ -181,7 +187,7 @@ class EditResonator extends Component {
                                 onClick={this.handleFinalUpdate}
                                 disabled={this.props.showSpinnerFinalUpdate}
                             >
-                                Submit
+                                {this.props.editMode ? "Update" : "Finish"}
                             </Button>
                             {this.props.showSpinnerFinalUpdate && (
                                 <CircularProgress

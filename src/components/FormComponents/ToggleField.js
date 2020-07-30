@@ -1,10 +1,10 @@
 import React from "react";
-import { Switch, FormControlLabel } from "@material-ui/core";
+import { FormControlLabel, Checkbox } from "@material-ui/core";
 
 export default ({ input: { onChange, value }, meta, label, ...custom }) => (
     <FormControlLabel
         control={
-            <Switch
+            <Checkbox
                 color="primary"
                 checked={value === "on"}
                 onChange={() => onChange(value === "on" ? "off" : "on")}
