@@ -64,7 +64,7 @@ class EditResonatorSchedule extends Component {
     renderDays() {
         return (
             <FormControl>
-                <FormLabel>Active Days</FormLabel>
+                <FormLabel>Active days</FormLabel>
                 <FormGroup row>
                     {[0, 1, 2, 3, 4, 5, 6].map((number) => (
                         <Field
@@ -95,10 +95,9 @@ class EditResonatorSchedule extends Component {
             <Field
                 name="time"
                 component={TimePicker}
-                label="Time of Day (24h format)"
+                label="Time of day (24h format)"
                 style={{ width: "max-content" }}
                 normalize={this.handleSelectTime}
-                validate={(value) => (value ? undefined : "Invalid time format")}
             />
         );
     }
@@ -122,7 +121,8 @@ class EditResonatorSchedule extends Component {
                                 {...custom}
                             />
                         }
-                        label="One Off"
+                        label="Send only once"
+                        style={{ marginTop: 8 }}
                     />
                 )}
             />
@@ -164,6 +164,9 @@ EditResonatorSchedule = StepBase({
     validate(formData /* props */) {
         let errors = {};
 
+        // TODO: This is a horrible solution. Component logic shouldn't be put in the form
+        // validation. This should be inside a day-picker component and the one-off field.
+        // It will be possible once we create a dedicated day-picker. See below TODO for more info.
         if (formData.oneOff === "on") {
             var selectedOne = false;
             [0, 1, 2, 3, 4, 5, 6].forEach((item, i) => {
@@ -172,6 +175,8 @@ EditResonatorSchedule = StepBase({
                 else formData[`day${item}`] = false;
             });
         }
+
+        if (formData.time && !formData.time.valueOf()) errors.time = "Invalid time";
 
         if (![0, 1, 2, 3, 4, 5, 6].some((day) => formData[`day${day}`])) {
             // TODO: This is a temporary patch to make the Next button disabled.
