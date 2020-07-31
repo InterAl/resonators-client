@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Edit, Clear, Add, RemoveRedEye } from "@material-ui/icons";
+import { Edit, Delete, Add, RemoveRedEye } from "@material-ui/icons";
 import {
     IconButton,
     Fab,
@@ -14,6 +14,7 @@ import {
     TableCell,
     Paper,
     Divider,
+    Tooltip,
 } from "@material-ui/core";
 import "./EntityTable.scss";
 
@@ -70,23 +71,29 @@ export default class EntityTable extends Component {
         switch (action) {
             case "edit":
                 return (
-                    <IconButton key={action} onClick={() => this.props.onEdit(id)}>
-                        <Edit />
-                    </IconButton>
+                    <Tooltip title="Edit">
+                        <IconButton key={action} onClick={() => this.props.onEdit(id)}>
+                            <Edit />
+                        </IconButton>
+                    </Tooltip>
                 );
 
             case "remove":
                 return (
-                    <IconButton key={action} onClick={() => this.props.onRemove(id)}>
-                        <Clear />
-                    </IconButton>
+                    <Tooltip title="Remove">
+                        <IconButton key={action} onClick={() => this.props.onRemove(id)}>
+                            <Delete />
+                        </IconButton>
+                    </Tooltip>
                 );
 
             case "show":
                 return (
-                    <IconButton key={action} onClick={() => this.props.onShow(id)}>
-                        <RemoveRedEye />
-                    </IconButton>
+                    <Tooltip title="Preview">
+                        <IconButton key={action} onClick={() => this.props.onShow(id)}>
+                            <RemoveRedEye />
+                        </IconButton>
+                    </Tooltip>
                 );
         }
     }
