@@ -31,10 +31,11 @@ class ResetPassword extends Component {
                             title='Reset password'
                             subheader='Please enter your new password below' />
                         <CardContent>
-                            <TextBox name='password' type='password' />
+                            <TextBox name='password' type='password' label="Password" />
                             <Button
                                 color="primary"
                                 variant="contained"
+                                disabled={this.props.invalid}
                                 onClick={this.props.handleSubmit(this.handleSubmit)}
                                 style={{ marginTop: 30, marginBottom: 30 }}>
                                 Submit

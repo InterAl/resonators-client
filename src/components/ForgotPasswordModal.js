@@ -39,6 +39,7 @@ class ForgotPasswordModal extends Component {
                         type="submit"
                         color="primary"
                         variant="contained"
+                        disabled={this.props.invalid}
                     >
                         Submit
                     </Button>
