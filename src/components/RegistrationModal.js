@@ -42,6 +42,7 @@ class RegistrationModal extends Component {
                         type="submit"
                         color="primary"
                         variant="contained"
+                        disabled={this.props.invalid}
                     >
                         Register
                     </Button>
