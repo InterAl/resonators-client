@@ -51,7 +51,6 @@ class EditResonatorCriteria extends Component {
                 {!this.props.editMode && <NavButtons
                     onNext={this.props.onNext}
                     onBack={this.props.onBack}
-                    nextDisabled={!selectedCriteria.length}
                 />}
             </div>
         );
