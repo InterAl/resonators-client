@@ -13,6 +13,7 @@ import {
     TableRow,
     TableCell,
     Paper,
+    Divider,
 } from "@material-ui/core";
 import "./EntityTable.scss";
 
@@ -35,11 +36,18 @@ export default class EntityTable extends Component {
     };
 
     renderToolbox() {
+        const left = _.get(this.props, "toolbox.left");
+        const right = _.get(this.props, "toolbox.right");
         return (
-            <Toolbar style={{ display: "flex", justifyContent: "space-between", padding: "0 16px" }}>
-                {_.get(this.props, "toolbox.left") || <div />}
-                {_.get(this.props, "toolbox.right") || <div />}
-            </Toolbar>
+            (left || right) && (
+                <div>
+                    <Toolbar style={{ justifyContent: "space-between", padding: "0 16px" }}>
+                        <div>{left}</div>
+                        <div>{right}</div>
+                    </Toolbar>
+                    <Divider />
+                </div>
+            )
         );
     }
 

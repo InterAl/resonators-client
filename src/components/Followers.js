@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
-import { MenuItem, Select, InputLabel, Link as MuiLink } from "@material-ui/core";
+import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
 import { NotInterested } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
@@ -120,9 +120,7 @@ class Followers extends Component {
 
     getToolbox() {
         return {
-            // left: [
-            //     this.renderClinicFilter()
-            // ],
+            left: <Typography variant="h6">Your Followers</Typography>,
             right: (
                 <MoreOptionsMenu>
                     <MenuItem onClick={() => this.toggleShowEmails()}>
