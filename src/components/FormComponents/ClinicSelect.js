@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Field} from 'redux-form';
 import SelectField from './SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem } from '@material-ui/core';
 
 class ClinicSelect extends Component {
     render() {
@@ -13,7 +13,7 @@ class ClinicSelect extends Component {
                    component={SelectField}>
             {
                 this.props.clinics.map(clinic => (
-                    <MenuItem value={clinic.id} primaryText={clinic.name} />
+                    <MenuItem value={clinic.id}>{clinic.name}</MenuItem>
                 ))
             }
             </Field>

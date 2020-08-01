@@ -1,21 +1,18 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { actions } from '../../../actions/resonatorCreationActions';
-
-import TextField from '../../FormComponents/TextField';
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
-import NavButtons from './navButtons';
+import { Button, Radio, RadioGroup, FormControlLabel, FormControl } from '@material-ui/core';
 import BackButton from './backButton';
-import RaisedButton from 'material-ui/RaisedButton';
 
 import StepBase from './stepBase';
 
 class EditResonatorInteractionTypes extends Component {
 
     static propTypes = {
-        updateIntractionType: React.PropTypes.func
+        updateIntractionType: PropTypes.func
     }
 
     constructor() {
@@ -38,28 +35,30 @@ class EditResonatorInteractionTypes extends Component {
             <div>
                 <div className='col-sm-12'>
                     <Field name='interactionType' component={({ input: { onChange, value }, meta, ...custom }) => (
-                        <RadioButtonGroup
-                            name='interactionType'
-                            {...custom}
-                            valueSelected={value}
-                            onChange={(event, value) => this.handleInteractionTypeChange(value, onChange)}
-                            disabled={true}
-                        />
-                    )}>
-                        <RadioButton value='0' label='Built-in Criteria' valueSelected={true} />
-                        <RadioButton value='1' label='Questionnaire' disabled={true} />
-                        <RadioButton value='2' label='Follower Diary' disabled={true} />
-                    </Field><br></br></div>
+                        <FormControl>
+                            <RadioGroup
+                                name='interactionType'
+                                {...custom}
+                                value={value}
+                                onChange={(event, value) => this.handleInteractionTypeChange(value, onChange)}>
+                                <FormControlLabel value="0" control={<Radio color="primary" />} label="Built-in Criteria" checked={true} />
+                                <FormControlLabel value="1" control={<Radio color="primary" />} label="Questionnaire" disabled={true} />
+                                <FormControlLabel value="2" control={<Radio color="primary" />} label="Follower Diary" disabled={true} />
+                            </RadioGroup>
+                        </FormControl>
+                    )}></Field>
+                    <br></br></div>
                 {!this.props.editMode &&
-                    <div className='navButton'>
-                        <BackButton onTouchTap={this.props.onBack}
+                    <div className='navButtons'>
+                        <BackButton onClick={this.props.onBack}
                             style={{ marginRight: 8 }} />
-                        {<RaisedButton
-                            primary={true}
-                            label='Next'
+                        {<Button
+                            color="primary"
+                            variant="contained"
                             style={{ marginRight: 8 }}
-                            onTouchTap={this.props.onNext}
-                        />}
+                            onClick={this.props.onNext}>
+                            Next
+                        </Button>}
                     </div>}
             </div>
         );
@@ -83,7 +82,7 @@ function mapDispatchToProps(dispatch) {
 EditResonatorInteractionTypes = StepBase({
     noBack: true,
     noNext: true,
-    validate(formData, props) {
+    validate(formData, /* props */) {
         let errors = {};
         /*
         if (formData.interactionType === undefined) {

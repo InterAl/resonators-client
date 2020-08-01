@@ -1,55 +1,56 @@
-import React, {Component} from 'react';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import React from "react";
+import PropTypes from "prop-types";
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    makeStyles,
+} from "@material-ui/core";
 
-export default class SimplePrompt extends Component {
-    static propTypes: {
-        onAccept: React.PropTypes.func.isRequired,
-        text: React.PropTypes.string.isRequired,
-        acceptText: React.PropTypes.string.isRequired,
-        title: React.PropTypes.string.isRequired,
-        className: React.PropTypes.string
+const useStyles = makeStyles(theme => ({
+    dialogContent: {
+        fontFamily: theme.typography.fontFamily
     }
+}))
 
-    constructor() {
-        super();
+export default function SimplePrompt(props) {
+    const classes = useStyles()
 
-        this.handleAcceptClick = this.handleAcceptClick.bind(this);
-    }
-
-    handleAcceptClick() {
-        this.props.onClose(this.props.onAccept);
-    }
-
-    renderModalButtons() {
-        return [
-            <FlatButton
-                onTouchTap={this.props.onClose}
-                label="Cancel"
-                primary={true}
-                keyboardFocused={true}
-            />,
-            <FlatButton
-                onTouchTap={this.handleAcceptClick}
-                label={this.props.acceptText}
-                primary={true}
-                className='confirmBtn'
-            />
-        ];
-    }
-
-    render() {
-        return (
-            <Dialog
-                open={this.props.open}
-                title={this.props.title}
-                modal={false}
-                actions={this.renderModalButtons()}
-                onRequestClose={this.props.onClose}
-                className={this.props.className}
-            >
-                {this.props.text}
-            </Dialog>
-        );
-    }
+    return (
+        <Dialog open={props.open} onClose={props.onClose} className={props.className}>
+            <DialogTitle>{props.title}</DialogTitle>
+            <DialogContent>
+                {props.text.constructor === String ? (
+                    <DialogContentText>{props.text}</DialogContentText>
+                ) : (
+                    /* in case a component is passed */
+                    <div className={classes.dialogContent}>
+                        {props.text}
+                    </div>
+                )}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={props.onClose}>
+                    Cancel
+                </Button>
+                <Button
+                    onClick={() => props.onClose(props.onAccept)}
+                    color="primary"
+                    variant="contained"
+                    className="confirmBtn"
+                >
+                    {props.acceptText}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
+
+SimplePrompt.propTypes = {
+    onAccept: PropTypes.func.isRequired,
+    acceptText: PropTypes.string.isRequired,
+    className: PropTypes.string,
+};

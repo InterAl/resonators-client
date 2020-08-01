@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
-import IconMenu from 'material-ui/IconMenu';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { IconButton, Menu } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
 
 class MoreOptionsMenu extends Component {
     static propTypes = {
-        onBlur: React.PropTypes.func,
-        className: React.PropTypes.string
+        onBlur: PropTypes.func,
+        className: PropTypes.string
     }
 
     static defaultProps = {
@@ -16,16 +16,34 @@ class MoreOptionsMenu extends Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            menuAnchor: null
+        }
+    }
+
+    openMenu(event) {
+        this.setState({ menuAnchor: event.currentTarget })
+    }
+
+    closeMenu(event) {
+        this.setState({ menuAnchor: null })
     }
 
     render() {
         return (
-            <IconMenu
-                iconButtonElement={<IconButton><MoreVertIcon/></IconButton>}
-                {..._.omit(this.props, 'children')}
-            >
-                {this.props.children}
-            </IconMenu>
+            <span>
+                <IconButton onClick={this.openMenu.bind(this)}>
+                    <MoreVert />
+                </IconButton>
+                <Menu
+                    keepMounted
+                    anchorEl={this.state.menuAnchor}
+                    open={Boolean(this.state.menuAnchor)}
+                    onClose={this.closeMenu.bind(this)}
+                    {..._.omit(this.props, 'children')}>
+                    {this.props.children}
+                </Menu>
+            </span>
         );
     }
 }

@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 import 'whatwg-fetch';
 import React from 'react';
 import { render } from 'react-dom';
@@ -7,9 +7,7 @@ import configureStore from './stores';
 import {actions as initActions} from './actions/initActions';
 import { AppContainer } from 'react-hot-loader';
 import App from './containers/App';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 
-injectTapEventPlugin();
 
 const store = configureStore();
 

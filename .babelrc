@@ -1,23 +1,18 @@
 {
-  "presets": [
-    ["es2015", { "modules": false }],
-    "react",
-    "stage-0",
-    "airbnb"
-  ],
-  "plugins": [
-    "transform-decorators-legacy",
-    "transform-runtime",
-    "transform-object-rest-spread",
-    "react-hot-loader/babel",
-  ],
-  "env": {
-    "test": {
-      "plugins": [
-        "transform-decorators-legacy",
-        "transform-object-rest-spread",
-        "istanbul"
-      ]
+    "presets": [
+      ["@babel/preset-env", { "modules": false, "targets": "defaults" }], 
+        "@babel/preset-react", 
+        "airbnb"
+      ],
+    "plugins": [
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-runtime",
+        "react-hot-loader/babel"
+    ],
+    "env": {
+        "test": {
+            "plugins": ["@babel/plugin-proposal-object-rest-spread", "istanbul"]
+        }
     }
-  }
 }

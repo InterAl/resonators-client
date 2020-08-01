@@ -1,15 +1,15 @@
-import _ from 'lodash';
-import React, {Component} from 'react';
-import {actions} from '../actions/followerGroupsActions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {actions as navigationActions} from '../actions/navigationActions';
+import _ from "lodash";
+import React, { Component } from "react";
+import { actions } from "../actions/followerGroupsActions";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { actions as navigationActions } from "../actions/navigationActions";
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
-import SelectField from 'material-ui/SelectField';
-import EntityTable from './EntityTable';
-import {Link} from 'react-router-dom';
-import MoreOptionsMenu from './MoreOptionsMenu';
-import MenuItem from 'material-ui/MenuItem';
+import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
+import { NotInterested } from "@material-ui/icons";
+import EntityTable from "./EntityTable";
+import { Link } from "react-router-dom";
+import MoreOptionsMenu from "./MoreOptionsMenu";
 import './FollowerGroups.scss';
 
 class FollowerGroups extends Component {
@@ -17,7 +17,7 @@ class FollowerGroups extends Component {
         super();
 
         this.state = {
-            openedMoreOptionsMenuFollowerGroupId: null
+            openedMoreOptionsMenuFollowerGroupId: null,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -56,25 +56,26 @@ class FollowerGroups extends Component {
             return; //prevent stack overflow
 
         this.setState({
-            openedMoreOptionsMenuFollowerGroupId: followerGroupId
+            openedMoreOptionsMenuFollowerGroupId: followerGroupId,
         });
     }
 
     renderClinicFilter() {
-        return (
-            <SelectField
-                floatingLabelText='Clinic'
+        return [
+            <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
+            <Select
+                labelId="clinic-filter-label"
                 value={this.props.clinicIdFilter}
                 onChange={this.handleClinicFilterChange}
             >
-                <MenuItem value='all' primaryText='All' />
-                {
-                    this.props.clinics.map((clinic, i) => (
-                        <MenuItem value={clinic.id} primaryText={clinic.name} key={i} />
-                    ))
-                }
-            </SelectField>
-        );
+                <MenuItem value="all">All</MenuItem>
+                {this.props.clinics.map((clinic, i) => (
+                    <MenuItem value={clinic.id} key={i}>
+                        {clinic.name}
+                    </MenuItem>
+                ))}
+            </Select>,
+        ];
     }
 
     getHeader() {
@@ -84,12 +85,17 @@ class FollowerGroups extends Component {
     getRows() {
         return _.reduce(this.props.followerGroups, (acc, fg) => {
             const cols = [
-                <Link to={`/followerGroups/${fg.id}/resonators`}
+                <MuiLink
+                    to={`/followerGroups/${fg.id}/resonators`}
+                    component={Link}
                     style={{
-                        color: fg.frozen ? 'rgb(157, 155, 155)' : ''
+                        color: fg.frozen ? 'rgb(157, 155, 155)' : '',
+                        display: "flex",
+                        alignItems: "center",
                     }}>
-                    {fg.group_name}
-                </Link>,
+                    {fg.frozen && <NotInterested fontSize="small" style={{ marginRight: 5 }} />}
+                    <span>{fg.group_name}</span>
+                </MuiLink>,
                 fg.clinicName,
             ];
             acc[fg.id] = cols;
@@ -98,56 +104,40 @@ class FollowerGroups extends Component {
     }
 
     getToolbox() {
-        const moreOptions = [];
-
-        if (this.props.displayFrozen)
-            moreOptions.push('showFrozen');
-
         return {
-            // left: [
-            //     this.renderClinicFilter()
-            // ],
-            right: [
-                <MoreOptionsMenu multiple value={moreOptions}>
-                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()}
-                        primaryText={this.props.displayFrozen ? 'Hide Deactivated' : 'Show Deactivated'} value='showFrozen'/>
+            left: <Typography variant="h6">Your Follower Groups</Typography>,
+            right: (
+                <MoreOptionsMenu>
+                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
+                        {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
+                    </MenuItem>
                 </MoreOptionsMenu>
-            ]
+            ),
         };
     }
 
     renderMoreOptionsMenu() {
-        return followerGroupId => {
+        return (followerGroupId) => {
             const followerGroup = this.props.getFollowerGroup(followerGroupId);
 
             const freezeUnfreezeMenuItem = followerGroup.frozen ? (
-                <MenuItem
-                    primaryText='Activate'
-                    onTouchTap={() => this.props.unfreezeFollowerGroup(followerGroupId)}
-                />
+                <MenuItem onClick={() => this.props.unfreezeFollowerGroup(followerGroupId)}>Activate</MenuItem>
             ) : (
-                <MenuItem
-                    primaryText='Deactivate'
-                    onTouchTap={() => this.handleFreezeFollowerGroup(followerGroupId)}
-                />
+                <MenuItem onClick={() => this.props.handleFreezeFollowerGroup(followerGroupId)}>Deactivate</MenuItem>
             );
 
             return (
-                <MoreOptionsMenu
-                    className='more-options-btn'
-                >
-                    <MenuItem
-                        className='edit-followerGroup-btn'
-                        primaryText='Edit'
-                        onTouchTap={() => this.handleEditFollowerGroup(followerGroupId)}
-                    />
+                <MoreOptionsMenu className='more-options-btn' key="more-options">
+                    <MenuItem className="edit-followerGroup-btn" onClick={() => this.handleEditFollowerGroup(followerGroupId)}>
+                        Edit
+                    </MenuItem>
                     {freezeUnfreezeMenuItem}
                     <MenuItem
-                        className='delete-followerGroup-btn'
-                        primaryText='Delete'
-                        onTouchTap={() => this.handleRemoveFollowerGroup(followerGroupId)}
-                        style={{color: 'red'}}
-                    />
+                        className="delete-followerGroup-btn"
+                        onClick={() => this.handleRemoveFollowerGroup(followerGroupId)}
+                        style={{ color: "red" }}>
+                        Delete
+                    </MenuItem>
                 </MoreOptionsMenu>
             );
         }
@@ -166,7 +156,7 @@ class FollowerGroups extends Component {
                 toolbox={toolbox}
                 addButton={true}
                 rowActions={[moreOptionsMenu]}
-                className='followerGroups'
+                className="followerGroups"
                 onAdd={this.handleAddFollowerGroup}
             />
         );
@@ -188,7 +178,7 @@ function mapDispatchToProps(dispatch) {
         unfreezeFollowerGroup: actions.unfreeze,
         filterByClinicId: actions.filterByClinicId,
         toggleDisplayFrozen: actions.toggleDisplayFrozen,
-        showEditFollowerGroupModal: followerGroupId => navigationActions.showModal({
+        showEditFollowerGroupModal: (followerGroupId) => navigationActions.showModal({
             name: 'editFollowerGroup',
             props: {
                 followerGroupId,
@@ -201,7 +191,7 @@ function mapDispatchToProps(dispatch) {
                 editMode: false
             }
         }),
-        showDeleteFollowerGroupPrompt: followerGroupId => navigationActions.showModal({
+        showDeleteFollowerGroupPrompt: (followerGroupId) => navigationActions.showModal({
             name: 'deleteFollowerGroup',
             props: {
                 followerGroupId

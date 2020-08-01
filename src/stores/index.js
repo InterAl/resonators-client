@@ -1,28 +1,30 @@
 import { createStore, applyMiddleware } from 'redux';
-import { ConnectedRouter, routerMiddleware, push } from 'react-router-redux';
+import { routerMiddleware } from 'connected-react-router';
 import history from './history';
 import createSagaMiddleware from 'redux-saga';
-import {sagas, reducers} from '../sagas';
-import createReduxLogger from 'redux-logger';
+import { sagas, createReducers } from '../sagas';
+import logger from 'redux-logger';
 
 function reduxStore(initialState) {
   const sagaMiddleware = createSagaMiddleware();
-  const reduxLogger = createReduxLogger();
 
-  const store = createStore(reducers, initialState,
+  const store = createStore(
+    createReducers(history),
+    initialState,
     applyMiddleware(
-        sagaMiddleware,
-        reduxLogger,
-        routerMiddleware(history)
-    ));
+      routerMiddleware(history),
+      sagaMiddleware,
+      logger,
+    )
+  );
 
   sagaMiddleware.run(sagas);
 
   if (module.hot) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('../sagas', () => {
-      // We need to require for hot reloadign to work properly.
-      const nextReducer = require('../sagas').reducers;  // eslint-disable-line global-require
+      // We need to require for hot reloading to work properly.
+      const nextReducer = require('../sagas').createReducers(history);  // eslint-disable-line global-require
 
       store.replaceReducer(nextReducer);
     });

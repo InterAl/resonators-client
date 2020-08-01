@@ -42,8 +42,8 @@ class FreezeFollowerGroupPrompt extends Component {
 }
 
 function mapStateToProps(state) {
-    let {modalProps: {followerGroupId}} = navigationInfoSelector(state);
-    let followerGroup = _.find(state.followerGroups.followerGroups, f => f.id === followerGroupId);
+    const {modalProps: {followerGroupId}} = navigationInfoSelector(state);
+    const followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {
         followerGroup

@@ -1,16 +1,20 @@
-import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import React from "react";
+import { Button } from "@material-ui/core";
 
-export default ({style, onTouchTap}) => {
-    let onClickProp = onTouchTap ? {onTouchTap} : {};
+export default ({ style, onClick, className = "", ...more }) => {
+    let onClickProp = onClick ? { onClick } : {};
 
     return (
-        <RaisedButton
-            type={onTouchTap ? 'button' : 'submit'}
-            label='Next'
-            primary={true}
+        <Button
+            type={onClick ? "button" : "submit"}
+            color="primary"
+            variant="contained"
             style={style}
+            className={className}
             {...onClickProp}
-        />
+            {...more}
+        >
+            Next
+        </Button>
     );
 };
