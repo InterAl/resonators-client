@@ -80,7 +80,11 @@ class FollowerResonators extends Component {
     }
     getToolbox() {
         return {
-            left: <Typography variant="h6">{`${this.props.follower.user.name}'s Resonators`}</Typography>,
+            left: (
+                <Typography variant="h6">
+                    {`${this.props.follower && this.props.follower.user.name}'s Resonators`}
+                </Typography>
+            ),
             right: (
                 <MoreOptionsMenu>
                     <MenuItem onClick={this.toggleShowInactive}>
