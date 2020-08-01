@@ -100,9 +100,6 @@ class WebpackBaseConfig {
             include: this.srcPathAbsolute,
             loaders: [{
                 loader: 'babel-loader',
-                query: {
-                  presets: ['@babel/preset-env']
-                }
             }, {
                 loader: 'eslint-loader'
             }]
