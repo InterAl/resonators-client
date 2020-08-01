@@ -2,9 +2,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {actions} from '../actions/feedbackActions';
-import {Card, CardHeader, CardText} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import { Button, Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import styles from './ResonatorFeedback.cssmodule.scss';
 import React, {Component} from 'react';
 import classNames from 'classnames';
@@ -39,17 +37,16 @@ class ResonatorFeedback extends Component {
         }
 
         return (
-            <RaisedButton
+            <Button
                 className={classNames(styles.answerButton, {
                     [styles.selectedAnswer]: this.props.answered[q.id] === a.id
                 })}
-                buttonStyle={{textAlign: this.props.rtl ? 'right' : 'left'}}
                 key={idx}
-                label={label}
                 onClick={() => this.handleAnswerClick(q.id, a.id)}
-                style={{ marginBottom: 30 }}
-                primary
-            />
+                style={{ marginBottom: 30, textAlign: this.props.rtl ? 'right' : 'left' }}
+                color="primary">
+                {label}
+            </Button>
         );
     }
 
@@ -70,11 +67,11 @@ class ResonatorFeedback extends Component {
 
     renderBackButton() {
         return this.props.currentQuestionIdx > 1 && (
-            <FlatButton
+            <Button
                 style={{marginTop: 24}}
-                label={this.props.rtl ? 'חזור' : 'Back'}
-                onClick={this.props.showPreviousQuestion}
-            />
+                onClick={this.props.showPreviousQuestion}>
+                {this.props.rtl ? 'חזור' : 'Back'}
+            </Button>
         );
     }
 
@@ -94,10 +91,12 @@ class ResonatorFeedback extends Component {
                     }
                     title={this.renderQuestionDescription(question.description)}
                 />
-                <CardText>
+                <CardContent>
                     {_.map(answers, a => this.renderAnswer(question, a))}
+                </CardContent>
+                <CardActions>
                     {this.renderBackButton()}
-                </CardText>
+                </CardActions>
             </Card>
         );
     }
@@ -105,11 +104,12 @@ class ResonatorFeedback extends Component {
     renderDone() {
         return (
             <Card key='done'>
-                <CardText className={styles.done}>
+                <CardContent className={styles.done}>
                     Your feedback was successfully recorded.
-                    <br/>
+                </CardContent>
+                <CardActions>
                     {this.renderBackButton()}
-                </CardText>
+                </CardActions>
             </Card>
         );
     }

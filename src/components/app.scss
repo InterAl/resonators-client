@@ -2,22 +2,15 @@ body {
     margin: 0;
 }
 
-.mainContainer {
+.main-container {
     height: 100vh;
     display: flex;
-    flex-direction: column;
 }
 
 .screenWrapper {
-    flex: 1;
     display: flex;
-    margin-top: 66px;
-
-    @media (min-width: 767px) {
-        &.menuClosed { 
-            margin-left: 0;
-        }
-
-        margin-left: 200px;
-    }
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 20px;
+    flex: 1;
 }

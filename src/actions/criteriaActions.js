@@ -1,4 +1,4 @@
-import {ActionCreatorHelper} from 'saga-reducer-factory';
+import {ActionCreatorHelper} from '../saga-reducers-factory-patch';
 
 const actionsList = [
     'CREATE_CRITERION',

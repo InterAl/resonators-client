@@ -1,17 +1,16 @@
-import _ from 'lodash';
-import React, {Component} from 'react';
-import {actions} from '../actions/followersActions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {actions as navigationActions} from '../actions/navigationActions';
-import followersSelector from '../selectors/followersSelector';
-import SelectField from 'material-ui/SelectField';
-import Toggle from 'material-ui/Toggle';
-import EntityTable from './EntityTable';
-import {Link} from 'react-router-dom';
-import MoreOptionsMenu from './MoreOptionsMenu';
-import MenuItem from 'material-ui/MenuItem';
-import './Followers.scss';
+import _ from "lodash";
+import React, { Component } from "react";
+import { actions } from "../actions/followersActions";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { actions as navigationActions } from "../actions/navigationActions";
+import followersSelector from "../selectors/followersSelector";
+import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
+import { NotInterested } from "@material-ui/icons";
+import EntityTable from "./EntityTable";
+import { Link } from "react-router-dom";
+import MoreOptionsMenu from "./MoreOptionsMenu";
+import "./Followers.scss";
 
 class Followers extends Component {
     constructor() {
@@ -19,7 +18,7 @@ class Followers extends Component {
 
         this.state = {
             showEmails: false,
-            openedMoreOptionsMenuFollowerId: null
+            openedMoreOptionsMenuFollowerId: null,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -54,123 +53,113 @@ class Followers extends Component {
     }
 
     toggleMoreOptionsMenu(followerId) {
-        if (!followerId && !this.state.openedMoreOptionsMenuFollowerId)
-            return; //prevent stack overflow
+        if (!followerId && !this.state.openedMoreOptionsMenuFollowerId) return; //prevent stack overflow
 
         this.setState({
-            openedMoreOptionsMenuFollowerId: followerId
+            openedMoreOptionsMenuFollowerId: followerId,
         });
     }
 
     toggleShowEmails() {
-        this.setState({showEmails: !this.state.showEmails});
+        this.setState({ showEmails: !this.state.showEmails });
     }
 
     renderClinicFilter() {
-        return (
-            <SelectField
-                floatingLabelText='Clinic'
+        return [
+            <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
+            <Select
+                labelId="clinic-filter-label"
                 value={this.props.clinicIdFilter}
                 onChange={this.handleClinicFilterChange}
             >
-                <MenuItem value='all' primaryText='All' />
-                {
-                    this.props.clinics.map((clinic, i) => (
-                        <MenuItem value={clinic.id} primaryText={clinic.name} key={i} />
-                    ))
-                }
-            </SelectField>
-        );
+                <MenuItem value="all">All</MenuItem>
+                {this.props.clinics.map((clinic, i) => (
+                    <MenuItem value={clinic.id} key={i}>
+                        {clinic.name}
+                    </MenuItem>
+                ))}
+            </Select>,
+        ];
     }
 
     getHeader() {
         let header = [];
-        header.push('Name');
-        this.state.showEmails && header.push('Email');
-        header.push('Clinic');
+        header.push("Name");
+        this.state.showEmails && header.push("Email");
+        header.push("Clinic");
         return header;
     }
 
     getRows() {
-        return _.reduce(this.props.followers, (acc, f) => {
-            let cols = [];
-            cols.push(
-                <Link
-                    to={`/followers/${f.id}/resonators`}
-                    style={{
-                        color: f.frozen ? 'rgb(157, 155, 155)' : ''
-                    }}
-                >
-                    {f.user.name}
-                </Link>
-            );
-            this.state.showEmails && cols.push(f.user.email);
-            cols.push(f.clinicName);
-            acc[f.id] = cols;
-            return acc;
-        }, {});
+        return _.reduce(
+            this.props.followers,
+            (acc, f) => {
+                let cols = [];
+                cols.push(
+                    <MuiLink
+                        to={`/followers/${f.id}/resonators`}
+                        component={Link}
+                        style={{
+                            color: f.frozen ? "rgb(157, 155, 155)" : "",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
+                        <span>{f.user.name}</span>
+                    </MuiLink>
+                );
+                this.state.showEmails && cols.push(f.user.email);
+                cols.push(f.clinicName);
+                acc[f.id] = cols;
+                return acc;
+            },
+            {}
+        );
     }
 
     getToolbox() {
-        const moreOptions = [];
-
-        if (this.state.showEmails)
-            moreOptions.push('showEmails');
-
-        if (this.props.displayFrozen)
-            moreOptions.push('showFrozen');
-
         return {
-            // left: [
-            //     this.renderClinicFilter()
-            // ],
-            right: [
-                <MoreOptionsMenu
-                    multiple
-                    value={moreOptions}
-                >
-                    <MenuItem onTouchTap={() => this.toggleShowEmails()} primaryText='Show Emails' value='showEmails'/>
-                    <MenuItem onTouchTap={() => this.props.toggleDisplayFrozen()} primaryText='Show Deactivated' value='showFrozen'/>
+            left: <Typography variant="h6">Your Followers</Typography>,
+            right: (
+                <MoreOptionsMenu>
+                    <MenuItem onClick={() => this.toggleShowEmails()}>
+                        {this.state.showEmails ? "Hide Emails" : "Show Emails"}
+                    </MenuItem>
+                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
+                        {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
+                    </MenuItem>
                 </MoreOptionsMenu>
-            ]
+            ),
         };
     }
 
     renderMoreOptionsMenu() {
-        return followerId => {
+        return (followerId) => {
             const follower = this.props.getFollower(followerId);
 
             const freezeUnfreezeMenuItem = follower.frozen ? (
-                <MenuItem
-                    primaryText='Activate'
-                    onTouchTap={() => this.props.unfreezeFollower(followerId)}
-                />
+                <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
             ) : (
-                <MenuItem
-                    primaryText='Deactivate'
-                    onTouchTap={() => this.handleFreezeFollower(followerId)}
-                />
+                <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
             );
 
             return (
-                <MoreOptionsMenu
-                    className='more-options-btn'
-                >
-                    <MenuItem
-                        className='edit-follower-btn'
-                        primaryText='Edit'
-                        onTouchTap={() => this.handleEditFollower(followerId)}
-                    />
+                <MoreOptionsMenu className="more-options-btn" key="more-options">
+                    <MenuItem className="edit-follower-btn" onClick={() => this.handleEditFollower(followerId)}>
+                        Edit
+                    </MenuItem>
                     {freezeUnfreezeMenuItem}
                     <MenuItem
-                        className='delete-follower-btn'
-                        primaryText='Delete'
-                        onTouchTap={() => this.handleRemoveFollower(followerId)}
-                        style={{color: 'red'}}
-                    />
+                        className="delete-follower-btn"
+                        onClick={() => this.handleRemoveFollower(followerId)}
+                        style={{ color: "red" }}
+                    >
+                        Delete
+                    </MenuItem>
                 </MoreOptionsMenu>
             );
-        }
+        };
     }
 
     render() {
@@ -186,7 +175,7 @@ class Followers extends Component {
                 toolbox={toolbox}
                 addButton={true}
                 rowActions={[moreOptionsMenu]}
-                className='followers'
+                className="followers"
                 onAdd={this.handleAddFollower}
             />
         );
@@ -198,43 +187,50 @@ function mapStateToProps(state) {
 
     return {
         ...followersData,
-        getFollower: followerId => _.find(followersData.followers, f => f.id === followerId)
+        getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId),
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        editFollower: actions.edit,
-        unfreezeFollower: actions.unfreeze,
-        filterByClinicId: actions.filterByClinicId,
-        toggleDisplayFrozen: actions.toggleDisplayFrozen,
-        showEditFollowerModal: followerId => navigationActions.showModal({
-            name: 'editFollower',
-            props: {
-                followerId,
-                editMode: true
-            }
-        }),
-        showCreateFollowerModal: () => navigationActions.showModal({
-            name: 'editFollower',
-            props: {
-                editMode: false
-            }
-        }),
-        showDeleteFollowerPrompt: followerId => navigationActions.showModal({
-            name: 'deleteFollower',
-            props: {
-                followerId
-            }
-        }),
-        showFreezeFollowerPrompt: followerId => navigationActions.showModal({
-            name: 'freezeFollower',
-            props: {
-                followerId
-            }
-        }),
-        selectFollower: actions.selectFollower,
-    }, dispatch);
+    return bindActionCreators(
+        {
+            editFollower: actions.edit,
+            unfreezeFollower: actions.unfreeze,
+            filterByClinicId: actions.filterByClinicId,
+            toggleDisplayFrozen: actions.toggleDisplayFrozen,
+            showEditFollowerModal: (followerId) =>
+                navigationActions.showModal({
+                    name: "editFollower",
+                    props: {
+                        followerId,
+                        editMode: true,
+                    },
+                }),
+            showCreateFollowerModal: () =>
+                navigationActions.showModal({
+                    name: "editFollower",
+                    props: {
+                        editMode: false,
+                    },
+                }),
+            showDeleteFollowerPrompt: (followerId) =>
+                navigationActions.showModal({
+                    name: "deleteFollower",
+                    props: {
+                        followerId,
+                    },
+                }),
+            showFreezeFollowerPrompt: (followerId) =>
+                navigationActions.showModal({
+                    name: "freezeFollower",
+                    props: {
+                        followerId,
+                    },
+                }),
+            selectFollower: actions.selectFollower,
+        },
+        dispatch
+    );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(Followers);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(Followers);
