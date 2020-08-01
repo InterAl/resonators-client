@@ -50,6 +50,7 @@ class CriteriaCreation extends Component {
         return (
             <MuiTextField
                 select
+                fullWidth
                 onChange={(event) => onChange(event.target.value)}
                 inputProps={{value}}
                 error={touched && error}
