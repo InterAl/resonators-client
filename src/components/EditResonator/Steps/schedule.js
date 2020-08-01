@@ -118,7 +118,6 @@ class EditResonatorSchedule extends Component {
                             />
                         }
                         label="Send only once"
-                        style={{ marginTop: 8 }}
                     />
                 )}
             />
@@ -128,9 +127,9 @@ class EditResonatorSchedule extends Component {
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "column" }}>
+                {this.renderOneOff()}
                 {this.renderDays()}
                 {this.renderTimeSelector()}
-                {this.renderOneOff()}
                 {!this.props.editMode && (
                     <div className="navButtons">
                         <BackButton onClick={this.props.onBack} style={{ marginRight: 8 }} />
