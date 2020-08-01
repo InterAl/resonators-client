@@ -5,16 +5,12 @@
         text-align: right !important;
     }
     
-    a {
-        cursor: pointer;
-    }
-
     .add-btn {
         position: fixed;
         bottom: 30px;
 
         @media (min-width: 0px)  {
-            right: 5px;
+            right: 15px;
         }
         @media (min-width: 767px)  {
             right: 88px;
