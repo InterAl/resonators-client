@@ -1,15 +1,25 @@
 import React from "react";
+import { Tooltip } from "@material-ui/core";
+import { Schedule } from "@material-ui/icons";
 import { KeyboardTimePicker } from "@material-ui/pickers";
 
-export default ({ input: { onChange, value }, label, ...custom }) => (
+export default ({ input: { onChange, onFocus, onBlur, value }, meta: { error, touched }, ...rest }) => (
     <KeyboardTimePicker
-        autoOk={true}
         ampm={false}
-        minutesStep={5}
-        value={value || new Date()}
-        label={label}
-        onChange={onChange}
+        autoOk={true}
         format="HH:mm"
-        {...custom}
+        minutesStep={5}
+        onBlur={() => onBlur(value)}
+        onFocus={onFocus}
+        onChange={onChange}
+        value={value || null}
+        helperText={touched && error}
+        error={Boolean(touched && error)}
+        keyboardIcon={
+            <Tooltip title="Open picker">
+                <Schedule />
+            </Tooltip>
+        }
+        {...rest}
     />
 );

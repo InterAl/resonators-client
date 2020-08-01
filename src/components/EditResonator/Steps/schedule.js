@@ -43,8 +43,9 @@ class EditResonatorSchedule extends Component {
     handleSelectTime(dateTime) {
         const now = moment();
         if (!dateTime) {
-            dateTime = now;
+            return null;
         }
+        dateTime = moment(dateTime);
         if (dateTime <= now) {
             // So the server won't immediately send it
             dateTime = now.add(1, "d").set({ hour: dateTime.get("hour"), minute: dateTime.get("minute") });
@@ -171,7 +172,11 @@ EditResonatorSchedule = StepBase({
             });
         }
 
-        if (formData.time && !formData.time.valueOf()) errors.time = "Invalid time";
+        if (!formData.time) {
+            errors.time = "Required";
+        } else if (!formData.time.valueOf()) {
+            errors.time = "Invalid time";
+        }
 
         if (![0, 1, 2, 3, 4, 5, 6].some((day) => formData[`day${day}`])) {
             // TODO: This is a temporary patch to make the Next button disabled.
