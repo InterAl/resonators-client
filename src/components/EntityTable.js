@@ -71,8 +71,8 @@ export default class EntityTable extends Component {
         switch (action) {
             case "edit":
                 return (
-                    <Tooltip title="Edit">
-                        <IconButton key={action} onClick={() => this.props.onEdit(id)}>
+                    <Tooltip title="Edit" key={action}>
+                        <IconButton onClick={() => this.props.onEdit(id)}>
                             <Edit />
                         </IconButton>
                     </Tooltip>
@@ -80,8 +80,8 @@ export default class EntityTable extends Component {
 
             case "remove":
                 return (
-                    <Tooltip title="Remove">
-                        <IconButton key={action} onClick={() => this.props.onRemove(id)}>
+                    <Tooltip title="Remove" key={action}>
+                        <IconButton onClick={() => this.props.onRemove(id)}>
                             <Delete />
                         </IconButton>
                     </Tooltip>
@@ -89,8 +89,8 @@ export default class EntityTable extends Component {
 
             case "show":
                 return (
-                    <Tooltip title="Preview">
-                        <IconButton key={action} onClick={() => this.props.onShow(id)}>
+                    <Tooltip title="Preview" key={action}>
+                        <IconButton onClick={() => this.props.onShow(id)}>
                             <RemoveRedEye />
                         </IconButton>
                     </Tooltip>
