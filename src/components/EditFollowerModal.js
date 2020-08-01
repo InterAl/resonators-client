@@ -119,14 +119,14 @@ let Form = reduxForm({
 })(EditFollowerModal);
 
 function mapStateToProps(state) {
-    let {
+    const {
         modalProps: { followerId, editMode },
     } = navigationInfoSelector(state);
-    let follower = _.find(state.followers.followers, (f) => f.id === followerId);
-    let clinics = state.clinics.clinics;
-    let current_clinic_id = state.leaders.leaders.current_clinic_id;
+    const follower = _.find(state.followers.followers, (f) => f.id === followerId);
+    const clinics = state.clinics.clinics;
+    const current_clinic_id = state.leaders.leaders.current_clinic_id;
 
-    let ret = {
+    const ret = {
         follower,
         clinics,
         editMode,

@@ -40,7 +40,6 @@ class EditResonatorCriteria extends Component {
     }
 
     render() {
-        const selectedCriteria = this.props.formData.criteria || [];
         return (
             <div>
                 <ResonatorCriteriaSelection

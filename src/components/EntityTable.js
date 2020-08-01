@@ -110,9 +110,7 @@ export default class EntityTable extends Component {
 
                             {this.props.rowActions && (
                                 <TableCell key="actions" className="editColumn">
-                                    {this.props.rowActions.map((action) => {
-                                        return this.renderAction(action, id);
-                                    })}
+                                    {this.props.rowActions.map((action) => this.renderAction(action, id))}
                                 </TableCell>
                             )}
                         </TableRow>

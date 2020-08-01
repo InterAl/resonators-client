@@ -52,7 +52,7 @@ class FollowerResonators extends Component {
                         direction: dir,
                         margin: "0 15px",
                         textAlign: dir === "rtl" ? "right" : "left",
-                        color: resonator.pop_email === false ? "grey" : "",
+                        color: resonator.pop_email ? "" : "grey",
                     }}
                 >
                     <Typography style={{ fontWeight: "bold" }}>{resonator.title}</Typography>

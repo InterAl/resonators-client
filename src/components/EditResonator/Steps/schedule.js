@@ -24,10 +24,6 @@ class EditResonatorSchedule extends Component {
         this.handleCreate = this.handleCreate.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleSelectTime = this.handleSelectTime.bind(this);
-
-        this.state = {
-            bla: new Date(),
-        };
     }
 
     componentWillReceiveProps(nextProps) {
