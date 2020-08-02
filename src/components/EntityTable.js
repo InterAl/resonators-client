@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Edit, Delete, Add, RemoveRedEye } from "@material-ui/icons";
+import React, { Component } from "react";
+import { Edit, Delete, Add } from "@material-ui/icons";
 import {
     IconButton,
     Fab,
@@ -27,7 +27,6 @@ export default class EntityTable extends Component {
         onAdd: PropTypes.func,
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
-        onShow: PropTypes.func,
         className: PropTypes.string,
     };
 
@@ -81,15 +80,6 @@ export default class EntityTable extends Component {
                     <Tooltip title="Remove" key={action}>
                         <IconButton onClick={() => this.props.onRemove(id)}>
                             <Delete />
-                        </IconButton>
-                    </Tooltip>
-                );
-
-            case "show":
-                return (
-                    <Tooltip title="Preview" key={action}>
-                        <IconButton onClick={() => this.props.onShow(id)}>
-                            <RemoveRedEye />
                         </IconButton>
                     </Tooltip>
                 );

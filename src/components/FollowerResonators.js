@@ -11,7 +11,8 @@ import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
-import { MenuItem, Typography } from "@material-ui/core";
+import { MenuItem, Typography, Tooltip, IconButton } from "@material-ui/core";
+import { RemoveRedEye } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -120,34 +121,38 @@ class FollowerResonators extends Component {
                 <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
             );
 
-            return (
-                <OverflowMenu key="more" className="more-options-btn">
-                    {freezeUnfreezeMenuItem}
-                </OverflowMenu>
-            );
+            return <OverflowMenu key="more">{freezeUnfreezeMenuItem}</OverflowMenu>;
         };
     }
 
+    renderPreviewAction(resonatorId) {
+        return (
+            <Tooltip title="Preview" key="preview">
+                <IconButton onClick={() => this.props.push(this.getPreviewRoute(resonatorId))}>
+                    <RemoveRedEye />
+                </IconButton>
+            </Tooltip>
+        );
+    }
+
+    getPreviewRoute(resonatorId) {
+        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/show`;
+    }
+
     render() {
-        let rows = this.getRows();
-        let header = this.getHeader();
-        let addRoute = `/followers/${this.props.match.params.followerId}/resonators/new`;
-        let getEditRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
-        let showRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/show`;
-        let toolbox = this.getToolbox();
-        let overflowMenu = this.renderOverflowMenu();
+        const addRoute = `/followers/${this.props.match.params.followerId}/resonators/new`;
+        const getEditRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
 
         return (
             <EntityTable
                 onAdd={() => this.props.push(addRoute)}
                 onEdit={(id) => this.props.push(getEditRoute(id))}
                 onRemove={this.handleRemoveResonator}
-                onShow={(id) => this.props.push(showRoute(id))}
                 addButton={true}
-                rowActions={["show", "edit", "remove", overflowMenu]}
-                header={header}
-                toolbox={toolbox}
-                rows={rows}
+                rowActions={[this.renderPreviewAction.bind(this), "edit", "remove", this.renderOverflowMenu()]}
+                header={this.getHeader()}
+                toolbox={this.getToolbox()}
+                rows={this.getRows()}
             />
         );
     }
