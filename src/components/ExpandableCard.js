@@ -21,7 +21,7 @@ class ExpandableCard extends Component {
     };
 
     static defaultProps = {
-        width: 400,
+        width: "max-content",
         margin: '0 auto',
         style: {},
         defaultCardData: {},
