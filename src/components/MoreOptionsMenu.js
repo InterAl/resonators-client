@@ -1,51 +1,28 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { IconButton, Menu } from '@material-ui/core';
-import { MoreVert } from '@material-ui/icons';
+import React, { useState } from "react";
+import { IconButton, Menu } from "@material-ui/core";
+import { MoreVert, MoreHoriz } from "@material-ui/icons";
 
-class MoreOptionsMenu extends Component {
-    static propTypes = {
-        onBlur: PropTypes.func,
-        className: PropTypes.string
-    }
+export default ({ horizontal = false, keepOpen = false, children = [], ...rest }) => {
+    const [menuAnchor, setMenuAnchor] = useState(null);
 
-    static defaultProps = {
-        onBlur: _.noop
-    }
+    const openMenu = (event) => setMenuAnchor(event.currentTarget);
+    const closeMenu = () => setMenuAnchor(null);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            menuAnchor: null
-        }
-    }
+    const overflowIcon = horizontal ? <MoreHoriz /> : <MoreVert />;
 
-    openMenu(event) {
-        this.setState({ menuAnchor: event.currentTarget })
-    }
-
-    closeMenu(event) {
-        this.setState({ menuAnchor: null })
-    }
-
-    render() {
-        return (
-            <span>
-                <IconButton onClick={this.openMenu.bind(this)}>
-                    <MoreVert />
-                </IconButton>
-                <Menu
-                    keepMounted
-                    anchorEl={this.state.menuAnchor}
-                    open={Boolean(this.state.menuAnchor)}
-                    onClose={this.closeMenu.bind(this)}
-                    {..._.omit(this.props, 'children')}>
-                    {this.props.children}
-                </Menu>
-            </span>
-        );
-    }
-}
-
-export default MoreOptionsMenu;
+    return (
+        <span>
+            <IconButton onClick={openMenu}>{overflowIcon}</IconButton>
+            <Menu
+                keepMounted
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={closeMenu}
+                onClick={keepOpen ? null : closeMenu}
+                {...rest}
+            >
+                {children}
+            </Menu>
+        </span>
+    );
+};
