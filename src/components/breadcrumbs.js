@@ -1,46 +1,47 @@
-import React from "react";
 import _ from "lodash";
+import React from "react";
+import { connect } from "react-redux";
 import { matchPath } from "react-router";
 import { Link } from "react-router-dom";
-import isMobile from "./isMobile";
 import followerSelector from "../selectors/followerSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
 import criterionSelector from "../selectors/criterionSelector";
-import { Breadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
+import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography, useMediaQuery, useTheme } from "@material-ui/core";
 import { NavigateNext } from "@material-ui/icons";
 
-export default function renderBreadcrumbs(state) {
-    let routeStack = getRouteStack(state);
-
-    routeStack = routeStack.length > 1 ? routeStack.slice(1) : routeStack;
-
-    const parts = _.flatMap(routeStack, (route, index) => {
-        let link = route.stubRoute ? _.get(routeStack, `[${index + 1}].route`) : route.route;
-
-        return isMobile() && route.stubRoute ? null : (
-            <MuiLink color="inherit" key={index} className="breadcrumb-part" to={link || ""} component={Link}>
-                <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
-            </MuiLink>
-        );
-    });
+function Breadcrumbs(props) {
+    const hideStubs = useMediaQuery(useTheme().breakpoints.down("sm"));
 
     return (
-        <Breadcrumbs style={{ flexGrow: 1, color: "inherit" }} separator={<NavigateNext />}>
-            {parts}
-        </Breadcrumbs>
+        <MuiBreadcrumbs style={{ flexGrow: 1, color: "inherit" }} separator={<NavigateNext />}>
+            {_.flatMap(props.routeStack, (route, index) =>
+                hideStubs && route.stubRoute ? null : (
+                    <MuiLink key={index} color="inherit" to={getLinkUri(route, index, props.routeStack)} component={Link}>
+                        <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
+                    </MuiLink>
+                )
+            )}
+        </MuiBreadcrumbs>
     );
+}
+
+function getLinkUri(route, index, routeStack) {
+    return (route.stubRoute ? _.get(routeStack, `[${index + 1}].route`) : route.route) || "";
 }
 
 function getRouteStack(state) {
     const { pathname } = location;
 
-    const routeStack = resolveRouteStack(pathname, "", tree);
+    let routeStack = resolveRouteStack(pathname, "", tree);
 
-    return routeStack.map((r) => ({
+    routeStack = routeStack.map((r) => ({
         route: r.match.url,
         stubRoute: r.stubRoute,
         title: r.title(state),
     }));
+
+    routeStack = routeStack.length > 1 ? routeStack.slice(1) : routeStack;
+    return routeStack;
 }
 
 function resolveRouteStack(fullPathname, pathname, tree) {
@@ -180,3 +181,5 @@ const tree = {
         },
     },
 };
+
+export default connect((state) => ({ routeStack: getRouteStack(state) }), null)(Breadcrumbs);
