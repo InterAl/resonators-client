@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { NotInterested } from "@material-ui/icons";
+import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
 import EntityTable, { rowAction } from "./EntityTable";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
@@ -106,7 +106,7 @@ class Followers extends Component {
                             alignItems: "center",
                         }}
                     >
-                        {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
+                        {f.frozen ? <PauseCircleFilled fontSize="small" style={{ marginRight: 5 }} /> : null}
                         <span>{f.user.name}</span>
                     </MuiLink>
                 );
@@ -158,11 +158,13 @@ class Followers extends Component {
         return [
             rowAction({
                 title: "Activate",
+                icon: <PlayCircleFilled />,
                 onClick: this.props.unfreezeFollower,
                 isAvailable: (followerId) => this.props.getFollower(followerId).frozen,
             }),
             rowAction({
                 title: "Deactivate",
+                icon: <PauseCircleFilled />,
                 onClick: this.handleFreezeFollower,
                 isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
             }),

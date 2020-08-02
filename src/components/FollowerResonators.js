@@ -12,7 +12,7 @@ import * as utils from "./utils";
 // import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
 import { MenuItem, Typography } from "@material-ui/core";
-import { RemoveRedEye } from "@material-ui/icons";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -143,11 +143,13 @@ class FollowerResonators extends Component {
     getExtraRowActions() {
         return [
             rowAction({
+                icon: <PauseCircleFilled />,
                 title: "Deactivate",
                 onClick: this.handleDeactivateResonator,
                 isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
             }),
             rowAction({
+                icon: <PlayCircleFilled />,
                 title: "Activate",
                 onClick: this.handleActivateResonator,
                 isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
