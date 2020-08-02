@@ -2,9 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Menu } from "@material-ui/icons";
 import { bindActionCreators } from "redux";
-import { AppBar, Toolbar, IconButton } from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Hidden } from "@material-ui/core";
 
-import isMobile from "./isMobile";
 import HeaderLogo from "./HeaderLogo";
 import Breadcrumbs from "./Breadcrumbs";
 import { actions } from "../actions/menuActions";
@@ -20,7 +19,9 @@ function TopBar(props) {
                     </IconButton>
                 ) : null}
                 <Breadcrumbs />
-                {isMobile() ? null : <HeaderLogo />}
+                <Hidden xsDown>
+                    <HeaderLogo />
+                </Hidden>
             </Toolbar>
         </AppBar>
     );
