@@ -10,12 +10,13 @@ import NoMatch from './NoMatch';
 import Visitor from './Visitor';
 import FollowerResonators from './FollowerResonators';
 import FollowerGroupResonators from './FollowerGroupResonators';
+import FollowerGroupMembers from './FollowerGroupMembers';
 import EditResonator from './EditResonator';
 import ShowResonator from './ShowResonator';
 import ResonatorStats from './ResonatorStats';
 import CriteriaList from './CriteriaList';
 import CriteriaCreation from './CriteriaCreation/index';
-import ResetPasword from './ResetPassword';
+import ResetPassword from './ResetPassword';
 import ResonatorFeedback from './ResonatorFeedback';
 import HomePage from './HomePage';
 
@@ -39,10 +40,11 @@ class AppComponent extends React.Component {
                 <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/edit" component={EditResonator}/>
                 <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
                 <Route path="/followerGroups/:followerGroupId/resonators/:resonatorId" component={ShowResonator}/>
+                <Route path="/followerGroups/:followerGroupId/members" component={FollowerGroupMembers}/>
                 <Route path="/followerGroups/:followerGroupId" component={FollowerGroupResonators}/>
                 <Route exact path="/followerGroups" component={FollowerGroups}/>
 
-                <Route exact path="/resetPassword" component={ResetPasword} />
+                <Route exact path="/resetPassword" component={ResetPassword} />
                 <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
                 <Route exact path="/clinics" component={Clinics} />
                 <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />

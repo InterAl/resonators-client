@@ -6,6 +6,7 @@ import { types as resonatorTypes } from '../actions/resonatorActions';
 import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerGroupApi from '../api/followerGroup';
 
+
 const followerGroupsSelector = state => state.followerGroups.followerGroups;
 
 const { handle, updateState, saga, reducer } = SagaReducerFactory({
@@ -21,7 +22,7 @@ handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
     const followerGroups = yield call(followerGroupApi.get);
 
     yield put(updateState({
-        followerGroups
+        followerGroups,
     }));
 });
 
@@ -34,7 +35,7 @@ handle(types.CREATE, function* (sagaParams, { payload }) {
 handle(types.DELETE, function* (sagaParams, { payload }) {
     yield call(followerGroupApi.deleteFollowerGroup, payload);
     const followerGroups = yield select(followerGroupsSelector);
-    const followerGroupsWithoutDeleted = _.reject(followerGroups, (f) => f.id === payload);
+    const followerGroupsWithoutDeleted = _.reject(followerGroups, (gf) => fg.id === payload);
 
     yield put(updateState({
         followerGroups: followerGroupsWithoutDeleted
@@ -87,6 +88,10 @@ handle(types.UPDATE, function* (sagaParams, { payload }) {
     yield updateStateWithNewFollowerGroup(updatedFollowerGroup);
 });
 
+handle(types.FETCH_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
+    yield fetchFollowerGroupMembers(payload);
+});
+
 handle(types.FETCH_FOLLOWER_GROUP_RESONATORS, function* (sagaParams, { payload }) {
     yield fetchFollowerGroupResonators(payload);
 });
@@ -98,9 +103,9 @@ handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
 
     const followerGroups = yield select(followerGroupsSelector);
 
-    const followerGroup = _.find(followerGroups, (f) => f.id === follower_group_id);
+    const followerGroup = _.find(followerGroups, (fg) => fg.id === follower_group_id);
 
-    const updatedFollowerGroups = _.reject(followerGroups, (f) => f.id === follower_group_id)
+    const updatedFollowerGroups = _.reject(followerGroups, (fg) => fg.id === follower_group_id)
         .concat({
             ...followerGroup,
             resonators: _.reject(followerGroup.resonators,
@@ -132,6 +137,26 @@ export function* waitForFollowerGroups() {
     } while (followerGroups.length === 0)
 }
 
+export function* fetchFollowerGroupMembers(followerGroupId) {
+    let followerGroup = yield getFollowerGroup(followerGroupId);
+
+    if (!followerGroup)
+        yield waitForFollowerGroups();
+
+    followerGroup = yield getFollowerGroup(followerGroupId);
+    console.log({members: followerGroup.members});
+    if (!followerGroup.members) {
+        let followerGroupMembers = yield call(followerGroupApi.getGroupMembers, followerGroupId);
+
+        let patchedFollowerGroup = {
+            ...followerGroup,
+            members: followerGroupMembers
+        };
+
+        yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
+    }
+}
+
 export function* fetchFollowerGroupResonators(followerGroupId) {
     let followerGroup = yield getFollowerGroup(followerGroupId);
 
@@ -141,7 +166,7 @@ export function* fetchFollowerGroupResonators(followerGroupId) {
     followerGroup = yield getFollowerGroup(followerGroupId);
 
     if (!followerGroup.resonators) {
-        let followerGroupResonators = yield call(followerGroupApi.getResonators, followerGroupId);
+        let followerGroupResonators = yield call(followerGroupApi.getGroupResonators, followerGroupId);
 
         let patchedFollowerGroup = {
             ...followerGroup,
@@ -155,7 +180,7 @@ export function* fetchFollowerGroupResonators(followerGroupId) {
 function* updateStateWithNewFollowerGroup(followerGroup) {
     let lastFollowerGroups = yield select(followerGroupsSelector);
 
-    let followerGroups = _.reject(lastFollowerGroups, f => f.id === followerGroup.id)
+    let followerGroups = _.reject(lastFollowerGroups, fg => fg.id === followerGroup.id)
         .concat(followerGroup);
 
     yield put(updateState({
@@ -166,14 +191,14 @@ function* updateStateWithNewFollowerGroup(followerGroup) {
 export function* updateResonator(followerGroupId, resonator) {
     let followerGroups = yield select(followerGroupsSelector);
 
-    let followerGroup = _.find(followerGroups, f => f.id === followerGroupId);
+    let followerGroup = _.find(followerGroups, fg => fg.id === followerGroupId);
 
     let updatedResonators = _.reject(followerGroup.resonators, r => r.id === resonator.id)
         .concat(resonator);
 
     let updatedFollowerGroup = { ...followerGroup, resonators: updatedResonators };
 
-    let updatedFollowerGroups = _.reject(followerGroups, f => f.id === followerGroupId)
+    let updatedFollowerGroups = _.reject(followerGroups, fg => fg.id === followerGroupId)
         .concat(updatedFollowerGroup);
 
     yield put(updateState({
@@ -183,7 +208,7 @@ export function* updateResonator(followerGroupId, resonator) {
 
 function* getFollowerGroup(id) {
     let followerGroups = yield select(followerGroupsSelector);
-    return _.find(followerGroups, f => f.id === id);
+    return _.find(followerGroups, fg => fg.id === id);
 }
 
 export default { saga, reducer };

@@ -40,3 +40,7 @@ export function deleteGroupResonator(followerGroupId, resonatorId) {
 export function getGroupResonators(followerGroupId) {
     return fetcher(`/leader_followerGroups/${followerGroupId}/reminders.json`);
 }
+
+export function getGroupMembers(followerGroupId) {
+    return fetcher(`/leader_followerGroups/${followerGroupId}/followers.json`);
+}

@@ -10,6 +10,7 @@ import { NotInterested } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
 import MoreOptionsMenu from "./MoreOptionsMenu";
+import { push } from "connected-react-router";
 import './FollowerGroups.scss';
 
 class FollowerGroups extends Component {
@@ -25,6 +26,7 @@ class FollowerGroups extends Component {
         this.handleEditFollowerGroup = this.handleEditFollowerGroup.bind(this);
         this.handleRemoveFollowerGroup = this.handleRemoveFollowerGroup.bind(this);
         this.handleAddFollowerGroup = this.handleAddFollowerGroup.bind(this);
+        this.handleManageFollowers = this.handleManageFollowers.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -39,16 +41,20 @@ class FollowerGroups extends Component {
         this.props.showCreateFollowerGroupModal();
     }
 
-    handleEditFollowerGroup(id) {
-        this.props.showEditFollowerGroupModal(id);
+    handleManageFollowers(followerGroupId) {
+        this.props.push(`/followerGroups/${followerGroupId}/members`);
     }
 
-    handleRemoveFollowerGroup(id) {
-        this.props.showDeleteFollowerGroupPrompt(id);
+    handleEditFollowerGroup(followerGroupId) {
+        this.props.showEditFollowerGroupModal(followerGroupId);
     }
 
-    handleFreezeFollowerGroup(id) {
-        this.props.showFreezeFollowerGroupPrompt(id);
+    handleRemoveFollowerGroup(followerGroupId) {
+        this.props.showDeleteFollowerGroupPrompt(followerGroupId);
+    }
+
+    handleFreezeFollowerGroup(followerGroupId) {
+        this.props.showFreezeFollowerGroupPrompt(followerGroupId);
     }
 
     toggleMoreOptionsMenu(followerGroupId) {
@@ -155,8 +161,9 @@ class FollowerGroups extends Component {
                 rows={rows}
                 toolbox={toolbox}
                 addButton={true}
-                rowActions={[moreOptionsMenu]}
-                className="followerGroups"
+                rowActions={['manageFollowers', moreOptionsMenu]}
+                className='followerGroups'
+                onManageFollowers={this.handleManageFollowers}
                 onAdd={this.handleAddFollowerGroup}
             />
         );
@@ -204,6 +211,7 @@ function mapDispatchToProps(dispatch) {
             }
         }),
         selectFollowerGroup: actions.selectFollowerGroup,
+        push
     }, dispatch);
 }
 

@@ -25,11 +25,13 @@ class FollowerGroupResonators extends Component {
     }
 
     componentDidMount() {
-        if (this.props.follower) this.props.fetchFollowerResonators(this.props.follower.id);
+        if (this.props.followerGroup)
+            this.props.fetchFollowerGroupResonators(this.props.followerGroup.id);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.follower) nextProps.fetchFollowerResonators(nextProps.follower.id);
+        if (nextProps.followerGroup)
+            nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
     }
 
     getHeader() {
@@ -47,11 +49,11 @@ class FollowerGroupResonators extends Component {
             <div style={{ display: "flex", alignItems: "center", filter: resonator.pop_email ? "" : "grayscale(1)" }}>
                 <ResonatorImage width={80} height={80} resonator={resonator} />
                 <div style={{
-                        direction: dir,
-                        margin: "0 15px",
-                        textAlign: dir === "rtl" ? "right" : "left",
-                        color: resonator.pop_email ? "" : "grey",
-                    }}>
+                    direction: dir,
+                    margin: "0 15px",
+                    textAlign: dir === "rtl" ? "right" : "left",
+                    color: resonator.pop_email ? "" : "grey",
+                }}>
                     <Typography style={{ fontWeight: "bold" }}>{resonator.title}</Typography>
                     <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
                 </div>
@@ -64,7 +66,8 @@ class FollowerGroupResonators extends Component {
         return _.reduce(
             orderedResonators,
             (acc, r) => {
-                if ((this.state.showDisabled && !r.pop_email) || r.pop_email) acc[r.id] = [this.renderColumn(r)];
+                if ((this.state.showDisabled && !r.pop_email) || r.pop_email)
+                    acc[r.id] = [this.renderColumn(r)];
 
                 return acc;
             },
@@ -114,8 +117,8 @@ class FollowerGroupResonators extends Component {
             const freezeUnfreezeMenuItem = resonator.pop_email ? (
                 <MenuItem onClick={() => this.handleDeactivateResonator(resonatorId)}>Deactivate</MenuItem>
             ) : (
-                <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
-            );
+                    <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
+                );
 
             return (
                 <MoreOptionsMenu key="more" className="more-options-btn">
@@ -156,12 +159,12 @@ function mapStateToProps(state, { match: { params: { followerGroupId } } }) {
     const followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {
-        resonators: _.get(followerGroupId, 'resonators'),
+        resonators: _.get(followerGroup, 'resonators'),
         followerGroup
     };
 }
 
-function mapDispatchToProps(dispatch, /* {params: {followerId}} */) {
+function mapDispatchToProps(dispatch, /* {params: {followerGroupId}} */) {
     return bindActionCreators({
         fetchFollowerGroupResonators: actions.fetchFollowerGroupResonators,
         activateResonator: resonatorActions.activate,

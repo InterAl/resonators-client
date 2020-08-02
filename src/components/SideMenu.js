@@ -24,7 +24,8 @@ import {
     ExitToApp,
     ExpandLess,
     ExpandMore,
-    Group
+    Group,
+    Person
 } from "@material-ui/icons";
 
 const drawerWidth = 250;
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 function SideMenu(props) {
     const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
-    const [followerMenuOpen, setFollowerMenuOpen] = useState(props.leader.group_permissions);
+    const [followerMenuOpen, setFollowerMenuOpen] = useState(true);
     const classes = useStyles(props);
     console.log(followerMenuOpen);
     return (
@@ -75,7 +76,7 @@ function SideMenu(props) {
                     <List style={{ marginLeft: 20 }}>
                         <ListItem button onClick={() => props.clickMenuItem("followers")}>
                             <ListItemIcon>
-                                <ListIcon />
+                                <Person />
                             </ListItemIcon>
                             <ListItemText primary="Follower List" />
                         </ListItem>

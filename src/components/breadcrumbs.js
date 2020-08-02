@@ -143,6 +143,9 @@ const tree = {
                             },
                             stubRoute: true,
                             routes: {
+                                "/members": {
+                                    title: 'Members',
+                                },
                                 "/resonators": {
                                     title: "Resonators",
                                     routes: {

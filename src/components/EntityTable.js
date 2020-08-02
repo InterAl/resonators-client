@@ -1,7 +1,7 @@
 import _ from "lodash";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Edit, Delete, Add, RemoveRedEye } from "@material-ui/icons";
+import { Edit, Delete, Add, RemoveRedEye, Group } from "@material-ui/icons";
 import {
     IconButton,
     Fab,
@@ -28,6 +28,7 @@ export default class EntityTable extends Component {
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
         onShow: PropTypes.func,
+        onManageFollowers: PropTypes.func,
         className: PropTypes.string,
     };
 
@@ -93,6 +94,14 @@ export default class EntityTable extends Component {
                         </IconButton>
                     </Tooltip>
                 );
+            case 'manageFollowers':
+                return (
+                    <Tooltip title="Members" key={action}>
+                        <IconButton onClick={() => this.props.onManageFollowers(id)}>
+                            <Group />
+                        </IconButton>
+                    </Tooltip>
+                );
         }
     }
 
@@ -106,15 +115,18 @@ export default class EntityTable extends Component {
                                 <TableCell key={index}>{column}</TableCell>
                             ))}
 
-                            {this.props.rowActions && (
-                                <TableCell key="actions" className="editColumn">
-                                    {this.props.rowActions.map((action) => this.renderAction(action, id))}
-                                </TableCell>
-                            )}
-                        </TableRow>
+                            {
+                                this.props.rowActions && (
+                                    <TableCell key="actions" className="editColumn">
+                                        {this.props.rowActions.map((action) => this.renderAction(action, id))}
+                                    </TableCell>
+                                )
+                            }
+                        </TableRow >
                     );
-                })}
-            </TableBody>
+                })
+                }
+            </TableBody >
         );
     }
 
@@ -130,14 +142,16 @@ export default class EntityTable extends Component {
                         </Table>
                     </TableContainer>
                 </Paper>
-                {this.props.addButton && (
-                    <div className="add-btn">
-                        <Fab color="primary" onClick={this.props.onAdd}>
-                            <Add />
-                        </Fab>
-                    </div>
-                )}
-            </div>
+                {
+                    this.props.addButton && (
+                        <div className="add-btn">
+                            <Fab color="primary" onClick={this.props.onAdd}>
+                                <Add />
+                            </Fab>
+                        </div>
+                    )
+                }
+            </div >
         );
     }
 }
