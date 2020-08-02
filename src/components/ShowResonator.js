@@ -30,11 +30,11 @@ class ShowResonator extends Component {
 
     renderSectionTitle(title) {
         return (
-            <div style={{ marginBottom: 10 }}>
+            <div style={{ marginBottom: 20 }}>
                 <Typography variant="h5" style={{ textAlign: "center" }}>
                     {title}
                 </Typography>
-                <Divider />
+                <Divider style={{ margin: 10 }} />
             </div>
         );
     }
@@ -47,12 +47,7 @@ class ShowResonator extends Component {
         let resonatorId = this.props.match.params.resonatorId;
 
         return (
-            <div
-                style={{
-                    // height: "100%",
-                    marginTop: 36,
-                }}
-            >
+            <div style={{ margin: 30 }}>
                 {this.renderSectionTitle(this.props.resonator.title)}
                 <div>
                     <ExpandableCard
@@ -85,14 +80,12 @@ class ShowResonator extends Component {
                         </div>
                     </ExpandableCard>
                 </div>
-                <div style={{ marginTop: 30 }}>
-                    {_.size(this.props.resonator.questions) > 0 && (
-                        <div>
-                            {this.renderSectionTitle("Criteria")}
-                            <ResonatorStats resonatorId={this.props.match.params.resonatorId} />
-                        </div>
-                    )}
-                </div>
+                {_.size(this.props.resonator.questions) > 0 && (
+                    <div style={{ marginTop: 40 }}>
+                        {this.renderSectionTitle("Criteria")}
+                        <ResonatorStats resonatorId={this.props.match.params.resonatorId} />
+                    </div>
+                )}
             </div>
         );
     }
