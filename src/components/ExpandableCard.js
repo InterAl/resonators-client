@@ -12,7 +12,7 @@ class ExpandableCard extends Component {
     static propTypes = {
         title: PropTypes.string,
         subtitle: PropTypes.string,
-        width: PropTypes.number,
+        width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
         margin: PropTypes.any,
         style: PropTypes.object,
         avatar: PropTypes.any,
