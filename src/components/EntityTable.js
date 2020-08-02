@@ -1,7 +1,7 @@
 import _ from "lodash";
-import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Edit, Delete, Add, RemoveRedEye } from "@material-ui/icons";
+import React, { Component } from "react";
+import { Edit, Delete, Add } from "@material-ui/icons";
 import {
     IconButton,
     Fab,
@@ -14,7 +14,11 @@ import {
     TableCell,
     Paper,
     Tooltip,
+    MenuItem,
+    ListItemIcon,
 } from "@material-ui/core";
+import OverflowMenu from "./OverflowMenu";
+import isMobile from "./isMobile";
 import "./EntityTable.scss";
 
 export default class EntityTable extends Component {
@@ -22,17 +26,19 @@ export default class EntityTable extends Component {
         rows: PropTypes.object,
         header: PropTypes.array,
         rowActions: PropTypes.array,
+        extraRowActions: PropTypes.array,
         addButton: PropTypes.bool,
         toolbox: PropTypes.object,
         onAdd: PropTypes.func,
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
-        onShow: PropTypes.func,
         className: PropTypes.string,
     };
 
     static defaultProps = {
         className: "",
+        rowActions: [],
+        extraRowActions: []
     };
 
     renderToolbox() {
@@ -63,52 +69,60 @@ export default class EntityTable extends Component {
         );
     }
 
-    renderAction(action, id) {
-        if (typeof action === "function") return action(id);
+    computeActionKey(action) {
+        return action.title.toLowerCase();
+    }
 
-        switch (action) {
-            case "edit":
-                return (
-                    <Tooltip title="Edit" key={action}>
-                        <IconButton onClick={() => this.props.onEdit(id)}>
-                            <Edit />
-                        </IconButton>
-                    </Tooltip>
-                );
+    renderShownAction(itemId) {
+        return (action) => (
+            <Tooltip title={action.title} key={this.computeActionKey(action)}>
+                <IconButton onClick={() => action.onClick(itemId)}>{action.icon}</IconButton>
+            </Tooltip>
+        );
+    }
 
-            case "remove":
-                return (
-                    <Tooltip title="Remove" key={action}>
-                        <IconButton onClick={() => this.props.onRemove(id)}>
-                            <Delete />
-                        </IconButton>
-                    </Tooltip>
-                );
+    renderOverflowAction(itemId) {
+        return (action) => (
+            <MenuItem onClick={() => action.onClick(itemId)} key={this.computeActionKey(action)}>
+                {action.icon ? <ListItemIcon>{action.icon}</ListItemIcon> : null}
+                {action.title}
+            </MenuItem>
+        );
+    }
 
-            case "show":
-                return (
-                    <Tooltip title="Preview" key={action}>
-                        <IconButton onClick={() => this.props.onShow(id)}>
-                            <RemoveRedEye />
-                        </IconButton>
-                    </Tooltip>
-                );
-        }
+    isActionAvailable(itemId) {
+        return (action) => action.isAvailable(itemId);
+    }
+
+    renderRowActions(itemId) {
+        const shownActions = isMobile() ? [] : this.props.rowActions;
+        const overflowActions = (isMobile() ? this.props.rowActions : []).concat(this.props.extraRowActions);
+
+        const isAvailable = this.isActionAvailable(itemId)
+
+        return [
+            ...shownActions.filter(isAvailable).map(this.renderShownAction(itemId)),
+            overflowActions.length ? (
+                <OverflowMenu key="more">
+                    {overflowActions.filter(isAvailable).map(this.renderOverflowAction(itemId))}
+                </OverflowMenu>
+            ) : null,
+        ];
     }
 
     renderBody() {
         return (
             <TableBody>
-                {_.map(this.props.rows, (row, id) => {
+                {_.map(this.props.rows, (row, itemId) => {
                     return (
-                        <TableRow key={id}>
+                        <TableRow key={itemId}>
                             {_.map(row, (column, index) => (
                                 <TableCell key={index}>{column}</TableCell>
                             ))}
 
                             {this.props.rowActions && (
                                 <TableCell key="actions" className="editColumn">
-                                    {this.props.rowActions.map((action) => this.renderAction(action, id))}
+                                    {this.renderRowActions(itemId)}
                                 </TableCell>
                             )}
                         </TableRow>
@@ -141,3 +155,15 @@ export default class EntityTable extends Component {
         );
     }
 }
+
+const rowAction = ({ title, onClick, icon = null, isAvailable = _.stubTrue }) => ({
+    icon,
+    title,
+    onClick,
+    isAvailable,
+});
+
+rowAction.edit = (onClick) => rowAction({ title: "Edit", icon: <Edit />, onClick });
+rowAction.remove = (onClick) => rowAction({ title: "Remove", icon: <Delete />, onClick });
+
+export { rowAction };

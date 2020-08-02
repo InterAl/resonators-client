@@ -2,7 +2,7 @@ import _ from "lodash";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import EntityTable from "./EntityTable";
+import EntityTable, { rowAction } from "./EntityTable";
 import { actions } from "../actions/followersActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
@@ -10,8 +10,9 @@ import ResonatorImage from "./ResonatorImage";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
-import MoreOptionsMenu from "./MoreOptionsMenu";
+import OverflowMenu from "./OverflowMenu";
 import { MenuItem, Typography } from "@material-ui/core";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -23,6 +24,8 @@ class FollowerResonators extends Component {
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
+        this.handleActivateResonator = this.handleActivateResonator.bind(this);
+        this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
     }
 
     componentDidMount() {
@@ -86,11 +89,11 @@ class FollowerResonators extends Component {
                 </Typography>
             ),
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={this.toggleShowInactive}>
                         {this.state.showDisabled ? "Hide Inactive Resonators" : "Show Inactive Resonators"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
@@ -109,45 +112,61 @@ class FollowerResonators extends Component {
         this.props.activateResonator({ followerId, resonator });
     }
 
-    renderMoreOptionsMenu() {
-        return (resonatorId) => {
-            let resonator = _.find(this.props.resonators, (r) => r.id === resonatorId);
-            if (!resonator) return;
+    getPreviewRoute(resonatorId) {
+        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/show`;
+    }
 
-            const freezeUnfreezeMenuItem = resonator.pop_email ? (
-                <MenuItem onClick={() => this.handleDeactivateResonator(resonatorId)}>Deactivate</MenuItem>
-            ) : (
-                <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
-            );
+    getEditRoute(resonatorId) {
+        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/edit`;
+    }
 
-            return (
-                <MoreOptionsMenu key="more" className="more-options-btn">
-                    {freezeUnfreezeMenuItem}
-                </MoreOptionsMenu>
-            );
-        };
+    getAddRoute() {
+        return `/followers/${this.props.match.params.followerId}/resonators/new`;
+    }
+
+    getRowActions() {
+        return [
+            rowAction({
+                title: "Preview",
+                icon: <RemoveRedEye />,
+                onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
+            }),
+            rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
+            rowAction.remove(this.handleRemoveResonator),
+        ];
+    }
+
+    getResonator(resonatorId) {
+        return _.find(this.props.resonators, (resonator) => resonator.id === resonatorId);
+    }
+
+    getExtraRowActions() {
+        return [
+            rowAction({
+                icon: <PauseCircleFilled />,
+                title: "Deactivate",
+                onClick: this.handleDeactivateResonator,
+                isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
+            }),
+            rowAction({
+                icon: <PlayCircleFilled />,
+                title: "Activate",
+                onClick: this.handleActivateResonator,
+                isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
+            }),
+        ];
     }
 
     render() {
-        let rows = this.getRows();
-        let header = this.getHeader();
-        let addRoute = `/followers/${this.props.match.params.followerId}/resonators/new`;
-        let getEditRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
-        let showRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/show`;
-        let toolbox = this.getToolbox();
-        let moreOptionsMenu = this.renderMoreOptionsMenu();
-
         return (
             <EntityTable
-                onAdd={() => this.props.push(addRoute)}
-                onEdit={(id) => this.props.push(getEditRoute(id))}
-                onRemove={this.handleRemoveResonator}
-                onShow={(id) => this.props.push(showRoute(id))}
                 addButton={true}
-                rowActions={["show", "edit", "remove", moreOptionsMenu]}
-                header={header}
-                toolbox={toolbox}
-                rows={rows}
+                rows={this.getRows()}
+                header={this.getHeader()}
+                toolbox={this.getToolbox()}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
+                onAdd={() => this.props.push(this.getAddRoute())}
             />
         );
     }

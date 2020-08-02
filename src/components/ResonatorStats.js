@@ -83,17 +83,17 @@ class ResonatorStats extends Component {
 
     renderCard(question) {
         return (
-            <div key={question.id} className='row' style={{marginBottom: 10}}>
-                <ExpandableCard
-                    id={`resonatorStats_${question.id}`}
-                    title={question.title}
-                    subtitle={question.description}
-                    avatar={<InsertChart/>}
-                >
-                    {_.isEmpty(question.followerAnswers) ?
-                        this.renderEmptyState() : this.renderChart(question)}
-                </ExpandableCard>
-            </div>
+            <ExpandableCard
+                id={`resonatorStats_${question.id}`}
+                title={question.title}
+                subtitle={question.description}
+                avatar={<InsertChart/>}
+                key={question.id}
+                style={{marginBottom: 10}}
+            >
+                {_.isEmpty(question.followerAnswers) ?
+                    this.renderEmptyState() : this.renderChart(question)}
+            </ExpandableCard>
         )
     }
 
