@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { NotInterested } from "@material-ui/icons";
-import EntityTable from "./EntityTable";
+import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
+import EntityTable, { rowAction } from "./EntityTable";
 import { Link } from "react-router-dom";
-import MoreOptionsMenu from "./MoreOptionsMenu";
+import OverflowMenu from "./OverflowMenu";
 import "./Followers.scss";
 
 class Followers extends Component {
@@ -18,7 +18,7 @@ class Followers extends Component {
 
         this.state = {
             showEmails: false,
-            openedMoreOptionsMenuFollowerId: null,
+            openedOverflowMenuFollowerId: null,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -26,6 +26,7 @@ class Followers extends Component {
         this.handleEditFollower = this.handleEditFollower.bind(this);
         this.handleRemoveFollower = this.handleRemoveFollower.bind(this);
         this.handleAddFollower = this.handleAddFollower.bind(this);
+        this.handleFreezeFollower = this.handleFreezeFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -52,11 +53,11 @@ class Followers extends Component {
         this.props.showFreezeFollowerPrompt(id);
     }
 
-    toggleMoreOptionsMenu(followerId) {
-        if (!followerId && !this.state.openedMoreOptionsMenuFollowerId) return; //prevent stack overflow
+    toggleOverflowMenu(followerId) {
+        if (!followerId && !this.state.openedOverflowMenuFollowerId) return; //prevent stack overflow
 
         this.setState({
-            openedMoreOptionsMenuFollowerId: followerId,
+            openedOverflowMenuFollowerId: followerId,
         });
     }
 
@@ -83,7 +84,7 @@ class Followers extends Component {
     }
 
     getHeader() {
-        let header = [];
+        const header = [];
         header.push("Name");
         this.state.showEmails && header.push("Email");
         header.push("Clinic");
@@ -105,7 +106,7 @@ class Followers extends Component {
                             alignItems: "center",
                         }}
                     >
-                        {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
+                        {f.frozen ? <PauseCircleFilled fontSize="small" style={{ marginRight: 5 }} /> : null}
                         <span>{f.user.name}</span>
                     </MuiLink>
                 );
@@ -122,61 +123,65 @@ class Followers extends Component {
         return {
             left: <Typography variant="h6">Your Followers</Typography>,
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={() => this.toggleShowEmails()}>
                         {this.state.showEmails ? "Hide Emails" : "Show Emails"}
                     </MenuItem>
                     <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
                         {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
 
-    renderMoreOptionsMenu() {
+    renderOverflowMenu() {
         return (followerId) => {
             const follower = this.props.getFollower(followerId);
-
-            const freezeUnfreezeMenuItem = follower.frozen ? (
-                <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
-            ) : (
-                <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
-            );
-
             return (
-                <MoreOptionsMenu className="more-options-btn" key="more-options">
-                    <MenuItem className="edit-follower-btn" onClick={() => this.handleEditFollower(followerId)}>
-                        Edit
-                    </MenuItem>
-                    {freezeUnfreezeMenuItem}
-                    <MenuItem
-                        className="delete-follower-btn"
-                        onClick={() => this.handleRemoveFollower(followerId)}
-                        style={{ color: "red" }}
-                    >
-                        Delete
-                    </MenuItem>
-                </MoreOptionsMenu>
+                <OverflowMenu key="more-options">
+                    {follower.frozen ? (
+                        <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
+                    ) : (
+                        <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
+                    )}
+                </OverflowMenu>
             );
         };
     }
 
-    render() {
-        let header = this.getHeader();
-        let rows = this.getRows();
-        let toolbox = this.getToolbox();
-        let moreOptionsMenu = this.renderMoreOptionsMenu();
+    getRowActions() {
+        return [rowAction.edit(this.handleEditFollower), rowAction.remove(this.handleRemoveFollower)];
+    }
 
+    getExtraRowActions() {
+        return [
+            rowAction({
+                title: "Activate",
+                icon: <PlayCircleFilled />,
+                onClick: this.props.unfreezeFollower,
+                isAvailable: (followerId) => this.props.getFollower(followerId).frozen,
+            }),
+            rowAction({
+                title: "Deactivate",
+                icon: <PauseCircleFilled />,
+                onClick: this.handleFreezeFollower,
+                isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
+            }),
+        ];
+    }
+
+    render() {
         return (
             <EntityTable
-                header={header}
-                rows={rows}
-                toolbox={toolbox}
                 addButton={true}
-                rowActions={[moreOptionsMenu]}
-                className="followers"
+                rows={this.getRows()}
+                header={this.getHeader()}
+                toolbox={this.getToolbox()}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
                 onAdd={this.handleAddFollower}
+                className="followers"
             />
         );
     }

@@ -1,5 +1,5 @@
 .entity-table {
-    margin: 30px 15%;
+    margin: 30px 5%;
 
     .editColumn {
         text-align: right !important;
@@ -10,7 +10,7 @@
         bottom: 30px;
 
         @media (min-width: 0px)  {
-            right: 15px;
+            right: 30px;
         }
         @media (min-width: 767px)  {
             right: 88px;
@@ -18,19 +18,5 @@
         @media (min-width: 992px) {
             right: 131px;
         }
-    }
-    .submit-btn {
-        text-align: right;
-        padding-top: 3vh;
-
-        // @media (min-width: 0px)  {
-        //     right: 5px;
-        // }
-        // @media (min-width: 767px)  {
-        //     right: 88px;
-        // }
-        // @media (min-width: 992px) {
-        //     right: 131px;
-        // }
     }
 }

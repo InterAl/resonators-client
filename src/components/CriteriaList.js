@@ -3,9 +3,9 @@ import { actions as navigationActions } from "../actions/navigationActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import EntityTable from "./EntityTable";
+import EntityTable, { rowAction } from "./EntityTable";
 import { push } from "connected-react-router";
-import { Typography } from '@material-ui/core';
+import { Typography } from "@material-ui/core";
 
 class CriteriaList extends Component {
     constructor(props) {
@@ -33,19 +33,18 @@ class CriteriaList extends Component {
     }
 
     render() {
-        let rows = this.getRows();
-        let addRoute = location.pathname + "/new";
-        let getEditRoute = (id) => `${location.pathname}/${id}/edit`;
+        const getEditRoute = (id) => `${location.pathname}/${id}/edit`;
 
         return (
             <EntityTable
-                onAdd={() => this.props.push(addRoute)}
-                onEdit={(id) => this.props.push(getEditRoute(id))}
-                onRemove={(id) => this.props.showDeleteCriterionPrompt(id)}
                 addButton={true}
-                rowActions={["edit", "remove"]}
+                rows={this.getRows()}
                 header={["Criteria"]}
-                rows={rows}
+                onAdd={() => this.props.push(location.pathname + "/new")}
+                rowActions={[
+                    rowAction.edit((criterionId) => this.props.push(getEditRoute(criterionId))),
+                    rowAction.remove((criterionId) => this.props.showDeleteCriterionPrompt(criterionId))
+                ]}
             />
         );
     }
