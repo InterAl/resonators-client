@@ -6,12 +6,12 @@ import EntityTable, { rowAction } from "./EntityTable";
 import { actions } from "../actions/followersActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
-import ResonatorImage from "./ResonatorImage";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
-import { MenuItem, Typography } from "@material-ui/core";
+import getResonatorImage from "../selectors/getResonatorImage";
+import { MenuItem, Typography, Avatar } from "@material-ui/core";
 import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
@@ -46,10 +46,11 @@ class FollowerResonators extends Component {
 
     renderColumn(resonator) {
         const dir = utils.getResonatorDirection(resonator);
+        const resonatorImage = getResonatorImage(resonator);
 
         return (
             <div style={{ display: "flex", alignItems: "center", filter: resonator.pop_email ? "" : "grayscale(1)" }}>
-                <ResonatorImage width={80} height={80} resonator={resonator} />
+                {resonatorImage ? <Avatar src={resonatorImage} variant="rounded" /> : null}
                 <div
                     style={{
                         direction: dir,
