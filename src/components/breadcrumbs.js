@@ -2,10 +2,12 @@ import React from "react";
 import _ from "lodash";
 import { matchPath } from "react-router";
 import { Link } from "react-router-dom";
+import isMobile from "./isMobile";
 import followerSelector from "../selectors/followerSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
 import criterionSelector from "../selectors/criterionSelector";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
+import { NavigateNext } from "@material-ui/icons";
 
 export default function renderBreadcrumbs(state) {
     let routeStack = getRouteStack(state);
@@ -15,14 +17,18 @@ export default function renderBreadcrumbs(state) {
     const parts = _.flatMap(routeStack, (route, index) => {
         let link = route.stubRoute ? _.get(routeStack, `[${index + 1}].route`) : route.route;
 
-        return (
+        return isMobile() && route.stubRoute ? null : (
             <MuiLink color="inherit" key={index} className="breadcrumb-part" to={link || ""} component={Link}>
-                <Typography variant="h5">{_.truncate(route.title)}</Typography>
+                <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
             </MuiLink>
         );
     });
 
-    return <Breadcrumbs style={{ flexGrow: 1, color: "inherit" }}>{parts}</Breadcrumbs>;
+    return (
+        <Breadcrumbs style={{ flexGrow: 1, color: "inherit" }} separator={<NavigateNext />}>
+            {parts}
+        </Breadcrumbs>
+    );
 }
 
 function getRouteStack(state) {
