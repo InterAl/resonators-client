@@ -4,7 +4,8 @@ import { actions } from "../actions/clinicActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
-import EntityTable, { rowAction } from "./EntityTable";
+import EntityTable from "./EntityTable";
+import { rowAction } from './RowActions';
 import { Checkbox } from "@material-ui/core";
 import { Label, PersonAdd } from "@material-ui/icons";
 

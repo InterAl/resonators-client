@@ -3,7 +3,8 @@ import { actions as navigationActions } from "../actions/navigationActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import EntityTable, { rowAction } from "./EntityTable";
+import EntityTable from "./EntityTable";
+import { rowAction } from './RowActions';
 import { push } from "connected-react-router";
 import { Typography } from "@material-ui/core";
 
