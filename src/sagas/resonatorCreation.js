@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'saga-reducer-factory';
+import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/resonatorCreationActions';
 import { actions as navigationActions } from '../actions/navigationActions';
@@ -197,18 +197,18 @@ function convertResonatorToForm(resonator) {
     return form;
 }
 
-function delay(fn, timeout) {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            try {
-                fn();
-            } catch (err) {
-                return reject(err);
-            }
+// function delay(fn, timeout) {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             try {
+//                 fn();
+//             } catch (err) {
+//                 return reject(err);
+//             }
 
-            resolve();
-        }, timeout);
-    });
-}
+//             resolve();
+//         }, timeout);
+//     });
+// }
 
 export default { saga, reducer };

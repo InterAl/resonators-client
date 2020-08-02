@@ -4,11 +4,10 @@ import {actions as statsActions} from '../actions/resonatorStatsActions';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
-import {Table, TableBody, TableRow, TableRowColumn} from 'material-ui/Table';
+import { TableContainer, Table, TableBody, TableRow, TableCell, Typography } from '@material-ui/core';
+import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
-import ChartIcon from 'material-ui/svg-icons/editor/insert-chart';
 import './ResonatorStats.scss';
-import moment from 'moment';
 
 class ResonatorStats extends Component {
     static defaultProps = {
@@ -31,26 +30,28 @@ class ResonatorStats extends Component {
     }
     renderQuestionLegend(question) {
         return (
-            <Table style={{width:500, margin: '0 auto', marginTop: 36}}>
-                <TableBody displayRowCheckbox={false}>
-                    {_.map(question.answers, a => (
-                        <TableRow>
-                            <TableRowColumn>
-                                {a.rank}
-                            </TableRowColumn>
-                            <TableRowColumn style={{whiteSpace: 'normal', textOverflow: 'inherit'}}>
-                                {a.body}
-                            </TableRowColumn>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+            <TableContainer>
+                <Table style={{ width: 500, margin: '0 auto', marginTop: 36 }}>
+                    <TableBody>
+                        {_.map(question.answers, (a) => (
+                            <TableRow key={a.id}>
+                                <TableCell>
+                                    {a.rank}
+                                </TableCell>
+                                <TableCell style={{ whiteSpace: 'normal', textOverflow: 'inherit' }}>
+                                    {a.body}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         );
     }
 
     renderChart(question) {
         return [
-            <div style={{height: 500, paddingRight: 30}}>
+            <div key="chart" style={{height: 500, paddingRight: 30}}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
                         <XAxis dataKey="time" tickFormatter={this.formatXAxis}/>
@@ -65,6 +66,7 @@ class ResonatorStats extends Component {
             <ExpandableCard
                 id={`resonatorStats_${question.id}_legend`}
                 title='Legend'
+                key="card"
             >
                 {this.renderQuestionLegend(question)}
             </ExpandableCard>
@@ -73,21 +75,20 @@ class ResonatorStats extends Component {
 
     renderEmptyState() {
         return (
-            <div style={{textAlign: 'center', padding: 20}}>
+            <Typography style={{textAlign: 'center', padding: 20}}>
                 No feedback has been given for this criterion.
-            </div>
+            </Typography>
         );
     }
 
     renderCard(question) {
         return (
-            <div className='row' style={{marginBottom: 10}}>
+            <div key={question.id} className='row' style={{marginBottom: 10}}>
                 <ExpandableCard
                     id={`resonatorStats_${question.id}`}
                     title={question.title}
                     subtitle={question.description}
-                    width='100%'
-                    avatar={<ChartIcon/>}
+                    avatar={<InsertChart/>}
                 >
                     {_.isEmpty(question.followerAnswers) ?
                         this.renderEmptyState() : this.renderChart(question)}

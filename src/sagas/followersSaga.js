@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'saga-reducer-factory';
+import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as resonatorTypes } from '../actions/resonatorActions';
@@ -44,7 +44,6 @@ handle(types.DELETE, function* (sagaParams, { payload }) {
 
 handle(types.FREEZE, function* (sagaParams, { payload }) {
     yield call(followerApi.freezeFollower, payload);
-    const followers = yield select(followersSelector);
     const follower = yield getFollower(payload);
 
     const updatedFollower = {
@@ -57,7 +56,6 @@ handle(types.FREEZE, function* (sagaParams, { payload }) {
 
 handle(types.UNFREEZE, function* (sagaParams, { payload }) {
     yield call(followerApi.unfreezeFollower, payload);
-    const followers = yield select(followersSelector);
     const follower = yield getFollower(payload);
 
     const updatedFollower = {

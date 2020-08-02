@@ -1,29 +1,19 @@
-.loginForm {
+.login-form {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    min-width: 500px;
 
-    .cardText {
-        display: flex;
-        flex-direction: column;
-    }
-    
     .submitBtn {
-        align-self: center;
         width: 100%;
-        margin: 10px;
         height: 50px !important;
-    }
-
-    .registerBtn {
-        width: 100%;
-        font-size: 12px;
     }
 
     .submitBtnWrapper {
         margin-top: 20px;
     }
-    .signInDesclaimer{
+
+    .signInDesclaimer {
         font-size: 16px;
         margin-bottom: 20px;
         margin-top: 20px;

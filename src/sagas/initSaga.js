@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { put } from 'redux-saga/effects';
-import SagaReducerFactory from 'saga-reducer-factory';
+import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { actions, types } from '../actions/initActions';
 import { actions as sessionActions } from '../actions/sessionActions';
 import queryString from 'query-string';
