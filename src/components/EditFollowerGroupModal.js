@@ -48,6 +48,14 @@ class EditFollowerGroupModal extends Component {
         this.props.onClose();
     }
 
+    renderForm() {
+        return (
+            <form autoComplete="off">
+                <Field type="text" placeholder="Name" name="name" component={TextField} />
+            </form>
+        );
+    }
+
     render() {
         return (
             <Dialog open={this.props.open} className="edit-followerGroup-modal" onClose={this.props.onClose}>

@@ -6,10 +6,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions as navigationActions } from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
-import { Select, Checkbox, MenuItem, Button, Link as MuiLink, Typography } from '@material-ui/core';
+import { Select, Checkbox, MenuItem, Button, Link as MuiLink, Typography, Divider } from '@material-ui/core';
 import EntityTable from './EntityTable';
 import { Link } from 'react-router-dom';
-import MoreOptionsMenu from './MoreOptionsMenu';
+import OverflowMenu from './OverflowMenu';
+import { NotInterested } from '@material-ui/icons';
 
 class FollowerGroupMembers extends Component {
     constructor() {
@@ -20,6 +21,7 @@ class FollowerGroupMembers extends Component {
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
 
     }
 
@@ -64,6 +66,15 @@ class FollowerGroupMembers extends Component {
         return this.state.currentMemberIdList ? this.state.currentMemberIdList?.includes(followerId) : false
     }
 
+    handleSubmit() {
+        const newMemberList = this.state.currentMemberIdList.map(
+            (followerId) => this.props.getFollower(followerId));
+        this.props.updateFollowerGroupMembers({
+            newMemberList,
+            followerGroupId: this.props.followerGroup.id,
+        });
+    }
+
     renderClinicFilter() {
         return [
             <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
@@ -94,21 +105,14 @@ class FollowerGroupMembers extends Component {
     getMemberRows(isMembers) {
         return _.reduce(
             _.filter(this.props.followers, (f) => isMembers === this.isFollowerInMemberList(f.id)),
+            // this.props.followers,
             (acc, f) => {
-                let cols = [];
+                const cols = [];
                 cols.push(
-                    <MuiLink
-                        to={`/followers/${f.id}/resonators`}
-                        component={Link}
-                        style={{
-                            color: f.frozen ? "rgb(157, 155, 155)" : "",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
+                    <React.Fragment>
                         {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
-                        <span>{f.user.name}</span>
-                    </MuiLink>
+                        <span> {f.user.name}</span >
+                    </React.Fragment>
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);
@@ -125,38 +129,22 @@ class FollowerGroupMembers extends Component {
         );
     }
 
-    getRows() {
-        return _.reduce(
-            _.sortBy(this.props.followers, [(f) => !this.isFollowerInMemberList(f.id)]),
-            (acc, f) => {
-                let cols = [];
-                cols.push(
-                    <MuiLink
-                        to={`/followers/${f.id}/resonators`}
-                        component={Link}
-                        style={{
-                            color: f.frozen ? "rgb(157, 155, 155)" : "",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
-                        <span>{f.user.name}</span>
-                    </MuiLink>
-                );
-                this.state.showEmails && cols.push(f.user.email);
-                cols.push(f.clinicName);
-                cols.push(
-                    <Checkbox
-                        color="primary"
-                        checked={this.isFollowerInMemberList(f.id)}
-                        onClick={() => this.toggleCheckbox(f.id)} />
-                );
-                acc[f.id] = cols;
-                return acc;
-            },
-            {}
-        );
+    renderRows() {
+        return (
+            <div>
+                <EntityTable
+                    header={this.getHeader()}
+                    rows={this.getMemberRows(true)}
+                    toolbox={this.getToolbox()}
+                    addButton={false}
+                    className='members' />
+                <Divider />
+                <EntityTable
+                    rows={this.getMemberRows(false)}
+                    addButton={false}
+                    className='members' />
+            </div>
+        )
     }
 
     getToolbox() {
@@ -167,34 +155,26 @@ class FollowerGroupMembers extends Component {
                 </Typography>
             ),
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu>
                     <MenuItem onClick={() => this.toggleShowEmails()}>
                         {this.state.showEmails ? "Hide Emails" : "Show Emails"}
                     </MenuItem>
                     <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
                         {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
 
     render() {
-
         return (
-            <div style={{textAlign: 'right'}}>
-                <EntityTable
-                    // header={this.getHeader()}
-                    rows={this.getRows()}
-                    toolbox={this.getToolbox()}
-                    addButton={false}
-                    className='members'
-                    submitButton={true}
-                    onSubmitClick={() => this.handleSubmit()}/>
-                <Button style={{marginRight: '15%'}}
+            <div style={{ textAlign: 'right' }}>
+                {this.renderRows()}
+                <Button style={{ marginRight: '5%' }}
                     color="primary"
                     variant="contained"
-                    onClick={console.log(`Sending ${this.state.currentMemberIdList}`)}
+                    onClick={this.handleSubmit}
                     disabled={!this.isSubmittable()}>
                     Update
                 </Button>
@@ -223,6 +203,7 @@ function mapStateToProps(state, { match: { params: { followerGroupId } } }) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         fetchFollowerGroupMembers: followerGroupsActions.fetchFollowerGroupMembers,
+        updateFollowerGroupMembers: followerGroupsActions.updateFollowerGroupMembers,
         toggleDisplayFrozen: followersActions.toggleDisplayFrozen,
     }, dispatch);
 }

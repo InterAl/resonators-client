@@ -44,3 +44,7 @@ export function getGroupResonators(followerGroupId) {
 export function getGroupMembers(followerGroupId) {
     return fetcher(`/leader_followerGroups/${followerGroupId}/followers.json`);
 }
+
+export function updateMembers(followerGroupId, memberIdList) {
+    return fetcher.put(`/leader_followerGroups/${followerGroupId}/followers.json`, memberIdList);
+}

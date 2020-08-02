@@ -6,10 +6,10 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { NotInterested } from "@material-ui/icons";
-import EntityTable from "./EntityTable";
+import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
+import EntityTable, { rowAction } from "./EntityTable";
 import { Link } from "react-router-dom";
-import MoreOptionsMenu from "./MoreOptionsMenu";
+import OverflowMenu from "./OverflowMenu";
 import { push } from "connected-react-router";
 import './FollowerGroups.scss';
 
@@ -18,7 +18,7 @@ class FollowerGroups extends Component {
         super();
 
         this.state = {
-            openedMoreOptionsMenuFollowerGroupId: null,
+            openedOverflowMenuFollowerGroupId: null,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -57,12 +57,12 @@ class FollowerGroups extends Component {
         this.props.showFreezeFollowerGroupPrompt(followerGroupId);
     }
 
-    toggleMoreOptionsMenu(followerGroupId) {
-        if (!followerGroupId && !this.state.openedMoreOptionsMenuFollowerGroupId)
+    toggleOverflowMenu(followerGroupId) {
+        if (!followerGroupId && !this.state.openedOverflowMenuFollowerGroupId)
             return; //prevent stack overflow
 
         this.setState({
-            openedMoreOptionsMenuFollowerGroupId: followerGroupId,
+            openedOverflowMenuFollowerGroupId: followerGroupId,
         });
     }
 
@@ -82,6 +82,10 @@ class FollowerGroups extends Component {
                 ))}
             </Select>,
         ];
+    }
+
+    getMembersRoute(followerGroupId) {
+        return `/followerGroups/${followerGroupId}/members`;
     }
 
     getHeader() {
@@ -113,57 +117,54 @@ class FollowerGroups extends Component {
         return {
             left: <Typography variant="h6">Your Follower Groups</Typography>,
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu>
                     <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
                         {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
 
-    renderMoreOptionsMenu() {
-        return (followerGroupId) => {
-            const followerGroup = this.props.getFollowerGroup(followerGroupId);
+    getRowActions() {
+        return [
+            rowAction({
+                title: "Members",
+                icon: <Group />,
+                onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
+            }),
+            rowAction.edit(this.handleEditFollowerGroup),
+            rowAction.remove(this.handleRemoveFollowerGroup),
+        ];
+    }
 
-            const freezeUnfreezeMenuItem = followerGroup.frozen ? (
-                <MenuItem onClick={() => this.props.unfreezeFollowerGroup(followerGroupId)}>Activate</MenuItem>
-            ) : (
-                <MenuItem onClick={() => this.props.handleFreezeFollowerGroup(followerGroupId)}>Deactivate</MenuItem>
-            );
-
-            return (
-                <MoreOptionsMenu className='more-options-btn' key="more-options">
-                    <MenuItem className="edit-followerGroup-btn" onClick={() => this.handleEditFollowerGroup(followerGroupId)}>
-                        Edit
-                    </MenuItem>
-                    {freezeUnfreezeMenuItem}
-                    <MenuItem
-                        className="delete-followerGroup-btn"
-                        onClick={() => this.handleRemoveFollowerGroup(followerGroupId)}
-                        style={{ color: "red" }}>
-                        Delete
-                    </MenuItem>
-                </MoreOptionsMenu>
-            );
-        }
+    getExtraRowActions() {
+        return [
+            rowAction({
+                title: "Activate",
+                icon: <PlayCircleFilled />,
+                onClick: this.props.unfreezeFollowerGroup,
+                isAvailable: (followerGroupId) => this.props.getFollowerGroup(followerGroupId).frozen,
+            }),
+            rowAction({
+                title: "Deactivate",
+                icon: <PauseCircleFilled />,
+                onClick: this.handleFreezeFollowerGroup,
+                isAvailable: (followerGroupId) => !this.props.getFollowerGroup(followerGroupId).frozen,
+            }),
+        ];
     }
 
     render() {
-        const header = this.getHeader();
-        const rows = this.getRows();
-        const toolbox = this.getToolbox();
-        const moreOptionsMenu = this.renderMoreOptionsMenu();
-
         return (
             <EntityTable
-                header={header}
-                rows={rows}
-                toolbox={toolbox}
+                header={this.getHeader()}
+                rows={this.getRows()}
+                toolbox={this.getToolbox()}
                 addButton={true}
-                rowActions={['manageFollowers', moreOptionsMenu]}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
                 className='followerGroups'
-                onManageFollowers={this.handleManageFollowers}
                 onAdd={this.handleAddFollowerGroup}
             />
         );

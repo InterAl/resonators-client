@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {actions} from '../actions/followerGroupsActions';
+import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { actions } from '../actions/followerGroupsActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
 import SimplePrompt from './SimplePrompt';
 
@@ -20,7 +20,7 @@ class DeleteFollowerGroupPrompt extends Component {
     render() {
         if (!this.props.followerGroup) return null;
 
-        const followerGroup = this.props;
+        const { followerGroup } = this.props;
 
         return (
             <SimplePrompt
@@ -37,7 +37,7 @@ class DeleteFollowerGroupPrompt extends Component {
 }
 
 function mapStateToProps(state) {
-    let {modalProps: {followerGroupId}} = navigationInfoSelector(state);
+    let { modalProps: { followerGroupId } } = navigationInfoSelector(state);
     let followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {

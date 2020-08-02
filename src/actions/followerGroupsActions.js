@@ -10,7 +10,8 @@ const actionsList = [
     'EDIT',
     'FILTER_BY_CLINIC_ID',
     'FETCH_FOLLOWER_GROUP_RESONATORS',
-    'FETCH_FOLLOWER_GROUP_MEMBERS'
+    'FETCH_FOLLOWER_GROUP_MEMBERS',
+    'UPDATE_FOLLOWER_GROUP_MEMBERS',
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'FOLLOWER_GROUPS_');

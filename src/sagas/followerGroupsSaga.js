@@ -88,6 +88,20 @@ handle(types.UPDATE, function* (sagaParams, { payload }) {
     yield updateStateWithNewFollowerGroup(updatedFollowerGroup);
 });
 
+handle(types.UPDATE_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
+    const { newMemberList, followerGroupId } = payload;
+    yield call(followerGroupApi.updateMembers, followerGroupId, newMemberList.map(({ id }) => id));
+    const followerGroup = yield getFollowerGroup(payload.id);
+
+    const updatedFollowerGroup = {
+        ...followerGroup,
+        members: payload,
+    };
+
+    yield updateStateWithNewFollowerGroup(updatedFollowerGroup);
+});
+
+
 handle(types.FETCH_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
     yield fetchFollowerGroupMembers(payload);
 });
@@ -144,7 +158,7 @@ export function* fetchFollowerGroupMembers(followerGroupId) {
         yield waitForFollowerGroups();
 
     followerGroup = yield getFollowerGroup(followerGroupId);
-    console.log({members: followerGroup.members});
+    console.log({ members: followerGroup.members });
     if (!followerGroup.members) {
         let followerGroupMembers = yield call(followerGroupApi.getGroupMembers, followerGroupId);
 
