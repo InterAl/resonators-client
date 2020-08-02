@@ -9,7 +9,7 @@ import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@mate
 import { NotInterested } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
-import MoreOptionsMenu from "./MoreOptionsMenu";
+import OverflowMenu from "./OverflowMenu";
 import "./Followers.scss";
 
 class Followers extends Component {
@@ -18,7 +18,7 @@ class Followers extends Component {
 
         this.state = {
             showEmails: false,
-            openedMoreOptionsMenuFollowerId: null,
+            openedOverflowMenuFollowerId: null,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
@@ -52,11 +52,11 @@ class Followers extends Component {
         this.props.showFreezeFollowerPrompt(id);
     }
 
-    toggleMoreOptionsMenu(followerId) {
-        if (!followerId && !this.state.openedMoreOptionsMenuFollowerId) return; //prevent stack overflow
+    toggleOverflowMenu(followerId) {
+        if (!followerId && !this.state.openedOverflowMenuFollowerId) return; //prevent stack overflow
 
         this.setState({
-            openedMoreOptionsMenuFollowerId: followerId,
+            openedOverflowMenuFollowerId: followerId,
         });
     }
 
@@ -122,19 +122,19 @@ class Followers extends Component {
         return {
             left: <Typography variant="h6">Your Followers</Typography>,
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu>
                     <MenuItem onClick={() => this.toggleShowEmails()}>
                         {this.state.showEmails ? "Hide Emails" : "Show Emails"}
                     </MenuItem>
                     <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
                         {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
 
-    renderMoreOptionsMenu() {
+    renderOverflowMenu() {
         return (followerId) => {
             const follower = this.props.getFollower(followerId);
 
@@ -145,7 +145,7 @@ class Followers extends Component {
             );
 
             return (
-                <MoreOptionsMenu className="more-options-btn" key="more-options">
+                <OverflowMenu className="more-options-btn" key="more-options">
                     <MenuItem className="edit-follower-btn" onClick={() => this.handleEditFollower(followerId)}>
                         Edit
                     </MenuItem>
@@ -157,7 +157,7 @@ class Followers extends Component {
                     >
                         Delete
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             );
         };
     }
@@ -166,7 +166,7 @@ class Followers extends Component {
         let header = this.getHeader();
         let rows = this.getRows();
         let toolbox = this.getToolbox();
-        let moreOptionsMenu = this.renderMoreOptionsMenu();
+        let overflowMenu = this.renderOverflowMenu();
 
         return (
             <EntityTable
@@ -174,7 +174,7 @@ class Followers extends Component {
                 rows={rows}
                 toolbox={toolbox}
                 addButton={true}
-                rowActions={[moreOptionsMenu]}
+                rowActions={[overflowMenu]}
                 className="followers"
                 onAdd={this.handleAddFollower}
             />

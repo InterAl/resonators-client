@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions as navigationActions } from '../actions/navigationActions';
 import EntityTable from './EntityTable';
-import MoreOptionsMenu from './MoreOptionsMenu';
+import OverflowMenu from './OverflowMenu';
 import { MenuItem, Checkbox } from '@material-ui/core';
 import { Label } from '@material-ui/icons';
 
@@ -82,13 +82,13 @@ class Clinics extends Component {
     render() {
         let header = this.getHeader();
         let rows = this.getRows();
-        let moreOptionsMenu = this.renderMoreOptionsMenu();
+        let overflowMenu = this.renderOverflowMenu();
         return (
             <EntityTable
                 header={header}
                 rows={rows}
                 addButton={false}
-                rowActions={[moreOptionsMenu]}
+                rowActions={[overflowMenu]}
                 className='clinics'
                 onAdd={this.handleAddClinic}
             />
@@ -96,7 +96,7 @@ class Clinics extends Component {
     }
 
 
-    renderMoreOptionsMenu() {
+    renderOverflowMenu() {
         return clinicId => {
             let clinic = _.find(this.props.clinics, f => f.id === clinicId);
             var showHideDetachClinciAction = this.props.leader.current_clinic_id === clinicId && clinic.isPrimary == false ? (
@@ -122,13 +122,13 @@ class Clinics extends Component {
                 </MenuItem>
             ) : ""
             return (
-                <MoreOptionsMenu
+                <OverflowMenu
                     key="more-options"
                     className='more-options-btn'>
                     {showMakeAsCurrentClinicAction}
                     {showHideDetachClinciAction}
                     {showHideAddClinciAction}
-                </MoreOptionsMenu>
+                </OverflowMenu>
             );
         }
     }

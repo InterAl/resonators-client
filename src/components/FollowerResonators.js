@@ -10,7 +10,7 @@ import ResonatorImage from "./ResonatorImage";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
-import MoreOptionsMenu from "./MoreOptionsMenu";
+import OverflowMenu from "./OverflowMenu";
 import { MenuItem, Typography } from "@material-ui/core";
 
 class FollowerResonators extends Component {
@@ -86,11 +86,11 @@ class FollowerResonators extends Component {
                 </Typography>
             ),
             right: (
-                <MoreOptionsMenu>
+                <OverflowMenu>
                     <MenuItem onClick={this.toggleShowInactive}>
                         {this.state.showDisabled ? "Hide Inactive Resonators" : "Show Inactive Resonators"}
                     </MenuItem>
-                </MoreOptionsMenu>
+                </OverflowMenu>
             ),
         };
     }
@@ -109,7 +109,7 @@ class FollowerResonators extends Component {
         this.props.activateResonator({ followerId, resonator });
     }
 
-    renderMoreOptionsMenu() {
+    renderOverflowMenu() {
         return (resonatorId) => {
             let resonator = _.find(this.props.resonators, (r) => r.id === resonatorId);
             if (!resonator) return;
@@ -121,9 +121,9 @@ class FollowerResonators extends Component {
             );
 
             return (
-                <MoreOptionsMenu key="more" className="more-options-btn">
+                <OverflowMenu key="more" className="more-options-btn">
                     {freezeUnfreezeMenuItem}
-                </MoreOptionsMenu>
+                </OverflowMenu>
             );
         };
     }
@@ -135,7 +135,7 @@ class FollowerResonators extends Component {
         let getEditRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
         let showRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/show`;
         let toolbox = this.getToolbox();
-        let moreOptionsMenu = this.renderMoreOptionsMenu();
+        let overflowMenu = this.renderOverflowMenu();
 
         return (
             <EntityTable
@@ -144,7 +144,7 @@ class FollowerResonators extends Component {
                 onRemove={this.handleRemoveResonator}
                 onShow={(id) => this.props.push(showRoute(id))}
                 addButton={true}
-                rowActions={["show", "edit", "remove", moreOptionsMenu]}
+                rowActions={["show", "edit", "remove", overflowMenu]}
                 header={header}
                 toolbox={toolbox}
                 rows={rows}
