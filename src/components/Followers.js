@@ -137,26 +137,13 @@ class Followers extends Component {
     renderOverflowMenu() {
         return (followerId) => {
             const follower = this.props.getFollower(followerId);
-
-            const freezeUnfreezeMenuItem = follower.frozen ? (
-                <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
-            ) : (
-                <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
-            );
-
             return (
-                <OverflowMenu className="more-options-btn" key="more-options">
-                    <MenuItem className="edit-follower-btn" onClick={() => this.handleEditFollower(followerId)}>
-                        Edit
-                    </MenuItem>
-                    {freezeUnfreezeMenuItem}
-                    <MenuItem
-                        className="delete-follower-btn"
-                        onClick={() => this.handleRemoveFollower(followerId)}
-                        style={{ color: "red" }}
-                    >
-                        Delete
-                    </MenuItem>
+                <OverflowMenu key="more-options">
+                    {follower.frozen ? (
+                        <MenuItem onClick={() => this.props.unfreezeFollower(followerId)}>Activate</MenuItem>
+                    ) : (
+                        <MenuItem onClick={() => this.handleFreezeFollower(followerId)}>Deactivate</MenuItem>
+                    )}
                 </OverflowMenu>
             );
         };
@@ -174,9 +161,11 @@ class Followers extends Component {
                 rows={rows}
                 toolbox={toolbox}
                 addButton={true}
-                rowActions={[overflowMenu]}
+                rowActions={["edit", "remove", overflowMenu]}
                 className="followers"
                 onAdd={this.handleAddFollower}
+                onEdit={this.handleEditFollower}
+                onRemove={this.handleRemoveFollower}
             />
         );
     }
