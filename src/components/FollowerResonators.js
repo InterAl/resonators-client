@@ -86,7 +86,7 @@ class FollowerResonators extends Component {
                 </Typography>
             ),
             right: (
-                <OverflowMenu>
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={this.toggleShowInactive}>
                         {this.state.showDisabled ? "Hide Inactive Resonators" : "Show Inactive Resonators"}
                     </MenuItem>

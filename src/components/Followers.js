@@ -122,7 +122,7 @@ class Followers extends Component {
         return {
             left: <Typography variant="h6">Your Followers</Typography>,
             right: (
-                <OverflowMenu>
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={() => this.toggleShowEmails()}>
                         {this.state.showEmails ? "Hide Emails" : "Show Emails"}
                     </MenuItem>
