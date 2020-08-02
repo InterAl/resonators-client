@@ -2,7 +2,7 @@ import _ from "lodash";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import EntityTable from "./EntityTable";
+import EntityTable, { rowAction } from "./EntityTable";
 import { actions } from "../actions/followersActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
@@ -11,7 +11,7 @@ import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
-import { MenuItem, Typography, Tooltip, IconButton } from "@material-ui/core";
+import { MenuItem, Typography } from "@material-ui/core";
 import { RemoveRedEye } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
@@ -24,6 +24,8 @@ class FollowerResonators extends Component {
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
+        this.handleActivateResonator = this.handleActivateResonator.bind(this);
+        this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
     }
 
     componentDidMount() {
@@ -110,49 +112,59 @@ class FollowerResonators extends Component {
         this.props.activateResonator({ followerId, resonator });
     }
 
-    renderOverflowMenu() {
-        return (resonatorId) => {
-            let resonator = _.find(this.props.resonators, (r) => r.id === resonatorId);
-            if (!resonator) return;
-
-            const freezeUnfreezeMenuItem = resonator.pop_email ? (
-                <MenuItem onClick={() => this.handleDeactivateResonator(resonatorId)}>Deactivate</MenuItem>
-            ) : (
-                <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
-            );
-
-            return <OverflowMenu key="more">{freezeUnfreezeMenuItem}</OverflowMenu>;
-        };
-    }
-
-    renderPreviewAction(resonatorId) {
-        return (
-            <Tooltip title="Preview" key="preview">
-                <IconButton onClick={() => this.props.push(this.getPreviewRoute(resonatorId))}>
-                    <RemoveRedEye />
-                </IconButton>
-            </Tooltip>
-        );
-    }
-
     getPreviewRoute(resonatorId) {
         return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/show`;
     }
 
-    render() {
-        const addRoute = `/followers/${this.props.match.params.followerId}/resonators/new`;
-        const getEditRoute = (id) => `/followers/${this.props.match.params.followerId}/resonators/${id}/edit`;
+    getEditRoute(resonatorId) {
+        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/edit`;
+    }
 
+    getAddRoute() {
+        return `/followers/${this.props.match.params.followerId}/resonators/new`;
+    }
+
+    getRowActions() {
+        return [
+            rowAction({
+                title: "Preview",
+                icon: <RemoveRedEye />,
+                onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
+            }),
+            rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
+            rowAction.remove(this.handleRemoveResonator),
+        ];
+    }
+
+    getResonator(resonatorId) {
+        return _.find(this.props.resonators, (resonator) => resonator.id === resonatorId);
+    }
+
+    getExtraRowActions() {
+        return [
+            rowAction({
+                title: "Deactivate",
+                onClick: this.handleDeactivateResonator,
+                isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
+            }),
+            rowAction({
+                title: "Activate",
+                onClick: this.handleActivateResonator,
+                isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
+            }),
+        ];
+    }
+
+    render() {
         return (
             <EntityTable
-                onAdd={() => this.props.push(addRoute)}
-                onEdit={(id) => this.props.push(getEditRoute(id))}
-                onRemove={this.handleRemoveResonator}
                 addButton={true}
-                rowActions={[this.renderPreviewAction.bind(this), "edit", "remove", this.renderOverflowMenu()]}
+                rows={this.getRows()}
                 header={this.getHeader()}
                 toolbox={this.getToolbox()}
-                rows={this.getRows()}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
+                onAdd={() => this.props.push(this.getAddRoute())}
             />
         );
     }

@@ -7,7 +7,7 @@ import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
 import { NotInterested } from "@material-ui/icons";
-import EntityTable from "./EntityTable";
+import EntityTable, { rowAction } from "./EntityTable";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
 import "./Followers.scss";
@@ -26,6 +26,7 @@ class Followers extends Component {
         this.handleEditFollower = this.handleEditFollower.bind(this);
         this.handleRemoveFollower = this.handleRemoveFollower.bind(this);
         this.handleAddFollower = this.handleAddFollower.bind(this);
+        this.handleFreezeFollower = this.handleFreezeFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -83,7 +84,7 @@ class Followers extends Component {
     }
 
     getHeader() {
-        let header = [];
+        const header = [];
         header.push("Name");
         this.state.showEmails && header.push("Email");
         header.push("Clinic");
@@ -149,23 +150,36 @@ class Followers extends Component {
         };
     }
 
-    render() {
-        let header = this.getHeader();
-        let rows = this.getRows();
-        let toolbox = this.getToolbox();
-        let overflowMenu = this.renderOverflowMenu();
+    getRowActions() {
+        return [rowAction.edit(this.handleEditFollower), rowAction.remove(this.handleRemoveFollower)];
+    }
 
+    getExtraRowActions() {
+        return [
+            rowAction({
+                title: "Activate",
+                onClick: this.props.unfreezeFollower,
+                isAvailable: (followerId) => this.props.getFollower(followerId).frozen,
+            }),
+            rowAction({
+                title: "Deactivate",
+                onClick: this.handleFreezeFollower,
+                isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
+            }),
+        ];
+    }
+
+    render() {
         return (
             <EntityTable
-                header={header}
-                rows={rows}
-                toolbox={toolbox}
                 addButton={true}
-                rowActions={["edit", "remove", overflowMenu]}
-                className="followers"
+                rows={this.getRows()}
+                header={this.getHeader()}
+                toolbox={this.getToolbox()}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
                 onAdd={this.handleAddFollower}
-                onEdit={this.handleEditFollower}
-                onRemove={this.handleRemoveFollower}
+                className="followers"
             />
         );
     }
