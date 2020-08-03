@@ -7,16 +7,18 @@ import { AppBar, Toolbar, IconButton, Hidden } from "@material-ui/core";
 import HeaderLogo from "./HeaderLogo";
 import Breadcrumbs from "./Breadcrumbs";
 import { actions } from "../actions/menuActions";
-import navigationSelector from "../selectors/navigationSelector";
+import loginInfoSelector from "../selectors/loginInfo";
 
 function TopBar(props) {
     return (
         <AppBar>
             <Toolbar>
-                {props.navigationInfo.showHamburger ? (
-                    <IconButton onClick={props.toggleMenu} color="inherit" edge="start">
-                        <Menu />
-                    </IconButton>
+                {props.loggedIn ? (
+                    <Hidden mdUp>
+                        <IconButton onClick={props.toggleMenu} color="inherit" edge="start">
+                            <Menu />
+                        </IconButton>
+                    </Hidden>
                 ) : null}
                 <Breadcrumbs />
                 <Hidden xsDown>
@@ -28,6 +30,6 @@ function TopBar(props) {
 }
 
 export default connect(
-    (state) => ({ navigationInfo: navigationSelector(state) }),
+    (state) => ({ loggedIn: loginInfoSelector(state).loggedIn }),
     (dispatch) => bindActionCreators({ toggleMenu: actions.toggleMenu }, dispatch)
 )(TopBar);

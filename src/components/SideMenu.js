@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actions } from "../actions/menuActions";
-import navigationInfoSelector from "../selectors/navigationSelector";
-import isMobile from "./isMobile";
+import navigationSelector from "../selectors/navigationSelector";
+
 import {
     Divider,
     List,
@@ -14,6 +14,8 @@ import {
     Collapse,
     Toolbar,
     makeStyles,
+    useTheme,
+    useMediaQuery,
 } from "@material-ui/core";
 import {
     DirectionsWalk,
@@ -37,24 +39,23 @@ const useStyles = makeStyles((theme) => ({
         minWidth: drawerWidth,
         padding: theme.spacing(1),
     },
-    dockedDrawer: {
-        display: (props) => (props.navigationInfo.menuOpen ? "" : "none"),
-    },
 }));
 
 function SideMenu(props) {
-    const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
+    const screenSmall = useMediaQuery(useTheme().breakpoints.down("sm"));
     const classes = useStyles(props);
+
+    const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
 
     return (
         <Drawer
-            open={props.navigationInfo.menuOpen}
-            variant={isMobile() ? "temporary" : "permanent"}
-            classes={{ root: classes.drawer, paper: classes.drawerPaper, docked: classes.dockedDrawer }}
+            open={props.menuOpen}
+            variant={screenSmall ? "temporary" : "permanent"}
+            classes={{ root: classes.drawer, paper: classes.drawerPaper }}
             PaperProps={{ elevation: 4 }}
             onClose={props.toggleMenu}
         >
-            {isMobile() ? null : (
+            {screenSmall ? null : (
                 /* a placeholder to keep the content below the app bar.
                    The drawer must have a separate toolbar placeholder because it has position: fixed.
                    Not required on "mobile" cause then we use the temporary drawer style. */
@@ -105,9 +106,7 @@ function SideMenu(props) {
 }
 
 export default connect(
-    (state) => ({
-        navigationInfo: navigationInfoSelector(state),
-    }),
+    (state) => ({ menuOpen: navigationSelector(state).menuOpen }),
     (dispatch) =>
         bindActionCreators(
             {
