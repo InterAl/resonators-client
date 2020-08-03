@@ -89,7 +89,7 @@ class ResonatorStats extends Component {
                 subtitle={question.description}
                 avatar={<InsertChart/>}
                 key={question.id}
-                style={{marginBottom: 10}}
+                style={{marginBottom: 10, minWidth: "100%"}}
             >
                 {_.isEmpty(question.followerAnswers) ?
                     this.renderEmptyState() : this.renderChart(question)}

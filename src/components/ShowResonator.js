@@ -47,7 +47,7 @@ class ShowResonator extends Component {
         let resonatorId = this.props.match.params.resonatorId;
 
         return (
-            <div style={{ margin: 30 }}>
+            <div>
                 {this.renderSectionTitle(this.props.resonator.title)}
                 <div>
                     <ExpandableCard
