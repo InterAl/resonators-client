@@ -1,10 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Edit, Delete } from "@material-ui/icons";
-import { Tooltip, IconButton, MenuItem, ListItemIcon } from "@material-ui/core";
+import { Tooltip, IconButton, MenuItem, ListItemIcon, useTheme, useMediaQuery } from "@material-ui/core";
 
 import OverflowMenu from "./OverflowMenu";
-import isMobile from "./isMobile";
 
 const computeActionKey = (action) => action.title.toLowerCase();
 
@@ -23,9 +22,11 @@ const renderOverflowAction = (itemId) => (action) => (
 
 const isActionAvailable = (itemId) => (action) => action.isAvailable(itemId);
 
-function RowActions({ actions, extraActions, itemId }) {
-    const shownActions = isMobile() ? [] : actions;
-    const overflowActions = (isMobile() ? actions : []).concat(extraActions);
+function RowActions({ actions, extraActions, itemId, overflowAllSize = "sm" }) {
+    const overflowAll = useMediaQuery(useTheme().breakpoints.down(overflowAllSize));
+
+    const shownActions = overflowAll ? [] : actions;
+    const overflowActions = (overflowAll ? actions : []).concat(extraActions);
 
     const isAvailable = isActionAvailable(itemId);
 
