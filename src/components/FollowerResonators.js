@@ -169,6 +169,7 @@ class FollowerResonators extends Component {
                 rowActions={this.getRowActions()}
                 extraRowActions={this.getExtraRowActions()}
                 onAdd={() => this.props.push(this.getAddRoute())}
+                addText="Create Resonator"
             />
         );
     }

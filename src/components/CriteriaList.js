@@ -39,6 +39,7 @@ class CriteriaList extends Component {
         return (
             <EntityTable
                 addButton={true}
+                addText="Add Criterion"
                 rows={this.getRows()}
                 header={["Criteria"]}
                 onAdd={() => this.props.push(location.pathname + "/new")}

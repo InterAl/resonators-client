@@ -182,6 +182,7 @@ class Followers extends Component {
                 extraRowActions={this.getExtraRowActions()}
                 onAdd={this.handleAddFollower}
                 className="followers"
+                addText="Add Follower"
             />
         );
     }

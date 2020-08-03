@@ -1,19 +1,9 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { Add } from "@material-ui/icons";
-import {
-    Fab,
-    Toolbar,
-    Table,
-    TableContainer,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    Paper,
-} from "@material-ui/core";
+import { Toolbar, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from "@material-ui/core";
 
+import Fab from "./Fab";
 import "./EntityTable.scss";
 import { RowActions } from "./RowActions";
 
@@ -29,6 +19,7 @@ export default class EntityTable extends Component {
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
         className: PropTypes.string,
+        addText: PropTypes.string,
     };
 
     renderToolbox() {
@@ -97,13 +88,7 @@ export default class EntityTable extends Component {
                         </Table>
                     </TableContainer>
                 </Paper>
-                {this.props.addButton && (
-                    <div className="add-btn">
-                        <Fab color="primary" onClick={this.props.onAdd}>
-                            <Add />
-                        </Fab>
-                    </div>
-                )}
+                {this.props.addButton && <Fab onClick={this.props.onAdd} text={this.props.addText} />}
             </div>
         );
     }

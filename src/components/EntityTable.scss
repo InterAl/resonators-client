@@ -2,19 +2,4 @@
     .editColumn {
         text-align: right !important;
     }
-    
-    .add-btn {
-        position: fixed;
-        bottom: 30px;
-
-        @media (min-width: 0px)  {
-            right: 30px;
-        }
-        @media (min-width: 767px)  {
-            right: 88px;
-        }
-        @media (min-width: 992px) {
-            right: 131px;
-        }
-    }
 }
