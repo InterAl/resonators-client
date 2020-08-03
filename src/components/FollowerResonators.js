@@ -60,7 +60,7 @@ class FollowerResonators extends Component {
                         color: resonator.pop_email ? "" : "grey",
                     }}
                 >
-                    <Typography style={{ fontWeight: "bold" }}>{resonator.title}</Typography>
+                    <Typography style={{ fontWeight: "bold" }}>{_.truncate(resonator.title, { length: 50 })}</Typography>
                     <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
                 </div>
             </div>

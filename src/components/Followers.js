@@ -8,10 +8,9 @@ import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
 import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
-import { rowAction } from './RowActions';
+import { rowAction } from "./RowActions";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
-import "./Followers.scss";
 
 class Followers extends Component {
     constructor() {

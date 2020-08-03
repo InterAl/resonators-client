@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ThemeProvider, Toolbar } from "@material-ui/core";
+import { ThemeProvider, Toolbar, Grid } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import SideMenu from "./SideMenu";
@@ -17,15 +17,21 @@ class Layout extends Component {
         return (
             <ThemeProvider theme={theme}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <div className="main-container">
-                        <TopBar />
-                        {this.props.loggedIn ? <SideMenu /> : null}
-                        <div className="screenWrapper">
-                            <Toolbar /> {/* placeholder to keep the main content below the app bar */}
-                            {this.props.children}
-                            <ModalDisplayer modal={this.props.modal} />
-                        </div>
-                    </div>
+                    <TopBar />
+                    <Toolbar />
+                    <Grid container wrap="nowrap">
+                        {this.props.loggedIn ? (
+                            <Grid item>
+                                <SideMenu />
+                            </Grid>
+                        ) : null}
+                        <Grid item xs container justify="center" style={{ padding: 30 }}>
+                            <Grid item xs md={10} xl={8}>
+                                {this.props.children}
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <ModalDisplayer modal={this.props.modal} />
                 </MuiPickersUtilsProvider>
             </ThemeProvider>
         );

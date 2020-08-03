@@ -57,7 +57,7 @@ class ExpandableCard extends Component {
 
     render() {
         return (
-            <Card style={{ maxWidth: '100vw', width: this.props.width, margin: this.props.margin, ...this.props.style }}>
+            <Card style={{ maxWidth: '100%', width: this.props.width, margin: this.props.margin, ...this.props.style }}>
                 <CardHeader
                     title={this.props.title}
                     subheader={this.props.subtitle}

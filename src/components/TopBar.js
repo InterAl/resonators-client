@@ -9,7 +9,8 @@ import Breadcrumbs from "./Breadcrumbs";
 import { actions } from "../actions/menuActions";
 import loginInfoSelector from "../selectors/loginInfo";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
+    appBar: { zIndex: theme.zIndex.drawer + 1 },
     toolbar: { justifyContent: "space-between" },
     leftSide: { display: "flex", alignItems: "center" },
 }));
@@ -18,7 +19,7 @@ function TopBar(props) {
     const classes = useStyles();
 
     return (
-        <AppBar>
+        <AppBar className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
                 <div className={classes.leftSide}>
                     {props.loggedIn ? (

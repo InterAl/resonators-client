@@ -27,16 +27,9 @@ import {
     ExpandMore,
 } from "@material-ui/icons";
 
-const drawerWidth = 250;
-
 const useStyles = makeStyles((theme) => ({
     drawer: {
-        minWidth: drawerWidth,
-        zIndex: theme.zIndex.appBar - 1,
-        padding: theme.spacing(1),
-    },
-    drawerPaper: {
-        minWidth: drawerWidth,
+        minWidth: 250,
         padding: theme.spacing(1),
     },
 }));
@@ -51,7 +44,7 @@ function SideMenu(props) {
         <Drawer
             open={props.menuOpen}
             variant={screenSmall ? "temporary" : "permanent"}
-            classes={{ root: classes.drawer, paper: classes.drawerPaper }}
+            classes={{ root: classes.drawer, paper: classes.drawer }}
             PaperProps={{ elevation: 4 }}
             onClose={props.toggleMenu}
         >

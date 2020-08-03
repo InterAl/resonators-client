@@ -31,7 +31,7 @@ class ShowResonator extends Component {
     renderSectionTitle(title) {
         return (
             <div style={{ marginBottom: 20 }}>
-                <Typography variant="h5" style={{ textAlign: "center" }}>
+                <Typography variant="h5" style={{ textAlign: "center" }} noWrap>
                     {title}
                 </Typography>
                 <Divider style={{ margin: 10 }} />
