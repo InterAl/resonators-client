@@ -14,15 +14,18 @@ function Breadcrumbs(props) {
 
     return (
         <MuiBreadcrumbs style={{ color: "inherit" }} separator={<NavigateNext />}>
-            {_.flatMap(props.routeStack, (route, index) =>
-                hideStubs && route.stubRoute ? null : (
-                    <MuiLink key={index} color="inherit" to={getLinkUri(route, index, props.routeStack)} component={Link}>
-                        <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
-                    </MuiLink>
-                )
-            )}
+            {_.flatMap(props.routeStack, renderBreadcrumb(props.routeStack, hideStubs))}
         </MuiBreadcrumbs>
     );
+}
+
+function renderBreadcrumb(routes, hideStubs) {
+    return (route, index) =>
+        hideStubs && route.stubRoute ? null : (
+            <MuiLink key={index} color="inherit" to={getLinkUri(route, index, routes)} component={Link}>
+                <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
+            </MuiLink>
+        );
 }
 
 function getLinkUri(route, index, routeStack) {
@@ -32,16 +35,14 @@ function getLinkUri(route, index, routeStack) {
 function getRouteStack(state) {
     const { pathname } = location;
 
-    let routeStack = resolveRouteStack(pathname, "", tree);
-
-    routeStack = routeStack.map((r) => ({
-        route: r.match.url,
-        stubRoute: r.stubRoute,
-        title: r.title(state),
+    const routeStack = resolveRouteStack(pathname, "", tree);
+    const normalized = routeStack.map((route) => ({
+        route: route.match.url,
+        title: route.title(state),
+        stubRoute: route.stubRoute,
     }));
 
-    routeStack = routeStack.length > 1 ? routeStack.slice(1) : routeStack;
-    return routeStack;
+    return normalized.length > 1 ? normalized.slice(1) : normalized;
 }
 
 function resolveRouteStack(fullPathname, pathname, tree) {
