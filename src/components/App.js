@@ -6,7 +6,7 @@ import Layout from './Layout';
 import Followers from './Followers';
 import Clinics from './Clinics';
 import NoMatch from './NoMatch';
-import Visitor from './Visitor';
+import LoginPage from './LoginPage';
 import FollowerResonators from './FollowerResonators';
 import EditResonator from './EditResonator';
 import ShowResonator from './ShowResonator';
@@ -43,7 +43,7 @@ class AppComponent extends React.Component {
 
                 <Route exact path="/follower/resonators" component={ResonatorsOverview} />
 
-                <Route exact path="/login" component={Visitor} />
+                <Route exact path="/login" component={LoginPage} />
                 <Route component={NoMatch} />
               </Switch>
             </Layout>

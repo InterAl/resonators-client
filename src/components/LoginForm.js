@@ -42,17 +42,15 @@ class LoginForm extends Component {
                                 props={{ placeholder: "Password" }}
                             />
                             {this.props.submitFailed && "Login failed"}
-                            <div className="submitBtnWrapper">
-                                <Button
-                                    type="submit"
-                                    className="submitBtn"
-                                    color="primary"
-                                    variant="contained"
-                                    style={{ marginTop: 10, marginBottom: 10 }}
-                                >
-                                    submit
-                                </Button>
-                            </div>
+                            <Button
+                                type="submit"
+                                className="submitBtn"
+                                color="primary"
+                                variant="contained"
+                                style={{ marginTop: 30, marginBottom: 10 }}
+                            >
+                                submit
+                            </Button>
 
                             <div
                                 style={{
