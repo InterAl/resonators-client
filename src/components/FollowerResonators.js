@@ -2,16 +2,17 @@ import _ from "lodash";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
-import EntityTable, { rowAction } from "./EntityTable";
+import EntityTable from "./EntityTable";
+import { rowAction } from './RowActions';
 import { actions } from "../actions/followersActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
-import ResonatorImage from "./ResonatorImage";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
 // import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
-import { MenuItem, Typography } from "@material-ui/core";
+import getResonatorImage from "../selectors/getResonatorImage";
+import { MenuItem, Typography, Avatar } from "@material-ui/core";
 import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
@@ -46,10 +47,11 @@ class FollowerResonators extends Component {
 
     renderColumn(resonator) {
         const dir = utils.getResonatorDirection(resonator);
+        const resonatorImage = getResonatorImage(resonator);
 
         return (
             <div style={{ display: "flex", alignItems: "center", filter: resonator.pop_email ? "" : "grayscale(1)" }}>
-                <ResonatorImage width={80} height={80} resonator={resonator} />
+                {resonatorImage ? <Avatar src={resonatorImage} variant="rounded" /> : null}
                 <div
                     style={{
                         direction: dir,
@@ -58,7 +60,7 @@ class FollowerResonators extends Component {
                         color: resonator.pop_email ? "" : "grey",
                     }}
                 >
-                    <Typography style={{ fontWeight: "bold" }}>{resonator.title}</Typography>
+                    <Typography style={{ fontWeight: "bold" }}>{_.truncate(resonator.title, { length: 50 })}</Typography>
                     <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
                 </div>
             </div>
@@ -167,6 +169,7 @@ class FollowerResonators extends Component {
                 rowActions={this.getRowActions()}
                 extraRowActions={this.getExtraRowActions()}
                 onAdd={() => this.props.push(this.getAddRoute())}
+                addText="Create Resonator"
             />
         );
     }

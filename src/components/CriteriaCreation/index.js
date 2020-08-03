@@ -6,7 +6,16 @@ import { actions } from "../../actions/criteriaActions";
 import { reduxForm, formValueSelector, Field } from "redux-form";
 // import ClinicSelect from '../FormComponents/ClinicSelect';
 import TextField from "../FormComponents/TextField";
-import { MenuItem, Card, Button, Typography, CardActions, CardContent, Collapse, TextField as MuiTextField } from "@material-ui/core";
+import {
+    MenuItem,
+    Card,
+    Button,
+    Typography,
+    CardActions,
+    CardContent,
+    Collapse,
+    TextField as MuiTextField,
+} from "@material-ui/core";
 import NumericCreation from "./NumericCreation";
 import BooleanCreation from "./BooleanCreation";
 import ValueListCreation from "./ValueListCreation";
@@ -52,7 +61,7 @@ class CriteriaCreation extends Component {
                 select
                 fullWidth
                 onChange={(event) => onChange(event.target.value)}
-                inputProps={{value}}
+                inputProps={{ value }}
                 error={touched && error}
                 {...custom}
             >
@@ -66,7 +75,7 @@ class CriteriaCreation extends Component {
         const CriterionType = this.getCreationTypeControl();
 
         return (
-            <Card style={{ margin: "30px 30%", maxHeight: "100%" }}>
+            <Card style={{maxWidth: 600, margin: "0 auto"}}>
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                     <CardContent>
                         <Typography variant="h6">Create a New Criterion</Typography>

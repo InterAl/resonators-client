@@ -1,40 +1,49 @@
-import React from "react";
 import _ from "lodash";
+import React from "react";
+import { connect } from "react-redux";
 import { matchPath } from "react-router";
 import { Link } from "react-router-dom";
 import followerSelector from "../selectors/followerSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
 import criterionSelector from "../selectors/criterionSelector";
-import { Breadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
+import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
+import { NavigateNext } from "@material-ui/icons";
+import { useBelowBreakpoint } from "./hooks";
 
-export default function renderBreadcrumbs(state) {
-    let routeStack = getRouteStack(state);
+function Breadcrumbs(props) {
+    const hideStubs = useBelowBreakpoint("sm");
 
-    routeStack = routeStack.length > 1 ? routeStack.slice(1) : routeStack;
+    return (
+        <MuiBreadcrumbs style={{ color: "inherit" }} separator={<NavigateNext />}>
+            {_.flatMap(props.routeStack, renderBreadcrumb(props.routeStack, hideStubs))}
+        </MuiBreadcrumbs>
+    );
+}
 
-    const parts = _.flatMap(routeStack, (route, index) => {
-        let link = route.stubRoute ? _.get(routeStack, `[${index + 1}].route`) : route.route;
-
-        return (
-            <MuiLink color="inherit" key={index} className="breadcrumb-part" to={link || ""} component={Link}>
-                <Typography variant="h5">{_.truncate(route.title)}</Typography>
+function renderBreadcrumb(routes, hideStubs) {
+    return (route, index) =>
+        hideStubs && route.stubRoute ? null : (
+            <MuiLink key={index} color="inherit" to={getLinkUri(route, index, routes)} component={Link}>
+                <Typography variant="h6">{_.truncate(route.title, { length: 20 })}</Typography>
             </MuiLink>
         );
-    });
+}
 
-    return <Breadcrumbs style={{ flexGrow: 1, color: "inherit" }}>{parts}</Breadcrumbs>;
+function getLinkUri(route, index, routeStack) {
+    return (route.stubRoute ? _.get(routeStack, `[${index + 1}].route`) : route.route) || "";
 }
 
 function getRouteStack(state) {
     const { pathname } = location;
 
     const routeStack = resolveRouteStack(pathname, "", tree);
-
-    return routeStack.map((r) => ({
-        route: r.match.url,
-        stubRoute: r.stubRoute,
-        title: r.title(state),
+    const normalized = routeStack.map((route) => ({
+        route: route.match.url,
+        title: route.title(state),
+        stubRoute: route.stubRoute,
     }));
+
+    return normalized.length > 1 ? normalized.slice(1) : normalized;
 }
 
 function resolveRouteStack(fullPathname, pathname, tree) {
@@ -174,3 +183,5 @@ const tree = {
         },
     },
 };
+
+export default connect((state) => ({ routeStack: getRouteStack(state) }), null)(Breadcrumbs);
