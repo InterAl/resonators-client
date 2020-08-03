@@ -13,7 +13,7 @@ function Breadcrumbs(props) {
     const hideStubs = useMediaQuery(useTheme().breakpoints.down("sm"));
 
     return (
-        <MuiBreadcrumbs style={{ flexGrow: 1, color: "inherit" }} separator={<NavigateNext />}>
+        <MuiBreadcrumbs style={{ color: "inherit" }} separator={<NavigateNext />}>
             {_.flatMap(props.routeStack, (route, index) =>
                 hideStubs && route.stubRoute ? null : (
                     <MuiLink key={index} color="inherit" to={getLinkUri(route, index, props.routeStack)} component={Link}>
