@@ -6,11 +6,12 @@ import { Link } from "react-router-dom";
 import followerSelector from "../selectors/followerSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
 import criterionSelector from "../selectors/criterionSelector";
-import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography, useMediaQuery, useTheme } from "@material-ui/core";
+import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
 import { NavigateNext } from "@material-ui/icons";
+import { useBelowBreakpoint } from "./hooks";
 
 function Breadcrumbs(props) {
-    const hideStubs = useMediaQuery(useTheme().breakpoints.down("sm"));
+    const hideStubs = useBelowBreakpoint("sm");
 
     return (
         <MuiBreadcrumbs style={{ color: "inherit" }} separator={<NavigateNext />}>

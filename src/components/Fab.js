@@ -1,6 +1,7 @@
 import React from "react";
 import { Add } from "@material-ui/icons";
-import { Fab, Tooltip, makeStyles, useMediaQuery, useTheme } from "@material-ui/core";
+import { Fab, Tooltip, makeStyles } from "@material-ui/core";
+import { useBelowBreakpoint } from "./hooks";
 
 const useStyles = makeStyles((theme) => ({
     fab: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default ({ onClick, text = "" }) => {
     const classes = useStyles();
-    const screenSmall = useMediaQuery(useTheme().breakpoints.down("xs"));
+    const screenSmall = useBelowBreakpoint("xs");
     const displayExtended = text && !screenSmall;
 
     return (

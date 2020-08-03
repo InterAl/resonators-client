@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { actions } from "../actions/menuActions";
-import navigationSelector from "../selectors/navigationSelector";
-
 import {
     Divider,
     List,
@@ -14,8 +11,6 @@ import {
     Collapse,
     Toolbar,
     makeStyles,
-    useTheme,
-    useMediaQuery,
 } from "@material-ui/core";
 import {
     DirectionsWalk,
@@ -27,6 +22,10 @@ import {
     ExpandMore,
 } from "@material-ui/icons";
 
+import { useBelowBreakpoint } from "./hooks";
+import { actions } from "../actions/menuActions";
+import navigationSelector from "../selectors/navigationSelector";
+
 const useStyles = makeStyles((theme) => ({
     drawer: {
         minWidth: 250,
@@ -35,8 +34,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SideMenu(props) {
-    const screenSmall = useMediaQuery(useTheme().breakpoints.down("sm"));
     const classes = useStyles(props);
+    const screenSmall = useBelowBreakpoint("sm");
 
     const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
 
