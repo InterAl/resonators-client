@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { actions } from "../actions/menuActions";
-import navigationInfoSelector from "../selectors/navigationSelector";
-import isMobile from "./isMobile";
 import {
     Divider,
     List,
@@ -14,7 +11,6 @@ import {
     Collapse,
     Toolbar,
     makeStyles,
-    IconButton,
 } from "@material-ui/core";
 import {
     DirectionsWalk,
@@ -28,37 +24,33 @@ import {
     Person
 } from "@material-ui/icons";
 
-const drawerWidth = 250;
+import { useBelowBreakpoint } from "./hooks";
+import { actions } from "../actions/menuActions";
+import navigationSelector from "../selectors/navigationSelector";
 
 const useStyles = makeStyles((theme) => ({
     drawer: {
-        minWidth: drawerWidth,
-        zIndex: theme.zIndex.appBar - 1,
+        minWidth: 250,
         padding: theme.spacing(1),
-    },
-    drawerPaper: {
-        minWidth: drawerWidth,
-        padding: theme.spacing(1),
-    },
-    dockedDrawer: {
-        display: (props) => (props.navigationInfo.menuOpen ? "" : "none"),
     },
 }));
 
 function SideMenu(props) {
+    const classes = useStyles(props);
+    const screenSmall = useBelowBreakpoint("sm");
+
     const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
     const [followerMenuOpen, setFollowerMenuOpen] = useState(true);
-    const classes = useStyles(props);
-    console.log(followerMenuOpen);
+
     return (
         <Drawer
-            open={props.navigationInfo.menuOpen}
-            variant={isMobile() ? "temporary" : "permanent"}
-            classes={{ root: classes.drawer, paper: classes.drawerPaper, docked: classes.dockedDrawer }}
+            open={props.menuOpen}
+            variant={screenSmall ? "temporary" : "permanent"}
+            classes={{ root: classes.drawer, paper: classes.drawer }}
             PaperProps={{ elevation: 4 }}
             onClose={props.toggleMenu}
         >
-            {isMobile() ? null : (
+            {screenSmall ? null : (
                 /* a placeholder to keep the content below the app bar.
                    The drawer must have a separate toolbar placeholder because it has position: fixed.
                    Not required on "mobile" cause then we use the temporary drawer style. */
@@ -130,7 +122,7 @@ function SideMenu(props) {
 
 export default connect(
     (state) => ({
-        navigationInfo: navigationInfoSelector(state),
+        menuOpen: navigationSelector(state).menuOpen,
         leader: state.leaders.leaders,
     }),
     (dispatch) =>

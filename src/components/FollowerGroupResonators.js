@@ -22,6 +22,7 @@ class FollowerGroupResonators extends Component {
         };
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
+        this.toggleShowInactive = this.toggleShowInactive.bind(this);
     }
 
     componentDidMount() {

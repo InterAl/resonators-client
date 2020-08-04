@@ -7,7 +7,7 @@ import Followers from './Followers';
 import FollowerGroups from './FollowerGroups';
 import Clinics from './Clinics';
 import NoMatch from './NoMatch';
-import Visitor from './Visitor';
+import LoginPage from './LoginPage';
 import FollowerResonators from './FollowerResonators';
 import FollowerGroupResonators from './FollowerGroupResonators';
 import FollowerGroupMembers from './FollowerGroupMembers';
@@ -51,7 +51,7 @@ class AppComponent extends React.Component {
                 <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
                 <Route exact path="/clinics/criteria" component={CriteriaList} />
 
-                <Route exact path="/login" component={Visitor} />
+                <Route exact path="/login" component={LoginPage} />
                 <Route component={NoMatch} />
               </Switch>
             </Layout>

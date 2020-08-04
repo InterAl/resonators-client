@@ -7,7 +7,8 @@ import { actions as navigationActions } from "../actions/navigationActions";
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
 import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
-import EntityTable, { rowAction } from "./EntityTable";
+import { rowAction } from './RowActions';
+import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
 import { push } from "connected-react-router";
@@ -166,6 +167,7 @@ class FollowerGroups extends Component {
                 extraRowActions={this.getExtraRowActions()}
                 className='followerGroups'
                 onAdd={this.handleAddFollowerGroup}
+                addText="Create Follower Group"
             />
         );
     }

@@ -1,25 +1,11 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { Edit, Delete, Add } from "@material-ui/icons";
-import {
-    IconButton,
-    Fab,
-    Toolbar,
-    Table,
-    TableContainer,
-    TableHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    Paper,
-    Tooltip,
-    MenuItem,
-    ListItemIcon,
-} from "@material-ui/core";
-import OverflowMenu from "./OverflowMenu";
-import isMobile from "./isMobile";
+import { Toolbar, Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper } from "@material-ui/core";
+
+import Fab from "./Fab";
 import "./EntityTable.scss";
+import { RowActions } from "./RowActions";
 
 export default class EntityTable extends Component {
     static propTypes = {
@@ -33,12 +19,7 @@ export default class EntityTable extends Component {
         onEdit: PropTypes.func,
         onRemove: PropTypes.func,
         className: PropTypes.string,
-    };
-
-    static defaultProps = {
-        className: "",
-        rowActions: [],
-        extraRowActions: []
+        addText: PropTypes.string,
     };
 
     renderToolbox() {
@@ -63,51 +44,13 @@ export default class EntityTable extends Component {
                     {this.props.header.map((col, index) => (
                         <TableCell key={index}>{col}</TableCell>
                     ))}
-                    {!_.isEmpty(this.props.rowActions) && <TableCell className="editColumn">Actions</TableCell>}
+                    {((this.props.rowActions && !_.isEmpty(this.props.rowActions)) ||
+                        (this.props.extraRowActions && !_.isEmpty(this.props.rowActions))) && (
+                        <TableCell className="editColumn">Actions</TableCell>
+                    )}
                 </TableRow>
             </TableHead>
         );
-    }
-
-    computeActionKey(action) {
-        return action.title.toLowerCase();
-    }
-
-    renderShownAction(itemId) {
-        return (action) => (
-            <Tooltip title={action.title} key={this.computeActionKey(action)}>
-                <IconButton onClick={() => action.onClick(itemId)}>{action.icon}</IconButton>
-            </Tooltip>
-        );
-    }
-
-    renderOverflowAction(itemId) {
-        return (action) => (
-            <MenuItem onClick={() => action.onClick(itemId)} key={this.computeActionKey(action)}>
-                {action.icon ? <ListItemIcon>{action.icon}</ListItemIcon> : null}
-                {action.title}
-            </MenuItem>
-        );
-    }
-
-    isActionAvailable(itemId) {
-        return (action) => action.isAvailable(itemId);
-    }
-
-    renderRowActions(itemId) {
-        const shownActions = isMobile() ? [] : this.props.rowActions;
-        const overflowActions = (isMobile() ? this.props.rowActions : []).concat(this.props.extraRowActions);
-
-        const isAvailable = this.isActionAvailable(itemId)
-
-        return [
-            ...shownActions.filter(isAvailable).map(this.renderShownAction(itemId)),
-            overflowActions.length ? (
-                <OverflowMenu key="more">
-                    {overflowActions.filter(isAvailable).map(this.renderOverflowAction(itemId))}
-                </OverflowMenu>
-            ) : null,
-        ];
     }
 
     renderBody() {
@@ -120,11 +63,13 @@ export default class EntityTable extends Component {
                                 <TableCell key={index}>{column}</TableCell>
                             ))}
 
-                            {this.props.rowActions && (
-                                <TableCell key="actions" className="editColumn">
-                                    {this.renderRowActions(itemId)}
-                                </TableCell>
-                            )}
+                            <TableCell key="actions" className="editColumn">
+                                <RowActions
+                                    itemId={itemId}
+                                    actions={this.props.rowActions}
+                                    extraActions={this.props.extraRowActions}
+                                />
+                            </TableCell>
                         </TableRow>
                     );
                 })
@@ -145,28 +90,8 @@ export default class EntityTable extends Component {
                         </Table>
                     </TableContainer>
                 </Paper>
-                {
-                    this.props.addButton && (
-                        <div className="add-btn">
-                            <Fab color="primary" onClick={this.props.onAdd}>
-                                <Add />
-                            </Fab>
-                        </div>
-                    )
-                }
-            </div >
+                {this.props.addButton && <Fab onClick={this.props.onAdd} text={this.props.addText} />}
+            </div>
         );
     }
 }
-
-const rowAction = ({ title, onClick, icon = null, isAvailable = _.stubTrue }) => ({
-    icon,
-    title,
-    onClick,
-    isAvailable,
-});
-
-rowAction.edit = (onClick) => rowAction({ title: "Edit", icon: <Edit />, onClick });
-rowAction.remove = (onClick) => rowAction({ title: "Remove", icon: <Delete />, onClick });
-
-export { rowAction };
