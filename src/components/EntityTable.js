@@ -81,7 +81,7 @@ export default class EntityTable extends Component {
     render() {
         return (
             <div className={`entity-table ${this.props.className}`}>
-                <Paper>
+                <Paper elevation={3}>
                     {(this.props.addButton || this.props.toolbox) && this.renderToolbox()}
                     <TableContainer>
                         <Table>

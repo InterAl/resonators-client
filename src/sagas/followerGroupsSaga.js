@@ -159,16 +159,14 @@ export function* fetchFollowerGroupMembers(followerGroupId) {
 
     followerGroup = yield getFollowerGroup(followerGroupId);
     console.log({ members: followerGroup.members });
-    if (!followerGroup.members) {
-        let followerGroupMembers = yield call(followerGroupApi.getGroupMembers, followerGroupId);
+    const followerGroupMembers = yield call(followerGroupApi.getGroupMembers, followerGroupId);
 
-        let patchedFollowerGroup = {
-            ...followerGroup,
-            members: followerGroupMembers
-        };
+    const patchedFollowerGroup = {
+        ...followerGroup,
+        members: followerGroupMembers
+    };
 
-        yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
-    }
+    yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
 }
 
 export function* fetchFollowerGroupResonators(followerGroupId) {

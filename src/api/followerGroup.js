@@ -4,7 +4,7 @@ export function get() {
     return fetcher('/leader_followerGroups');
 }
 
-export function create({group_name, clinic}) {
+export function create({ group_name, clinic }) {
     return fetcher.post('/leader_followerGroups.json', {
         group_name,
         clinic_id: clinic
@@ -46,5 +46,5 @@ export function getGroupMembers(followerGroupId) {
 }
 
 export function updateMembers(followerGroupId, memberIdList) {
-    return fetcher.put(`/leader_followerGroups/${followerGroupId}/followers.json`, memberIdList);
+    return fetcher.put(`/leader_followerGroups/${followerGroupId}/followers.json`, { memberIdList });
 }

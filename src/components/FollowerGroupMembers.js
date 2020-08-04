@@ -8,7 +8,7 @@ import { actions as navigationActions } from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
 import { Select, Checkbox, MenuItem, Button, Link as MuiLink, Typography, Divider } from '@material-ui/core';
 import EntityTable from './EntityTable';
-import { Link } from 'react-router-dom';
+import { push } from "connected-react-router";
 import OverflowMenu from './OverflowMenu';
 import { NotInterested } from '@material-ui/icons';
 
@@ -73,6 +73,7 @@ class FollowerGroupMembers extends Component {
             newMemberList,
             followerGroupId: this.props.followerGroup.id,
         });
+        this.props.push('/followerGroups/');
     }
 
     renderClinicFilter() {
@@ -105,7 +106,6 @@ class FollowerGroupMembers extends Component {
     getMemberRows(isMembers) {
         return _.reduce(
             _.filter(this.props.followers, (f) => isMembers === this.isFollowerInMemberList(f.id)),
-            // this.props.followers,
             (acc, f) => {
                 const cols = [];
                 cols.push(
@@ -130,19 +130,25 @@ class FollowerGroupMembers extends Component {
     }
 
     renderRows() {
+        const memberRows = this.getMemberRows(true);
+        const nonMemberRows = this.getMemberRows(false);
         return (
-            <div>
+            <div style={{ justifyContent: 'space-around', display: 'flex', flexDirection: 'column' }}>
                 <EntityTable
                     header={this.getHeader()}
-                    rows={this.getMemberRows(true)}
+                    rows={memberRows}
                     toolbox={this.getToolbox()}
                     addButton={false}
                     className='members' />
-                <Divider />
-                <EntityTable
-                    rows={this.getMemberRows(false)}
-                    addButton={false}
-                    className='members' />
+                {!_.isEmpty(nonMemberRows) &&
+                    <React.Fragment>
+                        <Divider style={{marginBottom: '3vh'}}/>
+                        <EntityTable
+                            rows={nonMemberRows}
+                            addButton={false}
+                            className='members' />
+                    </React.Fragment>
+                }
             </div>
         )
     }
@@ -205,6 +211,7 @@ function mapDispatchToProps(dispatch) {
         fetchFollowerGroupMembers: followerGroupsActions.fetchFollowerGroupMembers,
         updateFollowerGroupMembers: followerGroupsActions.updateFollowerGroupMembers,
         toggleDisplayFrozen: followersActions.toggleDisplayFrozen,
+        push,
     }, dispatch);
 }
 
