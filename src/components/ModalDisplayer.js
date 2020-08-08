@@ -15,6 +15,8 @@ import RegistrationModal from './RegistrationModal';
 import ForgotPasswordModal from './ForgotPasswordModal';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import AddLeaderClinicModal from './AddLeaderClinicModal'
+import ResetResonatorPrompt from './ResetResonatorPrompt';
+
 
 const modalMap = {
     'editFollower': EditFollowerModal,
@@ -28,7 +30,8 @@ const modalMap = {
     'registration': RegistrationModal,
     'forgotPassword': ForgotPasswordModal,
     'forgotPasswordSuccess': ForgotPasswordSuccess,
-    'addLeaderToClinic' : AddLeaderClinicModal
+    'addLeaderToClinic' : AddLeaderClinicModal,
+    'resetResonator': ResetResonatorPrompt,
 };
 
 class ModalDisplayer extends Component {

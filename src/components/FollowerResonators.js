@@ -116,9 +116,7 @@ class FollowerResonators extends Component {
     }
 
     handleResetResonator(id) {
-        const resonator = _.find(this.props.resonators, (r) => r.id === id);
-        const followerId = resonator.follower_id;
-        this.props.resetResonator({ followerId, resonator });
+        this.props.showResetResonatorPrompt(id);
     }
 
     getPreviewRoute(resonatorId) {
@@ -211,7 +209,13 @@ function mapDispatchToProps(dispatch /* {params: {followerId}} */) {
         {
             fetchFollowerResonators: actions.fetchFollowerResonators,
             activateResonator: resonatorActions.activate,
-            resetResonator: resonatorActions.reset,
+            showResetResonatorPrompt: (resonatorId) =>
+                navigationActions.showModal({
+                    name: "resetResonator",
+                    props: {
+                        resonatorId,
+                    },
+                }),
             showDeleteResonatorPrompt: (resonatorId) =>
                 navigationActions.showModal({
                     name: "deleteResonator",
@@ -220,7 +224,6 @@ function mapDispatchToProps(dispatch /* {params: {followerId}} */) {
                         isGroup: false,
                     },
                 }),
-
             push,
         },
         dispatch
