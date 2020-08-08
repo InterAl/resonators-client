@@ -13,7 +13,7 @@ import * as utils from "./utils";
 import OverflowMenu from "./OverflowMenu";
 import getResonatorImage from "../selectors/getResonatorImage";
 import { MenuItem, Typography, Avatar } from "@material-ui/core";
-import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -27,6 +27,7 @@ class FollowerResonators extends Component {
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
         this.handleActivateResonator = this.handleActivateResonator.bind(this);
         this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
+        this.handleResetResonator = this.handleResetResonator.bind(this);
     }
 
     componentDidMount() {
@@ -104,14 +105,20 @@ class FollowerResonators extends Component {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = true;
         const followerId = resonator.follower_id;
-        this.props.activateResonator({ followerId, resonator });
+        this.props.activateResonator({ targetId: followerId, targetType: 'follower', resonator });
     }
 
     handleDeactivateResonator(id) {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = false;
         const followerId = resonator.follower_id;
-        this.props.activateResonator({ followerId, resonator });
+        this.props.activateResonator({ targetId: followerId, targetType: 'follower', resonator });
+    }
+
+    handleResetResonator(id) {
+        const resonator = _.find(this.props.resonators, (r) => r.id === id);
+        const followerId = resonator.follower_id;
+        this.props.resetResonator({ followerId, resonator });
     }
 
     getPreviewRoute(resonatorId) {
@@ -156,6 +163,12 @@ class FollowerResonators extends Component {
                 onClick: this.handleActivateResonator,
                 isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
             }),
+            rowAction({
+                icon: <Autorenew />,
+                title: "Reset",
+                onClick: this.handleResetResonator,
+                isAvailable: (resonatorId) => !!this.getResonator(resonatorId).parent_resonator_id,
+            }),
         ];
     }
 
@@ -198,11 +211,13 @@ function mapDispatchToProps(dispatch /* {params: {followerId}} */) {
         {
             fetchFollowerResonators: actions.fetchFollowerResonators,
             activateResonator: resonatorActions.activate,
+            resetResonator: resonatorActions.reset,
             showDeleteResonatorPrompt: (resonatorId) =>
                 navigationActions.showModal({
                     name: "deleteResonator",
                     props: {
                         resonatorId,
+                        isGroup: false,
                     },
                 }),
 

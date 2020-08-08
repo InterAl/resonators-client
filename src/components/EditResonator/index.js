@@ -55,8 +55,12 @@ class EditResonator extends Component {
     }
 
     componentDidMount() {
-        const { followerId, resonatorId } = this.props.match.params;
-        this.props.reset({ followerId, resonatorId });
+        const { followerId, followerGroupId, resonatorId } = this.props.match.params;
+        this.props.reset({
+            targetType: followerId ? 'follower' : 'followerGroup',
+            targetId: followerId || followerGroupId,
+            resonatorId,
+        });
     }
 
     handleNext() {
@@ -68,7 +72,8 @@ class EditResonator extends Component {
     }
 
     handleFinalUpdate() {
-        this.props.updateFinal();
+        const { followerId } = this.props.match.params;
+        this.props.updateFinal({ targetType: followerId ? 'follower' : 'followerGroup' });
     }
 
     updateActiveStep(activeStep) {
@@ -104,6 +109,7 @@ class EditResonator extends Component {
     }
 
     renderSchedule() {
+        const { followerId } = this.props.match.params;
         return {
             label: "Schedule",
             content: (
@@ -112,6 +118,7 @@ class EditResonator extends Component {
                     onNext={this.handleNext}
                     onBack={this.handleBack}
                     updateOneOff={this.updateOneOff}
+                    targetType={followerId ? 'follower' : 'followerGroup'}
                 />
             ),
         };

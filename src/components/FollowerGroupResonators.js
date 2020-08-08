@@ -3,15 +3,16 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import React, { Component } from "react";
 import EntityTable from "./EntityTable";
+import { rowAction } from './RowActions';
 import { actions } from "../actions/followerGroupsActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
-import ResonatorImage from "./ResonatorImage";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
-// import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
-import { MenuItem, Typography } from "@material-ui/core";
+import getResonatorImage from "../selectors/getResonatorImage";
+import { MenuItem, Typography, Avatar } from "@material-ui/core";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
 class FollowerGroupResonators extends Component {
     constructor(props) {
@@ -23,20 +24,20 @@ class FollowerGroupResonators extends Component {
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
+        this.handleActivateResonator = this.handleActivateResonator.bind(this);
+        this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.followerGroup)
-            this.props.fetchFollowerGroupResonators(this.props.followerGroup.id);
+        if (this.props.followerGroup) this.props.fetchFollowerGroupResonators(this.props.followerGroup.id);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.followerGroup)
-            nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
+        if (nextProps.followerGroup) nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
     }
 
     getHeader() {
-        return ['Resonator'];
+        return ["Resonator"];
     }
 
     handleRemoveResonator(id) {
@@ -45,17 +46,20 @@ class FollowerGroupResonators extends Component {
 
     renderColumn(resonator) {
         const dir = utils.getResonatorDirection(resonator);
+        const resonatorImage = getResonatorImage(resonator);
 
         return (
             <div style={{ display: "flex", alignItems: "center", filter: resonator.pop_email ? "" : "grayscale(1)" }}>
-                <ResonatorImage width={80} height={80} resonator={resonator} />
-                <div style={{
-                    direction: dir,
-                    margin: "0 15px",
-                    textAlign: dir === "rtl" ? "right" : "left",
-                    color: resonator.pop_email ? "" : "grey",
-                }}>
-                    <Typography style={{ fontWeight: "bold" }}>{resonator.title}</Typography>
+                {resonatorImage ? <Avatar src={resonatorImage} variant="rounded" /> : null}
+                <div
+                    style={{
+                        direction: dir,
+                        margin: "0 15px",
+                        textAlign: dir === "rtl" ? "right" : "left",
+                        color: resonator.pop_email ? "" : "grey",
+                    }}
+                >
+                    <Typography style={{ fontWeight: "bold" }}>{_.truncate(resonator.title, { length: 50 })}</Typography>
                     <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
                 </div>
             </div>
@@ -87,7 +91,7 @@ class FollowerGroupResonators extends Component {
                 </Typography>
             ),
             right: (
-                <OverflowMenu>
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={this.toggleShowInactive}>
                         {this.state.showDisabled ? "Hide Inactive Resonators" : "Show Inactive Resonators"}
                     </MenuItem>
@@ -100,83 +104,109 @@ class FollowerGroupResonators extends Component {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = true;
         const followerGroupId = resonator.follower_group_id;
-        this.props.activateGroupResonator({ followerGroupId, resonator });
+        this.props.activateResonator({ targetId: followerGroupId, targetType: 'followerGroup', resonator });
     }
 
     handleDeactivateResonator(id) {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = false;
         const followerGroupId = resonator.follower_group_id;
-        this.props.activateGroupResonator({ followerGroupId, resonator });
+        this.props.activateResonator({ targetId: followerGroupId, targetType: 'followerGroup', resonator });
     }
 
-    renderOverflowMenu() {
-        return (resonatorId) => {
-            const resonator = _.find(this.props.resonators, (r) => r.id === resonatorId);
-            if (!resonator) return;
-
-            const freezeUnfreezeMenuItem = resonator.pop_email ? (
-                <MenuItem onClick={() => this.handleDeactivateResonator(resonatorId)}>Deactivate</MenuItem>
-            ) : (
-                    <MenuItem onClick={() => this.handleActivateResonator(resonatorId)}>Activate</MenuItem>
-                );
-
-            return (
-                <OverflowMenu key="more" className="more-options-btn">
-                    {freezeUnfreezeMenuItem}
-                </OverflowMenu>
-            );
-        };
+    getPreviewRoute(resonatorId) {
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${resonatorId}/show`;
     }
 
+    getEditRoute(resonatorId) {
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${resonatorId}/edit`;
+    }
+
+    getAddRoute() {
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/new`;
+    }
+
+    getRowActions() {
+        return [
+            rowAction({
+                title: "Preview",
+                icon: <RemoveRedEye />,
+                onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
+            }),
+            rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
+            rowAction.remove(this.handleRemoveResonator),
+        ];
+    }
+
+    getResonator(resonatorId) {
+        return _.find(this.props.resonators, (resonator) => resonator.id === resonatorId);
+    }
+
+    getExtraRowActions() {
+        return [
+            rowAction({
+                icon: <PauseCircleFilled />,
+                title: "Deactivate",
+                onClick: this.handleDeactivateResonator,
+                isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
+            }),
+            rowAction({
+                icon: <PlayCircleFilled />,
+                title: "Activate",
+                onClick: this.handleActivateResonator,
+                isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
+            }),
+        ];
+    }
 
     render() {
-        const rows = this.getRows();
-        const header = this.getHeader();
-        const addRoute = `/followerGroups/${this.props.match.params.followerGroupId}/resonators/new`;
-        const getEditRoute = (id) => `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${id}/edit`;
-        const showRoute = (id) => `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${id}/show`;
-        const toolbox = this.getToolbox();
-        const overflowMenu = this.renderOverflowMenu();
-
         return (
             <EntityTable
-                onAdd={() => this.props.push(addRoute)}
-                onEdit={(id) => this.props.push(getEditRoute(id))}
-                onRemove={this.handleRemoveResonator}
-                onShow={(id) => this.props.push(showRoute(id))}
                 addButton={true}
-                rowActions={["show", "edit", "remove", overflowMenu]}
-                header={header}
-                toolbox={toolbox}
-                rows={rows} />
+                rows={this.getRows()}
+                header={this.getHeader()}
+                toolbox={this.getToolbox()}
+                rowActions={this.getRowActions()}
+                extraRowActions={this.getExtraRowActions()}
+                onAdd={() => this.props.push(this.getAddRoute())}
+                addText="Create Group Resonator"
+            />
         );
     }
 }
 
-function mapStateToProps(state, { match: { params: { followerGroupId } } }) {
+function mapStateToProps(
+    state,
+    {
+        match: {
+            params: { followerGroupId },
+        },
+    }
+) {
     if (!followerGroupId) return {};
 
     const followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {
-        resonators: _.get(followerGroup, 'resonators'),
-        followerGroup
+        resonators: _.get(followerGroup, "resonators"),
+        followerGroup,
     };
 }
 
-function mapDispatchToProps(dispatch, /* {params: {followerGroupId}} */) {
+function mapDispatchToProps(dispatch /* {params: {followerGroupId}} */) {
     return bindActionCreators({
         fetchFollowerGroupResonators: actions.fetchFollowerGroupResonators,
         activateResonator: resonatorActions.activate,
-        showDeleteResonatorPrompt: resonatorId => navigationActions.showModal({
-            name: "deleteResonator",
-            props: {
-                resonatorId
-            }
-        }),
+        showDeleteResonatorPrompt: (resonatorId) =>
+            navigationActions.showModal({
+                name: "deleteResonator",
+                props: {
+                    resonatorId,
+                    isGroup: true,
+                },
+            }),
 
-        push
+        push,
     }, dispatch);
 }
 

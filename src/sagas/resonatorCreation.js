@@ -5,8 +5,31 @@ import { actions, types } from '../actions/resonatorCreationActions';
 import { actions as navigationActions } from '../actions/navigationActions';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 import { waitForFollowers, fetchFollowerResonators, updateResonator } from './followersSaga';
+import { waitForFollowerGroups, fetchFollowerGroupResonators, updateGroupResonator } from './followerGroupsSaga';
 import * as resonatorApi from '../api/resonator';
+import * as groupResonatorApi from '../api/groupResonator';
 import { types as resonatorTypes } from '../actions/resonatorActions';
+
+const targetFactory = {
+    ['follower']: {
+        waitForTarget: waitForFollowers,
+        fetchResonators: fetchFollowerResonators,
+        updateResonator,
+        resonatorApi,
+        navigationRoute: 'followerResonators',
+        targetIdName: 'followerId',
+        targetIdDbName: 'follower_id',
+    },
+    ['followerGroup']: {
+        waitForTarget: waitForFollowerGroups,
+        fetchResonators: fetchFollowerGroupResonators,
+        updateResonator: updateGroupResonator,
+        resonatorApi: groupResonatorApi,
+        navigationRoute: 'followerGroupResonators',
+        targetIdName: 'followerGroupId',
+        targetIdDbName: 'follower_group_id',
+    }
+};
 
 let { handle, updateState, saga, reducer } = SagaReducerFactory({
     actionTypes: types,
@@ -20,55 +43,57 @@ let { handle, updateState, saga, reducer } = SagaReducerFactory({
 
 const formDataSelector = state => state.resonatorCreation.formData;
 
-handle(types.UPDATE_FINAL, function* () {
+handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
     yield put(updateState({ showSpinnerFinalUpdate: true }));
 
-    let formData = yield getFormData();
-    let followerId = yield select(state => state.resonatorCreation.followerId);
-    let resonator = yield select(state => state.resonatorCreation.resonator);
+    const target = targetFactory[targetType];
+
+    const formData = yield getFormData();
+    const targetId = yield select(state => state.resonatorCreation[target.targetIdName]);
+    const resonator = yield select(state => state.resonatorCreation.resonator);
 
     function cleanupOldFile() {
         if (formData.removeOldFile) {
 
-            let lastPicture = _(resonator.items)
+            const lastPicture = _(resonator.items)
                 .filter(i => i.media_kind === 'picture')
                 .sortBy(i => new Date(i.created_at))
                 .last();
             if (lastPicture)
-                return resonatorApi.cleanupOldFile(followerId, resonator.id, lastPicture.id);
+                return target.resonatorApi.cleanupOldFile(targetId, resonator.id, lastPicture.id);
         }
     }
 
     function syncMedia() {
         if (formData.imageFile) {
-            return resonatorApi.uploadMedia(followerId, resonator.id, formData.imageFile);
+            return target.resonatorApi.uploadMedia(targetId, resonator.id, formData.imageFile);
         }
     }
 
     function syncCriteria() {
         if (formData.criteria)
-            return syncResonatorCriteria(resonator, formData.criteria);
+            return syncResonatorCriteria(resonator, formData.criteria, target);
     }
 
     function syncResonatorData() {
-        let payload = convertFormToPayload(followerId, formData);
+        const payload = convertFormToPayload({ targetId, target, formData });
         payload.id = resonator.id;
-        return resonatorApi.update(followerId, payload);
+        return target.resonatorApi.update(targetId, payload);
     }
 
-    let promise = Promise.all([cleanupOldFile(), syncMedia(), syncCriteria()])
+    const promise = Promise.all([cleanupOldFile(), syncMedia(), syncCriteria()])
         .then(syncResonatorData);
 
     const updatedResonator = yield call(() => promise);
-    yield updateResonator(followerId, { ...resonator, ...updatedResonator });
+    yield target.updateResonator(targetId, { ...resonator, ...updatedResonator });
     yield put(updateState({ showSpinnerFinalUpdate: false }));
     yield put(navigationActions.navigate({
-        route: 'followerResonators', routeParams: { followerId }
+        route: target.navigationRoute, routeParams: { [target.targetIdName]: targetId }
     }));
 });
 
 handle(types.UPDATE_CREATION_STEP, function* (sagaParams, { payload }) {
-    let currentFormData = yield select(formDataSelector);
+    const currentFormData = yield select(formDataSelector);
 
     yield put(updateState({
         formData: {
@@ -78,59 +103,82 @@ handle(types.UPDATE_CREATION_STEP, function* (sagaParams, { payload }) {
     }));
 });
 
-handle(types.RESET, function* (sagaParams, { payload: { followerId, resonatorId } }) {
-    yield waitForFollowers();
-    yield fetchFollowerResonators(followerId);
-    let resonators = yield select(resonatorsSelector);
-    let resonator = _.find(resonators, r => r.id === resonatorId);
-    let formData = resonator ? convertResonatorToForm(resonator) : {};
+handle(types.RESET, function* (sagaParams, { payload: { targetId, targetType, resonatorId } }) {
+    const target = targetFactory[targetType];
+    yield target.waitForTarget();
+    yield target.fetchResonators(targetId);
+    const resonators = yield select(resonatorsSelector);
+    const resonator = _.find(resonators, (r) => r.id === resonatorId);
+    const formData = resonator ? convertResonatorToForm(resonator) : {};
 
     yield put(updateState({
-        followerId,
+        [target.targetIdName]: targetId,
         resonator,
         formData,
         editMode: !!resonatorId
     }));
 });
 
-handle(resonatorTypes.ACTIVATE, function* (sagaParams, { payload }) {
+handle(resonatorTypes.ACTIVATE, function* (sagaParams, { payload: { targetId, targetType, resonator } }) {
+    const target = targetFactory[targetType];
 
-    const { followerId, resonator } = payload;
+    const updatedResonator = yield call(target.resonatorApi.update, targetId, resonator);
 
-    const updatedResonator = yield call(resonatorApi.update, followerId, resonator);
+    yield target.updateResonator(targetId, { ...resonator, ...updatedResonator });
+    yield put(updateState({ showSpinnerFinalUpdate: false }));
+    yield put(navigationActions.navigate({
+        route: targetId.navigationRoute, routeParams: { [target.targetIdName]: targetId }
+    }));
+});
+
+handle(resonatorTypes.RESET, function* (sagaParams, { payload: { followerId, resonator } }) {
+
+    const parentId = resonator.parent_resonator_id;
+    const resonators = yield select(resonatorsSelector);
+    console.log({ resonators });
+    const {
+        follower_group_id,
+        parent_resonator_id,
+        id,
+        follower_id,
+        last_pop_time,
+        created_at,
+        updated_at,
+        // Above are all the fields we don't want to reset
+        ...parentResonator
+    } = _.find(resonators, (r) => r.id === parentId);
+
+    const updatedResonator = yield call(resonatorApi.update, followerId, { ...resonator, ...parentResonator });
 
     yield updateResonator(followerId, { ...resonator, ...updatedResonator });
-    yield put(updateState({ showSpinnerFinalUpdate: false }));
     yield put(navigationActions.navigate({
         route: 'followerResonators', routeParams: { followerId }
     }));
 });
 
-handle(types.CREATE, function* () {
-    let formData = yield getFormData();
-    let followerId = yield select(state => state.resonatorCreation.followerId);
-    let requestPayload = convertFormToPayload(followerId, formData);
-    let response = yield call(resonatorApi.create, followerId, requestPayload);
+handle(types.CREATE, function* (sagaParams, { payload: { targetType } }) {
+    const target = targetFactory[targetType];
+    const formData = yield getFormData();
+    const targetId = yield select(state => state.resonatorCreation[target.targetIdName]);
+    const requestPayload = convertFormToPayload({ targetId, target, formData });
+    const response = yield call(target.resonatorApi.create, targetId, requestPayload);
 
     yield put(updateState({
         resonator: response
     }))
 });
 
-function syncResonatorCriteria(resonator, newCriteria) {
+function syncResonatorCriteria(resonator, newCriteria, target) {
     let resonatorQuestions = _.map(resonator.questions, 'question_id');
     let addedQids = _.difference(newCriteria, resonatorQuestions);
     let removedQids = _.difference(resonatorQuestions, newCriteria);
 
-    //why setTimeout? because the insert time is our only way of ordering the
-    //questions in the server. A dirty hack indeed.
-    // let addQuestionsPromises = _.map(addedQids, (qid, idx) => delay(() => resonatorApi.addCriterion(resonator.follower_id, resonator.id, qid), (idx + 1) * 10));
     var promisesStack = [];
-    let addQuestionsPromises = resonatorApi.addBulkCriterion(resonator.follower_id, resonator.id, addedQids);
+    let addQuestionsPromises = target.resonatorApi.addBulkCriterion(resonator[target.targetIdDbName], resonator.id, addedQids);
     promisesStack.push(addQuestionsPromises);
     let removedQuestionsPromises = _.map(removedQids, qid => {
         let rqid = _.find(resonator.questions, rq => rq.question_id === qid).id;
-        return resonatorApi.removeCriterion(resonator.follower_id, resonator.id, rqid);
+        return target.resonatorApi.removeCriterion(resonator[target.targetIdDbName], resonator.id, rqid);
     });
     if (removedQuestionsPromises.length > 0) {
         promisesStack.push(removedQuestionsPromises);
@@ -139,8 +187,8 @@ function syncResonatorCriteria(resonator, newCriteria) {
 }
 
 function* getFormData() {
-    let reduxFormData = yield select(state => state.form.resonatorCreation.values);
-    let sagaFormData = yield select(formDataSelector);
+    const reduxFormData = yield select(state => state.form.resonatorCreation.values);
+    const sagaFormData = yield select(formDataSelector);
 
     return {
         ...sagaFormData,
@@ -148,15 +196,15 @@ function* getFormData() {
     };
 }
 
-function convertFormToPayload(followerId, formData) {
-    let repeat_days = _.reduce([0, 1, 2, 3, 4, 5, 6], (acc, cur) => {
+function convertFormToPayload({ targetId, target, formData }) {
+    const repeat_days = _.reduce([0, 1, 2, 3, 4, 5, 6], (acc, cur) => {
         if (formData[`day${cur}`])
             acc.push(cur);
         return acc;
     }, []);
 
-    let payload = {
-        follower_id: followerId,
+    const payload = {
+        [target.targetIdDbName]: targetId,
         title: formData.title,
         content: formData.description,
         one_off: formData.oneOff === 'on',
@@ -174,12 +222,12 @@ function convertFormToPayload(followerId, formData) {
 }
 
 function convertResonatorToForm(resonator) {
-    let repeatDays = _.reduce([0, 1, 2, 3, 4, 5, 6], (acc, cur) => {
+    const repeatDays = _.reduce([0, 1, 2, 3, 4, 5, 6], (acc, cur) => {
         acc[`day${cur}`] = _.includes(resonator.repeat_days, cur);
         return acc;
     }, {});
 
-    let form = {
+    const form = {
         ...repeatDays,
         title: resonator.title,
         description: resonator.content,
@@ -196,19 +244,5 @@ function convertResonatorToForm(resonator) {
 
     return form;
 }
-
-// function delay(fn, timeout) {
-//     return new Promise((resolve, reject) => {
-//         setTimeout(() => {
-//             try {
-//                 fn();
-//             } catch (err) {
-//                 return reject(err);
-//             }
-
-//             resolve();
-//         }, timeout);
-//     });
-// }
 
 export default { saga, reducer };

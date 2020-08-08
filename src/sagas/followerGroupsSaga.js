@@ -2,7 +2,7 @@ import _ from 'lodash';
 import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followerGroupsActions';
-import { types as resonatorTypes } from '../actions/resonatorActions';
+import { types as resonatorTypes } from '../actions/groupResonatorActions';
 import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerGroupApi from '../api/followerGroup';
 
@@ -127,7 +127,7 @@ handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
         })
 
     yield put(updateState({
-        updatedFollowerGroups
+        followerGroups: updatedFollowerGroups,
     }));
 });
 
@@ -200,7 +200,7 @@ function* updateStateWithNewFollowerGroup(followerGroup) {
     }));
 }
 
-export function* updateResonator(followerGroupId, resonator) {
+export function* updateGroupResonator(followerGroupId, resonator) {
     let followerGroups = yield select(followerGroupsSelector);
 
     let followerGroup = _.find(followerGroups, fg => fg.id === followerGroupId);
