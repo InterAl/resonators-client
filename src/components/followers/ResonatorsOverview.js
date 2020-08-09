@@ -1,7 +1,7 @@
-import fetcher from "../../api/fetcher";
 import React, { useState, useEffect } from "react";
 import { Typography, makeStyles } from "@material-ui/core";
 
+import fetcher from "../../api/fetcher";
 import ResonatorList from "./ResonatorList";
 import LoadMoreButton from "./LoadMoreButton";
 
@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function ResonatorsOverview(props) {
+export default function ResonatorsOverview() {
     const [resonators, setResonators] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
     const [loading, setLoading] = useState(true);

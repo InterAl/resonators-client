@@ -1,5 +1,8 @@
 import React from "react";
 import moment from "moment";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { push as goto } from "connected-react-router";
 import {
     List,
     ListItem,
@@ -30,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const formatResonatorTime = (time) => moment(time).format("dddd, MMMM Do YYYY, HH:mm");
 
-export default function ResonatorList({ resonators, subheader, paperProps = {}, big = false }) {
+function ResonatorList({ resonators, subheader, paperProps = {}, big = false, goto }) {
     const classes = useStyles();
     const listItemClass = big ? classes.itemBig : "";
     const avatarClass = big ? classes.avatarBig : "";
@@ -46,7 +49,12 @@ export default function ResonatorList({ resonators, subheader, paperProps = {}, 
                 )}
                 {resonators.map((resonator) => (
                     <Grow in key={resonator.id}>
-                        <ListItem button divider className={listItemClass}>
+                        <ListItem
+                            button
+                            divider
+                            className={listItemClass}
+                            onClick={() => goto(`/follower/resonators/${resonator.id}`)}
+                        >
                             {resonator.picture ? (
                                 <ListItemAvatar>
                                     <Avatar src={resonator.picture} variant="rounded" className={avatarClass} />
@@ -65,3 +73,5 @@ export default function ResonatorList({ resonators, subheader, paperProps = {}, 
         </List>
     );
 }
+
+export default connect(null, (dispatch) => bindActionCreators({ goto }, dispatch))(ResonatorList);
