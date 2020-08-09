@@ -35,8 +35,10 @@ class FollowerResonators extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.follower) nextProps.fetchFollowerResonators(nextProps.follower.id);
+        if (nextProps.follower && this.props.follower && nextProps.follower.id !== this.props.follower.id)
+            nextProps.fetchFollowerResonators(nextProps.follower.id);
     }
+
 
     getHeader() {
         return ["Resonator"];

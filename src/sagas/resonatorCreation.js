@@ -127,7 +127,7 @@ handle(resonatorTypes.ACTIVATE, function* (sagaParams, { payload: { targetId, ta
     yield target.updateResonator(targetId, { ...resonator, ...updatedResonator });
     yield put(updateState({ showSpinnerFinalUpdate: false }));
     yield put(navigationActions.navigate({
-        route: targetId.navigationRoute, routeParams: { [target.targetIdName]: targetId }
+        route: target.navigationRoute, routeParams: { [target.targetIdName]: targetId }
     }));
 });
 
