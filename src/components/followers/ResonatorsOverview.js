@@ -39,14 +39,14 @@ export default function ResonatorsOverview() {
                 resonators={resonators.filter((resonator) => !resonator.done)}
                 subheader={
                     <Typography variant="h6" className={classes.openResonatorsSubheader}>
-                        Open Resonators
+                        Pending Resonators
                     </Typography>
                 }
             />
             <ResonatorList
                 paperProps={{ variant: "outlined" }}
                 resonators={resonators.filter((resonator) => resonator.done)}
-                subheader="Answered Resonators"
+                subheader="Finished Resonators"
             />
             {resonators.length === totalCount ? null : (
                 <LoadMoreButton text="load older" loading={loading} loadMore={() => setPages(page + 1)} />
