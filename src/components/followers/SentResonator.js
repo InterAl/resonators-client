@@ -1,6 +1,7 @@
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router";
 import React, { useEffect, useState } from "react";
+import { Link as LinkIcon } from "@material-ui/icons";
 import {
     makeStyles,
     Card,
@@ -27,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
         height: 200,
         margin: theme.spacing(2, 0),
         backgroundSize: "contain",
+    },
+    link: {
+        textTransform: "none",
     },
 }));
 
@@ -125,15 +129,24 @@ export default function SentResonator() {
 
 const ResonatorBody = ({ resonator }) => (
     <>
+        <Direction by={resonator.content}>
+            <Typography paragraph>{resonator.content}</Typography>
+        </Direction>
         {resonator.link ? (
-            <Typography gutterBottom>
-                <Link href={resonator.link} target="_blank" rel="noreferrer">
+            <Typography>
+                <Button
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    startIcon={<LinkIcon />}
+                    className={useStyles().link}
+                    href={resonator.link}
+                    rel="noreferrer"
+                    target="_blank"
+                >
                     {resonator.link}
-                </Link>
+                </Button>
             </Typography>
         ) : null}
-        <Direction by={resonator.content}>
-            <Typography>{resonator.content}</Typography>
-        </Direction>
     </>
 );
