@@ -12,15 +12,15 @@ import {
     Link,
     Typography,
     Grow,
+    Button,
 } from "@material-ui/core";
 
 import Direction from "../Direction";
 import fetcher from "../../api/fetcher";
 import LoadingOverlay from "./LoadingOverlay";
 import ResonatorAnswers from "./ResonatorAnswers";
-import ResonatorControls from "./ResonatorControls";
 import ResonatorQuestions from "./ResonatorQuestions";
-import { formatResonatorTime, findFirstUnansweredQuestion } from "./utils";
+import { formatResonatorTime } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
     media: {
@@ -38,7 +38,6 @@ export default function SentResonator() {
     const [loading, setLoading] = useState(true);
     const [editMode, setEditMode] = useState(false);
     const [resonator, setResonator] = useState(null);
-    const [activeQuestion, setActiveQuestion] = useState(0);
 
     const showError = (response) =>
         response.json().then(({ status }) =>
@@ -53,16 +52,6 @@ export default function SentResonator() {
             })
         );
 
-    const confirmSave = () =>
-        enqueueSnackbar("Answer saved", {
-            autoHideDuration: 2000,
-            TransitionComponent: Grow,
-            anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "right",
-            },
-        });
-
     useEffect(() => {
         setLoading(true);
         fetcher(`/follower/resonators/${sentResonatorId}`)
@@ -70,23 +59,10 @@ export default function SentResonator() {
             .then((resonator) => {
                 setResonator(resonator);
                 setEditMode(!resonator.done);
-                setActiveQuestion(findFirstUnansweredQuestion(resonator));
             })
             .catch(showError)
             .finally(() => setLoading(false));
     }, []);
-
-    const answerQuestion = (resonatorQuestion) => (event) => {
-        fetcher
-            .put(`/follower/resonators/${sentResonatorId}`, {
-                resonatorQuestionId: resonatorQuestion.id,
-                answerId: event.target.value,
-            })
-            .then((data) => data.resonator)
-            .then(setResonator)
-            .then(confirmSave)
-            .catch(showError);
-    };
 
     return (
         <>
@@ -113,9 +89,9 @@ export default function SentResonator() {
                                 <CardContent>
                                     {editMode ? (
                                         <ResonatorQuestions
+                                            showError={showError}
                                             resonator={resonator}
-                                            activeQuestion={activeQuestion}
-                                            answerQuestion={answerQuestion}
+                                            setResonator={setResonator}
                                         />
                                     ) : (
                                         <ResonatorAnswers resonator={resonator} />
@@ -123,13 +99,20 @@ export default function SentResonator() {
                                 </CardContent>
                                 <Divider />
                                 <CardActions>
-                                    <ResonatorControls
-                                        resonator={resonator}
-                                        editMode={editMode}
-                                        setEditMode={setEditMode}
-                                        activeQuestion={activeQuestion}
-                                        setActiveQuestion={setActiveQuestion}
-                                    />
+                                    {editMode ? (
+                                        <Button
+                                            color="primary"
+                                            variant="contained"
+                                            disabled={!resonator.done}
+                                            onClick={() => setEditMode(false)}
+                                        >
+                                            Finish
+                                        </Button>
+                                    ) : (
+                                        <Button color="primary" onClick={() => setEditMode(true)}>
+                                            Edit answers
+                                        </Button>
+                                    )}
                                 </CardActions>
                             </>
                         ) : null}
