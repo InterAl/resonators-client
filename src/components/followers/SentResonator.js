@@ -12,12 +12,11 @@ import {
     Link,
     Typography,
     Grow,
-    Backdrop,
-    CircularProgress,
 } from "@material-ui/core";
 
 import Direction from "../Direction";
 import fetcher from "../../api/fetcher";
+import LoadingOverlay from "./LoadingOverlay";
 import ResonatorAnswers from "./ResonatorAnswers";
 import ResonatorControls from "./ResonatorControls";
 import ResonatorQuestions from "./ResonatorQuestions";
@@ -91,7 +90,7 @@ export default function SentResonator() {
 
     return (
         <>
-            <LoadingIndicator loading={loading} />
+            <LoadingOverlay loading={loading} />
             {!loading && resonator ? (
                 <Grow in>
                     <Card>
@@ -140,13 +139,6 @@ export default function SentResonator() {
         </>
     );
 }
-
-const LoadingIndicator = ({ loading }) =>
-    loading ? (
-        <Backdrop open invisible>
-            <CircularProgress />
-        </Backdrop>
-    ) : null;
 
 const ResonatorBody = ({ resonator }) => (
     <>

@@ -4,6 +4,7 @@ import { Typography, makeStyles } from "@material-ui/core";
 import fetcher from "../../api/fetcher";
 import ResonatorList from "./ResonatorList";
 import LoadMoreButton from "./LoadMoreButton";
+import LoadingOverlay from "./LoadingOverlay";
 
 const useStyles = makeStyles((theme) => ({
     openResonatorsSubheader: {
@@ -26,12 +27,12 @@ export default function ResonatorsOverview() {
                 setTotalCount(data.totalCount);
                 setResonators(resonators.concat(data.resonators));
             })
-            .then(() => setLoading(false));
+            .finally(() => setLoading(false));
     }, [page]);
 
     return (
         <>
-            {!resonators.length && loading ? <Typography variant="h6">Loading your resonators...</Typography> : null}
+            {!resonators.length ? <LoadingOverlay loading={loading} /> : null}
             <ResonatorList
                 big
                 paperProps={{ elevation: 6 }}
