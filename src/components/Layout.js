@@ -1,38 +1,42 @@
-import React, { Component } from "react";
 import { connect } from "react-redux";
-import { ThemeProvider, Toolbar, Grid } from "@material-ui/core";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import React, { Component } from "react";
 import MomentUtils from "@date-io/moment";
-import SideMenu from "./SideMenu";
+import { withRouter } from "react-router";
+import { SnackbarProvider } from "notistack";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { ThemeProvider, Toolbar, Grid } from "@material-ui/core";
+
+import "./app.scss";
+import theme from "./theme";
 import TopBar from "./TopBar";
+import SideMenu from "./SideMenu";
 import ModalDisplayer from "./ModalDisplayer";
 import loginInfoSelector from "../selectors/loginInfo";
 import navigationSelector from "../selectors/navigationSelector";
-import { withRouter } from "react-router";
-import theme from "./theme";
-import "./app.scss";
 
 class Layout extends Component {
     render() {
         return (
             <ThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <TopBar />
-                    <Toolbar />
-                    <Grid container wrap="nowrap">
-                        {this.props.loggedIn ? (
-                            <Grid item>
-                                <SideMenu />
-                            </Grid>
-                        ) : null}
-                        <Grid item xs container justify="center" style={{ padding: 30 }}>
-                            <Grid item xs md={10} xl={8}>
-                                {this.props.children}
+                <SnackbarProvider>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <TopBar />
+                        <Toolbar />
+                        <Grid container wrap="nowrap">
+                            {this.props.loggedIn ? (
+                                <Grid item>
+                                    <SideMenu />
+                                </Grid>
+                            ) : null}
+                            <Grid item xs container justify="center" style={{ padding: 30 }}>
+                                <Grid item xs md={10} xl={8}>
+                                    {this.props.children}
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <ModalDisplayer modal={this.props.modal} />
-                </MuiPickersUtilsProvider>
+                        <ModalDisplayer modal={this.props.modal} />
+                    </MuiPickersUtilsProvider>
+                </SnackbarProvider>
             </ThemeProvider>
         );
     }

@@ -1,24 +1,22 @@
+import { useSnackbar } from "notistack";
 import { useParams } from "react-router";
 import React, { useEffect, useState } from "react";
 import {
     makeStyles,
     Card,
-    CardHeader,
     CardMedia,
+    CardHeader,
     CardContent,
-    Typography,
-    Link,
-    Divider,
-    Grow,
-    CircularProgress,
-    Backdrop,
-    Button,
     CardActions,
-    Slide,
+    Divider,
+    Link,
+    Typography,
+    Grow,
+    Backdrop,
+    CircularProgress,
 } from "@material-ui/core";
 
 import Bidi from "../Bidi";
-import Toast from "../Toast";
 import fetcher from "../../api/fetcher";
 import ResonatorAnswers from "./ResonatorAnswers";
 import ResonatorControls from "./ResonatorControls";
@@ -39,17 +37,36 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SentResonator() {
     const classes = useStyles();
-
     const { sentResonatorId } = useParams();
+    const { enqueueSnackbar } = useSnackbar();
 
-    const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [editMode, setEditMode] = useState(false);
     const [resonator, setResonator] = useState(null);
-    const [changesSaved, setChangesSaved] = useState(false);
     const [activeQuestion, setActiveQuestion] = useState(0);
 
-    const showError = (response) => response.json().then(({ status }) => setError(status));
+    const showError = (response) =>
+        response.json().then(({ status }) =>
+            enqueueSnackbar(status, {
+                variant: "error",
+                persist: true,
+                TransitionComponent: Grow,
+                anchorOrigin: {
+                    vertical: "bottom",
+                    horizontal: "center",
+                },
+            })
+        );
+
+    const confirmSave = () =>
+        enqueueSnackbar("Answer saved", {
+            autoHideDuration: 2000,
+            TransitionComponent: Grow,
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+            },
+        });
 
     useEffect(() => {
         setLoading(true);
@@ -72,16 +89,13 @@ export default function SentResonator() {
             })
             .then((data) => data.resonator)
             .then(setResonator)
-            .then(() => setChangesSaved(true))
+            .then(confirmSave)
             .catch(showError);
     };
 
     return (
         <>
             <LoadingIndicator loading={loading} />
-            <ErrorIndicator error={error} close={() => setError("")} />
-            <SaveIndicator shown={changesSaved} close={() => setChangesSaved(false)} />
-
             {!loading && resonator ? (
                 <Grow in>
                     <Card>
@@ -135,31 +149,6 @@ const LoadingIndicator = ({ loading }) =>
             <CircularProgress />
         </Backdrop>
     ) : null;
-
-const ErrorIndicator = ({ error, close }) => {
-    const classes = useStyles();
-
-    return (
-        <Toast
-            close={close}
-            message={error}
-            hideAfter={null}
-            open={Boolean(error)}
-            ContentProps={{ className: classes.error }}
-        />
-    );
-};
-
-const SaveIndicator = ({ shown, close }) => (
-    <Toast
-        open={shown}
-        close={close}
-        hideAfter={2000}
-        message="Answer saved"
-        TransitionComponent={Slide}
-        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-    />
-);
 
 const ResonatorBody = ({ resonator }) => (
     <>
