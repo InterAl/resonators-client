@@ -29,10 +29,6 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(2, 0),
         backgroundSize: "contain",
     },
-    error: {
-        backgroundColor: theme.palette.error.main,
-        alignItems: "center",
-    },
 }));
 
 export default function SentResonator() {
@@ -152,11 +148,13 @@ const LoadingIndicator = ({ loading }) =>
 
 const ResonatorBody = ({ resonator }) => (
     <>
-        <Typography gutterBottom>
-            <Link href={resonator.link} target="_blank" rel="noreferrer">
-                {resonator.link}
-            </Link>
-        </Typography>
+        {resonator.link ? (
+            <Typography gutterBottom>
+                <Link href={resonator.link} target="_blank" rel="noreferrer">
+                    {resonator.link}
+                </Link>
+            </Typography>
+        ) : null}
         <Typography>
             <Bidi fullWidth>{resonator.content}</Bidi>
         </Typography>
