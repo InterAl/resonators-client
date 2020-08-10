@@ -16,7 +16,7 @@ import {
     CircularProgress,
 } from "@material-ui/core";
 
-import Bidi from "../Bidi";
+import Direction from "../Direction";
 import fetcher from "../../api/fetcher";
 import ResonatorAnswers from "./ResonatorAnswers";
 import ResonatorControls from "./ResonatorControls";
@@ -95,11 +95,13 @@ export default function SentResonator() {
             {!loading && resonator ? (
                 <Grow in>
                     <Card>
-                        <CardHeader
-                            title={<Bidi fullWidth>{resonator.title}</Bidi>}
-                            subheader={formatResonatorTime(resonator.time)}
-                            titleTypographyProps={{ gutterBottom: true }}
-                        />
+                        <Direction by={resonator.title}>
+                            <CardHeader
+                                title={resonator.title}
+                                subheader={formatResonatorTime(resonator.time)}
+                                titleTypographyProps={{ gutterBottom: true }}
+                            />
+                        </Direction>
                         <Divider />
                         <CardMedia image={resonator.picture} className={classes.media} />
                         <Divider />
@@ -155,8 +157,8 @@ const ResonatorBody = ({ resonator }) => (
                 </Link>
             </Typography>
         ) : null}
-        <Typography>
-            <Bidi fullWidth>{resonator.content}</Bidi>
-        </Typography>
+        <Direction by={resonator.content}>
+            <Typography>{resonator.content}</Typography>
+        </Direction>
     </>
 );
