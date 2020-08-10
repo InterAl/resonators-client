@@ -19,6 +19,7 @@ import CriteriaCreation from './CriteriaCreation/index';
 import ResetPassword from './ResetPassword';
 import ResonatorFeedback from './ResonatorFeedback';
 import HomePage from './HomePage';
+import ResonatorsOverview from './followers/ResonatorsOverview';
 
 
 class AppComponent extends React.Component {
@@ -50,6 +51,8 @@ class AppComponent extends React.Component {
                 <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
                 <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
                 <Route exact path="/clinics/criteria" component={CriteriaList} />
+
+                <Route exact path="/follower/resonators" component={ResonatorsOverview} />
 
                 <Route exact path="/login" component={LoginPage} />
                 <Route component={NoMatch} />
