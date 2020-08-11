@@ -33,7 +33,10 @@ const screenToRoute = {
     },
     'criteriaList': {
         route: '/clinics/criteria',
-    }
+    },
+    'follower/resonators': {
+        route: '/follower/resonators',
+    },
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {

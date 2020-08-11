@@ -20,6 +20,7 @@ import {
     ExitToApp,
     ExpandLess,
     ExpandMore,
+    ViewList,
 } from "@material-ui/icons";
 
 import { useBelowBreakpoint } from "./hooks";
@@ -83,15 +84,19 @@ function SideMenu(props) {
                         </ListItem>
                     </List>
                 </Collapse>
+                <ListItem button onClick={() => props.clickMenuItem("follower/resonators")}>
+                    <ListItemIcon>
+                        <ViewList />
+                    </ListItemIcon>
+                    <ListItemText primary="Resonators" />
+                </ListItem>
                 <Divider />
-                <List>
-                    <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
-                        <ListItemIcon>
-                            <ExitToApp htmlColor="#ff4444" />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                    </ListItem>
-                </List>
+                <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
+                    <ListItemIcon>
+                        <ExitToApp htmlColor="#ff4444" />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                </ListItem>
             </List>
         </Drawer>
     );
