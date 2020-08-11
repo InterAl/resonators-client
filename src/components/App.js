@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Route, Switch } from "react-router";
 import { ConnectedRouter } from "connected-react-router";
 
@@ -21,35 +22,42 @@ import FollowerResonators from "./FollowerResonators";
 import CriteriaCreation from "./CriteriaCreation/index";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
 
-export default () => (
+const LeaderRoutes = () => (
+    <>
+        <Route exact path="/followers" component={Followers} />
+        <Route path="/followers/:followerId" component={FollowerResonators} />
+        <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
+        <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
+        <Route exact path="/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
+        <Route exact path="/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats} />
+
+        <Route exact path="/clinics" component={Clinics} />
+        <Route exact path="/clinics/criteria" component={CriteriaList} />
+        <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
+        <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
+        <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
+    </>
+);
+
+const FollowerRoutes = () => (
+    <>
+        <Route exact path="/follower/resonators" component={ResonatorsOverview} />
+        <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
+    </>
+);
+
+const App = (props) => (
     <ConnectedRouter history={history}>
         <Switch>
             <Route path="/(.+)">
                 <Layout>
                     <Switch>
-                        <Route exact path="/followers" component={Followers} />
-                        <Route path="/followers/:followerId" component={FollowerResonators} />
-                        <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
-                        <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
-                        <Route
-                            exact
-                            path="/followers/:followerId/resonators/:resonatorId/edit"
-                            component={EditResonator}
-                        />
-                        <Route
-                            exact
-                            path="/followers/:followerId/resonators/:resonatorId/stats/:qid"
-                            component={ResonatorStats}
-                        />
-
-                        <Route exact path="/clinics" component={Clinics} />
-                        <Route exact path="/clinics/criteria" component={CriteriaList} />
-                        <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
-                        <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
-                        <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
-
-                        <Route exact path="/follower/resonators" component={ResonatorsOverview} />
-                        <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
+                        {props.user ? (
+                            <>
+                                {props.user.isLeader ? <LeaderRoutes /> : null}
+                                {props.user.isFollower ? <FollowerRoutes /> : null}
+                            </>
+                        ) : null}
 
                         <Route exact path="/login" component={LoginPage} />
                         <Route exact path="/resetPassword" component={ResetPassword} />
@@ -62,3 +70,9 @@ export default () => (
         </Switch>
     </ConnectedRouter>
 );
+
+const mapStateToProps = (state) => ({
+    user: state.session.user,
+});
+
+export default connect(mapStateToProps, null)(App);
