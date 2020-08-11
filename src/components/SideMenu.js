@@ -93,7 +93,7 @@ function SideMenu(props) {
                         <ListItemIcon>
                             <ViewList />
                         </ListItemIcon>
-                        <ListItemText primary="Resonators" />
+                        <ListItemText primary="All Resonators" />
                     </ListItem>
                 ) : null}
                 <Divider />
