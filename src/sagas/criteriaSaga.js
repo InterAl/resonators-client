@@ -14,11 +14,15 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 });
 
 handle(sessionActionTypes.LOGIN_SUCCESS, function*() {
-    let criteria = yield call(criteriaApi.get);
+    const user = yield select((state) => state.session.user);
 
-    yield put(updateState({
-        criteria
-    }));
+    if (user.isLeader) {
+        const criteria = yield call(criteriaApi.get);
+    
+        yield put(updateState({
+            criteria
+        }));
+    }
 });
 
 handle(types.CREATE_CRITERION, function*(sagaParams, {payload}) {
