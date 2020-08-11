@@ -22,54 +22,55 @@ import FollowerResonators from "./FollowerResonators";
 import CriteriaCreation from "./CriteriaCreation/index";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
 
-const LeaderRoutes = () => (
-    <>
-        <Route exact path="/followers" component={Followers} />
-        <Route path="/followers/:followerId" component={FollowerResonators} />
-        <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
-        <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
-        <Route exact path="/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
-        <Route exact path="/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats} />
+const leaderRoutes = [
+    { exact: true, path: "/followers", component: Followers },
+    { exact: false, path: "/followers/:followerId", component: FollowerResonators },
+    { exact: true, path: "/followers/:followerId/resonators/new", component: EditResonator },
+    { exact: false, path: "/followers/:followerId/resonators/:resonatorId", component: ShowResonator },
+    { exact: true, path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
+    { exact: true, path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
 
-        <Route exact path="/clinics" component={Clinics} />
-        <Route exact path="/clinics/criteria" component={CriteriaList} />
-        <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
-        <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
-        <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
-    </>
-);
+    { exact: true, path: "/clinics", component: Clinics },
+    { exact: true, path: "/clinics/criteria", component: CriteriaList },
+    { exact: true, path: "*/criteria/submit", component: ResonatorFeedback },
+    { exact: true, path: "/clinics/criteria/new", component: CriteriaCreation },
+    { exact: false, path: "/clinics/criteria/:criterionId", component: CriteriaCreation },
+];
 
-const FollowerRoutes = () => (
-    <>
-        <Route exact path="/follower/resonators" component={ResonatorsOverview} />
-        <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
-    </>
-);
+const followerRoutes = [
+    { exact: true, path: "/follower/resonators", component: ResonatorsOverview },
+    { exact: true, path: "/follower/resonators/:sentResonatorId", component: SentResonator },
+];
 
-const App = (props) => (
-    <ConnectedRouter history={history}>
-        <Switch>
-            <Route path="/(.+)">
-                <Layout>
-                    <Switch>
-                        {props.user ? (
-                            <>
-                                {props.user.isLeader ? <LeaderRoutes /> : null}
-                                {props.user.isFollower ? <FollowerRoutes /> : null}
-                            </>
-                        ) : null}
+const commonRoutes = [
+    { exact: true, path: "/login", component: LoginPage },
+    { exact: true, path: "/resetPassword", component: ResetPassword },
+];
 
-                        <Route exact path="/login" component={LoginPage} />
-                        <Route exact path="/resetPassword" component={ResetPassword} />
+const App = (props) => {
+    const routes = commonRoutes
+        .concat(props.user?.isLeader ? leaderRoutes : [])
+        .concat(props.user?.isFollower ? followerRoutes : []);
 
-                        <Route component={NoMatch} />
-                    </Switch>
-                </Layout>
-            </Route>
-            <Route exact path="/" component={HomePage} />
-        </Switch>
-    </ConnectedRouter>
-);
+    return (
+        <ConnectedRouter history={history}>
+            <Switch>
+                <Route path="/(.+)">
+                    <Layout>
+                        <Switch>
+                            {routes.map((route, index) => (
+                                <Route key={index} {...route} />
+                            ))}
+
+                            <Route component={NoMatch} />
+                        </Switch>
+                    </Layout>
+                </Route>
+                <Route exact path="/" component={HomePage} />
+            </Switch>
+        </ConnectedRouter>
+    );
+};
 
 const mapStateToProps = (state) => ({
     user: state.session.user,
