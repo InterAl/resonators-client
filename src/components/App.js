@@ -1,60 +1,64 @@
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'connected-react-router';
-import history from '../stores/history';
-import Layout from './Layout';
-import Followers from './Followers';
-import Clinics from './Clinics';
-import NoMatch from './NoMatch';
-import LoginPage from './LoginPage';
-import FollowerResonators from './FollowerResonators';
-import EditResonator from './EditResonator';
-import ShowResonator from './ShowResonator';
-import ResonatorStats from './ResonatorStats';
-import CriteriaList from './CriteriaList';
-import CriteriaCreation from './CriteriaCreation/index';
-import ResetPasword from './ResetPassword';
-import ResonatorFeedback from './ResonatorFeedback';
-import HomePage from './HomePage';
-import ResonatorsOverview from './followers/ResonatorsOverview';
-import SentResonator from './followers/SentResonator';
+import React from "react";
+import { Route, Switch } from "react-router";
+import { ConnectedRouter } from "connected-react-router";
 
+import history from "../stores/history";
 
-class AppComponent extends React.Component {
-  render() {
-    return (
-      <ConnectedRouter history={history}>
+import Layout from "./Layout";
+import Clinics from "./Clinics";
+import NoMatch from "./NoMatch";
+import HomePage from "./HomePage";
+import Followers from "./Followers";
+import LoginPage from "./LoginPage";
+import CriteriaList from "./CriteriaList";
+import ShowResonator from "./ShowResonator";
+import EditResonator from "./EditResonator";
+import ResetPassword from "./ResetPassword";
+import ResonatorStats from "./ResonatorStats";
+import ResonatorFeedback from "./ResonatorFeedback";
+import SentResonator from "./followers/SentResonator";
+import FollowerResonators from "./FollowerResonators";
+import CriteriaCreation from "./CriteriaCreation/index";
+import ResonatorsOverview from "./followers/ResonatorsOverview";
+
+export default () => (
+    <ConnectedRouter history={history}>
         <Switch>
-          <Route path='/(.+)'>
-            <Layout>
-              <Switch>
-                <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
-                <Route exact path="/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
-                <Route exact path="/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats} />
-                <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
-                <Route path="/followers/:followerId" component={FollowerResonators} />
-                <Route exact path="/followers" component={Followers} />
+            <Route path="/(.+)">
+                <Layout>
+                    <Switch>
+                        <Route exact path="/followers" component={Followers} />
+                        <Route path="/followers/:followerId" component={FollowerResonators} />
+                        <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
+                        <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
+                        <Route
+                            exact
+                            path="/followers/:followerId/resonators/:resonatorId/edit"
+                            component={EditResonator}
+                        />
+                        <Route
+                            exact
+                            path="/followers/:followerId/resonators/:resonatorId/stats/:qid"
+                            component={ResonatorStats}
+                        />
 
-                <Route exact path="/resetPassword" component={ResetPasword} />
-                <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
-                <Route exact path="/clinics" component={Clinics} />
-                <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
-                <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
-                <Route exact path="/clinics/criteria" component={CriteriaList} />
+                        <Route exact path="/clinics" component={Clinics} />
+                        <Route exact path="/clinics/criteria" component={CriteriaList} />
+                        <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
+                        <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
+                        <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
 
-                <Route exact path="/follower/resonators" component={ResonatorsOverview} />
-                <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
+                        <Route exact path="/follower/resonators" component={ResonatorsOverview} />
+                        <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
 
-                <Route exact path="/login" component={LoginPage} />
-                <Route component={NoMatch} />
-              </Switch>
-            </Layout>
-          </Route>
-          <Route exact path='/' component={HomePage} />
+                        <Route exact path="/login" component={LoginPage} />
+                        <Route exact path="/resetPassword" component={ResetPassword} />
+
+                        <Route component={NoMatch} />
+                    </Switch>
+                </Layout>
+            </Route>
+            <Route exact path="/" component={HomePage} />
         </Switch>
-      </ConnectedRouter>
-    );
-  }
-}
-
-export default AppComponent;
+    </ConnectedRouter>
+);
