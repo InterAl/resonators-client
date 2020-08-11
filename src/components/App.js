@@ -23,28 +23,28 @@ import CriteriaCreation from "./CriteriaCreation/index";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
 
 const leaderRoutes = [
-    { exact: true, path: "/followers", component: Followers },
-    { exact: false, path: "/followers/:followerId", component: FollowerResonators },
-    { exact: true, path: "/followers/:followerId/resonators/new", component: EditResonator },
-    { exact: false, path: "/followers/:followerId/resonators/:resonatorId", component: ShowResonator },
-    { exact: true, path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
-    { exact: true, path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+    { path: "/followers", component: Followers },
+    { path: "/followers/:followerId/resonators", component: FollowerResonators },
+    { path: "/followers/:followerId/resonators/new", component: EditResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/show", component: ShowResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
 
-    { exact: true, path: "/clinics", component: Clinics },
-    { exact: true, path: "/clinics/criteria", component: CriteriaList },
-    { exact: true, path: "*/criteria/submit", component: ResonatorFeedback },
-    { exact: true, path: "/clinics/criteria/new", component: CriteriaCreation },
-    { exact: false, path: "/clinics/criteria/:criterionId", component: CriteriaCreation },
+    { path: "/clinics", component: Clinics },
+    { path: "/clinics/criteria", component: CriteriaList },
+    { path: "*/criteria/submit", component: ResonatorFeedback },
+    { path: "/clinics/criteria/new", component: CriteriaCreation },
+    { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
 ];
 
 const followerRoutes = [
-    { exact: true, path: "/follower/resonators", component: ResonatorsOverview },
-    { exact: true, path: "/follower/resonators/:sentResonatorId", component: SentResonator },
+    { path: "/follower/resonators", component: ResonatorsOverview },
+    { path: "/follower/resonators/:sentResonatorId", component: SentResonator },
 ];
 
 const commonRoutes = [
-    { exact: true, path: "/login", component: LoginPage },
-    { exact: true, path: "/resetPassword", component: ResetPassword },
+    { path: "/login", component: LoginPage },
+    { path: "/resetPassword", component: ResetPassword },
 ];
 
 const App = (props) => {
@@ -59,7 +59,7 @@ const App = (props) => {
                     <Layout>
                         <Switch>
                             {routes.map((route, index) => (
-                                <Route key={index} {...route} />
+                                <Route key={index} exact {...route} />
                             ))}
 
                             <Route component={NoMatch} />
