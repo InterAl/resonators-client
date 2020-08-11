@@ -141,7 +141,7 @@ function* updateUser(user = {}) {
         const currentPath = location.pathname;
 
         if (currentPath === '/' || currentPath === '/login')
-            yield put(navigationActions.navigate('followers'));
+            yield put(navigationActions.navigate(user.isFollower ? 'follower/resonators' : 'followers'));
     }
 
     return loggedIn;
