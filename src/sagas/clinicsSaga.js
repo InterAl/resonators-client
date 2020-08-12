@@ -1,5 +1,5 @@
 import SagaReducerFactory from '../saga-reducers-factory-patch';
-import { call, put } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 import { actions, types } from '../actions/clinicActions';
 import { types as sessionActionTypes} from '../actions/sessionActions';
 import { types as leaderClinicActiontypes} from '../actions/leaderClinicsActions';
@@ -14,11 +14,15 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 });
 
 handle(sessionActionTypes.LOGIN_SUCCESS, function*() {
-    let clinics = yield call(clinicApi.get);
+    const user = yield select(state => state.session.user);
 
-    yield put(updateState({
-        clinics
-    }));
+    if (user.isLeader) {
+        const clinics = yield call(clinicApi.get);
+    
+        yield put(updateState({
+            clinics
+        }));
+    }
 });
 handle(leaderClinicActiontypes.CREATE, function* (sagaParams, { payload }) {
     yield call(clinicApi.addLeaderToClinic, payload);

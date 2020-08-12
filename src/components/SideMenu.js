@@ -1,6 +1,6 @@
+import { connect } from "react-redux";
 import React, { useState } from "react";
 import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
 import {
     Divider,
     List,
@@ -13,13 +13,14 @@ import {
     makeStyles,
 } from "@material-ui/core";
 import {
-    DirectionsWalk,
     Weekend,
+    ViewList,
     EventNote,
-    List as ListIcon,
     ExitToApp,
     ExpandLess,
     ExpandMore,
+    DirectionsWalk,
+    List as ListIcon,
 } from "@material-ui/icons";
 
 import { useBelowBreakpoint } from "./hooks";
@@ -54,51 +55,64 @@ function SideMenu(props) {
                 <Toolbar />
             )}
             <List>
-                <ListItem button onClick={() => props.clickMenuItem("followers")}>
-                    <ListItemIcon>
-                        <DirectionsWalk />
-                    </ListItemIcon>
-                    <ListItemText primary="Followers" />
-                </ListItem>
-                <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
-                    <ListItemIcon>
-                        <Weekend />
-                    </ListItemIcon>
-                    <ListItemText primary="Clinic" />
-                    {clinicMenuOpen ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                <Collapse in={clinicMenuOpen}>
-                    <List style={{ marginLeft: 20 }}>
-                        <ListItem button onClick={() => props.clickMenuItem("clinics")}>
+                {props.user?.isLeader ? (
+                    <>
+                        <ListItem button onClick={() => props.clickMenuItem("followers")}>
                             <ListItemIcon>
-                                <ListIcon />
+                                <DirectionsWalk />
                             </ListItemIcon>
-                            <ListItemText primary="Clinics List" />
+                            <ListItemText primary="Followers" />
                         </ListItem>
-                        <ListItem button onClick={() => props.clickMenuItem("criteriaList")}>
+                        <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
                             <ListItemIcon>
-                                <EventNote />
+                                <Weekend />
                             </ListItemIcon>
-                            <ListItemText primary="Criteria List" />
+                            <ListItemText primary="Clinic" />
+                            {clinicMenuOpen ? <ExpandLess /> : <ExpandMore />}
                         </ListItem>
-                    </List>
-                </Collapse>
-                <Divider />
-                <List>
-                    <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
+                        <Collapse in={clinicMenuOpen}>
+                            <List style={{ marginLeft: 20 }}>
+                                <ListItem button onClick={() => props.clickMenuItem("clinics")}>
+                                    <ListItemIcon>
+                                        <ListIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Clinics List" />
+                                </ListItem>
+                                <ListItem button onClick={() => props.clickMenuItem("criteriaList")}>
+                                    <ListItemIcon>
+                                        <EventNote />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Criteria List" />
+                                </ListItem>
+                            </List>
+                        </Collapse>
+                    </>
+                ) : null}
+                {props.user?.isFollower ? (
+                    <ListItem button onClick={() => props.clickMenuItem("follower/resonators")}>
                         <ListItemIcon>
-                            <ExitToApp htmlColor="#ff4444" />
+                            <ViewList />
                         </ListItemIcon>
-                        <ListItemText primary="Logout" />
+                        <ListItemText primary="All Resonators" />
                     </ListItem>
-                </List>
+                ) : null}
+                <Divider />
+                <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
+                    <ListItemIcon>
+                        <ExitToApp htmlColor="#ff4444" />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                </ListItem>
             </List>
         </Drawer>
     );
 }
 
 export default connect(
-    (state) => ({ menuOpen: navigationSelector(state).menuOpen }),
+    (state) => ({
+        user: state.session.user,
+        menuOpen: navigationSelector(state).menuOpen,
+    }),
     (dispatch) =>
         bindActionCreators(
             {
