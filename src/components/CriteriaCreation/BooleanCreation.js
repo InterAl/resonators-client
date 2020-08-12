@@ -1,19 +1,16 @@
-import React, {Component} from 'react';
-import Subheader from 'material-ui/Subheader';
-import TextBox from '../FormComponents/TextBox';
+import React from "react";
+import { Typography } from "@material-ui/core";
+import TextBox from "../FormComponents/TextBox";
 
-export default class BooleanCreation extends Component {
-    render() {
-        return (
-            <div className='boolean-creation'>
-                <Subheader>
-                    True / False Creation
-                </Subheader>
-                <div>
-                    <TextBox name='answers.true' placeholder='True answer'/>
-                    <TextBox name='answers.false' placeholder='False answer'/>
-                </div>
+
+export default function BooleanCreation() {
+    return (
+        <div>
+            <Typography variant="subtitle2">Select Labels</Typography>
+            <div style={{ display: "flex" }}>
+                <TextBox name="answers.true" label="Yes" style={{ marginRight: 16 }} />
+                <TextBox name="answers.false" label="No" />
             </div>
-        );
-    }
+        </div>
+    );
 }

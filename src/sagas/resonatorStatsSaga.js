@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import SagaReducerFactory from 'saga-reducer-factory';
+import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { select, call, put } from 'redux-saga/effects';
 import { actions, types } from '../actions/resonatorStatsActions.js';
 import * as statsApi from '../api/resonatorStats';

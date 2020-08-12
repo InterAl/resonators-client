@@ -1,10 +1,12 @@
-import _ from 'lodash';
-import {actions as navigationActions} from '../actions/navigationActions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import React, {Component} from 'react';
-import EntityTable from './EntityTable';
-import {push} from 'react-router-redux';
+import _ from "lodash";
+import { actions as navigationActions } from "../actions/navigationActions";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import React, { Component } from "react";
+import EntityTable from "./EntityTable";
+import { rowAction } from './RowActions';
+import { push } from "connected-react-router";
+import { Typography } from "@material-ui/core";
 
 class CriteriaList extends Component {
     constructor(props) {
@@ -13,37 +15,38 @@ class CriteriaList extends Component {
 
     renderColumn(criteria) {
         return (
-            <div className='row'>
-                <div className='name col-lg-10 col-sm-9 col-xs-6'>
-                    <b>{criteria.title}</b><br/>
-                    {criteria.description}
-                </div>
+            <div>
+                <Typography style={{ fontWeight: "bold" }}>{criteria.title}</Typography>
+                <Typography color="textSecondary">{criteria.description}</Typography>
             </div>
         );
     }
 
     getRows() {
-        return _.reduce(this.props.criteria, (acc, c) => {
-            acc[c.id] = [this.renderColumn(c)];
-            return acc;
-        }, {});
+        return _.reduce(
+            this.props.criteria,
+            (acc, c) => {
+                acc[c.id] = [this.renderColumn(c)];
+                return acc;
+            },
+            {}
+        );
     }
 
     render() {
-        let rows = this.getRows();
-        let addRoute = location.pathname + '/new';
-        let getEditRoute = id => `${location.pathname}/${id}/edit`;
+        const getEditRoute = (id) => `${location.pathname}/${id}/edit`;
 
         return (
             <EntityTable
-                selectable={false}
-                onAdd={() => this.props.push(addRoute)}
-                onEdit={id => this.props.push(getEditRoute(id))}
-                onRemove={id => this.props.showDeleteCriterionPrompt(id)}
                 addButton={true}
-                rowActions={['edit', 'remove']}
-                header={['Criteria']}
-                rows={rows}
+                addText="Add Criterion"
+                rows={this.getRows()}
+                header={["Criteria"]}
+                onAdd={() => this.props.push(location.pathname + "/new")}
+                rowActions={[
+                    rowAction.edit((criterionId) => this.props.push(getEditRoute(criterionId))),
+                    rowAction.remove((criterionId) => this.props.showDeleteCriterionPrompt(criterionId))
+                ]}
             />
         );
     }
@@ -51,20 +54,24 @@ class CriteriaList extends Component {
 
 function mapStateToProps(state) {
     return {
-        criteria: state.criteria.criteria
+        criteria: state.criteria.criteria,
     };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        showDeleteCriterionPrompt: criterionId => navigationActions.showModal({
-            name: 'deleteCriterion',
-            props: {
-                criterionId
-            }
-        }),
-        push
-    }, dispatch);
+    return bindActionCreators(
+        {
+            showDeleteCriterionPrompt: (criterionId) =>
+                navigationActions.showModal({
+                    name: "deleteCriterion",
+                    props: {
+                        criterionId,
+                    },
+                }),
+            push,
+        },
+        dispatch
+    );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CriteriaList);

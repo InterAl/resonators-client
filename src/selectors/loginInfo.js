@@ -5,6 +5,6 @@ export default createSelector(
 
     session => ({
         user: session.user,
-        loggedIn: session.loggedIn
+        loggedIn: Boolean(session.loggedIn)
     })
 );

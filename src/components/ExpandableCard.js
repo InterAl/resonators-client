@@ -1,34 +1,43 @@
 import _ from 'lodash';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {actions} from '../actions/cardActions';
-import {Card, CardHeader, CardMedia} from 'material-ui/Card';
-import React, {Component} from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { actions } from '../actions/cardActions';
+import { Card, CardHeader, CardMedia, IconButton, Collapse } from '@material-ui/core';
+import { ExpandMore, ExpandLess } from '@material-ui/icons';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 
 class ExpandableCard extends Component {
     static propTypes = {
-        title: React.PropTypes.string,
-        subtitle: React.PropTypes.string,
-        width: React.PropTypes.number,
-        margin: React.PropTypes.any,
-        style: React.PropTypes.object,
-        avatar: React.PropTypes.any,
-        id: React.PropTypes.string,
-        onExpandChange: React.PropTypes.func
+        title: PropTypes.string,
+        subtitle: PropTypes.string,
+        width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+        margin: PropTypes.any,
+        style: PropTypes.object,
+        avatar: PropTypes.any,
+        id: PropTypes.string,
+        onExpandChange: PropTypes.func
     };
 
     static defaultProps = {
-        width: 400,
+        width: "max-content",
         margin: '0 auto',
         style: {},
         defaultCardData: {},
         onExpandChange: _.noop
     };
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.handleExpandChange = this.handleExpandChange.bind(this);
+        this.toggleExpanded = this.toggleExpanded.bind(this);
+        const { initiallyExpanded } = this.props.cardData || this.props.defaultCardData;
+
+        this.state = {
+            expanded: Boolean(initiallyExpanded)
+        }
     }
 
     handleExpandChange(expanded) {
@@ -40,25 +49,29 @@ class ExpandableCard extends Component {
         this.props.onExpandChange(expanded);
     }
 
-    render() {
-        let {expanded} = this.props.cardData || this.props.defaultCardData;
+    toggleExpanded() {
+        const newState = !this.state.expanded;
+        this.setState({ expanded: newState })
+        this.handleExpandChange(newState)
+    }
 
+    render() {
         return (
-            <Card style={{maxWidth: '100vw', width: this.props.width, margin: this.props.margin, ...this.props.style}}
-                  expanded={expanded}
-                  onExpandChange={this.handleExpandChange}
-            >
+            <Card style={{ maxWidth: '100%', width: this.props.width, margin: this.props.margin, ...this.props.style }}>
                 <CardHeader
                     title={this.props.title}
-                    subtitle={this.props.subtitle}
+                    subheader={this.props.subtitle}
                     avatar={this.props.avatar}
-                    actAsExpander={true}
-                    showExpandableButton={true}
-                    expanded={this.props.cardData}
-                />
-                <CardMedia expandable={true} style={{height: this.props.height}}>
-                    {this.props.children}
-                </CardMedia>
+                    action={
+                        <IconButton onClick={this.toggleExpanded}>
+                            {this.state.expanded ? <ExpandLess /> : <ExpandMore />}
+                        </IconButton>
+                    } />
+                <Collapse in={this.state.expanded}>
+                    <CardMedia style={{ height: this.props.height }}>
+                        {this.props.children}
+                    </CardMedia>
+                </Collapse>
             </Card>
         );
     }

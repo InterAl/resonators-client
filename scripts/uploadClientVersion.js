@@ -12,7 +12,7 @@ var commitHash = execSync('git rev-parse --verify HEAD');
 var commitTime = execSync('git show -s --format=%ci HEAD');
 
 try {
-    execSync('gzip -9 ' + attachmentPath + ' -k');
+    execSync('gzip -9 ' + attachmentPath + ' -k -f');
 } catch (err) {
     console.error('failed gzipping', err);
 }

@@ -71,9 +71,10 @@ class WebpackBaseConfig {
    */
   get defaultSettings() {
     const cssModulesQuery = {
-      modules: true,
+      modules: {
+        localIdentName: '[name]-[local]-[hash:base64:5]'
+      },
       importLoaders: 1,
-      localIdentName: '[name]-[local]-[hash:base64:5]'
     };
 
     return {
@@ -99,9 +100,6 @@ class WebpackBaseConfig {
             include: this.srcPathAbsolute,
             loaders: [{
                 loader: 'babel-loader',
-                query: {
-                  presets: ['es2015', 'stage-0']
-                }
             }, {
                 loader: 'eslint-loader'
             }]
@@ -114,7 +112,7 @@ class WebpackBaseConfig {
             ]
           },
           {
-            test: /\.(png|jpg|gif|mp4|ogg|svg|woff|woff2)$/,
+            test: /\.(png|jpg|gif|mp4|ogg|svg|woff|woff2|ttf)$/,
             loader: 'file-loader'
           },
           {
