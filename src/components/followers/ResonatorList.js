@@ -1,5 +1,4 @@
 import React from "react";
-import moment from "moment";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { push as goto } from "connected-react-router";
@@ -9,12 +8,14 @@ import {
     ListSubheader,
     ListItemAvatar,
     ListItemText,
-    Avatar,
     Paper,
     makeStyles,
     Grow,
     Typography,
 } from "@material-ui/core";
+
+import ResonatorAvatar from "../ResonatorAvatar";
+import { formatResonatorTime } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
     itemBig: {
@@ -30,8 +31,6 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "center",
     },
 }));
-
-const formatResonatorTime = (time) => moment(time).format("dddd, MMMM Do YYYY, HH:mm");
 
 function ResonatorList({ resonators, subheader, paperProps = {}, big = false, goto }) {
     const classes = useStyles();
@@ -57,7 +56,7 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
                         >
                             {resonator.picture ? (
                                 <ListItemAvatar>
-                                    <Avatar src={resonator.picture} variant="rounded" className={avatarClass} />
+                                    <ResonatorAvatar resonator={resonator} className={avatarClass} />
                                 </ListItemAvatar>
                             ) : null}
                             <ListItemText

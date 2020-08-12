@@ -17,6 +17,7 @@ import ResetPasword from './ResetPassword';
 import ResonatorFeedback from './ResonatorFeedback';
 import HomePage from './HomePage';
 import ResonatorsOverview from './followers/ResonatorsOverview';
+import SentResonator from './followers/SentResonator';
 
 
 class AppComponent extends React.Component {
@@ -42,6 +43,7 @@ class AppComponent extends React.Component {
                 <Route exact path="/clinics/criteria" component={CriteriaList} />
 
                 <Route exact path="/follower/resonators" component={ResonatorsOverview} />
+                <Route exact path="/follower/resonators/:sentResonatorId" component={SentResonator} />
 
                 <Route exact path="/login" component={LoginPage} />
                 <Route component={NoMatch} />
