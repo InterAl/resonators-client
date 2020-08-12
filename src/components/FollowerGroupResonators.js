@@ -33,7 +33,8 @@ class FollowerGroupResonators extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.followerGroup) nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
+        if (nextProps.followerGroup && this.props.followerGroup && nextProps.followerGroup.id !== this.props.followerGroup.id)
+            nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
     }
 
     getHeader() {

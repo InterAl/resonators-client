@@ -39,7 +39,10 @@ const screenToRoute = {
     },
     'followerGroupResonators': {
         route: '/followerGroups/:followerGroupId/resonators',
-    }
+    },
+    'follower/resonators': {
+        route: '/follower/resonators',
+    },
 };
 
 handle(types.NAVIGATE, function*(sagaParams, {payload}) {

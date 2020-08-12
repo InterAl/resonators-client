@@ -177,16 +177,14 @@ export function* fetchFollowerGroupResonators(followerGroupId) {
 
     followerGroup = yield getFollowerGroup(followerGroupId);
 
-    if (!followerGroup.resonators) {
-        let followerGroupResonators = yield call(followerGroupApi.getGroupResonators, followerGroupId);
+    const followerGroupResonators = yield call(followerGroupApi.getGroupResonators, followerGroupId);
 
-        let patchedFollowerGroup = {
-            ...followerGroup,
-            resonators: followerGroupResonators
-        };
+    const patchedFollowerGroup = {
+        ...followerGroup,
+        resonators: followerGroupResonators
+    };
 
-        yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
-    }
+    yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
 }
 
 function* updateStateWithNewFollowerGroup(followerGroup) {

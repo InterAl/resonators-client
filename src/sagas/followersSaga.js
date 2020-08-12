@@ -18,11 +18,15 @@ let { handle, updateState, saga, reducer } = SagaReducerFactory({
 });
 
 handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
-    let followers = yield call(followerApi.get);
+    const user = yield select((state) => state.session.user);
 
-    yield put(updateState({
-        followers
-    }));
+    if (user.isLeader) {
+        const followers = yield call(followerApi.get);
+    
+        yield put(updateState({
+            followers
+        }));
+    }
 });
 
 handle(types.CREATE, function* (sagaParams, { payload }) {

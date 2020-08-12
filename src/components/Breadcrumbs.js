@@ -223,6 +223,9 @@ const tree = {
                 login: {
                     title: "Login",
                 },
+                "follower/resonators": {
+                    title: "Resonators",
+                },
             },
         },
     },

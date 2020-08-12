@@ -1,69 +1,90 @@
-import React from 'react';
-import { Route, Switch } from 'react-router';
-import { ConnectedRouter } from 'connected-react-router';
-import history from '../stores/history';
-import Layout from './Layout';
-import Followers from './Followers';
+import React from "react";
+import { connect } from "react-redux";
+import { Route, Switch } from "react-router";
+import { ConnectedRouter } from "connected-react-router";
+
+import history from "../stores/history";
+
+import Layout from "./Layout";
+import Clinics from "./Clinics";
+import NoMatch from "./NoMatch";
+import HomePage from "./HomePage";
+import Followers from "./Followers";
 import FollowerGroups from './FollowerGroups';
-import Clinics from './Clinics';
-import NoMatch from './NoMatch';
-import LoginPage from './LoginPage';
-import FollowerResonators from './FollowerResonators';
+import LoginPage from "./LoginPage";
+import CriteriaList from "./CriteriaList";
+import ShowResonator from "./ShowResonator";
+import EditResonator from "./EditResonator";
+import ResetPassword from "./ResetPassword";
+import ResonatorStats from "./ResonatorStats";
+import ResonatorFeedback from "./ResonatorFeedback";
+import SentResonator from "./followers/SentResonator";
+import FollowerResonators from "./FollowerResonators";
 import FollowerGroupResonators from './FollowerGroupResonators';
 import FollowerGroupMembers from './FollowerGroupMembers';
-import EditResonator from './EditResonator';
-import ShowResonator from './ShowResonator';
-import ResonatorStats from './ResonatorStats';
-import CriteriaList from './CriteriaList';
-import CriteriaCreation from './CriteriaCreation/index';
-import ResetPassword from './ResetPassword';
-import ResonatorFeedback from './ResonatorFeedback';
-import HomePage from './HomePage';
-import ResonatorsOverview from './followers/ResonatorsOverview';
+import CriteriaCreation from "./CriteriaCreation/index";
+import ResonatorsOverview from "./followers/ResonatorsOverview";
 
+const leaderRoutes = [
+    { path: "/followers", component: Followers },
+    { path: "/followers/:followerId/resonators", component: FollowerResonators },
+    { path: "/followers/:followerId/resonators/new", component: EditResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/show", component: ShowResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
+    { path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
 
-class AppComponent extends React.Component {
-  render() {
+    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId", component: ShowResonator},
+    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
+    { path: "/followerGroups", component: FollowerGroups},
+
+    { path: "/clinics", component: Clinics },
+    { path: "/clinics/criteria", component: CriteriaList },
+    { path: "*/criteria/submit", component: ResonatorFeedback },
+    { path: "/clinics/criteria/new", component: CriteriaCreation },
+    { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
+];
+
+const followerRoutes = [
+    { path: "/follower/resonators", component: ResonatorsOverview },
+    { path: "/follower/resonators/:sentResonatorId", component: SentResonator },
+];
+
+const commonRoutes = [
+    { path: "/login", component: LoginPage },
+    { path: "/resetPassword", component: ResetPassword },
+];
+
+const App = (props) => {
+    const routes = commonRoutes
+        .concat(props.user?.isLeader ? leaderRoutes : [])
+        .concat(props.user?.isFollower ? followerRoutes : []);
+
     return (
-      <ConnectedRouter history={history}>
-        <Switch>
-          <Route path='/(.+)'>
-            <Layout>
-              <Switch>
-                <Route exact path="/followers/:followerId/resonators/new" component={EditResonator} />
-                <Route exact path="/followers/:followerId/resonators/:resonatorId/edit" component={EditResonator} />
-                <Route exact path="/followers/:followerId/resonators/:resonatorId/stats/:qid" component={ResonatorStats} />
-                <Route path="/followers/:followerId/resonators/:resonatorId" component={ShowResonator} />
-                <Route path="/followers/:followerId" component={FollowerResonators} />
-                <Route exact path="/followers" component={Followers} />
-                
-                <Route exact path="/followerGroups/:followerGroupId/resonators/new" component={EditResonator}/>
-                <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/edit" component={EditResonator}/>
-                <Route exact path="/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid" component={ResonatorStats}/>
-                <Route path="/followerGroups/:followerGroupId/resonators/:resonatorId" component={ShowResonator}/>
-                <Route path="/followerGroups/:followerGroupId/members" component={FollowerGroupMembers}/>
-                <Route path="/followerGroups/:followerGroupId" component={FollowerGroupResonators}/>
-                <Route exact path="/followerGroups" component={FollowerGroups}/>
+        <ConnectedRouter history={history}>
+            <Switch>
+                <Route path="/(.+)">
+                    <Layout>
+                        <Switch>
+                            {routes.map((route, index) => (
+                                <Route key={index} exact {...route} />
+                            ))}
 
-                <Route exact path="/resetPassword" component={ResetPassword} />
-                <Route exact path="*/criteria/submit" component={ResonatorFeedback} />
-                <Route exact path="/clinics" component={Clinics} />
-                <Route exact path="/clinics/criteria/new" component={CriteriaCreation} />
-                <Route path="/clinics/criteria/:criterionId" component={CriteriaCreation} />
-                <Route exact path="/clinics/criteria" component={CriteriaList} />
-
-                <Route exact path="/follower/resonators" component={ResonatorsOverview} />
-
-                <Route exact path="/login" component={LoginPage} />
-                <Route component={NoMatch} />
-              </Switch>
-            </Layout>
-          </Route>
-          <Route exact path='/' component={HomePage} />
-        </Switch>
-      </ConnectedRouter>
+                            <Route component={NoMatch} />
+                        </Switch>
+                    </Layout>
+                </Route>
+                <Route exact path="/" component={HomePage} />
+            </Switch>
+        </ConnectedRouter>
     );
-  }
-}
+};
 
-export default AppComponent;
+const mapStateToProps = (state) => ({
+    user: state.session.user,
+});
+
+export default connect(mapStateToProps, null)(App);
