@@ -60,31 +60,41 @@ function SideMenu(props) {
             <List>
                 {props.user?.isLeader && (
                     <>
-                        <ListItem button onClick={() => setFollowerMenuOpen(!followerMenuOpen)}>
-                            <ListItemIcon>
-                                <DirectionsWalk />
-                            </ListItemIcon>
-                            <ListItemText primary="Followers" />
-                            {followerMenuOpen ? <ExpandLess /> : <ExpandMore />}
-                        </ListItem>
-                        <Collapse in={followerMenuOpen}>
-                            <List style={{ marginLeft: 20 }}>
-                                <ListItem button onClick={() => props.clickMenuItem("followers")}>
+                        {props.leader.group_permissions ?
+                            <React.Fragment>
+                                <ListItem button onClick={() => setFollowerMenuOpen(!followerMenuOpen)}>
                                     <ListItemIcon>
-                                        <Person />
+                                        <DirectionsWalk />
                                     </ListItemIcon>
-                                    <ListItemText primary="Follower List" />
+                                    <ListItemText primary="Followers" />
+                                    {followerMenuOpen ? <ExpandLess /> : <ExpandMore />}
                                 </ListItem>
-                                {props.leader.group_permissions &&
-                                    <ListItem button onClick={() => props.clickMenuItem("followerGroups")}>
-                                        <ListItemIcon>
-                                            <Group />
-                                        </ListItemIcon>
-                                        <ListItemText primary="Follower Groups" />
-                                    </ListItem>
-                                }
-                            </List>
-                        </Collapse>
+                                <Collapse in={followerMenuOpen}>
+                                    <List style={{ marginLeft: 20 }}>
+                                        <ListItem button onClick={() => props.clickMenuItem("followers")}>
+                                            <ListItemIcon>
+                                                <Person />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Follower List" />
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => props.clickMenuItem("followerGroups")}>
+                                            <ListItemIcon>
+                                                <Group />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Follower Groups" />
+                                        </ListItem>
+
+                                    </List>
+                                </Collapse>
+                            </React.Fragment> :
+                            <ListItem button onClick={() => props.clickMenuItem("followers")}>
+                                <ListItemIcon>
+                                    <DirectionsWalk />
+                                </ListItemIcon>
+                                <ListItemText primary="Followers" />
+                            </ListItem>
+                        }
                         <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
                             <ListItemIcon>
                                 <Weekend />
