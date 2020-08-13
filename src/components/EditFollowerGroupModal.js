@@ -51,7 +51,7 @@ class EditFollowerGroupModal extends Component {
     renderForm() {
         return (
             <form autoComplete="off">
-                <Field type="text" placeholder="Name" name="name" component={TextField} />
+                <Field type="text" placeholder="Name" name="group_name" component={TextField} />
             </form>
         );
     }
