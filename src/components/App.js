@@ -32,9 +32,9 @@ const leaderRoutes = [
 
     { path: "/clinics", component: Clinics },
     { path: "/clinics/criteria", component: CriteriaList },
-    { path: "*/criteria/submit", component: ResonatorFeedback },
     { path: "/clinics/criteria/new", component: CriteriaCreation },
     { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
+    { path: "/api/criteria/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];
 
 const followerRoutes = [
