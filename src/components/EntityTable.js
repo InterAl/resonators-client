@@ -42,7 +42,7 @@ export default class EntityTable extends Component {
             <TableHead>
                 <TableRow>
                     {this.props.header.map((col, index) => (
-                        <TableCell key={index}>{col}</TableCell>
+                        <TableCell key={index}  style={{width: this.props.cellWidth}}>{col}</TableCell>
                     ))}
                     {((this.props.rowActions && !_.isEmpty(this.props.rowActions)) ||
                         (this.props.extraRowActions && !_.isEmpty(this.props.rowActions))) && (
@@ -60,7 +60,7 @@ export default class EntityTable extends Component {
                     return (
                         <TableRow key={itemId}>
                             {_.map(row, (column, index) => (
-                                <TableCell key={index}>{column}</TableCell>
+                                <TableCell key={index} style={{width: this.props.cellWidth}}>{column}</TableCell>
                             ))}
 
                             <TableCell key="actions" className="editColumn">

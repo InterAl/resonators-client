@@ -139,14 +139,16 @@ class FollowerGroupMembers extends Component {
                     rows={memberRows}
                     toolbox={this.getToolbox()}
                     addButton={false}
-                    className='members' />
+                    className='members'
+                    cellWidth='20vw' />
                 {!_.isEmpty(nonMemberRows) &&
                     <React.Fragment>
                         <Divider style={{marginBottom: '3vh'}}/>
                         <EntityTable
                             rows={nonMemberRows}
                             addButton={false}
-                            className='members' />
+                            className='members'
+                            cellWidth='20vw'/>
                     </React.Fragment>
                 }
             </div>
