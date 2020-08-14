@@ -9,7 +9,7 @@ export default createSelector(
         return {
             followerGroups: _(followerGroups.followerGroups)
                                 .filter(f => followerGroups.displayFrozen || !f.frozen)
-                                .filter(fg => filterByClinicId(followerGroups, fg))
+                                .filter(hasClinic(followerGroups.filterByClinicId))
                                 .map(fg => ({
                                     ...fg,
                                     clinicName: getClinicName(clinics, fg.clinic_id)
@@ -23,12 +23,15 @@ export default createSelector(
     }
 );
 
-function filterByClinicId(followerGroups, followerGroup) {
-    return !followerGroups.filterByClinicId ||
-            followerGroups.filterByClinicId === 'all' ||
-            followerGroup.clinic_id === followerGroups.filterByClinicId
+
+function hasClinic(clinicId) {
+    return (followerGroup) =>
+        !clinicId
+        || clinicId === "all"
+        || followerGroup.clinic_id === clinicId
 }
 
 function getClinicName(clinics, id) {
-    return _.get(_.find(clinics, c => c.id === id), 'name');
+    return clinics.find((clinic) => clinic.id === id)?.name
+
 }

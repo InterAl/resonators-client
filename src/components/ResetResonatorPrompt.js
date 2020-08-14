@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actions as resonatorActions } from '../actions/resonatorActions';
@@ -7,34 +7,26 @@ import navigationInfoSelector from '../selectors/navigationSelector';
 import SimplePrompt from './SimplePrompt';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 
-class ResetResonatorPrompt extends Component {
-    constructor() {
-        super();
-
-        this.handleReset = this.handleReset.bind(this);
+const ResetResonatorPrompt = (props) => {
+    console.log({props});
+    const handleReset = () => {
+        const followerId = props.resonator.follower_id;
+        props.reset({ followerId, resonator: props.resonator });
     }
+    if (!props.resonator) return null;
 
-    handleReset() {
-        const followerId = this.props.resonator.follower_id;
-        this.props.reset({ followerId, resonator: this.props.resonator });
-    }
+    const { resonator: { title } } = props;
 
-    render() {
-        if (!this.props.resonator) return null;
-
-        const { resonator: { title } } = this.props;
-
-        return (
-            <SimplePrompt
-                title='Reset Resonator'
-                text={`Reset ${title} to group's default?`}
-                acceptText='Reset'
-                onAccept={this.handleReset}
-                onClose={this.props.onClose}
-                open={this.props.open}
-            />
-        );
-    }
+    return (
+        <SimplePrompt
+            title='Reset Resonator'
+            text={`Reset ${title} to group's default?`}
+            acceptText='Reset'
+            onAccept={handleReset}
+            onClose={props.onClose}
+            open={props.open}
+        />
+    );
 }
 
 function mapStateToProps(state) {

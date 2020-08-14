@@ -167,7 +167,7 @@ class FollowerResonators extends Component {
                 icon: <Autorenew />,
                 title: "Reset",
                 onClick: this.handleResetResonator,
-                isAvailable: (resonatorId) => !!this.getResonator(resonatorId).parent_resonator_id,
+                isAvailable: (resonatorId) => Boolean(this.getResonator(resonatorId).parent_resonator_id),
             }),
         ];
     }

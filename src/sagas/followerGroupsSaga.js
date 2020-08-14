@@ -19,11 +19,15 @@ const { handle, updateState, saga, reducer } = SagaReducerFactory({
 });
 
 handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
-    const followerGroups = yield call(followerGroupApi.get);
+    const user = yield select((state) => state.session.user);
 
-    yield put(updateState({
-        followerGroups,
-    }));
+    if (user.isLeader) {
+        const followerGroups = yield call(followerGroupApi.get);
+
+        yield put(updateState({
+            followerGroups,
+        }));
+    }
 });
 
 handle(types.CREATE, function* (sagaParams, { payload }) {
@@ -35,7 +39,7 @@ handle(types.CREATE, function* (sagaParams, { payload }) {
 handle(types.DELETE, function* (sagaParams, { payload }) {
     yield call(followerGroupApi.deleteFollowerGroup, payload);
     const followerGroups = yield select(followerGroupsSelector);
-    const followerGroupsWithoutDeleted = _.reject(followerGroups, (gf) => fg.id === payload);
+    const followerGroupsWithoutDeleted = _.reject(followerGroups, (fg) => fg.id === payload);
 
     yield put(updateState({
         followerGroups: followerGroupsWithoutDeleted
@@ -44,7 +48,6 @@ handle(types.DELETE, function* (sagaParams, { payload }) {
 
 handle(types.FREEZE, function* (sagaParams, { payload }) {
     yield call(followerGroupApi.freezeFollowerGroup, payload);
-    const followerGroups = yield select(followerGroupsSelector);
     const followerGroup = yield getFollowerGroup(payload);
 
     const updatedFollowerGroup = {
@@ -158,7 +161,6 @@ export function* fetchFollowerGroupMembers(followerGroupId) {
         yield waitForFollowerGroups();
 
     followerGroup = yield getFollowerGroup(followerGroupId);
-    console.log({ members: followerGroup.members });
     const followerGroupMembers = yield call(followerGroupApi.getGroupMembers, followerGroupId);
 
     const patchedFollowerGroup = {

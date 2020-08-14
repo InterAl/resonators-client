@@ -22,16 +22,12 @@ class FollowerGroups extends Component {
             openedOverflowMenuFollowerGroupId: null,
         };
 
-        this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
         this.handleSelectFollowerGroup = this.handleSelectFollowerGroup.bind(this);
         this.handleEditFollowerGroup = this.handleEditFollowerGroup.bind(this);
         this.handleRemoveFollowerGroup = this.handleRemoveFollowerGroup.bind(this);
         this.handleAddFollowerGroup = this.handleAddFollowerGroup.bind(this);
         this.handleManageFollowers = this.handleManageFollowers.bind(this);
-    }
-
-    handleClinicFilterChange(ev, idx, value) {
-        this.props.filterByClinicId(value);
+        this.handleFreezeFollowerGroup = this.handleFreezeFollowerGroup.bind(this);
     }
 
     handleSelectFollowerGroup(followerGroupId) {
@@ -65,24 +61,6 @@ class FollowerGroups extends Component {
         this.setState({
             openedOverflowMenuFollowerGroupId: followerGroupId,
         });
-    }
-
-    renderClinicFilter() {
-        return [
-            <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
-            <Select
-                labelId="clinic-filter-label"
-                value={this.props.clinicIdFilter}
-                onChange={this.handleClinicFilterChange}
-            >
-                <MenuItem value="all">All</MenuItem>
-                {this.props.clinics.map((clinic, i) => (
-                    <MenuItem value={clinic.id} key={i}>
-                        {clinic.name}
-                    </MenuItem>
-                ))}
-            </Select>,
-        ];
     }
 
     getMembersRoute(followerGroupId) {
@@ -130,7 +108,7 @@ class FollowerGroups extends Component {
     getRowActions() {
         return [
             rowAction({
-                title: "Members",
+                title: "Add/Remove Members",
                 icon: <Group />,
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
             }),
@@ -186,7 +164,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         editFollowerGroup: actions.edit,
         unfreezeFollowerGroup: actions.unfreeze,
-        filterByClinicId: actions.filterByClinicId,
         toggleDisplayFrozen: actions.toggleDisplayFrozen,
         showEditFollowerGroupModal: (followerGroupId) => navigationActions.showModal({
             name: 'editFollowerGroup',
@@ -207,7 +184,7 @@ function mapDispatchToProps(dispatch) {
                 followerGroupId
             }
         }),
-        showFreezeFollowerGroupPrompt: followerGroupId => navigationActions.showModal({
+        showFreezeFollowerGroupPrompt: (followerGroupId) => navigationActions.showModal({
             name: 'freezeFollowerGroup',
             props: {
                 followerGroupId

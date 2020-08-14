@@ -83,7 +83,7 @@ const Form = reduxForm({
     form: "editFollowerGroup",
     validate: (formData) => {
         let errors = {};
-        if (!formData.groupName) errors.groupName = "Required";
+        if (!formData.group_name) errors.group_name = "Required";
         return errors;
     },
 })(EditFollowerGroupModal);
@@ -104,7 +104,7 @@ function mapStateToProps(state) {
 
     if (followerGroup) {
         ret.initialValues = {
-            name: followerGroup.group_name,
+            group_name: followerGroup.group_name,
         };
     } else {
         ret.initialValues = {

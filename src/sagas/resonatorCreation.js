@@ -135,7 +135,6 @@ handle(resonatorTypes.RESET, function* (sagaParams, { payload: { followerId, res
 
     const parentId = resonator.parent_resonator_id;
     const resonators = yield select(resonatorsSelector);
-    console.log({ resonators });
     const {
         follower_group_id,
         parent_resonator_id,
@@ -151,6 +150,7 @@ handle(resonatorTypes.RESET, function* (sagaParams, { payload: { followerId, res
     const updatedResonator = yield call(resonatorApi.update, followerId, { ...resonator, ...parentResonator });
 
     yield updateResonator(followerId, { ...resonator, ...updatedResonator });
+    yield put(updateState({ showSpinnerFinalUpdate: false }));
     yield put(navigationActions.navigate({
         route: 'followerResonators', routeParams: { followerId }
     }));
