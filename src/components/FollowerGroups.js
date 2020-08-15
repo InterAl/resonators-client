@@ -109,7 +109,7 @@ class FollowerGroups extends Component {
         return [
             rowAction({
                 title: "Add/Remove Members",
-                icon: <Group />,
+                icon: <Group color='primary'/>,
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
             }),
             rowAction.edit(this.handleEditFollowerGroup),
