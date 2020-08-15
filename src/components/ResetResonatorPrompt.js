@@ -20,7 +20,7 @@ const ResetResonatorPrompt = (props) => {
     return (
         <SimplePrompt
             title='Reset Resonator'
-            text={`Reset ${title} to group's default?`}
+            text={`Reset [${title}] to group's default?`}
             acceptText='Reset'
             onAccept={handleReset}
             onClose={props.onClose}

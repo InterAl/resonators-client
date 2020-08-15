@@ -10,7 +10,7 @@ import { Select, Checkbox, MenuItem, Button, Link as MuiLink, Typography, Divide
 import EntityTable from './EntityTable';
 import { push } from "connected-react-router";
 import OverflowMenu from './OverflowMenu';
-import { NotInterested } from '@material-ui/icons';
+import { NotInterested, Check } from '@material-ui/icons';
 
 class FollowerGroupMembers extends Component {
     constructor() {
@@ -138,7 +138,11 @@ class FollowerGroupMembers extends Component {
                     header={this.getHeader()}
                     rows={memberRows}
                     toolbox={this.getToolbox()}
-                    addButton={false}
+                    addButton={true}
+                    addText='Update Members'
+                    addIcon={<Check />}
+                    onAdd={this.handleSubmit}
+                    addDisabled={!this.isSubmittable()}
                     className='members'
                     cellWidth='20vw' />
                 {!_.isEmpty(nonMemberRows) &&
@@ -179,13 +183,6 @@ class FollowerGroupMembers extends Component {
         return (
             <div style={{ textAlign: 'right' }}>
                 {this.renderRows()}
-                <Button style={{ marginRight: '5%' }}
-                    color="primary"
-                    variant="contained"
-                    onClick={this.handleSubmit}
-                    disabled={!this.isSubmittable()}>
-                    Update
-                </Button>
             </div>
         );
     }

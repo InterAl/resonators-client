@@ -13,7 +13,7 @@ import * as utils from "./utils";
 import OverflowMenu from "./OverflowMenu";
 import getResonatorImage from "../selectors/getResonatorImage";
 import { MenuItem, Typography, Avatar } from "@material-ui/core";
-import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew } from "@material-ui/icons";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew, Group } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -66,6 +66,13 @@ class FollowerResonators extends Component {
                     <Typography style={{ fontWeight: "bold" }}>{_.truncate(resonator.title, { length: 50 })}</Typography>
                     <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
                 </div>
+                {resonator.parent_resonator_id ?
+                    <Group variant="rounded" fontSize="small" style={{
+                        marginLeft: 5,
+                        color: resonator.pop_email ? "" : "grey",
+                    }} /> :
+                    null
+                }
             </div>
         );
     }

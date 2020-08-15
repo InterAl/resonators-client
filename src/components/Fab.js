@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default ({ onClick, text = "" }) => {
+export default ({ onClick, text = "", icon, disabled }) => {
     const classes = useStyles();
     const screenSmall = useBelowBreakpoint("xs");
     const displayExtended = text && !screenSmall;
@@ -36,9 +36,10 @@ export default ({ onClick, text = "" }) => {
                 color="primary"
                 variant={displayExtended ? "extended" : "round"}
                 onClick={onClick}
+                disabled={disabled || false}
                 className={classes.fab}
             >
-                <Add />
+                {icon || <Add />}
                 {displayExtended ? <span className={classes.title}>{text}</span> : null}
             </Fab>
         </Tooltip>
