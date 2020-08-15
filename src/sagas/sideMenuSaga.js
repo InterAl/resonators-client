@@ -19,13 +19,13 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 
 handle(types.TOGGLE_MENU, function*() {
     let isOpen = yield select(state => state.menu.isOpen);
-
     yield put(updateState({
         isOpen: !isOpen
     }));
 });
 
 handle(types.CLICK_MENU_ITEM, function*(sagaParams, {payload}) {
+
     if (payload === 'logout') {
         yield put(sessionActions.logout());
     } else {

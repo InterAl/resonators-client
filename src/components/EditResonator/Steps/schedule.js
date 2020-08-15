@@ -32,7 +32,7 @@ class EditResonatorSchedule extends Component {
 
     handleCreate(formData) {
         this.props.updateCreationStep(formData);
-        this.props.createResonator();
+        this.props.createResonator({ targetType: this.props.targetType });
     }
 
     handleUpdate(formData) {

@@ -2,12 +2,12 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actions } from '../actions/followersActions';
+import { actions } from '../actions/followerGroupsActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
 import SimplePrompt from './SimplePrompt';
 import { Typography } from '@material-ui/core';
 
-class FreezeFollowerPrompt extends Component {
+class FreezeFollowerGroupPrompt extends Component {
     constructor() {
         super();
 
@@ -15,24 +15,24 @@ class FreezeFollowerPrompt extends Component {
     }
 
     handleFreezeClick() {
-        this.props.freezeFollower(this.props.follower.id);
+        this.props.freezeFollowerGroup(this.props.followerGroup.id);
     }
 
     render() {
-        if (!this.props.follower) return null;
+        if (!this.props.followerGroup) return null;
 
-        let { follower: { user: { name } } } = this.props;
+        const { followerGroup } = this.props;
 
         return (
             <SimplePrompt
-                title='Deactivate Follower'
+                title='Deactivate Follower Group'
                 acceptText='Confirm'
                 text={
                     <Typography>
-                        {`${name} will no longer receive Resonators assigned by you. Continue?`}
+                        {`${followerGroup.group_name}'s members will no longer receive Resonators assigned by you. Continue?`}
                         <br />
                         <br />
-                        (Note: inactive followers can be filtered in/out at the top of this page)
+                        (Note: inactive follower groups can be filtered in/out at the top of this page)
                     </Typography>
                 }
                 onAccept={this.handleFreezeClick}
@@ -44,18 +44,18 @@ class FreezeFollowerPrompt extends Component {
 }
 
 function mapStateToProps(state) {
-    let { modalProps: { followerId } } = navigationInfoSelector(state);
-    let follower = _.find(state.followers.followers, f => f.id === followerId);
+    const { modalProps: { followerGroupId } } = navigationInfoSelector(state);
+    const followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {
-        follower
+        followerGroup
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        freezeFollower: actions.freeze
+        freezeFollowerGroup: actions.freeze
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FreezeFollowerPrompt);
+export default connect(mapStateToProps, mapDispatchToProps)(FreezeFollowerGroupPrompt);

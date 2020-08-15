@@ -147,16 +147,15 @@ export function* fetchFollowerResonators(followerId) {
 
     follower = yield getFollower(followerId);
 
-    if (!follower.resonators) {
-        let followerResonators = yield call(followerApi.getResonators, followerId);
 
-        let patchedFollower = {
-            ...follower,
-            resonators: followerResonators
-        };
+    const followerResonators = yield call(followerApi.getResonators, followerId);
 
-        yield updateStateWithNewFollower(patchedFollower);
-    }
+    const patchedFollower = {
+        ...follower,
+        resonators: followerResonators
+    };
+
+    yield updateStateWithNewFollower(patchedFollower);
 }
 
 function* updateStateWithNewFollower(follower) {

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { matchPath } from "react-router";
 import { Link } from "react-router-dom";
 import followerSelector from "../selectors/followerSelector";
+import followerGroupSelector from "../selectors/followerGroupSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
 import criterionSelector from "../selectors/criterionSelector";
 import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
@@ -140,6 +141,49 @@ const tree = {
                             },
                         },
                     },
+                },
+                followerGroups: {
+                    title: "Follower Groups",
+                    routes: {
+                        "/:followerGroupId": {
+                            title: (state, routeParams) => {
+                                const followerGroup = followerGroupSelector(state, routeParams.followerGroupId);
+                                return _.get(followerGroup, "group_name");
+                            },
+                            stubRoute: true,
+                            routes: {
+                                "/members": {
+                                    title: 'Members',
+                                },
+                                "/resonators": {
+                                    title: "Resonators",
+                                    routes: {
+                                        "/new": {
+                                            title: "Create"
+                                        },
+                                        "/:resonatorId": {
+                                            title: (state, routeParams) => {
+                                                const resonator = resonatorSelector(state, routeParams.resonatorId);
+                                                return _.truncate(_.get(resonator, "title", "Resonator"), {length: 13});
+                                            },
+                                            stubRoute: true,
+                                            routes: {
+                                                "/stats/:qid": {
+                                                    title: "Criterion stats",
+                                                },
+                                                "/edit": {
+                                                    title: "Edit",
+                                                },
+                                                "/show": {
+                                                    title: "Preview",
+                                                },
+                                            }
+                                        },
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 resetPassword: {
                     title: "Reset Password",

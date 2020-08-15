@@ -4,18 +4,17 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import EntityTable from "./EntityTable";
 import { rowAction } from './RowActions';
-import { actions } from "../actions/followersActions";
+import { actions } from "../actions/followerGroupsActions";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as resonatorActions } from "../actions/resonatorActions";
 import { push } from "connected-react-router";
 import * as utils from "./utils";
-// import moment from 'moment';
 import OverflowMenu from "./OverflowMenu";
 import getResonatorImage from "../selectors/getResonatorImage";
 import { MenuItem, Typography, Avatar } from "@material-ui/core";
-import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew } from "@material-ui/icons";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled } from "@material-ui/icons";
 
-class FollowerResonators extends Component {
+class FollowerGroupResonators extends Component {
     constructor(props) {
         super(props);
 
@@ -27,18 +26,16 @@ class FollowerResonators extends Component {
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
         this.handleActivateResonator = this.handleActivateResonator.bind(this);
         this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
-        this.handleResetResonator = this.handleResetResonator.bind(this);
     }
 
     componentDidMount() {
-        if (this.props.follower) this.props.fetchFollowerResonators(this.props.follower.id);
+        if (this.props.followerGroup) this.props.fetchFollowerGroupResonators(this.props.followerGroup.id);
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.follower && this.props.follower && nextProps.follower.id !== this.props.follower.id)
-            nextProps.fetchFollowerResonators(nextProps.follower.id);
+        if (nextProps.followerGroup && this.props.followerGroup && nextProps.followerGroup.id !== this.props.followerGroup.id)
+            nextProps.fetchFollowerGroupResonators(nextProps.followerGroup.id);
     }
-
 
     getHeader() {
         return ["Resonator"];
@@ -75,7 +72,8 @@ class FollowerResonators extends Component {
         return _.reduce(
             orderedResonators,
             (acc, r) => {
-                if ((this.state.showDisabled && !r.pop_email) || r.pop_email) acc[r.id] = [this.renderColumn(r)];
+                if ((this.state.showDisabled && !r.pop_email) || r.pop_email)
+                    acc[r.id] = [this.renderColumn(r)];
 
                 return acc;
             },
@@ -90,7 +88,7 @@ class FollowerResonators extends Component {
         return {
             left: (
                 <Typography variant="h6">
-                    {`${this.props.follower && this.props.follower.user.name}'s Resonators`}
+                    {`${this.props.followerGroup && this.props.followerGroup.group_name}'s Resonators`}
                 </Typography>
             ),
             right: (
@@ -106,31 +104,27 @@ class FollowerResonators extends Component {
     handleActivateResonator(id) {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = true;
-        const followerId = resonator.follower_id;
-        this.props.activateResonator({ targetId: followerId, targetType: 'follower', resonator });
+        const followerGroupId = resonator.follower_group_id;
+        this.props.activateResonator({ targetId: followerGroupId, targetType: 'followerGroup', resonator });
     }
 
     handleDeactivateResonator(id) {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = false;
-        const followerId = resonator.follower_id;
-        this.props.activateResonator({ targetId: followerId, targetType: 'follower', resonator });
-    }
-
-    handleResetResonator(id) {
-        this.props.showResetResonatorPrompt(id);
+        const followerGroupId = resonator.follower_group_id;
+        this.props.activateResonator({ targetId: followerGroupId, targetType: 'followerGroup', resonator });
     }
 
     getPreviewRoute(resonatorId) {
-        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/show`;
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${resonatorId}/show`;
     }
 
     getEditRoute(resonatorId) {
-        return `/followers/${this.props.match.params.followerId}/resonators/${resonatorId}/edit`;
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/${resonatorId}/edit`;
     }
 
     getAddRoute() {
-        return `/followers/${this.props.match.params.followerId}/resonators/new`;
+        return `/followerGroups/${this.props.match.params.followerGroupId}/resonators/new`;
     }
 
     getRowActions() {
@@ -163,12 +157,6 @@ class FollowerResonators extends Component {
                 onClick: this.handleActivateResonator,
                 isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
             }),
-            rowAction({
-                icon: <Autorenew />,
-                title: "Reset",
-                onClick: this.handleResetResonator,
-                isAvailable: (resonatorId) => Boolean(this.getResonator(resonatorId).parent_resonator_id),
-            }),
         ];
     }
 
@@ -182,7 +170,7 @@ class FollowerResonators extends Component {
                 rowActions={this.getRowActions()}
                 extraRowActions={this.getExtraRowActions()}
                 onAdd={() => this.props.push(this.getAddRoute())}
-                addText="Create Resonator"
+                addText="Create Group Resonator"
             />
         );
     }
@@ -192,44 +180,35 @@ function mapStateToProps(
     state,
     {
         match: {
-            params: { followerId },
+            params: { followerGroupId },
         },
     }
 ) {
-    if (!followerId) return {};
+    if (!followerGroupId) return {};
 
-    let follower = _.find(state.followers.followers, (f) => f.id === followerId);
+    const followerGroup = _.find(state.followerGroups.followerGroups, (fg) => fg.id === followerGroupId);
 
     return {
-        resonators: _.get(follower, "resonators"),
-        follower,
+        resonators: _.get(followerGroup, "resonators"),
+        followerGroup,
     };
 }
 
-function mapDispatchToProps(dispatch /* {params: {followerId}} */) {
-    return bindActionCreators(
-        {
-            fetchFollowerResonators: actions.fetchFollowerResonators,
-            activateResonator: resonatorActions.activate,
-            showResetResonatorPrompt: (resonatorId) =>
-                navigationActions.showModal({
-                    name: "resetResonator",
-                    props: {
-                        resonatorId,
-                    },
-                }),
-            showDeleteResonatorPrompt: (resonatorId) =>
-                navigationActions.showModal({
-                    name: "deleteResonator",
-                    props: {
-                        resonatorId,
-                        isGroup: false,
-                    },
-                }),
-            push,
-        },
-        dispatch
-    );
+function mapDispatchToProps(dispatch /* {params: {followerGroupId}} */) {
+    return bindActionCreators({
+        fetchFollowerGroupResonators: actions.fetchFollowerGroupResonators,
+        activateResonator: resonatorActions.activate,
+        showDeleteResonatorPrompt: (resonatorId) =>
+            navigationActions.showModal({
+                name: "deleteResonator",
+                props: {
+                    resonatorId,
+                    isGroup: true,
+                },
+            }),
+
+        push,
+    }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FollowerResonators);
+export default connect(mapStateToProps, mapDispatchToProps)(FollowerGroupResonators);

@@ -19,6 +19,8 @@ import {
     ExitToApp,
     ExpandLess,
     ExpandMore,
+    Group,
+    Person,
     DirectionsWalk,
     List as ListIcon,
 } from "@material-ui/icons";
@@ -39,6 +41,7 @@ function SideMenu(props) {
     const screenSmall = useBelowBreakpoint("sm");
 
     const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
+    const [followerMenuOpen, setFollowerMenuOpen] = useState(true);
 
     return (
         <Drawer
@@ -55,14 +58,43 @@ function SideMenu(props) {
                 <Toolbar />
             )}
             <List>
-                {props.user?.isLeader ? (
+                {props.user?.isLeader && (
                     <>
-                        <ListItem button onClick={() => props.clickMenuItem("followers")}>
-                            <ListItemIcon>
-                                <DirectionsWalk />
-                            </ListItemIcon>
-                            <ListItemText primary="Followers" />
-                        </ListItem>
+                        {props.leader.group_permissions ?
+                            <React.Fragment>
+                                <ListItem button onClick={() => setFollowerMenuOpen(!followerMenuOpen)}>
+                                    <ListItemIcon>
+                                        <DirectionsWalk />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Followers" />
+                                    {followerMenuOpen ? <ExpandLess /> : <ExpandMore />}
+                                </ListItem>
+                                <Collapse in={followerMenuOpen}>
+                                    <List style={{ marginLeft: 20 }}>
+                                        <ListItem button onClick={() => props.clickMenuItem("followers")}>
+                                            <ListItemIcon>
+                                                <Person />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Follower List" />
+                                        </ListItem>
+
+                                        <ListItem button onClick={() => props.clickMenuItem("followerGroups")}>
+                                            <ListItemIcon>
+                                                <Group />
+                                            </ListItemIcon>
+                                            <ListItemText primary="Follower Groups" />
+                                        </ListItem>
+
+                                    </List>
+                                </Collapse>
+                            </React.Fragment> :
+                            <ListItem button onClick={() => props.clickMenuItem("followers")}>
+                                <ListItemIcon>
+                                    <DirectionsWalk />
+                                </ListItemIcon>
+                                <ListItemText primary="Followers" />
+                            </ListItem>
+                        }
                         <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
                             <ListItemIcon>
                                 <Weekend />
@@ -87,15 +119,15 @@ function SideMenu(props) {
                             </List>
                         </Collapse>
                     </>
-                ) : null}
-                {props.user?.isFollower ? (
+                )}
+                {props.user?.isFollower && (
                     <ListItem button onClick={() => props.clickMenuItem("follower/resonators")}>
                         <ListItemIcon>
                             <ViewList />
                         </ListItemIcon>
                         <ListItemText primary="All Resonators" />
                     </ListItem>
-                ) : null}
+                )}
                 <Divider />
                 <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
                     <ListItemIcon>
@@ -110,8 +142,9 @@ function SideMenu(props) {
 
 export default connect(
     (state) => ({
-        user: state.session.user,
         menuOpen: navigationSelector(state).menuOpen,
+        leader: state.leaders.leaders,
+        user: state.session.user,
     }),
     (dispatch) =>
         bindActionCreators(

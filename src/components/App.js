@@ -10,6 +10,7 @@ import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
+import FollowerGroups from './FollowerGroups';
 import LoginPage from "./LoginPage";
 import CriteriaList from "./CriteriaList";
 import ShowResonator from "./ShowResonator";
@@ -19,6 +20,8 @@ import ResonatorStats from "./ResonatorStats";
 import ResonatorFeedback from "./ResonatorFeedback";
 import SentResonator from "./followers/SentResonator";
 import FollowerResonators from "./FollowerResonators";
+import FollowerGroupResonators from './FollowerGroupResonators';
+import FollowerGroupMembers from './FollowerGroupMembers';
 import CriteriaCreation from "./CriteriaCreation/index";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
 
@@ -29,6 +32,14 @@ const leaderRoutes = [
     { path: "/followers/:followerId/resonators/:resonatorId/show", component: ShowResonator },
     { path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
     { path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+
+    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId", component: ShowResonator},
+    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
+    { path: "/followerGroups", component: FollowerGroups},
 
     { path: "/clinics", component: Clinics },
     { path: "/clinics/criteria", component: CriteriaList },
