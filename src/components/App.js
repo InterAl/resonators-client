@@ -33,6 +33,14 @@ const leaderRoutes = [
     { path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
     { path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
 
+    { path: "/clinics", component: Clinics },
+    { path: "/clinics/criteria", component: CriteriaList },
+    { path: "*/criteria/submit", component: ResonatorFeedback },
+    { path: "/clinics/criteria/new", component: CriteriaCreation },
+    { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
+];
+
+const leaderGroupRoutes = [
     { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
     { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
     { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
@@ -40,12 +48,6 @@ const leaderRoutes = [
     { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
     { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
     { path: "/followerGroups", component: FollowerGroups},
-
-    { path: "/clinics", component: Clinics },
-    { path: "/clinics/criteria", component: CriteriaList },
-    { path: "*/criteria/submit", component: ResonatorFeedback },
-    { path: "/clinics/criteria/new", component: CriteriaCreation },
-    { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
 ];
 
 const followerRoutes = [
@@ -61,6 +63,7 @@ const commonRoutes = [
 const App = (props) => {
     const routes = commonRoutes
         .concat(props.user?.isLeader ? leaderRoutes : [])
+        .concat(props.leader?.group_permissions ? leaderGroupRoutes : [])
         .concat(props.user?.isFollower ? followerRoutes : []);
 
     return (
@@ -85,6 +88,7 @@ const App = (props) => {
 
 const mapStateToProps = (state) => ({
     user: state.session.user,
+    leader: state.leaders.leaders,
 });
 
 export default connect(mapStateToProps, null)(App);
