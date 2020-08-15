@@ -35,7 +35,6 @@ const leaderRoutes = [
 
     { path: "/clinics", component: Clinics },
     { path: "/clinics/criteria", component: CriteriaList },
-    { path: "*/criteria/submit", component: ResonatorFeedback },
     { path: "/clinics/criteria/new", component: CriteriaCreation },
     { path: "/clinics/criteria/:criterionId/edit", component: CriteriaCreation },
 ];
@@ -58,6 +57,8 @@ const followerRoutes = [
 const commonRoutes = [
     { path: "/login", component: LoginPage },
     { path: "/resetPassword", component: ResetPassword },
+
+    { path: "*/criteria/submit", component: ResonatorFeedback },
 ];
 
 const App = (props) => {
