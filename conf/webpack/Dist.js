@@ -5,6 +5,7 @@
  * final output when running npm run dist.
  */
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBaseConfig = require('./Base');
 
 class WebpackDistConfig extends WebpackBaseConfig {
@@ -22,7 +23,13 @@ class WebpackDistConfig extends WebpackBaseConfig {
           'process.env.NODE_ENV': '"production"'
         }),
         new webpack.optimize.AggressiveMergingPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin(),
+        new CopyPlugin({
+          patterns: [
+            { from: `${this.srcPathAbsolute}/manifest.webmanifest` },
+            { from: `${this.srcPathAbsolute}/serviceWorker.js` }
+          ]
+        })
       ]
     };
 
