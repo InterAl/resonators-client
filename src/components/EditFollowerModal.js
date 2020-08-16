@@ -8,6 +8,7 @@ import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mate
 import { Field, reduxForm } from "redux-form";
 import TextField from "./FormComponents/TextField";
 import navigationInfoSelector from "../selectors/navigationSelector";
+import Papa from 'papaparse';
 
 class EditFollowerModal extends Component {
     static propTypes = {
@@ -31,7 +32,28 @@ class EditFollowerModal extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.importFollowers = this.importFollowers.bind(this);
         this.cfg = props.editMode ? editCfg : newCfg;
+    }
+
+    importFollowers(e) {
+        const importFile = e.target.files[0];
+        Papa.parse(importFile, {
+            header: true,
+            complete: ({ data }) => {
+                if (_.every(data, (follower) => _.isEmpty(validateInput(follower)))) {
+                    for (const follower of data) {
+                        this.props.create({
+                            ...follower,
+                            clinic: this.props.initialValues.clinic
+                        });
+                    }
+                    this.props.onClose();
+                }
+            }
+        })
+
+
     }
 
     handleClose() {
@@ -82,6 +104,23 @@ class EditFollowerModal extends Component {
                     <Button onClick={this.handleClose}>
                         Cancel
                     </Button>
+                    {!this.props.editMode && (
+                        <React.Fragment>
+                            <input
+                                accept=".csv"
+                                style={{ display: "none" }}
+                                id="import-followers"
+                                type="file"
+                                onChange={this.importFollowers}
+                            />
+                            <label htmlFor="import-followers">
+                                <Button component="span" variant="contained">
+                                    Import
+                                </Button>
+                            </label>
+                        </React.Fragment>
+                    )}
+
                     <Button
                         onClick={this.props.handleSubmit(this.handleSubmit)}
                         color="primary"
@@ -96,26 +135,25 @@ class EditFollowerModal extends Component {
     }
 }
 
+function validateInput(data) {
+    let errors = {};
+
+    if (!data.name) errors.name = "Required";
+
+    if (!data.email) {
+        errors.email = "Required";
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
+        errors.email = "Invalid email address";
+    }
+
+    if (!data.password) errors.password = "Required";
+
+    return errors;
+}
+
 let Form = reduxForm({
     form: "editFollower",
-    validate: (formData) => {
-        let errors = {};
-
-        if (!formData.name) errors.name = "Required";
-
-        if (!formData.email) {
-            errors.email = "Required";
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(formData.email)) {
-            errors.email = "Invalid email address";
-        }
-
-        if (!formData.password) errors.password = "Required";
-
-        // if (!formData.clinic)
-        //     errors.clinic = 'Required';
-
-        return errors;
-    },
+    validate: validateInput,
 })(EditFollowerModal);
 
 function mapStateToProps(state) {

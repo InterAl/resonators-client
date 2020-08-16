@@ -38,7 +38,6 @@ handle(types.LOGIN, function*(sagaParams, action) {
     } catch (err) {
         console.warn('login failed', err);
     }
-
     let {auth_token} = user;
 
     saveAuthToken(auth_token);
@@ -137,11 +136,10 @@ function* updateUser(user = {}) {
 
     if (loggedIn) {
         yield put(actions.loginSuccess());
-
         const currentPath = location.pathname;
 
         if (currentPath === '/' || currentPath === '/login')
-            yield put(navigationActions.navigate('followers'));
+            yield put(navigationActions.navigate(user.isFollower ? 'follower/resonators' : 'followers'));
     }
 
     return loggedIn;

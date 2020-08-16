@@ -18,11 +18,15 @@ let { handle, updateState, saga, reducer } = SagaReducerFactory({
 });
 
 handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
-    let followers = yield call(followerApi.get);
+    const user = yield select((state) => state.session.user);
 
-    yield put(updateState({
-        followers
-    }));
+    if (user.isLeader) {
+        const followers = yield call(followerApi.get);
+    
+        yield put(updateState({
+            followers
+        }));
+    }
 });
 
 handle(types.CREATE, function* (sagaParams, { payload }) {
@@ -143,16 +147,15 @@ export function* fetchFollowerResonators(followerId) {
 
     follower = yield getFollower(followerId);
 
-    if (!follower.resonators) {
-        let followerResonators = yield call(followerApi.getResonators, followerId);
 
-        let patchedFollower = {
-            ...follower,
-            resonators: followerResonators
-        };
+    const followerResonators = yield call(followerApi.getResonators, followerId);
 
-        yield updateStateWithNewFollower(patchedFollower);
-    }
+    const patchedFollower = {
+        ...follower,
+        resonators: followerResonators
+    };
+
+    yield updateStateWithNewFollower(patchedFollower);
 }
 
 function* updateStateWithNewFollower(follower) {
