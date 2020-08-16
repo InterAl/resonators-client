@@ -19,6 +19,7 @@ class WebpackDevConfig extends WebpackBaseConfig {
         './index.js'
       ],
       plugins: [
+        ...this.defaultSettings.plugins,
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin()
       ]

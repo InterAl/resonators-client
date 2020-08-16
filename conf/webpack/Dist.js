@@ -5,7 +5,6 @@
  * final output when running npm run dist.
  */
 const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBaseConfig = require('./Base');
 
 class WebpackDistConfig extends WebpackBaseConfig {
@@ -13,24 +12,17 @@ class WebpackDistConfig extends WebpackBaseConfig {
   constructor() {
     super();
     this.config = {
-      cache: false,
-      devtool: 'source-map',
-      entry: [
-        './index.js'
-      ],
-      plugins: [
-        new webpack.DefinePlugin({
-          'process.env.NODE_ENV': '"production"'
-        }),
-        new webpack.optimize.AggressiveMergingPlugin(),
-        new webpack.NoEmitOnErrorsPlugin(),
-        new CopyPlugin({
-          patterns: [
-            { from: `${this.srcPathAbsolute}/manifest.webmanifest` },
-            { from: `${this.srcPathAbsolute}/serviceWorker.js` }
-          ]
-        })
-      ]
+        cache: false,
+        devtool: "source-map",
+        entry: ["./index.js"],
+        plugins: [
+            ...this.defaultSettings.plugins,
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": '"production"',
+            }),
+            new webpack.optimize.AggressiveMergingPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
+        ],
     };
 
     // Deactivate hot-reloading if we run dist build on the dev server

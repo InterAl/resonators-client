@@ -5,6 +5,9 @@
  */
 const fs = require('fs');
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
+const WebpackPwaManifest = require("webpack-pwa-manifest");
+const manifest = require("../../src/manifest");
 
 const npmBase = path.join(__dirname, '../../node_modules');
 
@@ -205,7 +208,15 @@ class WebpackBaseConfig {
         //publicPath: './assets/'
         publicPath: 'http://localhost:8000/assets/'
       },
-      plugins: [],
+      plugins: [
+        new CopyPlugin({
+          patterns: [{ from: `${this.srcPathAbsolute}/serviceWorker.js` }],
+        }),
+        new WebpackPwaManifest({
+          ...manifest,
+          filename: "manifest.webmanifest",
+        }),
+      ],
       resolve: {
         alias: {
           actions: `${this.srcPathAbsolute}/actions/`,
