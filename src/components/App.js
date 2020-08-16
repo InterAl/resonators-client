@@ -40,13 +40,13 @@ const leaderRoutes = [
 ];
 
 const leaderGroupRoutes = [
+    { path: "/followerGroups", component: FollowerGroups},
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
     { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/show", component: ShowResonator},
     { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
     { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId", component: ShowResonator},
     { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
-    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
-    { path: "/followerGroups", component: FollowerGroups},
 ];
 
 const followerRoutes = [

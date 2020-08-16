@@ -1,11 +1,13 @@
 import _ from "lodash";
 import { connect } from "react-redux";
 import React, { Component } from "react";
+import { actions as statsActions } from '../actions/resonatorStatsActions';
+import { bindActionCreators } from 'redux';
 import resonatorsSelector from "../selectors/resonatorsSelector";
 import ExpandableCard from "./ExpandableCard";
 import ResonatorStats from "./ResonatorStats";
-import { CircularProgress, Typography, Divider } from "@material-ui/core";
-import { RemoveRedEye } from "@material-ui/icons";
+import { CircularProgress, Typography, Divider, IconButton, Tooltip } from "@material-ui/core";
+import { RemoveRedEye, GetApp } from "@material-ui/icons";
 
 class ShowResonator extends Component {
     constructor(props) {
@@ -28,18 +30,32 @@ class ShowResonator extends Component {
         });
     }
 
-    renderSectionTitle(title) {
+    renderSectionTitle(title, ...actions) {
         return (
             <div style={{ marginBottom: 20 }}>
-                <Typography variant="h5" style={{ textAlign: "center" }} noWrap>
-                    {title}
-                </Typography>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Typography variant="h5" style={{ textAlign: "center" }} noWrap>
+                        {title}
+                    </Typography>
+                    <React.Fragment>{actions}</React.Fragment>
+                </div>
                 <Divider style={{ margin: 10 }} />
             </div>
         );
     }
 
+    renderDownloadButton(downloadFunc) {
+        return (
+            <Tooltip title='Download' placement="left">
+                <IconButton onClick={() => downloadFunc({ resonatorId: this.props.resonator.id })}>
+                    <GetApp />
+                </IconButton>
+            </Tooltip>
+        )
+    }
+
     render() {
+        const { followerId, followerGroupId } = this.props.match.params;
         if (!_.get(this.props, "match.params.resonatorId")) return null;
 
         if (!this.props.resonator) return null;
@@ -82,8 +98,12 @@ class ShowResonator extends Component {
                 </div>
                 {_.size(this.props.resonator.questions) > 0 && (
                     <div style={{ marginTop: 40 }}>
-                        {this.renderSectionTitle("Criteria")}
-                        <ResonatorStats resonatorId={this.props.match.params.resonatorId} />
+                        {this.renderSectionTitle("Criteria",
+                            this.renderDownloadButton(this.props.downloadResonatorStats))}
+                        <ResonatorStats
+                            resonatorId={this.props.match.params.resonatorId}
+                            followerId={followerId}
+                            followerGroupId={followerGroupId} />
                     </div>
                 )}
             </div>
@@ -100,7 +120,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return { dispatch };
+    return bindActionCreators({
+        downloadResonatorStats: statsActions.downloadResonatorStats
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowResonator);

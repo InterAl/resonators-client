@@ -1,14 +1,15 @@
 import cfg from 'config';
+import { saveAs } from 'file-saver';
+
 
 function fetcher(url, options = {}) {
     const baseUrl = (cfg.baseUrl || '') + '/api';
-
     return fetch(`${baseUrl}${url}`, {
         credentials: 'same-origin',
         headers: getDefaultHeaders(),
         ...options
     })
-        .then(response => {
+        .then(async (response) => {
             if (response.status >= 300) {
                 if (response.status === 401)
                     return Promise.reject({
@@ -17,8 +18,11 @@ function fetcher(url, options = {}) {
                 else
                     return Promise.reject(response);
             }
-
-            if (!options.emptyResponse && response.status !== 204)
+            if (options.downloadResponse && response.ok) {
+                const blob = await response.blob();
+                saveAs(blob, `resonatorStats-${(new Date()).toLocaleDateString("en-US")}.csv`);
+            }
+            else if (!options.emptyResponse && response.status !== 204)
                 return response.json();
         })
         .catch(err => {
@@ -68,6 +72,16 @@ fetcher.delete = (url) => {
         emptyResponse: true
     });
 };
+
+fetcher.download = (url) => {
+    return fetcher(url, {
+        headers: {
+            ...getDefaultHeaders(),
+            Accept: 'text/csv',
+        },
+        downloadResponse: true,
+    });
+}
 
 function getDefaultHeaders() {
     if (localStorage.getItem('auth_token') != null)
