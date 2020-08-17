@@ -5,6 +5,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { EnvironmentPlugin } = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const WebpackPwaManifest = require("webpack-pwa-manifest");
 const manifest = require("../../src/manifest");
@@ -66,6 +67,14 @@ class WebpackBaseConfig {
    */
   get testPathAbsolute() {
     return path.resolve('./test');
+  }
+
+  /**
+   * Get the client assets path
+   * @returns {String}
+   */
+  get assetPath() {
+    return "/assets/"
   }
 
   /**
@@ -205,8 +214,7 @@ class WebpackBaseConfig {
       output: {
         path: path.resolve('./dist/assets'),
         filename: 'app.js',
-        //publicPath: './assets/'
-        publicPath: 'http://localhost:8000/assets/'
+        publicPath: this.assetPath,
       },
       plugins: [
         new CopyPlugin({
@@ -215,6 +223,9 @@ class WebpackBaseConfig {
         new WebpackPwaManifest({
           ...manifest,
           filename: "manifest.webmanifest",
+        }),
+        new EnvironmentPlugin({
+          ASSET_PATH: this.assetPath
         }),
       ],
       resolve: {

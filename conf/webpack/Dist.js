@@ -27,8 +27,6 @@ class WebpackDistConfig extends WebpackBaseConfig {
 
     // Deactivate hot-reloading if we run dist build on the dev server
     this.config.devServer.hot = false;
-
-    this.config.output.publicPath = 'https://reminders-uploads.s3-eu-west-1.amazonaws.com/assets/resonators-client/';
   }
 
   /**
@@ -37,6 +35,10 @@ class WebpackDistConfig extends WebpackBaseConfig {
    */
   get env() {
     return 'dist';
+  }
+
+  get assetPath() {
+    return "https://reminders-uploads.s3-eu-west-1.amazonaws.com/assets/resonators-client/"
   }
 }
 
