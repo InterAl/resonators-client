@@ -40,7 +40,7 @@ function registerServiceWorker() {
         if (navigator.serviceWorker) {
             console.log("Registering service worker...");
             navigator.serviceWorker
-                .register("./serviceWorker.js")
+                .register(`${process.env.ASSET_PATH}/serviceWorker.js`)
                 .then(() => console.log("Service worker registered!"))
                 .catch(() => console.log("Service worker registration failed :("));
         } else {
