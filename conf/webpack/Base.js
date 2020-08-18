@@ -101,6 +101,9 @@ class WebpackBaseConfig {
         port: 8000,
         proxy: {
           '/api': 'http://localhost:8080',
+        },
+        headers: {
+          "Service-Worker-Allowed": "/"
         }
       },
       entry: './index.js',
