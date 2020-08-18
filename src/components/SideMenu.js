@@ -60,7 +60,7 @@ function SideMenu(props) {
             <List>
                 {props.user?.isLeader && (
                     <>
-                        {props.leader.group_permissions ?
+                        {props.leader.group_permissions ? (
                             <React.Fragment>
                                 <ListItem button onClick={() => setFollowerMenuOpen(!followerMenuOpen)}>
                                     <ListItemIcon>
@@ -84,17 +84,17 @@ function SideMenu(props) {
                                             </ListItemIcon>
                                             <ListItemText primary="Follower Groups" />
                                         </ListItem>
-
                                     </List>
                                 </Collapse>
-                            </React.Fragment> :
+                            </React.Fragment>
+                        ) : (
                             <ListItem button onClick={() => props.clickMenuItem("followers")}>
                                 <ListItemIcon>
                                     <DirectionsWalk />
                                 </ListItemIcon>
                                 <ListItemText primary="Followers" />
                             </ListItem>
-                        }
+                        )}
                         <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
                             <ListItemIcon>
                                 <Weekend />
@@ -128,7 +128,9 @@ function SideMenu(props) {
                         <ListItemText primary="All Resonators" />
                     </ListItem>
                 )}
-                <Divider />
+            </List>
+            <Divider />
+            <List>
                 <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
                     <ListItemIcon>
                         <ExitToApp htmlColor="#ff4444" />
