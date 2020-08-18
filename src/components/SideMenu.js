@@ -22,6 +22,7 @@ import {
     Group,
     Person,
     DirectionsWalk,
+    AddToHomeScreen,
     List as ListIcon,
 } from "@material-ui/icons";
 
@@ -34,6 +35,13 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 250,
         padding: theme.spacing(1),
     },
+    logoutButton: {
+        color: theme.palette.error.main,
+    },
+    installButton: {
+        marginTop: "auto",
+        marginBottom: theme.spacing(1),
+    },
 }));
 
 function SideMenu(props) {
@@ -42,6 +50,8 @@ function SideMenu(props) {
 
     const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
     const [followerMenuOpen, setFollowerMenuOpen] = useState(true);
+
+    const addToHomeScreen = () => props.installPrompt.prompt();
 
     return (
         <Drawer
@@ -131,13 +141,26 @@ function SideMenu(props) {
             </List>
             <Divider />
             <List>
-                <ListItem button onClick={() => props.clickMenuItem("logout")} style={{ color: "#ff4444" }}>
+                <ListItem button onClick={() => props.clickMenuItem("logout")} className={classes.logoutButton}>
                     <ListItemIcon>
-                        <ExitToApp htmlColor="#ff4444" />
+                        <ExitToApp color="error" />
                     </ListItemIcon>
                     <ListItemText primary="Logout" />
                 </ListItem>
             </List>
+            {props.installPrompt && (
+                <div className={classes.installButton}>
+                    <Divider />
+                    <List>
+                        <ListItem button onClick={addToHomeScreen}>
+                            <ListItemIcon>
+                                <AddToHomeScreen />
+                            </ListItemIcon>
+                            <ListItemText primary="Add to Home Screen" />
+                        </ListItem>
+                    </List>
+                </div>
+            )}
         </Drawer>
     );
 }
@@ -147,6 +170,7 @@ export default connect(
         menuOpen: navigationSelector(state).menuOpen,
         leader: state.leaders.leaders,
         user: state.session.user,
+        installPrompt: state.pwa.installPrompt,
     }),
     (dispatch) =>
         bindActionCreators(

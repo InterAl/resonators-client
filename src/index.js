@@ -8,6 +8,7 @@ import { AppContainer } from "react-hot-loader";
 import App from "./containers/App";
 import configureStore from "./stores";
 import { actions as initActions } from "./actions/initActions";
+import { actions as pwaActions } from "./actions/pwaActions";
 
 function renderApp() {
     render(
@@ -49,7 +50,18 @@ function registerServiceWorker() {
     });
 }
 
+function registerInstallationActions(dispatch) {
+    window.addEventListener("beforeinstallprompt", (installPrompt) => {
+        installPrompt.preventDefault();
+        dispatch(pwaActions.registerInstallPrompt(installPrompt));
+    });
+    window.addEventListener("appinstalled", () => {
+        dispatch(pwaActions.appInstalled());
+    });
+}
+
 const store = configureStore();
 store.dispatch(initActions.initApp());
 renderApp();
 registerServiceWorker();
+registerInstallationActions(store.dispatch);
