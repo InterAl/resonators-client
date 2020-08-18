@@ -65,7 +65,7 @@ function processAsset(assetName) {
     let assetPath = path.resolve(ASSET_DIR, assetFile);
     if (!fs.existsSync(assetPath)) {
         console.error(`Couldn't find ${assetFile} in assets directory`);
-        return Promise.reject();
+        return Promise.resolve();
     }
     console.log(`Gzipping ${assetFile}...`);
     try {
