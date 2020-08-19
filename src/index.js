@@ -43,7 +43,7 @@ function registerServiceWorker() {
             navigator.serviceWorker
                 .register(`${process.env.ASSET_PATH}/serviceWorker.js`, { scope: "/" })
                 .then(() => console.log("Service worker registered!"))
-                .catch(() => console.log("Service worker registration failed :("));
+                .catch((error) => console.error(`Service worker registration failed: ${error}`));
         } else {
             console.log("Service workers are not supported by this browser");
         }
