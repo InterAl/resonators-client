@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
+import { useHistory } from "react-router";
 import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router";
 import { Link as LinkIcon, Close } from "@material-ui/icons";
 import {
     makeStyles,
@@ -50,10 +50,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SentResonator() {
+export default function SentResonator({ sentResonatorId }) {
     const classes = useStyles();
     const history = useHistory();
-    const { sentResonatorId } = useParams();
     const { enqueueSnackbar } = useSnackbar();
 
     const [loading, setLoading] = useState(true);
