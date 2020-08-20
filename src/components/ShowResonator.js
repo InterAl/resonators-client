@@ -39,7 +39,9 @@ class ShowResonator extends Component {
                     <Typography variant="h5" style={{ textAlign: "center" }} noWrap>
                         {title}
                     </Typography>
-                    <React.Fragment>{actions}</React.Fragment>
+                    <div>
+                        {actions}
+                    </div>
                 </div>
                 <Divider style={{ margin: 10 }} />
             </div>
@@ -101,7 +103,8 @@ class ShowResonator extends Component {
                 {_.size(this.props.resonator.questions) > 0 && (
                     <div style={{ marginTop: 40 }}>
                         {this.renderSectionTitle("Criteria",
-                            this.renderDownloadButton(this.props.downloadResonatorStats))}
+                            this.renderDownloadButton(this.props.downloadResonatorStats)
+                        )}
                         <ResonatorStats
                             resonatorId={this.props.match.params.resonatorId}
                             follower={follower}
