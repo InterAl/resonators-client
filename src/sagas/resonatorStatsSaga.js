@@ -88,7 +88,8 @@ function transformAnswer(answer) {
     return {
         time: moment(answer.time).format('D/M/YY HH:mm'),
         rank: answer.rank,
-        question_id: answer.question_id
+        question_id: answer.question_id,
+        followerName: answer.followerName
     };
 }
 

@@ -73,10 +73,10 @@ class ResonatorStats extends Component {
         ];
     }
 
-    renderEmptyState() {
+    renderTypography(text) {
         return (
-            <Typography style={{textAlign: 'center', padding: 20}}>
-                No feedback has been given for this criterion.
+            <Typography style={{ textAlign: 'center', padding: 20 }}>
+                {text}
             </Typography>
         );
     }
@@ -87,21 +87,29 @@ class ResonatorStats extends Component {
                 id={`resonatorStats_${question.id}`}
                 title={question.title}
                 subtitle={question.description}
-                avatar={<InsertChart/>}
+                avatar={<InsertChart />}
                 key={question.id}
-                style={{marginBottom: 10, minWidth: "100%"}}
+                style={{ marginBottom: 10, minWidth: "100%" }}
             >
                 {_.isEmpty(question.followerAnswers) ?
-                    this.renderEmptyState() : this.renderChart(question)}
+                    this.renderTypography('No feedback has been given for this criterion.') : this.renderChart(question)}
             </ExpandableCard>
         )
     }
 
     render() {
         const stats = _.map(this.props.stats, this.renderCard);
-        return <div className='resonator-stats-wrapper'>
-                   {stats ? stats : 'No stats are available.'}
-               </div>
+        return (
+            <React.Fragment>
+                <div className='resonator-stats-wrapper'>
+                    {this.props.followerGroup ?
+                        this.renderTypography('Group Stats Coming Soon.') :
+                        (stats || this.renderTypography('No stats are available.'))
+                    }
+                </div>
+            </React.Fragment>
+
+        );
     }
 }
 

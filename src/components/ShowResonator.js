@@ -4,6 +4,8 @@ import React, { Component } from "react";
 import { actions as statsActions } from '../actions/resonatorStatsActions';
 import { bindActionCreators } from 'redux';
 import resonatorsSelector from "../selectors/resonatorsSelector";
+import followersSelector from "../selectors/followersSelector";
+import followerGroupsSelector from "../selectors/followerGroupsSelector";
 import ExpandableCard from "./ExpandableCard";
 import ResonatorStats from "./ResonatorStats";
 import { CircularProgress, Typography, Divider, IconButton, Tooltip } from "@material-ui/core";
@@ -55,7 +57,7 @@ class ShowResonator extends Component {
     }
 
     render() {
-        const { followerId, followerGroupId } = this.props.match.params;
+        const { follower, followerGroup } = this.props;
         if (!_.get(this.props, "match.params.resonatorId")) return null;
 
         if (!this.props.resonator) return null;
@@ -102,8 +104,8 @@ class ShowResonator extends Component {
                             this.renderDownloadButton(this.props.downloadResonatorStats))}
                         <ResonatorStats
                             resonatorId={this.props.match.params.resonatorId}
-                            followerId={followerId}
-                            followerGroupId={followerGroupId} />
+                            follower={follower}
+                            followerGroup={followerGroup} />
                     </div>
                 )}
             </div>
@@ -112,10 +114,14 @@ class ShowResonator extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-    let resonators = resonatorsSelector(state);
+    const resonators = resonatorsSelector(state);
+    const followersData = followersSelector(state)
+    const followerGroupsData = followerGroupsSelector(state)
 
     return {
         resonator: _.find(resonators, (r) => r.id === ownProps.match.params.resonatorId),
+        follower: _.find(followersData.followers, (f) => f.id === ownProps.match.params.followerId),
+        followerGroup: _.find(followerGroupsData.followerGroups, (fg) => fg.id === ownProps.match.params.followerGroupId),
     };
 }
 

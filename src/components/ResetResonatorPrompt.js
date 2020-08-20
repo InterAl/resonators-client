@@ -8,7 +8,6 @@ import SimplePrompt from './SimplePrompt';
 import resonatorsSelector from '../selectors/resonatorsSelector';
 
 const ResetResonatorPrompt = (props) => {
-    console.log({props});
     const handleReset = () => {
         const followerId = props.resonator.follower_id;
         props.reset({ followerId, resonator: props.resonator });
