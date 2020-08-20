@@ -37,7 +37,8 @@ export default ({ resonator, setResonator, showError }) => {
     useEffect(() => setActiveQuestion(findFirstUnansweredQuestion(resonator)), []);
 
     const stepBack = () => setActiveQuestion((prevActiveQuestion) => prevActiveQuestion - 1);
-    const stepNext = () => setActiveQuestion((prevActiveQuestion) => prevActiveQuestion + 1);
+    const stepNext = () =>
+        setActiveQuestion((prevActiveQuestion) => Math.min(prevActiveQuestion + 1, resonator.questions.length - 1));
 
     const answerQuestion = (resonatorQuestion) => (event) => {
         fetcher
@@ -48,6 +49,7 @@ export default ({ resonator, setResonator, showError }) => {
             .then((data) => data.resonator)
             .then(setResonator)
             .then(confirmSave)
+            .then(() => !resonatorQuestion.answer && stepNext())
             .catch(showError);
     };
 
