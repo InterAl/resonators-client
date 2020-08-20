@@ -10,7 +10,6 @@ import {
     CardContent,
     CardActions,
     Divider,
-    Link,
     Typography,
     Grow,
     Button,
@@ -31,6 +30,12 @@ const useStyles = makeStyles((theme) => ({
     },
     link: {
         textTransform: "none",
+        maxWidth: "100%",
+    },
+    linkLabel: {
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        textOverflow: "ellipsis",
     },
 }));
 
@@ -127,26 +132,28 @@ export default function SentResonator() {
     );
 }
 
-const ResonatorBody = ({ resonator }) => (
-    <>
-        <Direction by={resonator.content}>
-            <Typography paragraph>{resonator.content}</Typography>
-        </Direction>
-        {resonator.link ? (
-            <Typography>
+const ResonatorBody = ({ resonator }) => {
+    const classes = useStyles();
+
+    return (
+        <>
+            <Direction by={resonator.content}>
+                <Typography paragraph>{resonator.content}</Typography>
+            </Direction>
+            {resonator.link ? (
                 <Button
                     size="small"
                     color="primary"
                     variant="outlined"
                     startIcon={<LinkIcon />}
-                    className={useStyles().link}
+                    className={classes.link}
                     href={resonator.link}
                     rel="noreferrer"
                     target="_blank"
                 >
-                    {resonator.link}
+                    <span className={classes.linkLabel}>{resonator.link}</span>
                 </Button>
-            </Typography>
-        ) : null}
-    </>
-);
+            ) : null}
+        </>
+    );
+};
