@@ -49,7 +49,7 @@ const leaderGroupRoutes = [
 ];
 
 const followerRoutes = [
-    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview, exact: false },
+    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview },
 ];
 
 const commonRoutes = [
