@@ -18,7 +18,6 @@ import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
 import ResonatorStats from "./ResonatorStats";
 import ResonatorFeedback from "./ResonatorFeedback";
-import SentResonator from "./followers/SentResonator";
 import FollowerResonators from "./FollowerResonators";
 import FollowerGroupResonators from './FollowerGroupResonators';
 import FollowerGroupMembers from './FollowerGroupMembers';
@@ -50,8 +49,7 @@ const leaderGroupRoutes = [
 ];
 
 const followerRoutes = [
-    { path: "/follower/resonators", component: ResonatorsOverview },
-    { path: "/follower/resonators/:sentResonatorId", component: SentResonator },
+    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview },
 ];
 
 const commonRoutes = [
