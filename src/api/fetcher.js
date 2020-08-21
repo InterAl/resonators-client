@@ -18,7 +18,7 @@ function fetcher(url, options = {}) {
                 else
                     return Promise.reject(response);
             }
-            if (options.downloadResponse && response.ok) {
+            if (options.download && response.ok) {
                 const blob = await response.blob();
                 saveAs(blob, `resonatorStats-${(new Date()).toLocaleDateString("en-US")}.csv`);
             }
@@ -79,7 +79,7 @@ fetcher.download = (url) => {
             ...getDefaultHeaders(),
             Accept: 'text/csv',
         },
-        downloadResponse: true,
+        download: true,
     });
 }
 

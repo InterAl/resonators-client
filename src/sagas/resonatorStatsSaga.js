@@ -15,7 +15,7 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 
 handle(types.DOWNLOAD_RESONATOR_STATS, function*(sagaParams, {payload}) {
     const {resonatorId} = payload;
-    yield call(statsApi.getJsonFile, resonatorId);
+    yield call(statsApi.getCsvFile, resonatorId);
 });
 
 handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {

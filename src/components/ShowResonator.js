@@ -36,7 +36,7 @@ class ShowResonator extends Component {
         return (
             <div style={{ marginBottom: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant="h5" style={{ textAlign: "center" }} noWrap>
+                    <Typography variant="h5" align='center' noWrap>
                         {title}
                     </Typography>
                     <div>
@@ -48,10 +48,10 @@ class ShowResonator extends Component {
         );
     }
 
-    renderDownloadButton(downloadFunc) {
+    renderDownloadButton() {
         return (
-            <Tooltip title='Download' placement="left">
-                <IconButton onClick={() => downloadFunc({ resonatorId: this.props.resonator.id })}>
+            <Tooltip title='Download CSV'>
+                <IconButton onClick={() => this.props.downloadResonatorStats({ resonatorId: this.props.resonator.id })}>
                     <GetApp />
                 </IconButton>
             </Tooltip>
@@ -102,9 +102,7 @@ class ShowResonator extends Component {
                 </div>
                 {_.size(this.props.resonator.questions) > 0 && (
                     <div style={{ marginTop: 40 }}>
-                        {this.renderSectionTitle("Criteria",
-                            this.renderDownloadButton(this.props.downloadResonatorStats)
-                        )}
+                        {this.renderSectionTitle("Criteria", this.renderDownloadButton())}
                         <ResonatorStats
                             resonatorId={this.props.match.params.resonatorId}
                             follower={follower}
