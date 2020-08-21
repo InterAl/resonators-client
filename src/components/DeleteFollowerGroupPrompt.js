@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { actions } from '../actions/followerGroupsActions';
 import navigationInfoSelector from '../selectors/navigationSelector';
 import SimplePrompt from './SimplePrompt';
+import { Typography } from '@material-ui/core';
 
 class DeleteFollowerGroupPrompt extends Component {
     constructor() {
@@ -27,7 +28,14 @@ class DeleteFollowerGroupPrompt extends Component {
                 className='delete-followerGroup-modal'
                 title='Delete Follower Group'
                 acceptText='Delete'
-                text={`Delete ${followerGroup.group_name}?`}
+                text={
+                    <Typography>
+                        {`Delete ${followerGroup.group_name}?`}
+                        <br />
+                        <br />
+                        (Note: The group's resonators will be deleted from all members)
+                    </Typography>
+                }
                 onAccept={this.handleRemoveClick}
                 onClose={this.props.onClose}
                 open={this.props.open}
