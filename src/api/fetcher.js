@@ -20,7 +20,7 @@ function fetcher(url, options = {}) {
             }
             if (options.download && response.ok) {
                 const blob = await response.blob();
-                saveAs(blob, `resonatorStats-${(new Date()).toLocaleDateString("en-US")}.csv`);
+                saveAs(blob, getResponseFileName(response));
             }
             else if (!options.emptyResponse && response.status !== 204)
                 return response.json();
@@ -88,6 +88,15 @@ function getDefaultHeaders() {
         return {
             'Authorization': localStorage.getItem('auth_token')
         };
+}
+
+function getResponseFileName(res) {
+    const disposition = res.headers.get('content-disposition');
+    if (disposition && disposition.indexOf('attachment') !== -1) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(disposition);
+        return matches?.[1]?.replace(/['"]/g, '');
+    }
 }
 
 export default fetcher;
