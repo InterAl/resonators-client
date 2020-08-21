@@ -1,8 +1,10 @@
+import { useParams } from "react-router";
 import React, { useState, useEffect } from "react";
 import { Typography, makeStyles } from "@material-ui/core";
 
 import fetcher from "../../api/fetcher";
 import ResonatorList from "./ResonatorList";
+import SentResonator from "./SentResonator";
 import LoadMoreButton from "./LoadMoreButton";
 import LoadingOverlay from "./LoadingOverlay";
 
@@ -19,6 +21,7 @@ export default function ResonatorsOverview() {
     const [page, setPages] = useState(0);
 
     const classes = useStyles();
+    const { sentResonatorId } = useParams();
 
     useEffect(() => {
         setLoading(true);
@@ -30,7 +33,9 @@ export default function ResonatorsOverview() {
             .finally(() => setLoading(false));
     }, [page]);
 
-    return (
+    return sentResonatorId ? (
+        <SentResonator sentResonatorId={sentResonatorId} />
+    ) : (
         <>
             {!resonators.length ? <LoadingOverlay loading={loading} /> : null}
             <ResonatorList
