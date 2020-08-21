@@ -18,7 +18,6 @@ import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
 import ResonatorStats from "./ResonatorStats";
 import ResonatorFeedback from "./ResonatorFeedback";
-import SentResonator from "./followers/SentResonator";
 import FollowerResonators from "./FollowerResonators";
 import FollowerGroupResonators from './FollowerGroupResonators';
 import FollowerGroupMembers from './FollowerGroupMembers';
@@ -40,18 +39,17 @@ const leaderRoutes = [
 ];
 
 const leaderGroupRoutes = [
-    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId", component: ShowResonator},
-    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
-    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
-    { path: "/followerGroups", component: FollowerGroups},
+    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId", component: ShowResonator },
+    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers },
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators },
+    { path: "/followerGroups", component: FollowerGroups },
 ];
 
 const followerRoutes = [
-    { path: "/follower/resonators", component: ResonatorsOverview },
-    { path: "/follower/resonators/:sentResonatorId", component: SentResonator },
+    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview },
 ];
 
 const commonRoutes = [
