@@ -18,10 +18,13 @@ class FollowerGroupMembers extends Component {
 
         this.state = {
             showEmails: false,
+            toggleAll: false,
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.toggleAllCheckboxes = this.toggleAllCheckboxes.bind(this);
+        this.toggleCheckbox = this.toggleCheckbox.bind(this);
 
     }
 
@@ -56,6 +59,12 @@ class FollowerGroupMembers extends Component {
 
     toggleCheckbox(followerId) {
         this.setState({ currentMemberIdList: _.xor(this.state.currentMemberIdList, [followerId]) });
+    }
+
+    toggleAllCheckboxes(newState) {
+        newState ?
+            this.setState({ currentMemberIdList: this.props.followers.map(({ id }) => id), toggleAll: true }) :
+            this.setState({ currentMemberIdList: [], toggleAll: false });
     }
 
     isSubmittable() {
@@ -99,7 +108,14 @@ class FollowerGroupMembers extends Component {
         header.push('Name');
         this.state.showEmails && header.push('Email');
         header.push('Clinic');
-        header.push('Member')
+        header.push(
+            <React.Fragment>
+                <Checkbox
+                    color="primary"
+                    checked={this.state.toggleAll}
+                    onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
+                <span>Member</span >
+            </React.Fragment>);
         return header;
     }
 
@@ -147,12 +163,12 @@ class FollowerGroupMembers extends Component {
                     cellWidth='20vw' />
                 {!_.isEmpty(nonMemberRows) &&
                     <React.Fragment>
-                        <Divider style={{marginBottom: '3vh'}}/>
+                        <Divider style={{ marginBottom: '3vh' }} />
                         <EntityTable
                             rows={nonMemberRows}
                             addButton={false}
                             className='members'
-                            cellWidth='20vw'/>
+                            cellWidth='20vw' />
                     </React.Fragment>
                 }
             </div>
