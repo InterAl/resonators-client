@@ -110,10 +110,12 @@ class FollowerGroupMembers extends Component {
         header.push('Clinic');
         header.push(
             <React.Fragment>
-                <Checkbox
-                    color="primary"
-                    checked={this.state.toggleAll}
-                    onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
+                <Tooltip title={this.state.toggleAll ? 'Remove All' : 'Select All'}>
+                    <Checkbox
+                        color="primary"
+                        checked={this.state.toggleAll}
+                        onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
+                </Tooltip>
                 <span>Member</span >
             </React.Fragment>);
         return header;
