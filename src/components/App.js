@@ -56,7 +56,7 @@ const commonRoutes = [
     { path: "/login", component: LoginPage },
     { path: "/resetPassword", component: ResetPassword },
 
-    { path: "*/criteria/submit", component: ResonatorFeedback },
+    { path: "/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];
 
 const App = (props) => {
