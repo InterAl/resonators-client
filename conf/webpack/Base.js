@@ -218,7 +218,11 @@ class WebpackBaseConfig {
                     ],
                 }),
                 new CopyPlugin({
-                    patterns: [{ from: "./serviceWorker.js" }],
+                    patterns: [
+                        { from: "./serviceWorker.js" },
+                        { from: "./pages/privacyPolicy.html" },
+                        { from: "./pages/termsAndConditions.html" },
+                    ],
                 }),
                 new WebpackPwaManifest({
                     ...manifest,
