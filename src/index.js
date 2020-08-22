@@ -17,7 +17,7 @@ function renderApp() {
                 <App />
             </Provider>
         </AppContainer>,
-        document.getElementById("app")
+        document.body
     );
 
     if (module.hot) {
@@ -30,7 +30,7 @@ function renderApp() {
                         <NextApp />
                     </Provider>
                 </AppContainer>,
-                document.getElementById("app")
+                document.body
             );
         });
     }
@@ -41,7 +41,7 @@ function registerServiceWorker() {
         if (navigator.serviceWorker) {
             console.log("Registering service worker...");
             navigator.serviceWorker
-                .register(`${process.env.ASSET_PATH}/serviceWorker.js`, { scope: "/" })
+                .register("/serviceWorker.js")
                 .then(() => console.log("Service worker registered!"))
                 .catch((error) => console.error(`Service worker registration failed: ${error}`));
         } else {

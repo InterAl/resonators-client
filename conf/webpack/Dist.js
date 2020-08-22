@@ -36,10 +36,6 @@ class WebpackDistConfig extends WebpackBaseConfig {
   get env() {
     return 'dist';
   }
-
-  get assetPath() {
-    return "https://reminders-uploads.s3-eu-west-1.amazonaws.com/assets/resonators-client/"
-  }
 }
 
 module.exports = WebpackDistConfig;

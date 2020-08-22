@@ -10,7 +10,7 @@ module.exports = {
     theme_color: "#00a0b4",
     icons: [
         {
-            src: path.resolve("./src/images/icons/resonators.png"),
+            src: path.resolve("./src/images/icon.png"),
             sizes: [144, 192, 512],
         },
     ],
