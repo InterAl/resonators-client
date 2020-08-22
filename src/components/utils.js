@@ -5,6 +5,10 @@ export function getResonatorDirection(resonator) {
     return getDir(text);
 }
 
+export function isMobile(width) {
+    return width < 767;
+}
+
 function getDir(text) {
     const textArr = text.split('');
     const hebrewLettersCount = _.reduce(textArr, (acc, letter) => {
