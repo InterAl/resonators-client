@@ -221,7 +221,7 @@ class WebpackBaseConfig {
                     patterns: [
                         { from: "./serviceWorker.js" },
                         { from: "./pages/privacyPolicy.html" },
-                        { from: "./pages/termsAndConditions.html" },
+                        { from: "./pages/serviceTerms.html" },
                     ],
                 }),
                 new WebpackPwaManifest({
