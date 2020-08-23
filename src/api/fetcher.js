@@ -25,9 +25,10 @@ function fetcher(url, options = {}) {
             else if (!options.emptyResponse && response.status !== 204)
                 return response.json();
         })
-        .catch(err => {
-            console.error('failed fetching', err);
-            throw err;
+        .catch(response => {
+            console.error('failed fetching', response);
+            if (response.headers.get('Content-Type')?.includes("application/json")) throw response.json()
+            throw response;
         });
 }
 
