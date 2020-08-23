@@ -18,6 +18,11 @@ handle(types.DOWNLOAD_RESONATOR_STATS, function*(sagaParams, {payload}) {
     yield call(statsApi.getCsvFile, resonatorId);
 });
 
+handle(types.DOWNLOAD_GROUP_STATS, function*(sagaParams, {payload}) {
+    const {followerGroupId} = payload;
+    yield call(statsApi.getGroupCsvFile, followerGroupId);
+});
+
 handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     let {resonatorId} = payload;
     let stats = yield select(state => state.resonatorStats.stats);

@@ -4,9 +4,10 @@ import { actions } from "../actions/followerGroupsActions";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
+import { actions as statsActions } from '../actions/resonatorStatsActions';
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
+import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled, GetApp } from "@material-ui/icons";
 import { rowAction } from './RowActions';
 import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
@@ -112,6 +113,11 @@ class FollowerGroups extends Component {
                 icon: <Group color='primary'/>,
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
             }),
+            rowAction({
+                title: "Download All Stats as CSV",
+                icon: <GetApp/>,
+                onClick: (followerGroupId) => this.props.downloadGroupStats({followerGroupId}),
+            }),
             rowAction.edit(this.handleEditFollowerGroup),
             rowAction.remove(this.handleRemoveFollowerGroup),
         ];
@@ -191,6 +197,7 @@ function mapDispatchToProps(dispatch) {
             }
         }),
         selectFollowerGroup: actions.selectFollowerGroup,
+        downloadGroupStats: statsActions.downloadGroupStats,
         push
     }, dispatch);
 }
