@@ -1,30 +1,3 @@
-.questionDescription {
-    max-width: 400px;
-}
-
-.questionDescriptionRtl {
-    >div {
-        padding-right: 0 !important;
-        padding-left: 90px;
-    }
-
-    text-align: right;
-}
-
-.questionDescriptionLtr {
-    >div {
-        padding-left: 0 !important;
-        padding-right: 90px;
-    }
-
-    text-align: left;
-}
-
-.questionDescriptionCount {
-    direction: ltr;
-    font-size: 12px;
-}
-
 .answerButton {
     display: block !important;
     max-width: 400px;

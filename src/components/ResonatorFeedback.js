@@ -60,17 +60,10 @@ class ResonatorFeedback extends Component {
         );
     }
 
-    renderQuestionDescription(description) {
+    renderQuestionDescription() {
         const total = this.props.questionsCount;
         const current = this.props.currentQuestionIdx + 1;
-
-        return (
-            <div>
-                <div className={styles.questionDescriptionCount}>{`(${current} / ${total})`}</div>
-
-                {description}
-            </div>
-        );
+        return `(${current} / ${total})`;
     }
 
     renderBackButton() {
@@ -91,11 +84,9 @@ class ResonatorFeedback extends Component {
         return (
             <Card key={q.id}>
                 <CardHeader
-                    className={classNames(styles.questionDescription, {
-                        [styles.questionDescriptionRtl]: rtl,
-                        [styles.questionDescriptionLtr]: !rtl,
-                    })}
-                    title={this.renderQuestionDescription(question.description)}
+                    title={question.description}
+                    subheader={this.renderQuestionDescription()}
+                    style={{ textAlign: rtl ? "right" : "left" }}
                 />
                 <CardContent>{_.map(answers, (a) => this.renderAnswer(question, a))}</CardContent>
                 <CardActions>{this.renderBackButton()}</CardActions>
