@@ -47,12 +47,10 @@ class ResonatorFeedback extends Component {
 
         return (
             <Button
-                className={classNames(styles.answerButton, {
-                    [styles.selectedAnswer]: this.props.answered[q.id] === a.id,
-                })}
                 key={idx}
                 onClick={() => this.handleAnswerClick(q.id, a.id)}
-                style={{ marginBottom: 30, textAlign: this.props.rtl ? "right" : "left" }}
+                style={{ marginBottom: 20, textAlign: this.props.rtl ? "right" : "left", display: "block" }}
+                variant={this.props.answered[q.id] === a.id ? "contained" : "outlined"}
                 color="primary"
             >
                 {label}
