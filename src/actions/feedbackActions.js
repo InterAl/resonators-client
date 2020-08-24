@@ -3,7 +3,8 @@ import {ActionCreatorHelper} from '../saga-reducers-factory-patch';
 const actionsList = [
     'SEND_ANSWER',
     'SHOW_PREVIOUS_QUESTION',
-    'SHOW_NEXT_QUESTION'
+    'SHOW_NEXT_QUESTION',
+    'LOAD_RESONATOR'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'RESONATOR_FEEDBACK_');

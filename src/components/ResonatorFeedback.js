@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {actions} from '../actions/feedbackActions';
@@ -14,6 +15,14 @@ class ResonatorFeedback extends Component {
         this.renderQuestion = this.renderQuestion.bind(this);
         this.renderAnswer = this.renderAnswer.bind(this);
         this.handleAnswerClick = this.handleAnswerClick.bind(this);
+
+        const query = Object.fromEntries(new URLSearchParams(this.props.location.search));
+        this.props.loadResonator({
+            resonatorId: this.props.match.params.resonatorId,
+            questionId: query.question_id,
+            answerId: query.answer_id,
+            sentResonatorId: query.sent_resonator_id,
+        })
     }
 
     handleAnswerClick(questionId, answerId) {
@@ -135,15 +144,15 @@ class ResonatorFeedback extends Component {
 
 function mapStateToProps(state) {
     const {resonator, answered, currentQuestionIdx} = state.resonatorFeedback;
-    const question = resonator.questions[currentQuestionIdx];
+    const question = (resonator?.questions || [])[currentQuestionIdx];
 
     return {
         resonator,
         answered,
         question,
         currentQuestionIdx,
-        questionsCount: resonator.questions.length,
-        rtl: question && shouldDisplayRtl(question.question)
+        questionsCount: (resonator?.questions || []).length,
+        rtl: question && shouldDisplayRtl(question?.question)
     };
 }
 
@@ -167,8 +176,9 @@ function shouldDisplayRtl(question) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         sendAnswer: actions.sendAnswer,
+        loadResonator: actions.loadResonator,
         showPreviousQuestion: actions.showPreviousQuestion
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResonatorFeedback);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ResonatorFeedback));

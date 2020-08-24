@@ -4,19 +4,27 @@ import { put, call, select, delay } from 'redux-saga/effects';
 import { actions, types } from '../actions/feedbackActions';
 import * as resonatorFeedbackApi from '../api/resonatorFeedbackApi';
 
-const pageResonator = window.pageData && window.pageData.resonator;
-
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
-        resonator: pageResonator,
+        resonator: {},
         answered: {},
-        currentQuestionIdx: pageResonator && _.size(pageResonator.questions) && 1
+        currentQuestionIdx: 1
     }
 });
 
 const selectResonatorFeedback = () => select(state => state.resonatorFeedback);
+
+handle(types.LOAD_RESONATOR, function* (sagaParams, {payload}) {
+    yield showSpinner(payload.questionId, payload.answerId);
+    const { resonator } = yield call(resonatorFeedbackApi.sendAnswer, payload);
+    yield put(updateState({
+        resonator,
+        currentQuestionIdx: resonator && _.size(resonator.questions) && 1
+    }))
+    yield showSpinner(null);
+})
 
 handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
     try {
