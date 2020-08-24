@@ -12,24 +12,21 @@ class WebpackDistConfig extends WebpackBaseConfig {
   constructor() {
     super();
     this.config = {
-      cache: false,
-      devtool: 'source-map',
-      entry: [
-        './index.js'
-      ],
-      plugins: [
-        new webpack.DefinePlugin({
-          'process.env.NODE_ENV': '"production"'
-        }),
-        new webpack.optimize.AggressiveMergingPlugin(),
-        new webpack.NoEmitOnErrorsPlugin()
-      ]
+        cache: false,
+        devtool: "source-map",
+        entry: ["./index.js"],
+        plugins: [
+            ...this.defaultSettings.plugins,
+            new webpack.DefinePlugin({
+                "process.env.NODE_ENV": '"production"',
+            }),
+            new webpack.optimize.AggressiveMergingPlugin(),
+            new webpack.NoEmitOnErrorsPlugin(),
+        ],
     };
 
     // Deactivate hot-reloading if we run dist build on the dev server
     this.config.devServer.hot = false;
-
-    this.config.output.publicPath = 'https://reminders-uploads.s3-eu-west-1.amazonaws.com/assets/resonators-client/';
   }
 
   /**
