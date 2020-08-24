@@ -1,12 +1,11 @@
 import _ from "lodash";
-import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { actions } from "../actions/feedbackActions";
-import { Button, Card, CardHeader, CardContent, CardActions, Grid } from "@material-ui/core";
-import styles from "./ResonatorFeedback.cssmodule.scss";
 import React, { Component } from "react";
-import classNames from "classnames";
+import { withRouter } from "react-router";
+import { bindActionCreators } from "redux";
+import { Button, Card, CardHeader, CardContent, CardActions, Grid, withTheme, Typography } from "@material-ui/core";
+
+import { actions } from "../actions/feedbackActions";
 
 class ResonatorFeedback extends Component {
     constructor(props) {
@@ -95,7 +94,13 @@ class ResonatorFeedback extends Component {
     renderDone() {
         return (
             <Card key="done">
-                <CardContent className={styles.done}>Your feedback was successfully recorded.</CardContent>
+                <CardHeader
+                    title={
+                        <Typography variant="h6" style={{ color: this.props.theme.palette.success.main }}>
+                            Your feedback was successfully recorded
+                        </Typography>
+                    }
+                />
                 <CardActions>{this.renderBackButton()}</CardActions>
             </Card>
         );
@@ -171,4 +176,4 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ResonatorFeedback));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(withRouter(ResonatorFeedback)));
