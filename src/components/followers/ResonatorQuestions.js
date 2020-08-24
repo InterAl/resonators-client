@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useSnackbar } from "notistack";
 import {
     Stepper,
     Step,
@@ -10,10 +9,8 @@ import {
     FormControlLabel,
     Button,
     makeStyles,
-    Grow,
 } from "@material-ui/core";
 
-import fetcher from "../../api/fetcher";
 import { getOptionLabel } from "./utils";
 
 const useStyle = makeStyles((theme) => ({
@@ -28,9 +25,8 @@ const findFirstUnansweredQuestion = (resonator) =>
         resonator.questions.findIndex((question) => !question.answer)
     );
 
-export default ({ resonator, setResonator, showError }) => {
+export default ({ resonator, answerQuestion }) => {
     const classes = useStyle();
-    const { enqueueSnackbar } = useSnackbar();
 
     const [activeQuestion, setActiveQuestion] = useState(0);
 
@@ -40,28 +36,10 @@ export default ({ resonator, setResonator, showError }) => {
     const stepNext = () =>
         setActiveQuestion((prevActiveQuestion) => Math.min(prevActiveQuestion + 1, resonator.questions.length - 1));
 
-    const answerQuestion = (resonatorQuestion) => (event) => {
-        fetcher
-            .put(`/follower/resonators/${resonator.id}`, {
-                resonatorQuestionId: resonatorQuestion.id,
-                answerId: event.target.value,
-            })
-            .then((data) => data.resonator)
-            .then(setResonator)
-            .then(confirmSave)
-            .then(() => !resonatorQuestion.answer && stepNext())
-            .catch(showError);
-    };
-
-    const confirmSave = () =>
-        enqueueSnackbar("Answer saved", {
-            autoHideDuration: 2000,
-            TransitionComponent: Grow,
-            anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "right",
-            },
-        });
+    const handleAnswer = (resonatorQuestion) => (event) =>
+        answerQuestion(resonator, resonatorQuestion, event.target.value).then(
+            () => !resonatorQuestion.answer && stepNext()
+        );
 
     return (
         <>
@@ -72,7 +50,7 @@ export default ({ resonator, setResonator, showError }) => {
                             {index === activeQuestion || question.answer ? question.body : `Question ${index + 1}`}
                         </StepLabel>
                         <StepContent>
-                            <RadioGroup value={question.answer} onChange={answerQuestion(question)}>
+                            <RadioGroup value={question.answer} onChange={handleAnswer(question)}>
                                 {question.options.map((option) => (
                                     <FormControlLabel
                                         key={option.id}

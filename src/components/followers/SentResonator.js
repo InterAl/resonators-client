@@ -1,6 +1,4 @@
-import { useSnackbar } from "notistack";
-import { useHistory } from "react-router";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link as LinkIcon, Close } from "@material-ui/icons";
 import {
     makeStyles,
@@ -11,14 +9,11 @@ import {
     CardActions,
     Divider,
     Typography,
-    Grow,
     Button,
     IconButton,
 } from "@material-ui/core";
 
 import Direction from "../Direction";
-import fetcher from "../../api/fetcher";
-import LoadingOverlay from "./LoadingOverlay";
 import ResonatorAnswers from "./ResonatorAnswers";
 import ResonatorQuestions from "./ResonatorQuestions";
 import { formatResonatorTime } from "./utils";
@@ -50,103 +45,63 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SentResonator({ sentResonatorId }) {
+export default function SentResonator({ resonator, answerQuestion, close = null }) {
     const classes = useStyles();
-    const history = useHistory();
-    const { enqueueSnackbar } = useSnackbar();
 
-    const [loading, setLoading] = useState(true);
-    const [editMode, setEditMode] = useState(false);
-    const [resonator, setResonator] = useState(null);
-
-    const showError = (response) =>
-        response.json().then(({ status }) =>
-            enqueueSnackbar(status, {
-                variant: "error",
-                persist: true,
-                TransitionComponent: Grow,
-                anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "center",
-                },
-            })
-        );
-
-    const goToAllResonators = () => history.push("/follower/resonators");
-
-    useEffect(() => {
-        setLoading(true);
-        fetcher(`/follower/resonators/${sentResonatorId}`)
-            .then((data) => data.resonator)
-            .then((resonator) => {
-                setResonator(resonator);
-                setEditMode(!resonator.done);
-            })
-            .catch(showError)
-            .finally(() => setLoading(false));
-    }, []);
+    const [editMode, setEditMode] = useState(!resonator.done);
 
     return (
-        <>
-            <LoadingOverlay loading={loading} />
-            {!loading && resonator ? (
-                <Grow in>
-                    <div className={classes.root}>
-                        <IconButton className={classes.backButton} size="small" onClick={goToAllResonators}>
-                            <Close />
-                        </IconButton>
-                        <Card>
-                            <Direction by={resonator.title}>
-                                <CardHeader
-                                    title={resonator.title}
-                                    subheader={formatResonatorTime(resonator.time)}
-                                    titleTypographyProps={{ gutterBottom: true }}
-                                />
-                            </Direction>
-                            <Divider />
-                            <CardMedia image={resonator.picture} className={classes.media} />
-                            <Divider />
-                            <CardContent>
-                                <ResonatorBody resonator={resonator} />
-                            </CardContent>
-                            {resonator.questions.length ? (
-                                <>
-                                    <Divider />
-                                    <CardContent>
-                                        {editMode ? (
-                                            <ResonatorQuestions
-                                                showError={showError}
-                                                resonator={resonator}
-                                                setResonator={setResonator}
-                                            />
-                                        ) : (
-                                            <ResonatorAnswers resonator={resonator} />
-                                        )}
-                                    </CardContent>
-                                    <Divider />
-                                    <CardActions>
-                                        {editMode ? (
-                                            <Button
-                                                color="primary"
-                                                variant="contained"
-                                                disabled={!resonator.done}
-                                                onClick={() => setEditMode(false)}
-                                            >
-                                                Finish
-                                            </Button>
-                                        ) : (
-                                            <Button color="primary" onClick={() => setEditMode(true)}>
-                                                Edit answers
-                                            </Button>
-                                        )}
-                                    </CardActions>
-                                </>
-                            ) : null}
-                        </Card>
-                    </div>
-                </Grow>
-            ) : null}
-        </>
+        <div className={classes.root}>
+            {close && (
+                <IconButton className={classes.backButton} size="small" onClick={close}>
+                    <Close />
+                </IconButton>
+            )}
+            <Card>
+                <Direction by={resonator.title}>
+                    <CardHeader
+                        title={resonator.title}
+                        subheader={formatResonatorTime(resonator.time)}
+                        titleTypographyProps={{ gutterBottom: true }}
+                    />
+                </Direction>
+                <Divider />
+                <CardMedia image={resonator.picture} className={classes.media} />
+                <Divider />
+                <CardContent>
+                    <ResonatorBody resonator={resonator} />
+                </CardContent>
+                {resonator.questions.length ? (
+                    <>
+                        <Divider />
+                        <CardContent>
+                            {editMode ? (
+                                <ResonatorQuestions resonator={resonator} answerQuestion={answerQuestion} />
+                            ) : (
+                                <ResonatorAnswers resonator={resonator} />
+                            )}
+                        </CardContent>
+                        <Divider />
+                        <CardActions>
+                            {editMode ? (
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    disabled={!resonator.done}
+                                    onClick={() => setEditMode(false)}
+                                >
+                                    Finish
+                                </Button>
+                            ) : (
+                                <Button color="primary" onClick={() => setEditMode(true)}>
+                                    Edit answers
+                                </Button>
+                            )}
+                        </CardActions>
+                    </>
+                ) : null}
+            </Card>
+        </div>
     );
 }
 

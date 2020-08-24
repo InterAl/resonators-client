@@ -1,7 +1,5 @@
 import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { push as goto } from "connected-react-router";
+import { useHistory } from "react-router";
 import {
     List,
     ListItem,
@@ -32,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function ResonatorList({ resonators, subheader, paperProps = {}, big = false, goto }) {
+export default function ResonatorList({ resonators, subheader, paperProps = {}, big = false, onClickItem }) {
     const classes = useStyles();
     const listItemClass = big ? classes.itemBig : "";
     const avatarClass = big ? classes.avatarBig : "";
@@ -52,7 +50,7 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
                             button
                             divider
                             className={listItemClass}
-                            onClick={() => goto(`/follower/resonators/${resonator.id}`)}
+                            onClick={() => onClickItem(resonator)}
                         >
                             {resonator.picture ? (
                                 <ListItemAvatar>
@@ -72,5 +70,3 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
         </List>
     );
 }
-
-export default connect(null, (dispatch) => bindActionCreators({ goto }, dispatch))(ResonatorList);
