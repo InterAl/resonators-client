@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import followersSelector from '../selectors/followersSelector';
 import { Select, Checkbox, MenuItem, Typography, Divider, Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import withWidth from '@material-ui/core/withWidth';
 import EntityTable from './EntityTable';
 import { push } from "connected-react-router";
 import OverflowMenu from './OverflowMenu';
@@ -34,9 +35,7 @@ class FollowerGroupMembers extends Component {
             this.props.fetchFollowerGroupMembers(this.props.followerGroup.id);
         this.setState({
             currentMemberIdList: this.props.members?.map(({ id }) => id),
-            isMobile: isMobile(window.innerWidth),
         })
-        window.addEventListener('resize', () => this.setState({ isMobile: isMobile(window.innerWidth) }));
     }
 
     componentWillReceiveProps(nextProps) {
@@ -94,8 +93,8 @@ class FollowerGroupMembers extends Component {
         return this.state.filter === '' ?
             this.props.followers :
             this.props.followers.filter((f) =>
-                f.user.name.includes(this.state.filter) ||
-                (this.state.showEmails && f.user.email.includes(this.state.filter)));
+                f.user.name.toLowerCase().includes(this.state.filter.toLowerCase()) ||
+                (this.state.showEmails && f.user.email.toLowerCase().includes(this.state.filter.toLowerCase())));
     }
 
     handleSubmit() {
@@ -128,19 +127,17 @@ class FollowerGroupMembers extends Component {
 
     getHeader() {
         let header = [];
+        header.push(
+            <Tooltip title={this.state.toggleAll ? 'Remove All' : 'Select All'}>
+                <Checkbox
+                    color="primary"
+                    checked={this.state.toggleAll}
+                    onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
+            </Tooltip>
+        );
         header.push('Name');
         this.state.showEmails && header.push('Email');
         header.push('Clinic');
-        header.push(
-            <React.Fragment>
-                <Tooltip title={this.state.toggleAll ? 'Remove All' : 'Select All'}>
-                    <Checkbox
-                        color="primary"
-                        checked={this.state.toggleAll}
-                        onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
-                </Tooltip>
-                <span>Member</span >
-            </React.Fragment>);
         return header;
     }
 
@@ -150,6 +147,12 @@ class FollowerGroupMembers extends Component {
             (acc, f) => {
                 const cols = [];
                 cols.push(
+                    <Checkbox
+                        color="primary"
+                        checked={isMembers}
+                        onClick={() => this.toggleCheckbox(f.id)} />
+                );
+                cols.push(
                     <React.Fragment>
                         {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
                         <span> {f.user.name}</span >
@@ -157,12 +160,6 @@ class FollowerGroupMembers extends Component {
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);
-                cols.push(
-                    <Checkbox
-                        color="primary"
-                        checked={isMembers}
-                        onClick={() => this.toggleCheckbox(f.id)} />
-                );
                 acc[f.id] = cols;
                 return acc;
             },
@@ -207,10 +204,9 @@ class FollowerGroupMembers extends Component {
             size='small'
             style={{
                 marginTop: '0.5vh',
-                // width: '15vw'
             }}
             InputProps={{
-                startAdornment: (
+                endAdornment: (
                     <InputAdornment position="start">
                         <Search />
                     </InputAdornment>
@@ -220,10 +216,11 @@ class FollowerGroupMembers extends Component {
         />
     }
 
+
     getToolbox() {
         return {
             left: (
-                this.state.isMobile ?
+                isMobile(this.props.width) ?
                     this.renderSearch() :
                     <Typography variant="h6">
                         {`${this.props.followerGroup && this.props.followerGroup.group_name}'s Members`}
@@ -231,7 +228,7 @@ class FollowerGroupMembers extends Component {
             ),
             right: (
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-                    {!this.state.isMobile && this.renderSearch()}
+                    {!isMobile(this.props.width) && this.renderSearch()}
                     <OverflowMenu>
                         <MenuItem onClick={() => this.toggleShowEmails()}>
                             {this.state.showEmails ? "Hide Emails" : "Show Emails"}
@@ -280,4 +277,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(FollowerGroupMembers);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(withWidth()(FollowerGroupMembers));

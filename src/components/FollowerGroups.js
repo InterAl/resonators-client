@@ -119,12 +119,12 @@ class FollowerGroups extends Component {
                 onClick: (followerGroupId) => this.props.downloadGroupStats({followerGroupId}),
             }),
             rowAction.edit(this.handleEditFollowerGroup),
-            rowAction.remove(this.handleRemoveFollowerGroup),
         ];
     }
 
     getExtraRowActions() {
         return [
+            rowAction.remove(this.handleRemoveFollowerGroup),
             rowAction({
                 title: "Activate",
                 icon: <PlayCircleFilled />,

@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { isWidthDown } from '@material-ui/core/withWidth';
+
 
 export function getResonatorDirection(resonator) {
     const text = (resonator.content + resonator.description) || '';
@@ -6,7 +8,7 @@ export function getResonatorDirection(resonator) {
 }
 
 export function isMobile(width) {
-    return width < 767;
+    return isWidthDown('xs', width);
 }
 
 function getDir(text) {
