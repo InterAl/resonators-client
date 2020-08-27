@@ -7,3 +7,7 @@ export function get(resonatorId) {
 export function getCsvFile(resonatorId) {
     return fetcher.download(`/criteria/stats/reminders/${resonatorId}/download`);
 }
+
+export function getGroupCsvFile(followerGroupId) {
+    return fetcher.download(`/criteria/stats/followerGroups/${followerGroupId}/download`);
+}

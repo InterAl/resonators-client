@@ -3,6 +3,7 @@ import {ActionCreatorHelper} from '../saga-reducers-factory-patch';
 const actionsList = [
     'FETCH_RESONATOR_STATS',
     'DOWNLOAD_RESONATOR_STATS',
+    'DOWNLOAD_GROUP_STATS',
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'STATS_');

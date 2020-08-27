@@ -4,13 +4,14 @@ import { actions as followersActions } from '../actions/followersActions';
 import { actions as followerGroupsActions } from '../actions/followerGroupsActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actions as navigationActions } from '../actions/navigationActions';
 import followersSelector from '../selectors/followersSelector';
-import { Select, Checkbox, MenuItem, Button, Link as MuiLink, Typography, Divider } from '@material-ui/core';
+import { Select, Checkbox, MenuItem, Typography, Divider, Tooltip, TextField, InputAdornment } from '@material-ui/core';
+import withWidth from '@material-ui/core/withWidth';
 import EntityTable from './EntityTable';
 import { push } from "connected-react-router";
 import OverflowMenu from './OverflowMenu';
-import { NotInterested, Check } from '@material-ui/icons';
+import { NotInterested, Check, Search } from '@material-ui/icons';
+import { isMobile } from './utils';
 
 class FollowerGroupMembers extends Component {
     constructor() {
@@ -18,11 +19,15 @@ class FollowerGroupMembers extends Component {
 
         this.state = {
             showEmails: false,
+            toggleAll: false,
+            filter: '',
         };
 
         this.handleClinicFilterChange = this.handleClinicFilterChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-
+        this.toggleAllCheckboxes = this.toggleAllCheckboxes.bind(this);
+        this.toggleCheckbox = this.toggleCheckbox.bind(this);
+        this.filteredFollowers = this.filteredFollowers.bind(this);
     }
 
     componentWillMount() {
@@ -58,12 +63,38 @@ class FollowerGroupMembers extends Component {
         this.setState({ currentMemberIdList: _.xor(this.state.currentMemberIdList, [followerId]) });
     }
 
+    toggleAllCheckboxes(newState) {
+        newState ?
+            this.setState({
+                currentMemberIdList: _.union(
+                    this.state.currentMemberIdList,
+                    this.filteredFollowers().map(({ id }) => id)
+                ),
+                toggleAll: true,
+            }) :
+            this.setState({
+                currentMemberIdList: _.difference(
+                    this.state.currentMemberIdList,
+                    this.filteredFollowers().map(({ id }) => id)
+                ),
+                toggleAll: false
+            });
+    }
+
     isSubmittable() {
         return !_.isEqual(this.state.currentMemberIdList, this.props.initialMemberIds);
     }
 
     isFollowerInMemberList(followerId) {
         return this.state.currentMemberIdList ? this.state.currentMemberIdList?.includes(followerId) : false
+    }
+
+    filteredFollowers() {
+        return this.state.filter === '' ?
+            this.props.followers :
+            this.props.followers.filter((f) =>
+                f.user.name.toLowerCase().includes(this.state.filter.toLowerCase()) ||
+                (this.state.showEmails && f.user.email.toLowerCase().includes(this.state.filter.toLowerCase())));
     }
 
     handleSubmit() {
@@ -96,18 +127,31 @@ class FollowerGroupMembers extends Component {
 
     getHeader() {
         let header = [];
+        header.push(
+            <Tooltip title={this.state.toggleAll ? 'Remove All' : 'Select All'}>
+                <Checkbox
+                    color="primary"
+                    checked={this.state.toggleAll}
+                    onClick={() => this.toggleAllCheckboxes(!this.state.toggleAll)} />
+            </Tooltip>
+        );
         header.push('Name');
         this.state.showEmails && header.push('Email');
         header.push('Clinic');
-        header.push('Member')
         return header;
     }
 
     getMemberRows(isMembers) {
         return _.reduce(
-            _.filter(this.props.followers, (f) => isMembers === this.isFollowerInMemberList(f.id)),
+            _.filter(this.filteredFollowers(), (f) => isMembers === this.isFollowerInMemberList(f.id)),
             (acc, f) => {
                 const cols = [];
+                cols.push(
+                    <Checkbox
+                        color="primary"
+                        checked={isMembers}
+                        onClick={() => this.toggleCheckbox(f.id)} />
+                );
                 cols.push(
                     <React.Fragment>
                         {f.frozen ? <NotInterested fontSize="small" style={{ marginRight: 5 }} /> : null}
@@ -116,12 +160,6 @@ class FollowerGroupMembers extends Component {
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);
-                cols.push(
-                    <Checkbox
-                        color="primary"
-                        checked={isMembers}
-                        onClick={() => this.toggleCheckbox(f.id)} />
-                );
                 acc[f.id] = cols;
                 return acc;
             },
@@ -147,34 +185,59 @@ class FollowerGroupMembers extends Component {
                     cellWidth='20vw' />
                 {!_.isEmpty(nonMemberRows) &&
                     <React.Fragment>
-                        <Divider style={{marginBottom: '3vh'}}/>
+                        <Divider style={{ marginBottom: '3vh' }} />
                         <EntityTable
                             rows={nonMemberRows}
                             addButton={false}
                             className='members'
-                            cellWidth='20vw'/>
+                            cellWidth='20vw' />
                     </React.Fragment>
                 }
             </div>
         )
     }
 
+    renderSearch() {
+        return <TextField
+            label='Filter'
+            variant='outlined'
+            size='small'
+            style={{
+                marginTop: '0.5vh',
+            }}
+            InputProps={{
+                endAdornment: (
+                    <InputAdornment position="start">
+                        <Search />
+                    </InputAdornment>
+                ),
+            }}
+            onChange={(e) => this.setState({ filter: e.target.value })}
+        />
+    }
+
+
     getToolbox() {
         return {
             left: (
-                <Typography variant="h6">
-                    {`${this.props.followerGroup && this.props.followerGroup.group_name}'s Members`}
-                </Typography>
+                isMobile(this.props.width) ?
+                    this.renderSearch() :
+                    <Typography variant="h6">
+                        {`${this.props.followerGroup && this.props.followerGroup.group_name}'s Members`}
+                    </Typography>
             ),
             right: (
-                <OverflowMenu>
-                    <MenuItem onClick={() => this.toggleShowEmails()}>
-                        {this.state.showEmails ? "Hide Emails" : "Show Emails"}
-                    </MenuItem>
-                    <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
-                        {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
-                    </MenuItem>
-                </OverflowMenu>
+                <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                    {!isMobile(this.props.width) && this.renderSearch()}
+                    <OverflowMenu>
+                        <MenuItem onClick={() => this.toggleShowEmails()}>
+                            {this.state.showEmails ? "Hide Emails" : "Show Emails"}
+                        </MenuItem>
+                        <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
+                            {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
+                        </MenuItem>
+                    </OverflowMenu>
+                </div>
             ),
         };
     }
@@ -214,4 +277,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(FollowerGroupMembers);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(withWidth()(FollowerGroupMembers));
