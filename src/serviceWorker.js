@@ -3,9 +3,17 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-    const { title, body } = event.data.json();
+    const { type, title, body, options } = event.data.json();
+
     self.registration.showNotification(title, {
         body,
         icon: "https://www.psysession.com/icon.png",
+        ...notificationFormatters[type](options),
     });
 });
+
+const notificationFormatters = {
+    resonator: (options) => ({
+        image: options.image,
+    }),
+};
