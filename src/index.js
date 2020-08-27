@@ -7,6 +7,7 @@ import { AppContainer } from "react-hot-loader";
 
 import App from "./containers/App";
 import configureStore from "./stores";
+import { subscribeToPushNotifications } from "./push";
 import { actions as pwaActions } from "./actions/pwaActions";
 import { actions as initActions } from "./actions/initActions";
 
@@ -65,3 +66,4 @@ store.dispatch(initActions.initApp());
 renderApp();
 registerServiceWorker();
 registerInstallationActions(store.dispatch);
+subscribeToPushNotifications();
