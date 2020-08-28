@@ -3,17 +3,36 @@ self.addEventListener("fetch", (event) => {
 });
 
 self.addEventListener("push", (event) => {
-    const { type, title, body, options } = event.data.json();
+    const { type, title, options } = event.data.json();
+    const notificationOptions = notificationFormatters[type](options);
 
-    self.registration.showNotification(title, {
-        body,
-        icon: "https://www.psysession.com/icon.png",
-        ...notificationFormatters[type](options),
-    });
+    event.waitUntil(
+        self.registration.showNotification(title, {
+            ...notificationOptions,
+            icon: "https://www.psysession.com/icon.png",
+            data: {
+                ...notificationOptions.data,
+                type,
+            },
+        })
+    );
+});
+
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();
+    notificationActions[event.notification.data.type](event);
 });
 
 const notificationFormatters = {
-    resonator: (options) => ({
-        image: options.image,
+    resonator: ({ id, image, body }) => ({
+        body,
+        image,
+        tag: id,
     }),
+};
+
+const notificationActions = {
+    resonator: (event) => {
+        event.waitUntil(clients.openWindow(`/follower/resonators/${event.notification.tag}`));
+    },
 };
