@@ -5,6 +5,7 @@ import { actions, types } from '../actions/followerGroupsActions';
 import { types as resonatorTypes } from '../actions/groupResonatorActions';
 import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerGroupApi from '../api/followerGroup';
+import resonatorsSelector from '../selectors/resonatorsSelector';
 
 
 const followerGroupsSelector = state => state.followerGroups.followerGroups;
@@ -94,11 +95,11 @@ handle(types.UPDATE, function* (sagaParams, { payload }) {
 handle(types.UPDATE_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
     const { newMemberList, followerGroupId } = payload;
     yield call(followerGroupApi.updateMembers, followerGroupId, newMemberList.map(({ id }) => id));
-    const followerGroup = yield getFollowerGroup(payload.id);
+    const followerGroup = yield getFollowerGroup(followerGroupId);
 
     const updatedFollowerGroup = {
         ...followerGroup,
-        members: payload,
+        members: newMemberList,
     };
 
     yield updateStateWithNewFollowerGroup(updatedFollowerGroup);
@@ -111,6 +112,10 @@ handle(types.FETCH_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
 
 handle(types.FETCH_FOLLOWER_GROUP_RESONATORS, function* (sagaParams, { payload }) {
     yield fetchFollowerGroupResonators(payload);
+});
+
+handle(types.FETCH_MEMBERS_WITH_RESONATOR_CHILDREN, function* (sagaParams, { payload }) {
+    yield fetchMembersWithResonatorChildren(payload);
 });
 
 handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
@@ -184,6 +189,22 @@ export function* fetchFollowerGroupResonators(followerGroupId) {
     const patchedFollowerGroup = {
         ...followerGroup,
         resonators: followerGroupResonators
+    };
+
+    yield updateStateWithNewFollowerGroup(patchedFollowerGroup);
+}
+
+export function* fetchMembersWithResonatorChildren({ followerGroupId, resonatorId }) {
+    yield fetchFollowerGroupMembers(followerGroupId);
+
+    const followerGroup = yield getFollowerGroup(followerGroupId);
+    const resonators = yield select(resonatorsSelector);
+    const resonator = _.find(resonators, (r) => r.id === resonatorId);
+    const childResonators = yield call(followerGroupApi.getGroupResonatorChildren, followerGroupId, resonatorId);
+    const patchedFollowerGroup = {
+        ...followerGroup,
+        resonators: _.reject(followerGroup.resonators, (r) => r.id === resonatorId)
+            .concat({ ...resonator, childResonators }),
     };
 
     yield updateStateWithNewFollowerGroup(patchedFollowerGroup);

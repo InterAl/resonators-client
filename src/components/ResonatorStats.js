@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
-import {actions as statsActions} from '../actions/resonatorStatsActions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
+import React, { Component } from 'react';
+import { actions as statsActions } from '../actions/resonatorStatsActions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend } from 'recharts';
 import { TableContainer, Table, TableBody, TableRow, TableCell, Typography } from '@material-ui/core';
 import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
@@ -24,6 +24,13 @@ class ResonatorStats extends Component {
         this.props.fetchResonatorStats({
             resonatorId: this.props.resonatorId
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.resonatorId !== prevProps.resonatorId)
+            this.props.fetchResonatorStats({
+                resonatorId: this.props.resonatorId
+            });
     }
     formatXAxis(tickItem) {
         return tickItem.split(" ")[0];
@@ -51,14 +58,14 @@ class ResonatorStats extends Component {
 
     renderChart(question) {
         return [
-            <div key="chart" style={{height: 500, paddingRight: 30}}>
+            <div key="chart" style={{ height: 500, paddingRight: 30 }}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
-                        <XAxis dataKey="time" tickFormatter={this.formatXAxis}/>
-                        <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]}/>
-                        <Tooltip/>
-                        <Legend/>
-                        <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                        <XAxis dataKey="time" tickFormatter={this.formatXAxis} />
+                        <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]} />
+                        <Tooltip />
+                        <Legend />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                         <Line type="linear" dataKey="rank" stroke="#82ca9d" />
                     </LineChart>
                 </ResponsiveContainer>
