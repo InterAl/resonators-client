@@ -104,15 +104,39 @@ class ResonatorStats extends Component {
         )
     }
 
+    formatStats(stats) {
+        return _.reduce(stats, (acc, { followerAnswers, ...stat }) => ({
+                ...acc,
+                [stat.id]: {
+                    ...stat,
+                    followerAnswers:
+                        _(followerAnswers)
+                            .groupBy(({ time }) =>
+                                time.split(' ')[0])
+                            .map(this.getSumByDay)
+                            .value(),
+                },
+            }), {});
+    }
+
+    getSumByDay(stats) {
+        return stats.reduce((acc, next) => ({
+            time: next.time.split(' ')[0].concat(' 00:00'),
+            rank: acc.rank + next.rank,
+            question_id: next.question_id,
+        }));
+    }
+
     render() {
-        const stats = _.map(this.props.stats, this.renderCard);
+        const formattedStats = this.props.followerGroup ?
+            this.formatStats(this.props.stats) :
+            this.props.stats;
+        const stats = _.map(formattedStats, this.renderCard);
+
         return (
             <React.Fragment>
                 <div className='resonator-stats-wrapper'>
-                    {this.props.followerGroup ?
-                        this.renderTypography('Group Stats Coming Soon.') :
-                        (stats || this.renderTypography('No stats are available.'))
-                    }
+                        {stats || this.renderTypography('No stats are available.')}
                 </div>
             </React.Fragment>
 

@@ -146,7 +146,7 @@ class ShowResonator extends Component {
                                 rightActions: this.renderDownloadButton(this.props.resonator.id),
                             })}
                             <ResonatorStats
-                                resonatorId={this.props.match.params.resonatorId}
+                                resonatorId={resonatorId}
                                 follower={follower}
                                 followerGroup={followerGroup} />
                         </div>
