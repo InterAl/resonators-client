@@ -1,4 +1,4 @@
-import api from "./api/fetcher";
+import * as api from "./api/pushSubscription";
 import { pushServerKey } from "./config/push";
 
 export async function subscribeToPushNotifications() {
@@ -11,11 +11,7 @@ export async function subscribeToPushNotifications() {
                 userVisibleOnly: true,
                 applicationServerKey: pushServerKey,
             })
-            .then(saveSubsctiption)
+            .then(api.saveSubsctiption)
             .catch(console.error);
     }
-}
-
-function saveSubsctiption(subscription) {
-    return api.post("/push-subscribe", subscription);
 }

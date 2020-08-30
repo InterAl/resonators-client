@@ -20,7 +20,7 @@ self.addEventListener("push", (event) => {
 
 self.addEventListener("notificationclick", (event) => {
     event.notification.close();
-    notificationActions[event.notification.data.type](event);
+    event.waitUntil(notificationActions[event.notification.data.type](event));
 });
 
 const notificationFormatters = {
@@ -32,7 +32,5 @@ const notificationFormatters = {
 };
 
 const notificationActions = {
-    resonator: (event) => {
-        event.waitUntil(clients.openWindow(`/follower/resonators/${event.notification.tag}`));
-    },
+    resonator: (event) => clients.openWindow(`/follower/resonators/${event.notification.tag}`),
 };
