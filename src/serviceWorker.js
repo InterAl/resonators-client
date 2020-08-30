@@ -23,6 +23,19 @@ self.addEventListener("notificationclick", (event) => {
     event.waitUntil(notificationActions[event.notification.data.type](event));
 });
 
+self.addEventListener("pushsubscriptionchange", (event) => {
+    event.waitUntil(
+        fetch("/api/push-subscription", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                oldSubscription: event.oldSubscription,
+                newSubscription: event.newSubscription,
+            }),
+        })
+    );
+});
+
 const notificationFormatters = {
     resonator: ({ id, image, body }) => ({
         body,
