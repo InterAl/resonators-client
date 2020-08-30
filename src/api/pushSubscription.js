@@ -7,9 +7,9 @@ export function saveSubsctiption(subscription) {
 }
 
 export function replaceSubscription(oldSubscription, newSubscription) {
-    return api.put(`${BASE_URL}/${oldSubscription.endpoint}`, newSubscription);
+    return api.put(BASE_URL, { oldSubscription, newSubscription });
 }
 
 export function deleteSubscription(subscription) {
-    return api.delete(`${BASE_URL}/${subscription.endpoint}`);
+    return api.delete(BASE_URL, subscription);
 }

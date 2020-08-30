@@ -15,3 +15,15 @@ export async function subscribeToPushNotifications() {
             .catch(console.error);
     }
 }
+
+export async function unsubscribeFromPushNotifications() {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+
+    if (subscription) {
+        subscription
+            .unsubscribe()
+            .then(() => api.deleteSubscription(subscription))
+            .catch(console.error);
+    }
+}
