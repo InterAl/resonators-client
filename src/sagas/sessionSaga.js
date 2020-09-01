@@ -5,6 +5,7 @@ import { actions, types } from '../actions/sessionActions';
 import formErrorAction from '../actions/formError';
 import * as sessionApi from '../api/session';
 import {actions as navigationActions} from '../actions/navigationActions';
+import { subscribeToPushNotifications, unsubscribeFromPushNotifications } from "../push";
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -52,6 +53,7 @@ handle(types.LOGIN, function*(sagaParams, action) {
 
 handle(types.LOGOUT, function*() {
     try {
+        yield call(unsubscribeFromPushNotifications);
         yield call(sessionApi.logout);
         yield put(updateState({
             loggedIn: false
@@ -137,6 +139,8 @@ function* updateUser(user = {}) {
     if (loggedIn) {
         yield put(actions.loginSuccess());
         const currentPath = location.pathname;
+
+        yield call(subscribeToPushNotifications);
 
         if (currentPath === '/' || currentPath === '/login')
             yield put(navigationActions.navigate(user.isFollower ? 'follower/resonators' : 'followers'));

@@ -65,11 +65,15 @@ fetcher.put = (url, body) => {
     });
 };
 
-fetcher.delete = (url) => {
+fetcher.delete = (url, body = {}) => {
     return fetcher(url, {
-        ...getDefaultHeaders(),
         method: 'DELETE',
-        emptyResponse: true
+        headers: {
+            ...getDefaultHeaders(),
+            'Content-Type': 'application/json',
+        },
+        emptyResponse: true,
+        body: JSON.stringify(body)
     });
 };
 
