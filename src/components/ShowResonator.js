@@ -9,8 +9,7 @@ import followersSelector from "../selectors/followersSelector";
 import followerGroupsSelector from "../selectors/followerGroupsSelector";
 import ExpandableCard from "./ExpandableCard";
 import ResonatorStats from "./ResonatorStats";
-import { CircularProgress, Typography, Divider, IconButton, Tooltip } from "@material-ui/core";
-import { Pagination } from '@material-ui/lab';
+import { CircularProgress, Typography, Divider, IconButton, Tooltip, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import { RemoveRedEye, GetApp } from "@material-ui/icons";
 
 class ShowResonator extends Component {
@@ -52,7 +51,7 @@ class ShowResonator extends Component {
         });
     }
 
-    renderSectionTitle({ title, bottomActions, rightActions }) {
+    renderSectionTitle({ title, bottomLeftActions, bottomRightActions, rightActions }) {
         return (
             <div style={{ marginBottom: 20 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -66,7 +65,14 @@ class ShowResonator extends Component {
                     </div>
                 </div>
                 <Divider style={{ margin: 10 }} />
-                {bottomActions}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div>
+                        {bottomLeftActions}
+                    </div>
+                    <div>
+                        {bottomRightActions}
+                    </div>
+                </div>
             </div>
         );
     }
@@ -81,20 +87,32 @@ class ShowResonator extends Component {
         )
     }
 
-    renderMemberPagination() {
+    renderMemberSelect() {
         return (
-            <Pagination
-                count={_.size(this.props.followerGroup.members)}
-                shape="rounded"
-                siblingCount={2}
-                size='small'
-                onChange={this.handleMemberChange}
-            />
+            <FormControl variant="outlined">
+                <InputLabel id="memberSelectLabel">Member</InputLabel>
+                <Select
+                    labelId="memberSelectLabel"
+                    value={this.state.member}
+                    onChange={this.handleMemberChange}
+                    label='Member'
+                    style={{
+                        minWidth: '15vw'
+                    }}
+                    renderValue={() => this.props.getFollower(this.state.member.id).user.name}
+                >
+                    {this.props.followerGroup.members.map((member) =>
+                        <MenuItem value={member}>
+                            {this.props.getFollower(member.id).user.name}
+                        </MenuItem>
+                    )}
+                </Select>
+            </FormControl>
         )
     }
 
-    handleMemberChange(event, page) {
-        this.setState({ member: this.props.followerGroup.members[page - 1] });
+    handleMemberChange(event) {
+        this.setState({ member: event.target.value });
     }
 
     render() {
@@ -153,9 +171,9 @@ class ShowResonator extends Component {
                         {followerGroup?.members && this.state.member && (
                             <div style={{ marginTop: 40 }}>
                                 {this.renderSectionTitle({
-                                    title: `${getFollower(this.state.member.id).user.name}'s Criteria`,
-                                    bottomActions: this.renderMemberPagination(),
-                                    rightActions: this.renderDownloadButton(getChildResonator(this.state.member.id)?.id),
+                                    title: 'Member Criteria',
+                                    bottomLeftActions: this.renderMemberSelect(),
+                                    bottomRightActions: this.renderDownloadButton(getChildResonator(this.state.member.id)?.id),
                                 })}
                                 <ResonatorStats
                                     resonatorId={(getChildResonator(this.state.member.id))?.id}
