@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import React, {Component} from 'react';
-import {actions as statsActions} from '../actions/resonatorStatsActions';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend} from 'recharts';
+import React, { Component } from 'react';
+import { actions as statsActions } from '../actions/resonatorStatsActions';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend } from 'recharts';
 import { TableContainer, Table, TableBody, TableRow, TableCell, Typography } from '@material-ui/core';
 import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
@@ -24,6 +24,13 @@ class ResonatorStats extends Component {
         this.props.fetchResonatorStats({
             resonatorId: this.props.resonatorId
         });
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.resonatorId !== prevProps.resonatorId)
+            this.props.fetchResonatorStats({
+                resonatorId: this.props.resonatorId
+            });
     }
     formatXAxis(tickItem) {
         return tickItem.split(" ")[0];
@@ -51,14 +58,14 @@ class ResonatorStats extends Component {
 
     renderChart(question) {
         return [
-            <div key="chart" style={{height: 500, paddingRight: 30}}>
+            <div key="chart" style={{ height: 500, paddingRight: 30 }}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
-                        <XAxis dataKey="time" tickFormatter={this.formatXAxis}/>
-                        <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]}/>
-                        <Tooltip/>
-                        <Legend/>
-                        <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                        <XAxis dataKey="time" tickFormatter={this.formatXAxis} />
+                        <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]} />
+                        <Tooltip />
+                        <Legend />
+                        <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                         <Line type="linear" dataKey="rank" stroke="#82ca9d" />
                     </LineChart>
                 </ResponsiveContainer>
@@ -97,15 +104,39 @@ class ResonatorStats extends Component {
         )
     }
 
+    formatStats(stats) {
+        return _.reduce(stats, (acc, { followerAnswers, ...stat }) => ({
+                ...acc,
+                [stat.id]: {
+                    ...stat,
+                    followerAnswers:
+                        _(followerAnswers)
+                            .groupBy(({ time }) =>
+                                time.split(' ')[0])
+                            .map(this.getSumByDay)
+                            .value(),
+                },
+            }), {});
+    }
+
+    getSumByDay(stats) {
+        return stats.reduce((acc, next) => ({
+            time: next.time.split(' ')[0].concat(' 00:00'),
+            rank: acc.rank + next.rank,
+            question_id: next.question_id,
+        }));
+    }
+
     render() {
-        const stats = _.map(this.props.stats, this.renderCard);
+        const formattedStats = this.props.followerGroup ?
+            this.formatStats(this.props.stats) :
+            this.props.stats;
+        const stats = _.map(formattedStats, this.renderCard);
+
         return (
             <React.Fragment>
                 <div className='resonator-stats-wrapper'>
-                    {this.props.followerGroup ?
-                        this.renderTypography('Group Stats Coming Soon.') :
-                        (stats || this.renderTypography('No stats are available.'))
-                    }
+                        {stats || this.renderTypography('No stats are available.')}
                 </div>
             </React.Fragment>
 
