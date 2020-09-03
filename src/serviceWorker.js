@@ -31,6 +31,7 @@ function getNotificationOptions(type, options) {
     return {
         ...typeOptions,
         icon: "https://www.psysession.com/icon.png",
+        vibrate: [200, 100, 200, 100, 200],
         data: {
             ...typeOptions.data,
             type,
