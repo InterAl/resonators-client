@@ -13,7 +13,9 @@ const useStyles = makeStyles((theme) => ({
         marginTop: theme.spacing(2),
     },
     option: {
-        marginBottom: theme.spacing(2),
+        "&:not(:last-child)": {
+            marginBottom: theme.spacing(2),
+        },
     },
 }));
 
