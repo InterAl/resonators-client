@@ -1,24 +1,29 @@
 import _ from "lodash";
 import React from "react";
+import jssRtlPlugin from "jss-rtl";
+import { create as createJssInstance } from "jss";
+import { ThemeProvider, StylesProvider, jssPreset } from "@material-ui/core";
 
-export default ({ by, children, ...props }) => {
+const rtlJss = createJssInstance({
+    plugins: [...jssPreset().plugins, jssRtlPlugin()],
+});
+
+export default function Direction({ by, children, ...props }) {
     const rtl = isRtl(by);
     const dir = rtl ? "rtl" : "ltr";
-    const textAlign = rtl ? "right" : "left";
 
-    return React.Children.map(children, (child) =>
-        child
-            ? React.cloneElement(child, {
-                  ...props,
-                  dir,
-                  style: {
-                      ..._.get(child, "props.style", {}),
-                      textAlign,
-                  },
-              })
-            : null
+    const transformedChildren = React.Children.map(children, (child) =>
+        child ? React.cloneElement(child, { ...props, dir }) : null
     );
-};
+
+    return rtl ? (
+        <ThemeProvider theme={(outerTheme) => ({ ...outerTheme, direction: "rtl" })}>
+            <StylesProvider jss={rtlJss}>{transformedChildren}</StylesProvider>
+        </ThemeProvider>
+    ) : (
+        transformedChildren
+    );
+}
 
 const isRtl = (text) => {
     const letters = text.replace(/\s/g, "").split("");
