@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider } from "@material-ui/core";
 
 import Question from "./questions";
+import Direction from "../../Direction";
 import fetcher from "../../../api/fetcher";
 import { useStateWithHistory } from "../../hooks";
 import NavigationControls from "./NavigationControls";
@@ -63,17 +64,19 @@ export default ({ resonator, setResonator, showError }) => {
 
                     return (
                         <Step key={question.id} active={active} completed={completed}>
-                            <StepLabel>{label}</StepLabel>
-                            <StepContent>
-                                <Question question={question} onAnswer={answerQuestion} />
-                                <NavigationControls
-                                    index={activeQuestion}
-                                    setIndex={setActiveQuestion}
-                                    total={resonator.questions.length}
-                                    className={classes.controls}
-                                    nextDisabled={!completed}
-                                />
-                            </StepContent>
+                            <Direction by={question.body}>
+                                <StepLabel>{label}</StepLabel>
+                                <StepContent>
+                                    <Question question={question} onAnswer={answerQuestion} />
+                                    <NavigationControls
+                                        index={activeQuestion}
+                                        setIndex={setActiveQuestion}
+                                        total={resonator.questions.length}
+                                        className={classes.controls}
+                                        nextDisabled={!completed}
+                                    />
+                                </StepContent>
+                            </Direction>
                         </Step>
                     );
                 })}
