@@ -1,21 +1,39 @@
 import React from "react";
-import { RadioGroup, Radio, FormControlLabel } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
+
+import QuestionTypography from "./QuestionTypography";
+import MultipleChoiceOption from "./MultipleChoiceOption";
 
 function getOptionLabel(option) {
     return option.label ? `${option.value} - ${option.label}` : option.value;
 }
 
+const useStyles = makeStyles((theme) => ({
+    options: {
+        marginTop: theme.spacing(1),
+    },
+    option: {
+        margin: theme.spacing(1, 0),
+    },
+}));
+
 export default function MultipleChoiceQuestion({ question, options, chosen, handleAnswer }) {
+    const classes = useStyles();
+
     return (
-        <RadioGroup value={chosen} onChange={(event) => handleAnswer(event.target.value)}>
-            {options.map((option) => (
-                <FormControlLabel
-                    key={option.id}
-                    value={option.id}
-                    control={<Radio color="primary" />}
-                    label={getOptionLabel(option)}
-                />
-            ))}
-        </RadioGroup>
+        <div>
+            <QuestionTypography>{question}</QuestionTypography>
+            <div className={classes.options}>
+                {options.map((option) => (
+                    <MultipleChoiceOption
+                        key={option.id}
+                        className={classes.option}
+                        chosen={chosen === option.id}
+                        label={getOptionLabel(option)}
+                        onClick={() => handleAnswer(option.id)}
+                    />
+                ))}
+            </div>
+        </div>
     );
 }
