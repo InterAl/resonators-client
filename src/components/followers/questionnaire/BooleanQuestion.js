@@ -6,16 +6,25 @@ import QuestionTypography from "./QuestionTypography";
 
 const useStyles = makeStyles((theme) => ({
     options: {
-        display: "flex",
         marginTop: theme.spacing(2),
+        [theme.breakpoints.up("sm")]: {
+            display: "flex",
+        },
     },
     no: {
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
+        [theme.breakpoints.up("sm")]: {
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+        },
     },
     yes: {
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
+        [theme.breakpoints.up("sm")]: {
+            borderTopRightRadius: 0,
+            borderBottomRightRadius: 0,
+        },
+        [theme.breakpoints.down("xs")]: {
+            marginBottom: theme.spacing(2),
+        },
     },
 }));
 

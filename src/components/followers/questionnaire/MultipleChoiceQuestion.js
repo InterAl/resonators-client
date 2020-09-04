@@ -10,10 +10,10 @@ function getOptionLabel(option) {
 
 const useStyles = makeStyles((theme) => ({
     options: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(2),
     },
     option: {
-        margin: theme.spacing(1, 0),
+        marginBottom: theme.spacing(2),
     },
 }));
 
