@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
-import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow } from "@material-ui/core";
+import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider } from "@material-ui/core";
 
+import { useSeen } from "../../hooks";
 import fetcher from "../../../api/fetcher";
 import BooleanQuestion from "./BooleanQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
@@ -45,6 +46,20 @@ function renderQuestion(question, handler) {
     }
 }
 
+function Section({ active, question, children, ...extra }) {
+    const seen = useSeen(active);
+
+    const completed = Boolean(question.answer);
+    const label = (seen || completed) && !active ? question.body : <Divider />;
+
+    return (
+        <Step active={active} {...extra}>
+            <StepLabel completed={completed}>{label}</StepLabel>
+            <StepContent>{children}</StepContent>
+        </Step>
+    );
+}
+
 export default ({ resonator, setResonator, showError }) => {
     const classes = useStyle();
     const { enqueueSnackbar } = useSnackbar();
@@ -81,23 +96,18 @@ export default ({ resonator, setResonator, showError }) => {
 
     return (
         <>
-            <Stepper orientation="vertical" activeStep={activeQuestion}>
+            <Stepper orientation="vertical">
                 {resonator.questions.map((question, index) => (
-                    <Step key={question.id} completed={Boolean(question.answer)}>
-                        <StepLabel>
-                            {index === activeQuestion || question.answer ? question.body : `Question ${index + 1}`}
-                        </StepLabel>
-                        <StepContent>
-                            {renderQuestion(question, answerQuestion(question))}
-                            <NavigationControls
-                                index={activeQuestion}
-                                setIndex={setActiveQuestion}
-                                total={resonator.questions.length}
-                                nextDisabled={!question.answer}
-                                className={classes.controls}
-                            />
-                        </StepContent>
-                    </Step>
+                    <Section key={question.id} active={index === activeQuestion} question={question}>
+                        {renderQuestion(question, answerQuestion(question))}
+                        <NavigationControls
+                            index={activeQuestion}
+                            setIndex={setActiveQuestion}
+                            total={resonator.questions.length}
+                            nextDisabled={!question.answer}
+                            className={classes.controls}
+                        />
+                    </Section>
                 ))}
             </Stepper>
         </>
