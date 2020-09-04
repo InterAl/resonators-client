@@ -1,6 +1,6 @@
 import { useSnackbar } from "notistack";
-import React, { useState, useEffect } from "react";
-import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider, StepButton } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider } from "@material-ui/core";
 
 import Question from "./questions";
 import fetcher from "../../../api/fetcher";
