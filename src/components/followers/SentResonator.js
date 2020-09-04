@@ -104,8 +104,12 @@ export default function SentResonator({ sentResonatorId }) {
                                 />
                             </Direction>
                             <Divider />
-                            <CardMedia image={resonator.picture} className={classes.media} />
-                            <Divider />
+                            {resonator.picture ? (
+                                <>
+                                    <CardMedia image={resonator.picture} className={classes.media} />
+                                    <Divider />
+                                </>
+                            ) : null}
                             <CardContent>
                                 <ResonatorBody resonator={resonator} />
                             </CardContent>
