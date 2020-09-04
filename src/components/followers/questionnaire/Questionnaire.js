@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
-import {
-    Stepper,
-    Step,
-    StepLabel,
-    StepContent,
-    RadioGroup,
-    Radio,
-    FormControlLabel,
-    Button,
-    makeStyles,
-    Grow,
-} from "@material-ui/core";
+import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow } from "@material-ui/core";
 
-import fetcher from "../../api/fetcher";
-import { getOptionLabel } from "./utils";
+import fetcher from "../../../api/fetcher";
+import BooleanQuestion from "./BooleanQuestion";
+import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
+import NavigationControls from "./NavigationControls";
 
 const useStyle = makeStyles((theme) => ({
     controls: {
@@ -28,6 +19,32 @@ const findFirstUnansweredQuestion = (resonator) =>
         resonator.questions.findIndex((question) => !question.answer)
     );
 
+function renderQuestion(question, handler) {
+    switch (question.type) {
+        case "numeric":
+            return (
+                <MultipleChoiceQuestion
+                    question={question.body}
+                    options={question.options}
+                    chosen={question.answer}
+                    handleAnswer={handler}
+                />
+            );
+        case "boolean":
+            return (
+                <BooleanQuestion
+                    question={question.body}
+                    yes={question.options[0]}
+                    no={question.options[1]}
+                    chosen={question.answer}
+                    handleAnswer={handler}
+                />
+            );
+        default:
+            return null;
+    }
+}
+
 export default ({ resonator, setResonator, showError }) => {
     const classes = useStyle();
     const { enqueueSnackbar } = useSnackbar();
@@ -36,15 +53,14 @@ export default ({ resonator, setResonator, showError }) => {
 
     useEffect(() => setActiveQuestion(findFirstUnansweredQuestion(resonator)), []);
 
-    const stepBack = () => setActiveQuestion((prevActiveQuestion) => prevActiveQuestion - 1);
     const stepNext = () =>
         setActiveQuestion((prevActiveQuestion) => Math.min(prevActiveQuestion + 1, resonator.questions.length - 1));
 
-    const answerQuestion = (resonatorQuestion) => (event) => {
+    const answerQuestion = (resonatorQuestion) => (answerId) => {
         fetcher
             .put(`/follower/resonators/${resonator.id}`, {
                 resonatorQuestionId: resonatorQuestion.id,
-                answerId: event.target.value,
+                answerId,
             })
             .then((data) => data.resonator)
             .then(setResonator)
@@ -72,28 +88,14 @@ export default ({ resonator, setResonator, showError }) => {
                             {index === activeQuestion || question.answer ? question.body : `Question ${index + 1}`}
                         </StepLabel>
                         <StepContent>
-                            <RadioGroup value={question.answer} onChange={answerQuestion(question)}>
-                                {question.options.map((option) => (
-                                    <FormControlLabel
-                                        key={option.id}
-                                        value={option.id}
-                                        control={<Radio color="primary" />}
-                                        label={getOptionLabel(option, question)}
-                                    />
-                                ))}
-                            </RadioGroup>
-                            <div className={classes.controls}>
-                                <Button onClick={stepBack} disabled={index === 0}>
-                                    Back
-                                </Button>
-                                <Button
-                                    color="primary"
-                                    onClick={stepNext}
-                                    disabled={index === resonator.questions.length - 1 || !question.answer}
-                                >
-                                    Next
-                                </Button>
-                            </div>
+                            {renderQuestion(question, answerQuestion(question))}
+                            <NavigationControls
+                                index={activeQuestion}
+                                setIndex={setActiveQuestion}
+                                total={resonator.questions.length}
+                                nextDisabled={!question.answer}
+                                className={classes.controls}
+                            />
                         </StepContent>
                     </Step>
                 ))}

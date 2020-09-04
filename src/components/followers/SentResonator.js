@@ -20,7 +20,7 @@ import Direction from "../Direction";
 import fetcher from "../../api/fetcher";
 import LoadingOverlay from "./LoadingOverlay";
 import ResonatorAnswers from "./ResonatorAnswers";
-import ResonatorQuestions from "./ResonatorQuestions";
+import ResonatorQuestionnaire from "./questionnaire/Questionnaire";
 import { formatResonatorTime } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
@@ -114,7 +114,7 @@ export default function SentResonator({ sentResonatorId }) {
                                     <Divider />
                                     <CardContent>
                                         {editMode ? (
-                                            <ResonatorQuestions
+                                            <ResonatorQuestionnaire
                                                 showError={showError}
                                                 resonator={resonator}
                                                 setResonator={setResonator}
