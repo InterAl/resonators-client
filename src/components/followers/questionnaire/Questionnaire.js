@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
-import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider, StepButton } from "@material-ui/core";
 
-import { useSeen } from "../../hooks";
+import Question from "./questions";
 import fetcher from "../../../api/fetcher";
-import BooleanQuestion from "./BooleanQuestion";
-import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
+import { useStateWithHistory } from "../../hooks";
 import NavigationControls from "./NavigationControls";
 
 const useStyle = makeStyles((theme) => ({
@@ -20,58 +19,17 @@ const findFirstUnansweredQuestion = (resonator) =>
         resonator.questions.findIndex((question) => !question.answer)
     );
 
-function renderQuestion(question, handler) {
-    switch (question.type) {
-        case "numeric":
-            return (
-                <MultipleChoiceQuestion
-                    question={question.body}
-                    options={question.options}
-                    chosen={question.answer}
-                    handleAnswer={handler}
-                />
-            );
-        case "boolean":
-            return (
-                <BooleanQuestion
-                    question={question.body}
-                    yes={question.options[0]}
-                    no={question.options[1]}
-                    chosen={question.answer}
-                    handleAnswer={handler}
-                />
-            );
-        default:
-            return null;
-    }
-}
-
-function Section({ active, question, children, ...extra }) {
-    const seen = useSeen(active);
-
-    const completed = Boolean(question.answer);
-    const label = (seen || completed) && !active ? question.body : <Divider />;
-
-    return (
-        <Step active={active} {...extra}>
-            <StepLabel completed={completed}>{label}</StepLabel>
-            <StepContent>{children}</StepContent>
-        </Step>
-    );
-}
-
 export default ({ resonator, setResonator, showError }) => {
     const classes = useStyle();
     const { enqueueSnackbar } = useSnackbar();
 
-    const [activeQuestion, setActiveQuestion] = useState(0);
+    const [activeQuestion, setActiveQuestion, activeQuestionHistory] = useStateWithHistory(0);
 
     useEffect(() => setActiveQuestion(findFirstUnansweredQuestion(resonator)), []);
 
-    const stepNext = () =>
-        setActiveQuestion((prevActiveQuestion) => Math.min(prevActiveQuestion + 1, resonator.questions.length - 1));
+    const stepNext = () => setActiveQuestion(Math.min(activeQuestion + 1, resonator.questions.length - 1));
 
-    const answerQuestion = (resonatorQuestion) => (answerId) => {
+    const answerQuestion = (resonatorQuestion, answerId) => {
         fetcher
             .put(`/follower/resonators/${resonator.id}`, {
                 resonatorQuestionId: resonatorQuestion.id,
@@ -97,18 +55,28 @@ export default ({ resonator, setResonator, showError }) => {
     return (
         <>
             <Stepper orientation="vertical">
-                {resonator.questions.map((question, index) => (
-                    <Section key={question.id} active={index === activeQuestion} question={question}>
-                        {renderQuestion(question, answerQuestion(question))}
-                        <NavigationControls
-                            index={activeQuestion}
-                            setIndex={setActiveQuestion}
-                            total={resonator.questions.length}
-                            nextDisabled={!question.answer}
-                            className={classes.controls}
-                        />
-                    </Section>
-                ))}
+                {resonator.questions.map((question, index) => {
+                    const active = index === activeQuestion;
+                    const completed = Boolean(question.answer);
+                    const seen = activeQuestionHistory.includes(index);
+                    const label = (seen || completed) && !active ? question.body : <Divider />;
+
+                    return (
+                        <Step key={question.id} active={active} completed={completed}>
+                            <StepLabel>{label}</StepLabel>
+                            <StepContent>
+                                <Question question={question} onAnswer={answerQuestion} />
+                                <NavigationControls
+                                    index={activeQuestion}
+                                    setIndex={setActiveQuestion}
+                                    total={resonator.questions.length}
+                                    className={classes.controls}
+                                    nextDisabled={!completed}
+                                />
+                            </StepContent>
+                        </Step>
+                    );
+                })}
             </Stepper>
         </>
     );
