@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as statsActions } from '../actions/resonatorStatsActions';
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
-import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
+import { MenuItem, Link as MuiLink, Typography, Badge } from "@material-ui/core";
 import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled, GetApp } from "@material-ui/icons";
 import { rowAction } from './RowActions';
 import EntityTable from "./EntityTable";
@@ -112,10 +112,12 @@ class FollowerGroups extends Component {
                 title: "Add/Remove Members",
                 icon: (followerGroupId) => (
                     <React.Fragment>
-                        <Typography color='primary' style={{ marginRight: '0.5vw' }}>
-                            {this.props.getFollowerGroup(followerGroupId).memberCount}
-                        </Typography>
-                        <Group color='primary' />
+                        <Badge
+                            badgeContent={this.props.getFollowerGroup(followerGroupId).memberCount}
+                            color="primary"
+                        >
+                            <Group color='primary' />
+                        </Badge>
                     </React.Fragment>
                 ),
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
