@@ -1,4 +1,5 @@
 import React from "react";
+import { sortBy } from "lodash";
 import { makeStyles } from "@material-ui/core";
 
 import QuestionTypography from "./QuestionTypography";
@@ -26,7 +27,7 @@ export default function MultipleChoiceQuestion({ question, options, chosen, hand
         <div>
             <QuestionTypography>{question}</QuestionTypography>
             <div className={classes.options}>
-                {options.map((option) => (
+                {sortBy(options, (option) => option.value).map((option) => (
                     <MultipleChoiceOption
                         key={option.id}
                         className={classes.option}
