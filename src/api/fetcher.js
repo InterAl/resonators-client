@@ -70,7 +70,7 @@ fetcher.download = (url) => {
 
 function handleResponse(response, options) {
     if (!response.ok) {
-        return Promise.reject(getErrorPayload(response));
+        return getErrorPayload(response).then((error) => Promise.reject(error));
     }
     if (options.download) {
         return downloadPayload(response);
