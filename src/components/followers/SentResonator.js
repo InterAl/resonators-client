@@ -1,7 +1,6 @@
 import { useSnackbar } from "notistack";
 import { useHistory } from "react-router";
 import React, { useEffect, useState } from "react";
-import { Link as LinkIcon } from "@material-ui/icons";
 import {
     makeStyles,
     Card,
@@ -17,34 +16,16 @@ import {
 
 import Direction from "../Direction";
 import fetcher from "../../api/fetcher";
+import AttachedLink from "../AttachedLink";
 import LoadingOverlay from "./LoadingOverlay";
 import ResonatorQuestionnaire from "./questionnaire/Questionnaire";
 import { formatResonatorTime } from "./utils";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        position: "relative",
-    },
     media: {
         height: 200,
-        margin: theme.spacing(2, 0),
         backgroundSize: "contain",
-    },
-    link: {
-        textTransform: "none",
-        maxWidth: "100%",
-    },
-    linkLabel: {
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        textOverflow: "ellipsis",
-    },
-    backButton: {
-        position: "absolute",
-        right: 0,
-        transform: "translate(50%, -50%)",
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: theme.shadows[1],
+        margin: theme.spacing(2, 0),
     },
 }));
 
@@ -123,7 +104,10 @@ export default function SentResonator({ sentResonatorId }) {
                             </>
                         ) : null}
                         <CardContent>
-                            <ResonatorBody resonator={resonator} />
+                            <Direction by={resonator.content}>
+                                <Typography paragraph>{resonator.content}</Typography>
+                            </Direction>
+                            {resonator.link ? <AttachedLink link={resonator.link} /> : null}
                         </CardContent>
                         {resonator.questions.length ? (
                             <>
@@ -143,29 +127,3 @@ export default function SentResonator({ sentResonatorId }) {
         </>
     );
 }
-
-const ResonatorBody = ({ resonator }) => {
-    const classes = useStyles();
-
-    return (
-        <>
-            <Direction by={resonator.content}>
-                <Typography paragraph>{resonator.content}</Typography>
-            </Direction>
-            {resonator.link ? (
-                <Button
-                    size="small"
-                    color="primary"
-                    variant="outlined"
-                    startIcon={<LinkIcon />}
-                    className={classes.link}
-                    href={resonator.link}
-                    rel="noreferrer"
-                    target="_blank"
-                >
-                    <span className={classes.linkLabel}>{resonator.link}</span>
-                </Button>
-            ) : null}
-        </>
-    );
-};
