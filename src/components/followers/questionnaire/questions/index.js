@@ -30,7 +30,7 @@ function renderQuestion(question, handler) {
 }
 
 function Question({ question, onAnswer }) {
-    return renderQuestion(question, (answerId) => onAnswer(question, answerId));
+    return renderQuestion(question, onAnswer);
 }
 
 export { BooleanQuestion, MultipleChoiceQuestion };

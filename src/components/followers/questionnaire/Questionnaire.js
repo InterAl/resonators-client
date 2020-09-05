@@ -1,86 +1,107 @@
-import { useSnackbar } from "notistack";
-import React, { useEffect } from "react";
-import { Stepper, Step, StepLabel, StepContent, makeStyles, Grow, Divider } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
+import { Stepper, Step, StepLabel, StepContent, makeStyles, Divider, Button } from "@material-ui/core";
 
 import Question from "./questions";
 import Direction from "../../Direction";
-import fetcher from "../../../api/fetcher";
-import { useStateWithHistory } from "../../hooks";
+import ResonatorAnswers from "./ResonatorAnswers";
 import NavigationControls from "./NavigationControls";
+import { useStateWithHistory } from "../../hooks";
 
 const useStyle = makeStyles((theme) => ({
     controls: {
         marginTop: theme.spacing(2),
+        display: "inline-block",
+    },
+    done: {
+        margin: theme.spacing(0, 1),
     },
 }));
 
-const findFirstUnansweredQuestion = (resonator) =>
-    Math.max(
-        0,
-        resonator.questions.findIndex((question) => !question.answer)
+function findFirstUnansweredQuestion(questions) {
+    return Math.max(
+        questions.findIndex((question) => !isQuestionAnswered(question)),
+        0
     );
+}
 
-export default ({ resonator, setResonator, showError }) => {
+function isQuestionAnswered(question) {
+    return Boolean(question.answer);
+}
+
+export default ({ questions, onAnswer }) => {
     const classes = useStyle();
-    const { enqueueSnackbar } = useSnackbar();
 
+    const completed = questions.every(isQuestionAnswered);
+
+    const [editMode, setEditMode] = useState(!completed);
     const [activeQuestion, setActiveQuestion, activeQuestionHistory] = useStateWithHistory(0);
 
-    useEffect(() => setActiveQuestion(findFirstUnansweredQuestion(resonator)), []);
+    useEffect(() => setActiveQuestion(findFirstUnansweredQuestion(questions)), []);
 
-    const stepNext = () => setActiveQuestion(Math.min(activeQuestion + 1, resonator.questions.length - 1));
+    function completeQuestionnaire() {
+        setEditMode(false);
+    }
 
-    const answerQuestion = (resonatorQuestion, answerId) => {
-        fetcher
-            .put(`/follower/resonators/${resonator.id}`, {
-                resonatorQuestionId: resonatorQuestion.id,
-                answerId,
-            })
-            .then((data) => data.resonator)
-            .then(setResonator)
-            .then(confirmSave)
-            .then(() => !resonatorQuestion.answer && stepNext())
-            .catch(showError);
-    };
+    function autoNext(index) {
+        if (index === questions.length - 1) {
+            completeQuestionnaire();
+        } else {
+            setActiveQuestion(activeQuestion + 1);
+        }
+    }
 
-    const confirmSave = () =>
-        enqueueSnackbar("Answer saved", {
-            autoHideDuration: 2000,
-            TransitionComponent: Grow,
-            anchorOrigin: {
-                vertical: "bottom",
-                horizontal: "right",
-            },
-        });
+    function handleAnswer(question, index) {
+        return (answerId) =>
+            onAnswer(question.id, answerId).then(() => !isQuestionAnswered(question) && autoNext(index));
+    }
 
     return (
-        <>
-            <Stepper orientation="vertical">
-                {resonator.questions.map((question, index) => {
-                    const active = index === activeQuestion;
-                    const completed = Boolean(question.answer);
-                    const seen = activeQuestionHistory.includes(index);
-                    const label = (seen || completed) && !active ? question.body : <Divider />;
+        <div>
+            {editMode ? (
+                <Stepper orientation="vertical">
+                    {questions.map((question, index) => {
+                        const active = index === activeQuestion;
+                        const answered = isQuestionAnswered(question);
+                        const seen = activeQuestionHistory.includes(index);
+                        const label = (seen || answered) && !active ? question.body : <Divider />;
 
-                    return (
-                        <Step key={question.id} active={active} completed={completed}>
-                            <Direction by={question.body}>
-                                <StepLabel>{label}</StepLabel>
-                                <StepContent>
-                                    <Question question={question} onAnswer={answerQuestion} />
-                                    <NavigationControls
-                                        index={activeQuestion}
-                                        setIndex={setActiveQuestion}
-                                        total={resonator.questions.length}
-                                        className={classes.controls}
-                                        nextDisabled={!completed}
-                                    />
-                                </StepContent>
-                            </Direction>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-        </>
+                        return (
+                            <Step key={question.id} active={active} completed={answered}>
+                                <Direction by={question.body}>
+                                    <StepLabel>{label}</StepLabel>
+                                    <StepContent>
+                                        <Question question={question} onAnswer={handleAnswer(question, index)} />
+                                        <NavigationControls
+                                            index={activeQuestion}
+                                            total={questions.length}
+                                            setIndex={setActiveQuestion}
+                                            className={classes.controls}
+                                            nextDisabled={!answered}
+                                        />
+                                        {completed ? (
+                                            <Button
+                                                color="primary"
+                                                variant="contained"
+                                                onClick={completeQuestionnaire}
+                                                className={classes.done}
+                                            >
+                                                Done
+                                            </Button>
+                                        ) : null}
+                                    </StepContent>
+                                </Direction>
+                            </Step>
+                        );
+                    })}
+                </Stepper>
+            ) : (
+                <>
+                    <ResonatorAnswers questions={questions} />
+                    <Button color="primary" onClick={() => setEditMode(true)}>
+                        Edit answers
+                    </Button>
+                </>
+            )}
+        </div>
     );
 };
