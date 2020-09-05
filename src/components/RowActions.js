@@ -10,13 +10,13 @@ const computeActionKey = (action) => action.title.toLowerCase();
 
 const renderShownAction = (itemId) => (action) => (
     <Tooltip title={action.title} key={computeActionKey(action)}>
-        <IconButton onClick={() => action.onClick(itemId)}>{action.icon}</IconButton>
+        <IconButton onClick={() => action.onClick(itemId)}>{action.icon(itemId)}</IconButton>
     </Tooltip>
 );
 
 const renderOverflowAction = (itemId) => (action) => (
     <MenuItem onClick={() => action.onClick(itemId)} key={computeActionKey(action)}>
-        {action.icon ? <ListItemIcon>{action.icon}</ListItemIcon> : null}
+        {action.icon ? <ListItemIcon>{action.icon(itemId)}</ListItemIcon> : null}
         {action.title}
     </MenuItem>
 );
@@ -58,7 +58,7 @@ const rowAction = ({ title, onClick, icon = null, isAvailable = _.stubTrue }) =>
     isAvailable,
 });
 
-rowAction.edit = (onClick) => rowAction({ title: "Edit", icon: <Edit />, onClick });
-rowAction.remove = (onClick) => rowAction({ title: "Remove", icon: <Delete />, onClick });
+rowAction.edit = (onClick) => rowAction({ title: "Edit", icon: () => <Edit />, onClick });
+rowAction.remove = (onClick) => rowAction({ title: "Remove", icon: () => <Delete />, onClick });
 
 export { RowActions, rowAction };

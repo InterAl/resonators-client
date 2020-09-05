@@ -110,13 +110,20 @@ class FollowerGroups extends Component {
         return [
             rowAction({
                 title: "Add/Remove Members",
-                icon: <Group color='primary'/>,
+                icon: (followerGroupId) => (
+                    <React.Fragment>
+                        <Typography color='primary' style={{ marginRight: '0.5vw' }}>
+                            {this.props.getFollowerGroup(followerGroupId).memberCount}
+                        </Typography>
+                        <Group color='primary' />
+                    </React.Fragment>
+                ),
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
             }),
             rowAction({
                 title: "Download All Stats as CSV",
-                icon: <GetApp/>,
-                onClick: (followerGroupId) => this.props.downloadGroupStats({followerGroupId}),
+                icon: () => <GetApp />,
+                onClick: (followerGroupId) => this.props.downloadGroupStats({ followerGroupId }),
             }),
             rowAction.edit(this.handleEditFollowerGroup),
         ];
@@ -127,13 +134,13 @@ class FollowerGroups extends Component {
             rowAction.remove(this.handleRemoveFollowerGroup),
             rowAction({
                 title: "Activate",
-                icon: <PlayCircleFilled />,
+                icon: () => <PlayCircleFilled />,
                 onClick: this.props.unfreezeFollowerGroup,
                 isAvailable: (followerGroupId) => this.props.getFollowerGroup(followerGroupId).frozen,
             }),
             rowAction({
                 title: "Deactivate",
-                icon: <PauseCircleFilled />,
+                icon: () => <PauseCircleFilled />,
                 onClick: this.handleFreezeFollowerGroup,
                 isAvailable: (followerGroupId) => !this.props.getFollowerGroup(followerGroupId).frozen,
             }),
@@ -202,4 +209,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(FollowerGroups);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(FollowerGroups);

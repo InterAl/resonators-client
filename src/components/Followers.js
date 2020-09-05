@@ -158,13 +158,13 @@ class Followers extends Component {
         return [
             rowAction({
                 title: "Activate",
-                icon: <PlayCircleFilled />,
+                icon: () => <PlayCircleFilled />,
                 onClick: this.props.unfreezeFollower,
                 isAvailable: (followerId) => this.props.getFollower(followerId).frozen,
             }),
             rowAction({
                 title: "Deactivate",
-                icon: <PauseCircleFilled />,
+                icon: () => <PauseCircleFilled />,
                 onClick: this.handleFreezeFollower,
                 isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
             }),

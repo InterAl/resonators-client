@@ -103,13 +103,13 @@ class Clinics extends Component {
             //         this.props.leader.current_clinic_id === clinicId && !this.getClinic(clinicId).isPrimary,
             // }),
             rowAction({
-                icon: <PersonAdd />,
+                icon: () => <PersonAdd />,
                 title: "Add Leader to Clinic",
                 onClick: this.handleAddLeaderToClinic,
                 isAvailable: (clinicId) => this.getClinic(clinicId).isPrimary,
             }),
             rowAction({
-                icon: <Label />,
+                icon: () => <Label />,
                 title: "Make as Current Clinic",
                 onClick: this.handleSelectClinic,
                 isAvailable: (clinicId) => !this.getClinic(clinicId).isCurrentClinic

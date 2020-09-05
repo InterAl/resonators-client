@@ -144,7 +144,7 @@ class FollowerResonators extends Component {
         return [
             rowAction({
                 title: "Preview",
-                icon: <RemoveRedEye />,
+                icon: () => <RemoveRedEye />,
                 onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
             }),
             rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
@@ -159,19 +159,19 @@ class FollowerResonators extends Component {
     getExtraRowActions() {
         return [
             rowAction({
-                icon: <PauseCircleFilled />,
+                icon: () => <PauseCircleFilled />,
                 title: "Deactivate",
                 onClick: this.handleDeactivateResonator,
                 isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
             }),
             rowAction({
-                icon: <PlayCircleFilled />,
+                icon: () => <PlayCircleFilled />,
                 title: "Activate",
                 onClick: this.handleActivateResonator,
                 isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
             }),
             rowAction({
-                icon: <Autorenew />,
+                icon: () => <Autorenew />,
                 title: "Reset",
                 onClick: this.handleResetResonator,
                 isAvailable: (resonatorId) => Boolean(this.getResonator(resonatorId).parent_resonator_id),
