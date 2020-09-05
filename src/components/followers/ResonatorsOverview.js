@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import React, { useState, useEffect } from "react";
 import { Typography, makeStyles } from "@material-ui/core";
 
-import fetcher from "../../api/fetcher";
+import api from "../../api";
 import ResonatorList from "./ResonatorList";
 import SentResonator from "./SentResonator";
 import LoadMoreButton from "./LoadMoreButton";
@@ -25,7 +25,7 @@ export default function ResonatorsOverview() {
 
     useEffect(() => {
         setLoading(true);
-        fetcher(`/follower/resonators?page=${page}`)
+        api.get(`/follower/resonators?page=${page}`)
             .then((data) => {
                 setTotalCount(data.totalCount);
                 setResonators(resonators.concat(data.resonators));

@@ -1,37 +1,26 @@
 import cfg from "config";
 import { saveAs } from "file-saver";
 
+const API_PREFIX = "api";
+const BASE_URL = `${cfg.baseUrl || ""}/${API_PREFIX}`;
+
 function fetcher(url, options = {}) {
-    const baseUrl = (cfg.baseUrl || "") + "/api";
-    return fetch(`${baseUrl}${url}`, {
+    return fetch(BASE_URL + url, {
         credentials: "same-origin",
-        headers: getDefaultHeaders(),
         ...options,
-    })
-        .then(async (response) => {
-            if (response.status >= 300) {
-                if (response.status === 401)
-                    return Promise.reject({
-                        unauthorized: true,
-                    });
-                else return Promise.reject(response);
-            }
-            if (options.download && response.ok) {
-                const blob = await response.blob();
-                saveAs(blob, getResponseFileName(response));
-            } else if (!options.emptyResponse && response.status !== 204) return response.json();
-        })
-        .catch((err) => {
-            console.error("failed fetching", err);
-            throw err;
-        });
+        headers: {
+            ...getDefaultHeaders(),
+            ...(options.headers || {}),
+        },
+    }).then((response) => handleResponse(response, options));
 }
+
+fetcher.get = fetcher;
 
 fetcher.post = (url, body, emptyResponse = false) => {
     return fetcher(url, {
         method: "POST",
         headers: {
-            ...getDefaultHeaders(),
             "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
@@ -39,22 +28,10 @@ fetcher.post = (url, body, emptyResponse = false) => {
     });
 };
 
-fetcher.upload = (url, body) => {
-    return fetcher(url, {
-        method: "POST",
-        headers: {
-            ...getDefaultHeaders(),
-            Accept: "application/json, text/plain, */*",
-        },
-        body,
-    });
-};
-
 fetcher.put = (url, body) => {
     return fetcher(url, {
         method: "PUT",
         headers: {
-            ...getDefaultHeaders(),
             "Content-Type": "application/json",
         },
         body: JSON.stringify(body),
@@ -65,7 +42,6 @@ fetcher.delete = (url, body = {}) => {
     return fetcher(url, {
         method: "DELETE",
         headers: {
-            ...getDefaultHeaders(),
             "Content-Type": "application/json",
         },
         emptyResponse: true,
@@ -73,15 +49,37 @@ fetcher.delete = (url, body = {}) => {
     });
 };
 
+fetcher.upload = (url, body) => {
+    return fetcher(url, {
+        method: "POST",
+        headers: {
+            Accept: "application/json, text/plain, */*",
+        },
+        body,
+    });
+};
+
 fetcher.download = (url) => {
     return fetcher(url, {
         headers: {
-            ...getDefaultHeaders(),
             Accept: "text/csv",
         },
         download: true,
     });
 };
+
+function handleResponse(response, options) {
+    if (!response.ok) {
+        return Promise.reject(getErrorPayload(response));
+    }
+    if (options.download) {
+        return downloadPayload(response);
+    }
+    if (options.emptyResponse) {
+        return Promise.resolve();
+    }
+    return response.json();
+}
 
 function getDefaultHeaders() {
     if (localStorage.getItem("auth_token") != null)
@@ -90,13 +88,25 @@ function getDefaultHeaders() {
         };
 }
 
-function getResponseFileName(res) {
-    const disposition = res.headers.get("content-disposition");
-    if (disposition && disposition.indexOf("attachment") !== -1) {
+function getErrorPayload(response) {
+    return hasJson(response) ? response.json() : response.text();
+}
+
+function downloadPayload(response) {
+    return response.blob().then((blob) => saveAs(blob, getResponseFileName(response)));
+}
+
+function getResponseFileName(response) {
+    const disposition = response.headers.get("content-disposition");
+    if (disposition && disposition.includes("attachment")) {
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
         const matches = filenameRegex.exec(disposition);
         return matches?.[1]?.replace(/['"]/g, "");
     }
+}
+
+function hasJson(response) {
+    return response.headers.get("Content-Type")?.includes("application/json");
 }
 
 export default fetcher;

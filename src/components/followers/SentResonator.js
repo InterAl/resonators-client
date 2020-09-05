@@ -14,8 +14,8 @@ import {
     Button,
 } from "@material-ui/core";
 
+import api from "../../api";
 import Direction from "../Direction";
-import fetcher from "../../api/fetcher";
 import AttachedLink from "../AttachedLink";
 import LoadingOverlay from "./LoadingOverlay";
 import ResonatorQuestionnaire from "./questionnaire/Questionnaire";
@@ -51,7 +51,7 @@ export default function SentResonator({ sentResonatorId }) {
         );
 
     const answerQuestion = (resonatorQuestionId, answerId) => {
-        return fetcher
+        return api
             .put(`/follower/resonators/${resonator.id}`, {
                 resonatorQuestionId,
                 answerId,
@@ -76,7 +76,7 @@ export default function SentResonator({ sentResonatorId }) {
 
     useEffect(() => {
         setLoading(true);
-        fetcher(`/follower/resonators/${sentResonatorId}`)
+        api.get(`/follower/resonators/${sentResonatorId}`)
             .then((data) => data.resonator)
             .then(setResonator)
             .catch(showError)
