@@ -40,7 +40,7 @@ export default function SentResonator({ sentResonatorId }) {
     const showError = ({ status }) => {
         enqueueSnackbar(status, {
             variant: "error",
-            persist: true,
+            autoHideDuration: 6000,
             TransitionComponent: Grow,
             anchorOrigin: {
                 vertical: "bottom",
