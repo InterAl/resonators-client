@@ -37,18 +37,18 @@ export default function SentResonator({ sentResonatorId }) {
     const [loading, setLoading] = useState(true);
     const [resonator, setResonator] = useState(null);
 
-    const showError = (response) =>
-        response.json().then(({ status }) =>
-            enqueueSnackbar(status, {
-                variant: "error",
-                persist: true,
-                TransitionComponent: Grow,
-                anchorOrigin: {
-                    vertical: "bottom",
-                    horizontal: "center",
-                },
-            })
-        );
+    const showError = ({ status }) => {
+        enqueueSnackbar(status, {
+            variant: "error",
+            persist: true,
+            TransitionComponent: Grow,
+            anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "center",
+            },
+        });
+        throw { status };
+    };
 
     const answerQuestion = (resonatorQuestionId, answerId) => {
         return api
@@ -56,10 +56,10 @@ export default function SentResonator({ sentResonatorId }) {
                 resonatorQuestionId,
                 answerId,
             })
+            .catch(showError)
             .then((data) => data.resonator)
             .then(setResonator)
-            .then(confirmSave)
-            .catch(showError);
+            .then(confirmSave);
     };
 
     const confirmSave = () =>
@@ -77,9 +77,9 @@ export default function SentResonator({ sentResonatorId }) {
     useEffect(() => {
         setLoading(true);
         api.get(`/follower/resonators/${sentResonatorId}`)
+            .catch(showError)
             .then((data) => data.resonator)
             .then(setResonator)
-            .catch(showError)
             .finally(() => setLoading(false));
     }, []);
 
