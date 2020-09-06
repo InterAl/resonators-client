@@ -100,6 +100,7 @@ handle(types.UPDATE_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) 
     const updatedFollowerGroup = {
         ...followerGroup,
         members: newMemberList,
+        memberCount: newMemberList.length,
     };
 
     yield updateStateWithNewFollowerGroup(updatedFollowerGroup);
