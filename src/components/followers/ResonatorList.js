@@ -50,7 +50,7 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
             <Paper {...paperProps}>
                 {!resonators.length && (
                     <ListItem className={classes.noResults}>
-                        <ListItemText primary={<Typography color="textSecondary">Nothing to show yet</Typography>} />
+                        <ListItemText primary={<Typography color="textSecondary">Nothing to show</Typography>} />
                     </ListItem>
                 )}
                 {resonators.map((resonator) => (

@@ -24,7 +24,7 @@ export default function ResonatorsOverview() {
     const { sentResonatorId } = useParams();
 
     function updateResonator(resonator) {
-        const resonatorIndex = resonators.findIndex((r) => r.id === resonator.id); 
+        const resonatorIndex = resonators.findIndex((r) => r.id === resonator.id);
         setResonators(
             resonators
                 .slice(0, resonatorIndex)
@@ -43,11 +43,12 @@ export default function ResonatorsOverview() {
             .finally(() => setLoading(false));
     }, [page]);
 
-    return sentResonatorId ? (
+    return loading ? (
+        <LoadingOverlay loading={loading} />
+    ) : sentResonatorId ? (
         <SentResonator sentResonatorId={sentResonatorId} onAnswer={updateResonator} />
     ) : (
         <>
-            {!resonators.length ? <LoadingOverlay loading={loading} /> : null}
             <ResonatorList
                 big
                 paperProps={{ elevation: 6 }}
