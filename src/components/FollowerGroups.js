@@ -113,13 +113,10 @@ class FollowerGroups extends Component {
                 title: "Add/Remove Members",
                 icon: (followerGroupId) => (
                     <React.Fragment>
-                        <Badge
-                            badgeContent={this.props.getFollowerGroup(followerGroupId).memberCount}
-                            color="primary"
-                            style={isMobile(this.props.width) ? { top: 7 } : {}}
-                        >
-                            <Group color='primary' />
-                        </Badge>
+                        <Typography color='primary' style={{ marginRight: !isMobile(this.props.width) && '0.5vw' }}>
+                            ({this.props.getFollowerGroup(followerGroupId).memberCount})
+                        </Typography>
+                        <Group color='primary' />
                     </React.Fragment>
                 ),
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
