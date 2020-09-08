@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SentResonator({ sentResonatorId }) {
+export default function SentResonator({ sentResonatorId, onAnswer }) {
     const classes = useStyles();
     const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
@@ -57,8 +57,10 @@ export default function SentResonator({ sentResonatorId }) {
                 answerId,
             })
             .catch(showError)
-            .then((data) => data.resonator)
-            .then(setResonator)
+            .then(({ resonator }) => {
+                setResonator(resonator);
+                onAnswer(resonator);
+            })
             .then(confirmSave);
     };
 

@@ -23,6 +23,16 @@ export default function ResonatorsOverview() {
     const classes = useStyles();
     const { sentResonatorId } = useParams();
 
+    function updateResonator(resonator) {
+        const resonatorIndex = resonators.findIndex((r) => r.id === resonator.id); 
+        setResonators(
+            resonators
+                .slice(0, resonatorIndex)
+                .concat({ ...resonators[resonatorIndex], done: true })
+                .concat(resonators.slice(resonatorIndex + 1))
+        );
+    }
+
     useEffect(() => {
         setLoading(true);
         api.get(`/follower/resonators?page=${page}`)
@@ -34,7 +44,7 @@ export default function ResonatorsOverview() {
     }, [page]);
 
     return sentResonatorId ? (
-        <SentResonator sentResonatorId={sentResonatorId} />
+        <SentResonator sentResonatorId={sentResonatorId} onAnswer={updateResonator} />
     ) : (
         <>
             {!resonators.length ? <LoadingOverlay loading={loading} /> : null}
