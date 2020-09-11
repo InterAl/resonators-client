@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as statsActions } from '../actions/resonatorStatsActions';
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
-import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
+import { MenuItem, Link as MuiLink, Typography, Badge, withWidth } from "@material-ui/core";
 import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled, GetApp } from "@material-ui/icons";
 import { rowAction } from './RowActions';
 import EntityTable from "./EntityTable";
@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
 import { push } from "connected-react-router";
 import './FollowerGroups.scss';
+import { isMobile } from "./utils";
 
 class FollowerGroups extends Component {
     constructor() {
@@ -110,13 +111,20 @@ class FollowerGroups extends Component {
         return [
             rowAction({
                 title: "Add/Remove Members",
-                icon: <Group color='primary'/>,
+                icon: (followerGroupId) => (
+                    <React.Fragment>
+                        <Typography color='primary' style={{ marginRight: !isMobile(this.props.width) && '0.5vw' }}>
+                            ({this.props.getFollowerGroup(followerGroupId).memberCount})
+                        </Typography>
+                        <Group color='primary' />
+                    </React.Fragment>
+                ),
                 onClick: (followerGroupId) => this.props.push(this.getMembersRoute(followerGroupId)),
             }),
             rowAction({
                 title: "Download All Stats as CSV",
-                icon: <GetApp/>,
-                onClick: (followerGroupId) => this.props.downloadGroupStats({followerGroupId}),
+                icon: <GetApp />,
+                onClick: (followerGroupId) => this.props.downloadGroupStats({ followerGroupId }),
             }),
             rowAction.edit(this.handleEditFollowerGroup),
         ];
@@ -202,4 +210,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps, null, {pure: false})(FollowerGroups);
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(withWidth()(FollowerGroups));
