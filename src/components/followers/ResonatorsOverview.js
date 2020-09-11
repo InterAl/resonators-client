@@ -24,7 +24,7 @@ export default function ResonatorsOverview() {
     const { sentResonatorId } = useParams();
 
     function updateResonator(resonator) {
-        setResonators(resonators.map((r) => (r.id === resonator.id ? { ...r, done: true } : r)));
+        setResonators(resonators.map((r) => (r.id === resonator.id ? { ...r, done: resonator.done } : r)));
     }
 
     useEffect(() => {
