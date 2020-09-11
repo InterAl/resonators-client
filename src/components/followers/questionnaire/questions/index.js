@@ -3,7 +3,7 @@ import React from "react";
 import BooleanQuestion from "./BooleanQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
 
-function renderQuestion(question, handler) {
+function Question({ question, onAnswer }) {
     switch (question.type) {
         case "numeric":
             return (
@@ -11,7 +11,7 @@ function renderQuestion(question, handler) {
                     question={question.body}
                     options={question.options}
                     chosen={question.answer}
-                    handleAnswer={handler}
+                    handleAnswer={onAnswer}
                 />
             );
         case "boolean":
@@ -21,16 +21,12 @@ function renderQuestion(question, handler) {
                     yes={question.options[0]}
                     no={question.options[1]}
                     chosen={question.answer}
-                    handleAnswer={handler}
+                    handleAnswer={onAnswer}
                 />
             );
         default:
             return null;
     }
-}
-
-function Question({ question, onAnswer }) {
-    return renderQuestion(question, onAnswer);
 }
 
 export { BooleanQuestion, MultipleChoiceQuestion };

@@ -24,13 +24,7 @@ export default function ResonatorsOverview() {
     const { sentResonatorId } = useParams();
 
     function updateResonator(resonator) {
-        const resonatorIndex = resonators.findIndex((r) => r.id === resonator.id);
-        setResonators(
-            resonators
-                .slice(0, resonatorIndex)
-                .concat({ ...resonators[resonatorIndex], done: true })
-                .concat(resonators.slice(resonatorIndex + 1))
-        );
+        setResonators(resonators.map((r) => (r.id === resonator.id ? { ...r, done: true } : r)));
     }
 
     useEffect(() => {

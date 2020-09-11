@@ -17,16 +17,13 @@ const useStyle = makeStyles((theme) => ({
     },
 }));
 
-function findFirstUnansweredQuestion(questions) {
-    return Math.max(
+const findFirstUnansweredQuestion = (questions) =>
+    Math.max(
         questions.findIndex((question) => !isQuestionAnswered(question)),
         0
     );
-}
 
-function isQuestionAnswered(question) {
-    return Boolean(question.answer);
-}
+const isQuestionAnswered = (question) => Boolean(question.answer);
 
 export default ({ questions, onAnswer }) => {
     const classes = useStyle();
