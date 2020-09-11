@@ -2,7 +2,7 @@ import { useParams } from "react-router";
 import React, { useState, useEffect } from "react";
 import { Typography, makeStyles } from "@material-ui/core";
 
-import fetcher from "../../api/fetcher";
+import api from "../../api";
 import ResonatorList from "./ResonatorList";
 import SentResonator from "./SentResonator";
 import LoadMoreButton from "./LoadMoreButton";
@@ -23,9 +23,13 @@ export default function ResonatorsOverview() {
     const classes = useStyles();
     const { sentResonatorId } = useParams();
 
+    function updateResonator(resonator) {
+        setResonators(resonators.map((r) => (r.id === resonator.id ? { ...r, done: resonator.done } : r)));
+    }
+
     useEffect(() => {
         setLoading(true);
-        fetcher(`/follower/resonators?page=${page}`)
+        api.get(`/follower/resonators?page=${page}`)
             .then((data) => {
                 setTotalCount(data.totalCount);
                 setResonators(resonators.concat(data.resonators));
@@ -33,11 +37,12 @@ export default function ResonatorsOverview() {
             .finally(() => setLoading(false));
     }, [page]);
 
-    return sentResonatorId ? (
-        <SentResonator sentResonatorId={sentResonatorId} />
+    return loading ? (
+        <LoadingOverlay loading={loading} />
+    ) : sentResonatorId ? (
+        <SentResonator sentResonatorId={sentResonatorId} onAnswer={updateResonator} />
     ) : (
         <>
-            {!resonators.length ? <LoadingOverlay loading={loading} /> : null}
             <ResonatorList
                 big
                 paperProps={{ elevation: 6 }}

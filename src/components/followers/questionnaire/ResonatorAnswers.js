@@ -1,15 +1,15 @@
 import React from "react";
 import { List, ListSubheader, ListItem, ListItemText } from "@material-ui/core";
 
-import Direction from "../Direction";
-import { getOptionLabel } from "./utils";
+import Direction from "../../Direction";
+import { getOptionLabel } from "../utils";
 
 const getQuestionAnswer = (question) => question.options.find((option) => option.id === question.answer);
 
-export default ({ resonator }) => (
+export default ({ questions }) => (
     <List dense>
         <ListSubheader>Your Answers</ListSubheader>
-        {resonator.questions.map((question) => (
+        {questions.map((question) => (
             <Direction by={question.body} key={question.id}>
                 <ListItem>
                     <ListItemText

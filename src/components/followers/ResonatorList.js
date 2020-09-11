@@ -25,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
     avatarBig: {
         height: theme.spacing(8),
         width: theme.spacing(8),
-        marginRight: theme.spacing(2),
+    },
+    itemTextBig: {
+        marginLeft: theme.spacing(2),
+    },
+    insetTextBig: {
+        marginLeft: theme.spacing(3),
     },
     noResults: {
         textAlign: "center",
@@ -36,6 +41,8 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
     const classes = useStyles();
     const listItemClass = big ? classes.itemBig : "";
     const avatarClass = big ? classes.avatarBig : "";
+    const itemTextClass = big ? classes.itemTextBig : "";
+    const insetBigClass = big ? classes.insetTextBig : "";
 
     return (
         <List>
@@ -43,7 +50,7 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
             <Paper {...paperProps}>
                 {!resonators.length && (
                     <ListItem className={classes.noResults}>
-                        <ListItemText primary={<Typography color="textSecondary">Nothing to show yet</Typography>} />
+                        <ListItemText primary={<Typography color="textSecondary">Nothing to show</Typography>} />
                     </ListItem>
                 )}
                 {resonators.map((resonator) => (
@@ -64,6 +71,7 @@ function ResonatorList({ resonators, subheader, paperProps = {}, big = false, go
                                 primary={resonator.title}
                                 secondary={formatResonatorTime(resonator.time)}
                                 primaryTypographyProps={{ noWrap: true }}
+                                classes={{ root: itemTextClass, inset: insetBigClass }}
                             />
                         </ListItem>
                     </Grow>
