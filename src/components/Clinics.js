@@ -59,7 +59,7 @@ class Clinics extends Component {
             this.props.clinics,
             (acc, c) => {
                 let cols = [];
-                if (c.isPrimary) {
+                if (c.is_primary) {
                     cols.push(
                         <div key={c.name} className="primary-clinic">
                             <Label htmlColor="#5DADE2" fontSize="small" style={{ marginRight: 5 }} />
@@ -100,13 +100,13 @@ class Clinics extends Component {
             //     title: "Detach Clinic",
             //     onClick: _.noop,
             //     isAvailable: (clinicId) =>
-            //         this.props.leader.current_clinic_id === clinicId && !this.getClinic(clinicId).isPrimary,
+            //         this.props.leader.current_clinic_id === clinicId && !this.getClinic(clinicId).is_primary,
             // }),
             rowAction({
                 icon: <PersonAdd />,
                 title: "Add Leader to Clinic",
                 onClick: this.handleAddLeaderToClinic,
-                isAvailable: (clinicId) => this.getClinic(clinicId).isPrimary,
+                isAvailable: (clinicId) => this.getClinic(clinicId).is_primary,
             }),
             rowAction({
                 icon: <Label />,
