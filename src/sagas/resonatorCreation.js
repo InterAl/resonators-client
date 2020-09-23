@@ -57,7 +57,7 @@ handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
 
             const lastPicture = _(resonator.items)
                 .filter(i => i.media_kind === 'picture')
-                .sortBy(i => new Date(i.created_at))
+                .sortBy(i => new Date(i.createdAt))
                 .last();
             if (lastPicture)
                 return target.resonatorApi.cleanupOldFile(targetId, resonator.id, lastPicture.id);
@@ -141,8 +141,8 @@ handle(resonatorTypes.RESET, function* (sagaParams, { payload: { followerId, res
         id,
         follower_id,
         last_pop_time,
-        created_at,
-        updated_at,
+        createdAt,
+        updatedAt,
         // Above are all the fields we don't want to reset
         ...parentResonator
     } = _.find(resonators, (r) => r.id === parentId);

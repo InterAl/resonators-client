@@ -5,7 +5,7 @@ export default resonator => {
 
     let lastPicture = _(resonator.items)
         .filter(i => i.media_kind === 'picture')
-        .sortBy(i => new Date(i.created_at))
+        .sortBy(i => new Date(i.createdAt))
         .last();
 
     if (lastPicture != null && lastPicture.visible) {

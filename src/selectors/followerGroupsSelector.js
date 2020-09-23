@@ -14,7 +14,7 @@ export default createSelector(
                                     ...fg,
                                     clinicName: getClinicName(clinics, fg.clinic_id)
                                 }))
-                                .sortBy('created_at')
+                                .sortBy('createdAt')
                                 .value(),
             clinics,
             clinicIdFilter: followerGroups.filterByClinicId,

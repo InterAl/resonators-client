@@ -35,7 +35,7 @@ class EditResonatorMedia extends Component {
 
         let lastPicture = _(this.props.resonator.items)
             .filter((i) => i.media_kind === "picture")
-            .sortBy((i) => new Date(i.created_at))
+            .sortBy((i) => new Date(i.createdAt))
             .last();
         if (lastPicture) lastPicture.visible = 1;
 
@@ -59,7 +59,7 @@ class EditResonatorMedia extends Component {
 
         let lastPicture = _(this.props.resonator.items)
             .filter((i) => i.media_kind === "picture")
-            .sortBy((i) => new Date(i.created_at))
+            .sortBy((i) => new Date(i.createdAt))
             .last();
         if (lastPicture) lastPicture.visible = 0;
 

@@ -34,7 +34,7 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     questions.push(aggregatedChart.question);
     answers = answers.concat(aggregatedChart.answers);
 
-    questions.sort((a,b) => moment(a.updated_at) - moment(b.updated_at));
+    questions.sort((a,b) => moment(a.updatedAt) - moment(b.updatedAt));
 
     let dic = _.reduce(questions, (acc, q) => {
         acc[q.id] = q;
@@ -83,7 +83,7 @@ function aggregateChart(allAnswers, allQuestions) {
             body: '',
             rank: maxRank
         }],
-        updated_at: moment(0).toISOString()
+        updatedAt: moment(0).toISOString()
     };
 
     return { question, answers: aggregatedAnswers};
