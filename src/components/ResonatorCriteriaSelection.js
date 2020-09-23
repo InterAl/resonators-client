@@ -1,24 +1,24 @@
-import _ from 'lodash';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { List, ListItem, ListSubheader, ListItemText, ListItemIcon, Checkbox } from '@material-ui/core';
-import criteriaSelector from '../selectors/criteriaSelector';
-import './ResonatorCriteriaSelection.scss';
+import _ from "lodash";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { List, ListItem, ListSubheader, ListItemText, ListItemIcon, Checkbox, withTheme } from "@material-ui/core";
+import criteriaSelector from "../selectors/criteriaSelector";
+import "./ResonatorCriteriaSelection.scss";
 
 class ResonatorCriteriaSelection extends Component {
     static propTypes = {
         selectedCriteria: PropTypes.array,
         onAddCriterion: PropTypes.func,
-        onRemoveCriterion: PropTypes.func
-    }
+        onRemoveCriterion: PropTypes.func,
+    };
 
     static defaultProps = {
         onRemoveCriterion: _.noop,
         onAddCriterion: _.noop,
         selectedCriteria: [],
-        criteria: []
-    }
+        criteria: [],
+    };
 
     handleCheck(criterionId, checked) {
         if (checked) {
@@ -29,26 +29,24 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     isCriterionAttached(criterion) {
-        return !!_.find(this.props.selectedCriteria,
-            id => id === criterion.id)
+        return _.some(this.props.selectedCriteria, (id) => id === criterion.id);
     }
 
     renderCriteria() {
-        const sortedCriteria = _.orderBy(this.props.criteria, c => {
+        const sortedCriteria = _.orderBy(this.props.criteria, (c) => {
             return this.isCriterionAttached(c) ? 0 : 1;
         });
 
         return sortedCriteria.map((criterion, idx) => {
             return (
-                <ListItem
-                    key={idx}
-                    className='criterion-selection-item'>
+                <ListItem key={idx} className="criterion-selection-item">
                     <ListItemIcon>
                         <Checkbox
                             edge="start"
                             color="primary"
                             checked={this.isCriterionAttached(criterion)}
-                            onChange={(e, c) => this.handleCheck(criterion.id, c)} />
+                            onChange={(e, c) => this.handleCheck(criterion.id, c)}
+                        />
                     </ListItemIcon>
                     <ListItemText primary={criterion.title} />
                 </ListItem>
@@ -58,10 +56,14 @@ class ResonatorCriteriaSelection extends Component {
 
     render() {
         return (
-            <div className='resonator-criteria-selection col-xs-12'>
-                <List subheader={
-                    <ListSubheader>Attach criteria to the resonator (optional)</ListSubheader>
-                }>
+            <div className="resonator-criteria-selection col-xs-12">
+                <List
+                    subheader={
+                        <ListSubheader style={{ backgroundColor: this.props.theme.palette.background.paper }}>
+                            Attach criteria to the resonator (optional)
+                        </ListSubheader>
+                    }
+                >
                     {this.renderCriteria()}
                 </List>
             </div>
@@ -71,8 +73,8 @@ class ResonatorCriteriaSelection extends Component {
 
 function mapStateToProps(state) {
     return {
-        criteria: criteriaSelector(state)
+        criteria: criteriaSelector(state),
     };
 }
 
-export default connect(mapStateToProps)(ResonatorCriteriaSelection);
+export default connect(mapStateToProps)(withTheme(ResonatorCriteriaSelection));
