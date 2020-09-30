@@ -121,8 +121,12 @@ class WebpackBaseConfig {
                         loaders: [{ loader: "style-loader" }, { loader: "css-loader" }],
                     },
                     {
-                        test: /\.(png|jpg|gif|mp4|ogg|svg|woff|woff2|ttf)$/,
+                        test: /\.(png|jpg|gif|mp4|ogg|woff|woff2|ttf)$/,
                         loader: "file-loader",
+                    },
+                    {
+                        test: /\.svg$/,
+                        use: ["@svgr/webpack"],
                     },
                     {
                         test: /^.((?!cssmodule).)*\.(sass|scss)$/,
