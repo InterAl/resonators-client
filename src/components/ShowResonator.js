@@ -92,9 +92,8 @@ class ShowResonator extends Component {
     renderNextMemberArrow() {
         const { memberIndex } = this.state;
         return (
-            <IconButton onClick={
-                () => this.handleMemberArrowClick(() => memberIndex + 1 === this.props.followerGroup.members.length ? 0 : memberIndex + 1)
-            }>
+            <IconButton
+                onClick={() => this.handleMemberArrowClick(() => (memberIndex + 1) % this.props.followerGroup.members.length)}>
                 <Tooltip title='Next'>
                     <ChevronRightRounded />
                 </Tooltip>
@@ -105,9 +104,10 @@ class ShowResonator extends Component {
     renderPrevMemberArrow() {
         const { memberIndex } = this.state;
         return (
-            <IconButton onClick={
-                () => this.handleMemberArrowClick(() => memberIndex - 1 < 0 ? this.props.followerGroup.members.length - 1 : memberIndex - 1)
-            }>
+            <IconButton
+                onClick={() => this.handleMemberArrowClick(() =>
+                    memberIndex - 1 < 0 ? this.props.followerGroup.members.length - 1 : memberIndex - 1)
+                }>
                 <Tooltip title='Previous'>
                     <ChevronLeftRounded />
                 </Tooltip>
@@ -115,42 +115,46 @@ class ShowResonator extends Component {
         );
     }
 
-    renderMemberSelect() {
-        const { member } = this.state;
+    renderMemberSelectInput() {
+        const { member, memberIndex } = this.state;
         const { getFollower, followerGroup } = this.props;
         return (
-            <div style={{ display: "flex", alignItems: 'center', flexDirection: 'column' }}>
-                <div>
-                    {this.renderPrevMemberArrow()}
-                    <FormControl variant="outlined">
-                        <InputLabel id="memberSelectLabel">Member</InputLabel>
-                        <Select
-                            labelId="memberSelectLabel"
-                            value={member}
-                            onChange={this.handleMemberChange}
-                            label='Member'
-                            style={{
-                                minWidth: '15vw'
-                            }}
-                            renderValue={() =>
-                                _.truncate(getFollower(member.id).user.name, {
-                                    length: isMobile(this.props.width) ? 15 : 50,
-                                })}
-                        >
-                            {followerGroup.members.map((member) =>
-                                <MenuItem value={member}>
-                                    {getFollower(member.id).user.name}
-                                </MenuItem>
-                            )}
-                        </Select>
-                    </FormControl>
-                    {this.renderNextMemberArrow()}
-                </div>
-                <div style={{ marginTop: '1vh' }}>
-                    <Typography>
-                        ({this.state.memberIndex + 1}/{this.props.followerGroup.members.length})
-                    </Typography>
-                </div>
+            <FormControl variant="outlined">
+                <InputLabel id="memberSelectLabel">Member</InputLabel>
+                <Select
+                    labelId="memberSelectLabel"
+                    value={member}
+                    onChange={this.handleMemberChange}
+                    label='Member'
+                    style={{
+                        minWidth: '15vw',
+                        width: '30vw',
+                    }}
+                    IconComponent={() => (
+                        <Typography className='MuiSelect-icon MuiSelect-iconOutlined' variant='subtitle1'>
+                            {memberIndex + 1}/{followerGroup.members.length}
+                        </Typography>
+                    )}
+                    renderValue={() =>
+                        _.truncate(getFollower(member.id).user.name, {
+                            length: isMobile(this.props.width) ? 15 : 30,
+                        })}>
+                    {followerGroup.members.map((member) =>
+                        <MenuItem value={member}>
+                            {getFollower(member.id).user.name}
+                        </MenuItem>
+                    )}
+                </Select>
+            </FormControl>
+        )
+    }
+
+    renderMemberSelect() {
+        return (
+            <div style={{ display: "flex" }}>
+                {this.renderPrevMemberArrow()}
+                {this.renderMemberSelectInput()}
+                {this.renderNextMemberArrow()}
             </div>
         )
     }
