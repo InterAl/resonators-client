@@ -9,8 +9,9 @@ import followersSelector from "../selectors/followersSelector";
 import followerGroupsSelector from "../selectors/followerGroupsSelector";
 import ExpandableCard from "./ExpandableCard";
 import ResonatorStats from "./ResonatorStats";
-import { CircularProgress, Typography, Divider, IconButton, Tooltip, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
-import { RemoveRedEye, GetApp } from "@material-ui/icons";
+import { CircularProgress, Typography, Divider, IconButton, Tooltip, FormControl, InputLabel, Select, MenuItem, withWidth } from "@material-ui/core";
+import { RemoveRedEye, GetApp, ChevronRightRounded, ChevronLeftRounded } from "@material-ui/icons";
+import { isMobile } from './utils';
 
 class ShowResonator extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class ShowResonator extends Component {
 
         this.handleIframeLoad = this.handleIframeLoad.bind(this);
         this.handleMemberChange = this.handleMemberChange.bind(this);
+        this.handleMemberArrowClick = this.handleMemberArrowClick.bind(this);
     }
 
     componentWillMount() {
@@ -32,13 +34,13 @@ class ShowResonator extends Component {
                 resonatorId: this.props.resonator.id,
             });
             this.props.followerGroup.members &&
-                this.setState({ member: this.props.followerGroup.members[0] });
+                this.setState({ member: this.props.followerGroup.members[0], memberIndex: 0 });
         }
     }
 
     componentDidUpdate(prevProps) {
         if (!_.isEqual(prevProps.followerGroup, this.props.followerGroup)) {
-            this.setState({ member: this.props.followerGroup.members?.[0] });
+            this.setState({ member: this.props.followerGroup.members?.[0], memberIndex: 0 });
         }
     }
 
@@ -87,32 +89,86 @@ class ShowResonator extends Component {
         )
     }
 
-    renderMemberSelect() {
+    renderNextMemberArrow() {
+        const { memberIndex } = this.state;
         return (
-            <FormControl variant="outlined">
-                <InputLabel id="memberSelectLabel">Member</InputLabel>
-                <Select
-                    labelId="memberSelectLabel"
-                    value={this.state.member}
-                    onChange={this.handleMemberChange}
-                    label='Member'
-                    style={{
-                        minWidth: '15vw'
-                    }}
-                    renderValue={() => this.props.getFollower(this.state.member.id).user.name}
-                >
-                    {this.props.followerGroup.members.map((member) =>
-                        <MenuItem value={member}>
-                            {this.props.getFollower(member.id).user.name}
-                        </MenuItem>
-                    )}
-                </Select>
-            </FormControl>
+            <IconButton onClick={
+                () => this.handleMemberArrowClick(() => memberIndex + 1 === this.props.followerGroup.members.length ? 0 : memberIndex + 1)
+            }>
+                <Tooltip title='Next'>
+                    <ChevronRightRounded />
+                </Tooltip>
+            </IconButton>
+        );
+    }
+
+    renderPrevMemberArrow() {
+        const { memberIndex } = this.state;
+        return (
+            <IconButton onClick={
+                () => this.handleMemberArrowClick(() => memberIndex - 1 < 0 ? this.props.followerGroup.members.length - 1 : memberIndex - 1)
+            }>
+                <Tooltip title='Previous'>
+                    <ChevronLeftRounded />
+                </Tooltip>
+            </IconButton>
+        );
+    }
+
+    renderMemberSelect() {
+        const { member } = this.state;
+        const { getFollower, followerGroup } = this.props;
+        return (
+            <div style={{ display: "flex", alignItems: 'center', flexDirection: 'column' }}>
+                <div>
+                    {this.renderPrevMemberArrow()}
+                    <FormControl variant="outlined">
+                        <InputLabel id="memberSelectLabel">Member</InputLabel>
+                        <Select
+                            labelId="memberSelectLabel"
+                            value={member}
+                            onChange={this.handleMemberChange}
+                            label='Member'
+                            style={{
+                                minWidth: '15vw'
+                            }}
+                            renderValue={() =>
+                                _.truncate(getFollower(member.id).user.name, {
+                                    length: isMobile(this.props.width) ? 15 : 50,
+                                })}
+                        >
+                            {followerGroup.members.map((member) =>
+                                <MenuItem value={member}>
+                                    {getFollower(member.id).user.name}
+                                </MenuItem>
+                            )}
+                        </Select>
+                    </FormControl>
+                    {this.renderNextMemberArrow()}
+                </div>
+                <div style={{ marginTop: '1vh' }}>
+                    <Typography>
+                        ({this.state.memberIndex + 1}/{this.props.followerGroup.members.length})
+                    </Typography>
+                </div>
+            </div>
         )
     }
 
     handleMemberChange(event) {
-        this.setState({ member: event.target.value });
+        this.setState({
+            member: event.target.value,
+            memberIndex: _.findIndex(this.props.followerGroup.members, (member) => _.isEqual(member, event.target.value)),
+        });
+    }
+
+    handleMemberArrowClick(findIndex) {
+        const { followerGroup } = this.props;
+        const newIndex = findIndex();
+        this.setState({
+            member: followerGroup.members[newIndex],
+            memberIndex: newIndex,
+        });
     }
 
     render() {
@@ -212,4 +268,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowResonator);
+export default connect(mapStateToProps, mapDispatchToProps)(withWidth()(ShowResonator));
