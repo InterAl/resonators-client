@@ -216,6 +216,12 @@ EditResonatorSchedule = StepBase({
             errors.day0 = "No day selected";
         }
 
+        if (!formData.interval) {
+            errors.interval = "Required";
+        } else if (formData.interval <= 0 || !Number.isInteger(parseFloat(formData.interval))) {
+            errors.interval = "Must be a positive integer";
+        }
+
         // props.updateIntractionType(parseInt(formData.interactionType));
 
         return errors;
