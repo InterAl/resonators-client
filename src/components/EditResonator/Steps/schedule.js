@@ -5,8 +5,17 @@ import { bindActionCreators } from "redux";
 import { actions } from "../../../actions/resonatorCreationActions";
 import { Field } from "redux-form";
 import BackButton from "./backButton";
-import { Button, Checkbox, FormControlLabel, FormControl, FormLabel, FormGroup } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+    FormGroup,
+    InputAdornment,
+} from "@material-ui/core";
 import TimePicker from "../../FormComponents/TimePicker";
+import TextField from "../../FormComponents/TextField";
 
 import StepBase from "./stepBase";
 import moment from "moment";
@@ -125,12 +134,29 @@ class EditResonatorSchedule extends Component {
         );
     }
 
+    renderIntervalSelector() {
+        return (
+            <Field
+                type="number"
+                name="interval"
+                margin="normal"
+                component={TextField}
+                style={{ width: 150 }}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">Every</InputAdornment>,
+                    endAdornment: <InputAdornment position="end">weeks</InputAdornment>,
+                }}
+            />
+        );
+    }
+
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "column" }}>
                 {this.renderOneOff()}
                 {this.renderDays()}
                 {this.renderTimeSelector()}
+                {this.renderIntervalSelector()}
                 {!this.props.editMode && (
                     <div className="navButtons">
                         <BackButton onClick={this.props.onBack} style={{ marginRight: 8 }} />
