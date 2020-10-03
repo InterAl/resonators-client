@@ -13,6 +13,7 @@ import {
     FormLabel,
     FormGroup,
     InputAdornment,
+    Collapse,
 } from "@material-ui/core";
 import TimePicker from "../../FormComponents/TimePicker";
 import TextField from "../../FormComponents/TextField";
@@ -156,7 +157,7 @@ class EditResonatorSchedule extends Component {
                 {this.renderOneOff()}
                 {this.renderDays()}
                 {this.renderTimeSelector()}
-                {this.renderIntervalSelector()}
+                <Collapse in={this.props.formData?.oneOff !== "on"}>{this.renderIntervalSelector()}</Collapse>
                 {!this.props.editMode && (
                     <div className="navButtons">
                         <BackButton onClick={this.props.onBack} style={{ marginRight: 8 }} />
@@ -231,6 +232,7 @@ EditResonatorSchedule = StepBase({
 EditResonatorSchedule = connect(
     (state) => ({
         resonatorCreated: state.resonatorCreation.resonator,
+        formData: state.form.resonatorCreation.values,
     }),
     (dispatch) =>
         bindActionCreators(
