@@ -109,7 +109,7 @@ handle(types.RESET, function* (sagaParams, { payload: { targetId, targetType, re
     yield target.fetchResonators(targetId);
     const resonators = yield select(resonatorsSelector);
     const resonator = _.find(resonators, (r) => r.id === resonatorId);
-    const formData = resonator ? convertResonatorToForm(resonator) : {};
+    const formData = resonator ? convertResonatorToForm(resonator) : { interval: 1 };
 
     yield put(updateState({
         [target.targetIdName]: targetId,
