@@ -109,7 +109,7 @@ handle(types.RESET, function* (sagaParams, { payload: { targetId, targetType, re
     yield target.fetchResonators(targetId);
     const resonators = yield select(resonatorsSelector);
     const resonator = _.find(resonators, (r) => r.id === resonatorId);
-    const formData = resonator ? convertResonatorToForm(resonator) : {};
+    const formData = resonator ? convertResonatorToForm(resonator) : { interval: 1 };
 
     yield put(updateState({
         [target.targetIdName]: targetId,
@@ -215,7 +215,8 @@ function convertFormToPayload({ targetId, target, formData }) {
         pop_email: formData.activated === 'on',
         pop_time: formData.time.toISOString(),
         selected_questionnaire: formData.selectedQuestionnaire,
-        questionnaire_details: formData.questionnaireDetails
+        questionnaire_details: formData.questionnaireDetails,
+        interval: formData.interval,
     };
 
     return payload;
@@ -239,7 +240,8 @@ function convertResonatorToForm(resonator) {
         criteria: _.map(resonator.questions, 'question_id'),
         oneOff: resonator.one_off ? 'on' : 'off',
         selectedQuestionnaire: resonator.selected_questionnaire,
-        questionnaireDetails: resonator.questionnaire_details
+        questionnaireDetails: resonator.questionnaire_details,
+        interval: resonator.interval,
     }
 
     return form;

@@ -5,8 +5,18 @@ import { bindActionCreators } from "redux";
 import { actions } from "../../../actions/resonatorCreationActions";
 import { Field } from "redux-form";
 import BackButton from "./backButton";
-import { Button, Checkbox, FormControlLabel, FormControl, FormLabel, FormGroup } from "@material-ui/core";
+import {
+    Button,
+    Checkbox,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+    FormGroup,
+    InputAdornment,
+    Collapse,
+} from "@material-ui/core";
 import TimePicker from "../../FormComponents/TimePicker";
+import TextField from "../../FormComponents/TextField";
 
 import StepBase from "./stepBase";
 import moment from "moment";
@@ -125,12 +135,29 @@ class EditResonatorSchedule extends Component {
         );
     }
 
+    renderIntervalSelector() {
+        return (
+            <Field
+                type="number"
+                name="interval"
+                margin="normal"
+                component={TextField}
+                style={{ width: 150 }}
+                InputProps={{
+                    startAdornment: <InputAdornment position="start">Every</InputAdornment>,
+                    endAdornment: <InputAdornment position="end">weeks</InputAdornment>,
+                }}
+            />
+        );
+    }
+
     render() {
         return (
             <div style={{ display: "flex", flexDirection: "column" }}>
                 {this.renderOneOff()}
                 {this.renderDays()}
                 {this.renderTimeSelector()}
+                <Collapse in={this.props.formData?.oneOff !== "on"}>{this.renderIntervalSelector()}</Collapse>
                 {!this.props.editMode && (
                     <div className="navButtons">
                         <BackButton onClick={this.props.onBack} style={{ marginRight: 8 }} />
@@ -190,6 +217,12 @@ EditResonatorSchedule = StepBase({
             errors.day0 = "No day selected";
         }
 
+        if (!formData.interval) {
+            errors.interval = "Required";
+        } else if (formData.interval <= 0 || !Number.isInteger(parseFloat(formData.interval))) {
+            errors.interval = "Must be a positive integer";
+        }
+
         // props.updateIntractionType(parseInt(formData.interactionType));
 
         return errors;
@@ -199,6 +232,7 @@ EditResonatorSchedule = StepBase({
 EditResonatorSchedule = connect(
     (state) => ({
         resonatorCreated: state.resonatorCreation.resonator,
+        formData: state.form.resonatorCreation.values,
     }),
     (dispatch) =>
         bindActionCreators(
