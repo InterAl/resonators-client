@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import { Button, Card, CardHeader, CardContent, CardActions, Grid, withTheme, Typography } from "@material-ui/core";
 
 import { actions } from "../actions/feedbackActions";
+import Layout from "./layouts/EmptyCenteredLayout";
 
 class ResonatorFeedback extends Component {
     constructor(props) {
@@ -108,25 +109,7 @@ class ResonatorFeedback extends Component {
 
     render() {
         const { question } = this.props;
-        return (
-            <Grid
-                container
-                justify="center"
-                alignItems="center"
-                style={{
-                    height: "100vh",
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                }}
-            >
-                <Grid item xs={10} sm={8} md={6} lg={5} xl={4}>
-                    {question ? this.renderQuestion(question) : this.renderDone()}
-                </Grid>
-            </Grid>
-        );
+        return <Layout>{question ? this.renderQuestion(question) : this.renderDone()}</Layout>;
     }
 }
 

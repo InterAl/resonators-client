@@ -22,7 +22,7 @@ class LoginForm extends Component {
     }
 
     render() {
-        const isLoginFormRequired = false;
+        const isLoginFormRequired = true;
         return (
             <Card className="login-form">
                 {isLoginFormRequired && <CardHeader title="Login" />}
