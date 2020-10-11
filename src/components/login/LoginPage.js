@@ -1,9 +1,10 @@
 import React from "react";
-import { actions } from "../actions/sessionActions";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import LoginForm from "./LoginForm";
 import { Grid, makeStyles } from "@material-ui/core";
+
+import LoginForm from "./LoginForm";
+import { actions } from "../../actions/sessionActions";
 
 const useStyles = makeStyles(() => ({
     container: {

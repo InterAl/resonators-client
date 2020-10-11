@@ -1,13 +1,14 @@
-import React, { Component } from "react";
 import { connect } from "react-redux";
+import React, { Component } from "react";
 import { bindActionCreators } from "redux";
-import { actions as navigationActions } from "../actions/navigationActions";
-import { actions as sessionActions } from "../actions/sessionActions";
-import { Card, CardHeader, CardContent, Button } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
-import TextField from "./FormComponents/TextField";
-import googleIcon from "./Icons/GoogleIcon";
+import { Card, CardHeader, CardContent, Button } from "@material-ui/core";
+
 import "./LoginForm.scss";
+import googleIcon from "../Icons/GoogleIcon";
+import TextField from "../FormComponents/TextField";
+import { actions as sessionActions } from "../../actions/sessionActions";
+import { actions as navigationActions } from "../../actions/navigationActions";
 
 class LoginForm extends Component {
     constructor() {
@@ -28,12 +29,7 @@ class LoginForm extends Component {
                 <CardContent>
                     {isLoginFormRequired && (
                         <form onSubmit={this.props.handleSubmit}>
-                            <Field
-                                type="email"
-                                name="email"
-                                component={TextField}
-                                props={{ placeholder: "Email" }}
-                            />
+                            <Field type="email" name="email" component={TextField} props={{ placeholder: "Email" }} />
                             <br />
                             <Field
                                 type="password"
@@ -78,8 +74,7 @@ class LoginForm extends Component {
                     {!isLoginFormRequired && (
                         <div className="signInDesclaimer">
                             <span>
-                                Dear Psysession user, Starting Jan 1st 2019,
-                                Login and Registration to Psysession.com is
+                                Dear Psysession user, Starting Jan 1st 2019, Login and Registration to Psysession.com is
                                 enabled with a Google account only.
                             </span>
                         </div>

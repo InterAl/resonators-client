@@ -18,7 +18,7 @@ import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
-import LoginPage from "./LoginPage";
+import LoginPage from "./login/LoginPage";
 import CriteriaList from "./CriteriaList";
 import ShowResonator from "./ShowResonator";
 import EditResonator from "./EditResonator";
