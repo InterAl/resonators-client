@@ -1,8 +1,8 @@
 import React from "react";
 import { Toolbar, Grid } from "@material-ui/core";
 
-import TopBar from "./TopBar";
-import SideMenu from "./SideMenu";
+import TopBar from "../TopBar";
+import SideMenu from "../SideMenu";
 
 export default (props) => (
     <>
