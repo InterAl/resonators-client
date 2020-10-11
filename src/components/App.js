@@ -7,6 +7,7 @@ import { ThemeProvider } from "@material-ui/core";
 import { ConnectedRouter } from "connected-react-router";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
+import "./app.scss";
 import theme from "./theme";
 import history from "../stores/history";
 import { useBelowBreakpoint } from "./hooks";

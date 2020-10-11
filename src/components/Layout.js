@@ -2,7 +2,6 @@ import React from "react";
 import { connect } from "react-redux";
 import { Toolbar, Grid } from "@material-ui/core";
 
-import "./app.scss";
 import TopBar from "./TopBar";
 import SideMenu from "./SideMenu";
 import loginInfoSelector from "../selectors/loginInfo";
