@@ -10,19 +10,19 @@ import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
-import FollowerGroups from './FollowerGroups';
 import LoginPage from "./LoginPage";
 import CriteriaList from "./CriteriaList";
 import ShowResonator from "./ShowResonator";
 import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
 import ResonatorStats from "./ResonatorStats";
+import FollowerGroups from "./FollowerGroups";
 import ResonatorFeedback from "./ResonatorFeedback";
 import FollowerResonators from "./FollowerResonators";
-import FollowerGroupResonators from './FollowerGroupResonators';
-import FollowerGroupMembers from './FollowerGroupMembers';
 import CriteriaCreation from "./CriteriaCreation/index";
+import FollowerGroupMembers from "./FollowerGroupMembers";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
+import FollowerGroupResonators from "./FollowerGroupResonators";
 
 const leaderRoutes = [
     { path: "/followers", component: Followers },
@@ -39,28 +39,27 @@ const leaderRoutes = [
 ];
 
 const leaderGroupRoutes = [
-    { path: "/followerGroups", component: FollowerGroups},
-    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
-    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/show", component: ShowResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
-    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
+    { path: "/followerGroups", component: FollowerGroups },
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators },
+    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/show", component: ShowResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers },
 ];
 
-const followerRoutes = [
-    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview },
-];
+const followerRoutes = [{ path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview }];
 
-const commonRoutes = [
+const noLayoutRoutes = [
     { path: "/login", component: LoginPage },
     { path: "/resetPassword", component: ResetPassword },
-
     { path: "/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];
 
+const renderRoutes = (routes) => routes.map((route, index) => <Route key={index} exact {...route} />);
+
 const App = (props) => {
-    const routes = commonRoutes
+    const routesWithLayout = []
         .concat(props.user?.isLeader ? leaderRoutes : [])
         .concat(props.leader?.group_permissions ? leaderGroupRoutes : [])
         .concat(props.user?.isFollower ? followerRoutes : []);
@@ -68,13 +67,11 @@ const App = (props) => {
     return (
         <ConnectedRouter history={history}>
             <Switch>
+                {renderRoutes(noLayoutRoutes)}
                 <Route path="/(.+)">
                     <Layout>
                         <Switch>
-                            {routes.map((route, index) => (
-                                <Route key={index} exact {...route} />
-                            ))}
-
+                            {renderRoutes(routesWithLayout)}
                             <Route component={NoMatch} />
                         </Switch>
                     </Layout>
