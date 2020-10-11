@@ -1,9 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
+import MomentUtils from "@date-io/moment";
 import { Route, Switch } from "react-router";
+import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from "@material-ui/core";
 import { ConnectedRouter } from "connected-react-router";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
+import theme from "./theme";
 import history from "../stores/history";
+import { useBelowBreakpoint } from "./hooks";
+import navigationSelector from "../selectors/navigationSelector";
 
 import Layout from "./Layout";
 import Clinics from "./Clinics";
@@ -17,6 +24,7 @@ import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
 import ResonatorStats from "./ResonatorStats";
 import FollowerGroups from "./FollowerGroups";
+import ModalDisplayer from "./ModalDisplayer";
 import ResonatorFeedback from "./ResonatorFeedback";
 import FollowerResonators from "./FollowerResonators";
 import CriteriaCreation from "./CriteriaCreation/index";
@@ -66,18 +74,25 @@ const App = (props) => {
 
     return (
         <ConnectedRouter history={history}>
-            <Switch>
-                {renderRoutes(noLayoutRoutes)}
-                <Route path="/(.+)">
-                    <Layout>
+            <ThemeProvider theme={theme}>
+                <SnackbarProvider dense={useBelowBreakpoint("sm")}>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
                         <Switch>
-                            {renderRoutes(routesWithLayout)}
-                            <Route component={NoMatch} />
+                            {renderRoutes(noLayoutRoutes)}
+                            <Route path="/(.+)">
+                                <Layout>
+                                    <Switch>
+                                        {renderRoutes(routesWithLayout)}
+                                        <Route component={NoMatch} />
+                                    </Switch>
+                                </Layout>
+                            </Route>
+                            <Route exact path="/" component={HomePage} />
                         </Switch>
-                    </Layout>
-                </Route>
-                <Route exact path="/" component={HomePage} />
-            </Switch>
+                        <ModalDisplayer modal={props.modal} />
+                    </MuiPickersUtilsProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
         </ConnectedRouter>
     );
 };
@@ -85,6 +100,7 @@ const App = (props) => {
 const mapStateToProps = (state) => ({
     user: state.session.user,
     leader: state.leaders.leaders,
+    modal: navigationSelector(state).modal,
 });
 
 export default connect(mapStateToProps, null)(App);
