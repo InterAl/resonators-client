@@ -13,13 +13,13 @@ import history from "../stores/history";
 import { useBelowBreakpoint } from "./hooks";
 import navigationSelector from "../selectors/navigationSelector";
 
-import Layout from "./Layout";
 import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
 import LoginPage from "./login/LoginPage";
 import CriteriaList from "./CriteriaList";
+import Layout from "./layouts/LeaderLayout";
 import ShowResonator from "./ShowResonator";
 import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
