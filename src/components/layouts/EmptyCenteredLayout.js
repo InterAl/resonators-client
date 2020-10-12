@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
     container: {
         height: "100vh",
         position: "fixed",
@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
         overflowY: "auto",
     },
     content: {
-        padding: 30,
+        padding: theme.spacing(4, 0),
     },
 }));
 
