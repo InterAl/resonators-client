@@ -2,13 +2,15 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { bindActionCreators } from "redux";
 import { Field, reduxForm } from "redux-form";
-import { Card, CardHeader, CardContent, Button } from "@material-ui/core";
+import { Card, CardHeader, CardContent, Button, Typography } from "@material-ui/core";
 
 import "./LoginForm.scss";
 import googleIcon from "../Icons/GoogleIcon";
 import TextField from "../FormComponents/TextField";
 import { actions as sessionActions } from "../../actions/sessionActions";
 import { actions as navigationActions } from "../../actions/navigationActions";
+
+const isLoginFormRequired = false;
 
 class LoginForm extends Component {
     constructor() {
@@ -22,12 +24,28 @@ class LoginForm extends Component {
     }
 
     render() {
-        const isLoginFormRequired = true;
         return (
-            <Card className="login-form">
-                {isLoginFormRequired && <CardHeader title="Login" />}
+            <Card className="login-form" elevation={10}>
+                <CardHeader title="Welcome!" subheader="Sign in to use the Resonators app" />
                 <CardContent>
-                    {isLoginFormRequired && (
+                    {!isLoginFormRequired && (
+                        <Typography paragraph>
+                            Registration to the Resonators app is currently possible via a Google account only
+                        </Typography>
+                    )}
+                    <Button
+                        fullWidth
+                        type="button"
+                        variant="outlined"
+                        startIcon={googleIcon}
+                        onClick={this.handleGoogleLogin}
+                    >
+                        Continue with Google
+                    </Button>
+                </CardContent>
+                {isLoginFormRequired && (
+                    <CardContent>
+                        <Typography paragraph align="center" variant="subtitle2">OR</Typography>
                         <form onSubmit={this.props.handleSubmit}>
                             <Field type="email" name="email" component={TextField} props={{ placeholder: "Email" }} />
                             <br />
@@ -70,26 +88,8 @@ class LoginForm extends Component {
                                 </Button>
                             </div>
                         </form>
-                    )}
-                    {!isLoginFormRequired && (
-                        <div className="signInDesclaimer">
-                            <span>
-                                Dear Psysession user, Starting Jan 1st 2019, Login and Registration to Psysession.com is
-                                enabled with a Google account only.
-                            </span>
-                        </div>
-                    )}
-                    <div style={{ width: "100%" }}>
-                        <Button
-                            type="button"
-                            onClick={this.handleGoogleLogin}
-                            startIcon={googleIcon}
-                            style={{ width: "100%", marginTop: 12 }}
-                        >
-                            Sign in with Google
-                        </Button>
-                    </div>
-                </CardContent>
+                    </CardContent>
+                )}
             </Card>
         );
     }
