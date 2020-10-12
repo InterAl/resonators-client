@@ -11,18 +11,17 @@ const useStyles = makeStyles(() => ({
         right: 0,
         overflowY: "auto",
     },
+    content: {
+        padding: 30,
+    },
 }));
 
 export default ({ children, className = "", ...rest }) => {
+    const classes = useStyles();
+
     return (
-        <Grid
-            container
-            justify="center"
-            alignItems="center"
-            className={`${useStyles().container} ${className}`}
-            {...rest}
-        >
-            <Grid item xs={10} sm={8} md={6} lg={5} xl={4}>
+        <Grid container justify="center" alignItems="center" className={`${classes.container} ${className}`} {...rest}>
+            <Grid item xs={10} sm={8} md={6} lg={5} xl={4} className={classes.content}>
                 {children}
             </Grid>
         </Grid>
