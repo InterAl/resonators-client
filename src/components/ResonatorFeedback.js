@@ -65,11 +65,7 @@ class ResonatorFeedback extends Component {
     }
 
     renderBackButton() {
-        return (
-            <Button onClick={this.props.showPreviousQuestion}>
-                {this.props.rtl ? "חזור" : "Back"}
-            </Button>
-        );
+        return <Button onClick={this.props.showPreviousQuestion}>{this.props.rtl ? "חזור" : "Back"}</Button>;
     }
 
     renderQuestion(q) {
@@ -107,15 +103,7 @@ class ResonatorFeedback extends Component {
 
     render() {
         const { question } = this.props;
-        return (
-            <Layout
-                style={{
-                    backgroundImage: `linear-gradient(${this.props.theme.palette.primary.light}, 90%, ${this.props.theme.palette.primary.dark})`,
-                }}
-            >
-                {question ? this.renderQuestion(question) : this.renderDone()}
-            </Layout>
-        );
+        return <Layout colorful>{question ? this.renderQuestion(question) : this.renderDone()}</Layout>;
     }
 }
 
