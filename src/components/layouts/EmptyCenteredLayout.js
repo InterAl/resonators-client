@@ -14,7 +14,13 @@ const useStyles = makeStyles(() => ({
 
 export default ({ children, className = "", ...rest }) => {
     return (
-        <Grid container justify="center" alignItems="center" className={`${useStyles().container} ${className}`}>
+        <Grid
+            container
+            justify="center"
+            alignItems="center"
+            className={`${useStyles().container} ${className}`}
+            {...rest}
+        >
             <Grid item xs={10} sm={8} md={6} lg={5} xl={4}>
                 {children}
             </Grid>

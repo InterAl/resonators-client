@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { Button, Card, CardHeader, CardContent, CardActions, Grid, withTheme, Typography } from "@material-ui/core";
+import { Button, Card, CardHeader, CardContent, CardActions, withTheme, Typography } from "@material-ui/core";
 
 import { actions } from "../actions/feedbackActions";
 import Layout from "./layouts/EmptyCenteredLayout";
@@ -66,11 +66,9 @@ class ResonatorFeedback extends Component {
 
     renderBackButton() {
         return (
-            this.props.currentQuestionIdx > 1 && (
-                <Button style={{ marginTop: 24 }} onClick={this.props.showPreviousQuestion}>
-                    {this.props.rtl ? "חזור" : "Back"}
-                </Button>
-            )
+            <Button onClick={this.props.showPreviousQuestion}>
+                {this.props.rtl ? "חזור" : "Back"}
+            </Button>
         );
     }
 
@@ -80,21 +78,21 @@ class ResonatorFeedback extends Component {
         const { rtl } = this.props;
 
         return (
-            <Card key={q.id}>
+            <Card key={q.id} elevation={10}>
                 <CardHeader
                     title={question.description}
                     subheader={this.renderQuestionDescription()}
                     style={{ textAlign: rtl ? "right" : "left" }}
                 />
                 <CardContent>{_.map(answers, (a) => this.renderAnswer(question, a))}</CardContent>
-                <CardActions>{this.renderBackButton()}</CardActions>
+                {this.props.currentQuestionIdx > 1 && <CardActions>{this.renderBackButton()}</CardActions>}
             </Card>
         );
     }
 
     renderDone() {
         return (
-            <Card key="done">
+            <Card key="done" elevation={10}>
                 <CardHeader
                     title={
                         <Typography variant="h6" style={{ color: this.props.theme.palette.success.main }}>
@@ -102,14 +100,22 @@ class ResonatorFeedback extends Component {
                         </Typography>
                     }
                 />
-                <CardActions>{this.renderBackButton()}</CardActions>
+                {this.props.currentQuestionIdx > 1 && <CardActions>{this.renderBackButton()}</CardActions>}
             </Card>
         );
     }
 
     render() {
         const { question } = this.props;
-        return <Layout>{question ? this.renderQuestion(question) : this.renderDone()}</Layout>;
+        return (
+            <Layout
+                style={{
+                    backgroundImage: `linear-gradient(${this.props.theme.palette.primary.light}, 90%, ${this.props.theme.palette.primary.dark})`,
+                }}
+            >
+                {question ? this.renderQuestion(question) : this.renderDone()}
+            </Layout>
+        );
     }
 }
 
