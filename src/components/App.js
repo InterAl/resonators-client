@@ -1,28 +1,37 @@
 import React from "react";
 import { connect } from "react-redux";
+import MomentUtils from "@date-io/moment";
 import { Route, Switch } from "react-router";
+import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from "@material-ui/core";
 import { ConnectedRouter } from "connected-react-router";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
+import "./app.scss";
+import theme from "./theme";
 import history from "../stores/history";
+import { useBelowBreakpoint } from "./hooks";
+import navigationSelector from "../selectors/navigationSelector";
 
-import Layout from "./Layout";
 import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
-import FollowerGroups from './FollowerGroups';
-import LoginPage from "./LoginPage";
+import LoginPage from "./login/LoginPage";
 import CriteriaList from "./CriteriaList";
+import Layout from "./layouts/LeaderLayout";
 import ShowResonator from "./ShowResonator";
 import EditResonator from "./EditResonator";
 import ResetPassword from "./ResetPassword";
 import ResonatorStats from "./ResonatorStats";
+import FollowerGroups from "./FollowerGroups";
+import ModalDisplayer from "./ModalDisplayer";
 import ResonatorFeedback from "./ResonatorFeedback";
 import FollowerResonators from "./FollowerResonators";
-import FollowerGroupResonators from './FollowerGroupResonators';
-import FollowerGroupMembers from './FollowerGroupMembers';
 import CriteriaCreation from "./CriteriaCreation/index";
+import FollowerGroupMembers from "./FollowerGroupMembers";
 import ResonatorsOverview from "./followers/ResonatorsOverview";
+import FollowerGroupResonators from "./FollowerGroupResonators";
 
 const leaderRoutes = [
     { path: "/followers", component: Followers },
@@ -39,48 +48,52 @@ const leaderRoutes = [
 ];
 
 const leaderGroupRoutes = [
-    { path: "/followerGroups", component: FollowerGroups},
-    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators},
-    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/show", component: ShowResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator},
-    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats},
-    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers},
+    { path: "/followerGroups", component: FollowerGroups },
+    { path: "/followerGroups/:followerGroupId/resonators", component: FollowerGroupResonators },
+    { path: "/followerGroups/:followerGroupId/resonators/new", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/show", component: ShowResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/edit", component: EditResonator },
+    { path: "/followerGroups/:followerGroupId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+    { path: "/followerGroups/:followerGroupId/members", component: FollowerGroupMembers },
 ];
 
-const followerRoutes = [
-    { path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview },
-];
+const followerRoutes = [{ path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview }];
 
-const commonRoutes = [
+const noLayoutRoutes = [
     { path: "/login", component: LoginPage },
     { path: "/resetPassword", component: ResetPassword },
-
     { path: "/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];
 
+const renderRoutes = (routes) => routes.map((route, index) => <Route key={index} exact {...route} />);
+
 const App = (props) => {
-    const routes = commonRoutes
+    const routesWithLayout = []
         .concat(props.user?.isLeader ? leaderRoutes : [])
         .concat(props.leader?.group_permissions ? leaderGroupRoutes : [])
         .concat(props.user?.isFollower ? followerRoutes : []);
 
     return (
         <ConnectedRouter history={history}>
-            <Switch>
-                <Route path="/(.+)">
-                    <Layout>
+            <ThemeProvider theme={theme}>
+                <SnackbarProvider dense={useBelowBreakpoint("sm")}>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
                         <Switch>
-                            {routes.map((route, index) => (
-                                <Route key={index} exact {...route} />
-                            ))}
-
-                            <Route component={NoMatch} />
+                            {renderRoutes(noLayoutRoutes)}
+                            <Route path="/(.+)">
+                                <Layout>
+                                    <Switch>
+                                        {renderRoutes(routesWithLayout)}
+                                        <Route component={NoMatch} />
+                                    </Switch>
+                                </Layout>
+                            </Route>
+                            <Route exact path="/" component={HomePage} />
                         </Switch>
-                    </Layout>
-                </Route>
-                <Route exact path="/" component={HomePage} />
-            </Switch>
+                        <ModalDisplayer modal={props.modal} />
+                    </MuiPickersUtilsProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
         </ConnectedRouter>
     );
 };
@@ -88,6 +101,7 @@ const App = (props) => {
 const mapStateToProps = (state) => ({
     user: state.session.user,
     leader: state.leaders.leaders,
+    modal: navigationSelector(state).modal,
 });
 
 export default connect(mapStateToProps, null)(App);

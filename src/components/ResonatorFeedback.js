@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { Button, Card, CardHeader, CardContent, CardActions, Grid, withTheme, Typography } from "@material-ui/core";
+import { Button, Card, CardHeader, CardContent, CardActions, withTheme, Typography } from "@material-ui/core";
 
 import { actions } from "../actions/feedbackActions";
+import Layout from "./layouts/EmptyCenteredLayout";
 
 class ResonatorFeedback extends Component {
     constructor(props) {
@@ -64,13 +65,7 @@ class ResonatorFeedback extends Component {
     }
 
     renderBackButton() {
-        return (
-            this.props.currentQuestionIdx > 1 && (
-                <Button style={{ marginTop: 24 }} onClick={this.props.showPreviousQuestion}>
-                    {this.props.rtl ? "חזור" : "Back"}
-                </Button>
-            )
-        );
+        return <Button onClick={this.props.showPreviousQuestion}>{this.props.rtl ? "חזור" : "Back"}</Button>;
     }
 
     renderQuestion(q) {
@@ -79,21 +74,21 @@ class ResonatorFeedback extends Component {
         const { rtl } = this.props;
 
         return (
-            <Card key={q.id}>
+            <Card key={q.id} elevation={10}>
                 <CardHeader
                     title={question.description}
                     subheader={this.renderQuestionDescription()}
                     style={{ textAlign: rtl ? "right" : "left" }}
                 />
                 <CardContent>{_.map(answers, (a) => this.renderAnswer(question, a))}</CardContent>
-                <CardActions>{this.renderBackButton()}</CardActions>
+                {this.props.currentQuestionIdx > 1 && <CardActions>{this.renderBackButton()}</CardActions>}
             </Card>
         );
     }
 
     renderDone() {
         return (
-            <Card key="done">
+            <Card key="done" elevation={10}>
                 <CardHeader
                     title={
                         <Typography variant="h6" style={{ color: this.props.theme.palette.success.main }}>
@@ -101,32 +96,14 @@ class ResonatorFeedback extends Component {
                         </Typography>
                     }
                 />
-                <CardActions>{this.renderBackButton()}</CardActions>
+                {this.props.currentQuestionIdx > 1 && <CardActions>{this.renderBackButton()}</CardActions>}
             </Card>
         );
     }
 
     render() {
         const { question } = this.props;
-        return (
-            <Grid
-                container
-                justify="center"
-                alignItems="center"
-                style={{
-                    height: "100vh",
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                }}
-            >
-                <Grid item xs={10} sm={8} md={6} lg={5} xl={4}>
-                    {question ? this.renderQuestion(question) : this.renderDone()}
-                </Grid>
-            </Grid>
-        );
+        return <Layout colorful>{question ? this.renderQuestion(question) : this.renderDone()}</Layout>;
     }
 }
 
