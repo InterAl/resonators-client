@@ -16,17 +16,43 @@ class LoginForm extends Component {
     constructor() {
         super();
 
+        this.state = {
+            isLeader: false
+        };
+
         this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
+        this.switchLoginMode = this.switchLoginMode.bind(this);
     }
 
     handleGoogleLogin() {
-        this.props.googleLogin();
+        this.props.googleLogin({isLeader: this.state.isLeader});
+    }
+
+    switchLoginMode() {
+        this.setState({ isLeader: !this.state.isLeader });
     }
 
     render() {
+        const role = (this.state.isLeader) ? "leader" : "follower";
+        let google_error_message = '';
+        switch(this.props.errorGoogle) { // this should probably be replaced by key-based translations later
+            case 'not_leader':
+                google_error_message = 'This user is not registered as a Leader. Contact your Leader';
+            break;
+            case 'not_follower':
+                google_error_message = 'This user is not registered as a Follower';
+                break;
+            case 'follower_registration_not_allowed':
+                google_error_message = 'Can\'t register as a follower. Follower needs to be assigned to a leader';
+            break;
+            case 'unknown':
+                google_error_message = 'Unknown problem. Try again';
+            break;
+        }
+
         return (
             <Card className="login-form" elevation={10}>
-                <CardHeader title="Welcome!" subheader="Sign in to use the Resonators app" />
+                <CardHeader title="Welcome!" subheader={"Sign in to use the Resonators app as a " + role} />
                 <CardContent>
                     {!isLoginFormRequired && (
                         <Typography paragraph>
@@ -42,6 +68,7 @@ class LoginForm extends Component {
                     >
                         Continue with Google
                     </Button>
+                    <div className="error" style={{ color: "red", textAlign: "center"}}>{google_error_message}</div>
                 </CardContent>
                 {isLoginFormRequired && (
                     <CardContent>
@@ -62,6 +89,7 @@ class LoginForm extends Component {
                                 color="primary"
                                 variant="contained"
                                 style={{ marginTop: 30, marginBottom: 10 }}
+                                onClick={() => {this.props.change('isLeader', this.state.isLeader)}}
                             >
                                 submit
                             </Button>
@@ -74,7 +102,7 @@ class LoginForm extends Component {
                             >
                                 <Button
                                     type="button"
-                                    onClick={this.props.showRegistrationModal}
+                                    onClick={() => this.props.showRegistrationModal(this.state.isLeader)}
                                     className="registerBtn"
                                 >
                                     Register
@@ -90,17 +118,31 @@ class LoginForm extends Component {
                         </form>
                     </CardContent>
                 )}
+                {this.props.isLeaderPage && (
+                    <CardContent>
+                        <span className="leader-switch_mode">Click <Button onClick={this.switchLoginMode}>HERE</Button> to sign in as a {(!this.state.isLeader) ? "leader" : "follower"}</span>
+                    </CardContent>
+                )}
             </Card>
         );
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        errorGoogle: state.router.location.query.error
+    };
+}
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            showRegistrationModal: () =>
+            showRegistrationModal: (isLeader) =>
                 navigationActions.showModal({
                     name: "registration",
+                    props: {
+                        isLeader: isLeader
+                    }
                 }),
 
             showForgotPasswordModal: () =>
@@ -108,16 +150,14 @@ function mapDispatchToProps(dispatch) {
                     name: "forgotPassword",
                 }),
 
-            googleLogin: sessionActions.googleLogin,
+            googleLogin: sessionActions.googleLogin
         },
         dispatch
     );
 }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(
+
+export default connect(mapStateToProps, mapDispatchToProps)(
     reduxForm({
         form: "login",
     })(LoginForm)

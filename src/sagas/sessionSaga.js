@@ -20,9 +20,14 @@ handle(types.RESUME, function*() {
     try {
         let user = yield call(sessionApi.get);
         let loggedIn = yield updateUser(user);
+        const currentPath = location.pathname;
+        const excludedRedirect = [
+          '/login',
+          '/loginLeader'
+        ];
 
-        if (!loggedIn)
-            yield put(navigationActions.navigate('login'));
+        if (!loggedIn && !excludedRedirect.includes(currentPath))
+            yield put(navigationActions.navigate((currentPath === '/followers') ? 'loginLeader' : 'login'));
     } catch (err) {
         console.log('resuming session failed', err);
         yield put(navigationActions.navigate('login'));
@@ -30,12 +35,12 @@ handle(types.RESUME, function*() {
 });
 
 handle(types.LOGIN, function*(sagaParams, action) {
-    let {email, password} = action.payload;
+    let {email, password, isLeader} = action.payload;
 
     let user;
 
     try {
-        user = yield call(sessionApi.create, email, password);
+        user = yield call(sessionApi.create, email, password, isLeader);
     } catch (err) {
         console.warn('login failed', err);
     }
@@ -53,12 +58,13 @@ handle(types.LOGIN, function*(sagaParams, action) {
 
 handle(types.LOGOUT, function*() {
     try {
+        let user = yield call(sessionApi.get);
         yield call(unsubscribeFromPushNotifications);
         yield call(sessionApi.logout);
         yield put(updateState({
             loggedIn: false
         }));
-        yield put(navigationActions.navigate('logout'));
+        yield put(navigationActions.navigate(user.isLeader ? 'logoutLeader' : 'logout'));
     } catch (err) {
         console.warn('logout failed', err);
     }
@@ -67,7 +73,7 @@ handle(types.LOGOUT, function*() {
 handle(types.REGISTER, function*(sagaParams, {payload}) {
     try {
         yield put(updateState({ registrationFailed: false }));
-        let user = yield call(sessionApi.register, payload.email, payload.name, payload.password);
+        let user = yield call(sessionApi.register, payload.email, payload.name, payload.password, payload.isLeader);
         yield updateUser(user);
         yield put(navigationActions.hideModal());
     } catch (err) {
@@ -76,9 +82,9 @@ handle(types.REGISTER, function*(sagaParams, {payload}) {
     }
 });
 
-handle(types.GOOGLE_LOGIN, function*() {
+handle(types.GOOGLE_LOGIN, function*(sagaParams, {payload}) {
     try {
-        const {url} = yield call(sessionApi.startGoogleLogin);
+        const {url} = yield call(sessionApi.startGoogleLogin, payload.isLeader);
         location.href = url;
     } catch (err) {
         console.error('google login failed', err);
@@ -142,8 +148,12 @@ function* updateUser(user = {}) {
 
         yield call(subscribeToPushNotifications);
 
-        if (currentPath === '/' || currentPath === '/login')
+        if (currentPath === '/' || currentPath === '/login') {
+            yield put(navigationActions.navigate('follower/resonators'));
+        } else if (currentPath === '/loginLeader') {
             yield put(navigationActions.navigate(user.isFollower ? 'follower/resonators' : 'followers'));
+        }
+
     }
 
     return loggedIn;

@@ -25,8 +25,14 @@ const screenToRoute = {
     'login': {
         route: '/login',
     },
+    'loginLeader': {
+        route: '/loginLeader',
+    },
     'logout': {
         route: '/login',
+    },
+    'logoutLeader': {
+        route: '/loginLeader',
     },
     'criteriaCreation': {
         route: '/clinics/criteria/new',

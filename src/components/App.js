@@ -18,6 +18,7 @@ import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
 import LoginPage from "./login/LoginPage";
+import LoginLeaderPage from "./login/LoginLeaderPage";
 import CriteriaList from "./CriteriaList";
 import Layout from "./layouts/LeaderLayout";
 import ShowResonator from "./ShowResonator";
@@ -61,6 +62,7 @@ const followerRoutes = [{ path: "/follower/resonators/:sentResonatorId?", compon
 
 const noLayoutRoutes = [
     { path: "/login", component: LoginPage },
+    { path: "/loginLeader", component: LoginLeaderPage },
     { path: "/resetPassword", component: ResetPassword },
     { path: "/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];

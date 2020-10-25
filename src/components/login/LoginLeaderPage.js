@@ -6,10 +6,10 @@ import LoginForm from "./LoginForm";
 import Layout from "../layouts/EmptyCenteredLayout";
 import { actions } from "../../actions/sessionActions";
 
-const LoginPage = (props) => {
+const LoginLeaderPage = (props) => {
     return (
         <Layout colorful>
-            <LoginForm onSubmit={props.login} isLeaderPage={false} />
+            <LoginForm onSubmit={props.login} isLeaderPage={true}/>
         </Layout>
     );
 };
@@ -18,4 +18,4 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({ login: actions.login }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(LoginPage);
+export default connect(null, mapDispatchToProps)(LoginLeaderPage);
