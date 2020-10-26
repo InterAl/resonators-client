@@ -16,6 +16,7 @@ class RegistrationModal extends Component {
     }
 
     handleSubmit(form) {
+        form.isLeader = this.props.isLeader;
         this.props.register(form);
     }
 
@@ -54,7 +55,8 @@ class RegistrationModal extends Component {
 
 function mapStateToProps(state) {
     return {
-        registrationFailed: state.session.registrationFailed
+        registrationFailed: state.session.registrationFailed,
+        isLeader: state.navigation.modal.props.isLeader
     };
 }
 

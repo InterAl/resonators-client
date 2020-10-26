@@ -60,7 +60,8 @@ const leaderGroupRoutes = [
 const followerRoutes = [{ path: "/follower/resonators/:sentResonatorId?", component: ResonatorsOverview }];
 
 const noLayoutRoutes = [
-    { path: "/login", component: LoginPage },
+    { path: "/login", component: () => <LoginPage isLeader={false} /> },
+    { path: "/loginLeader", component: () => <LoginPage isLeader={true} /> },
     { path: "/resetPassword", component: ResetPassword },
     { path: "/stats/reminders/:resonatorId/criteria/submit", component: ResonatorFeedback },
 ];

@@ -4,10 +4,11 @@ export function get() {
     return fetcher('/user_sessions');
 }
 
-export function create(email, password) {
+export function create(email, password, isLeader) {
     return fetcher.post('/user_sessions.json', {
         email,
-        password
+        password,
+        isLeader
     });
 }
 
@@ -18,11 +19,12 @@ export function logout() {
     });
 }
 
-export function register(email, name, password) {
+export function register(email, name, password, isLeader) {
     return fetcher.post('/users.json', {
         email,
         name,
-        password
+        password,
+        isLeader
     });
 }
 
@@ -39,6 +41,8 @@ export function resetPassword({ password, token }) {
     });
 }
 
-export function startGoogleLogin() {
-    return fetcher('/startGoogleLogin');
+export function startGoogleLogin(isLeader) {
+    return fetcher.post('/startGoogleLogin', {
+        isLeader
+    });
 }

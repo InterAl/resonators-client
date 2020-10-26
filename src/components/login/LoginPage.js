@@ -9,7 +9,7 @@ import { actions } from "../../actions/sessionActions";
 const LoginPage = (props) => {
     return (
         <Layout colorful>
-            <LoginForm onSubmit={props.login} />
+            <LoginForm onSubmit={props.login} isLeaderPage={props.isLeader} />
         </Layout>
     );
 };
