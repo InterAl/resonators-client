@@ -68,7 +68,7 @@ class LoginForm extends Component {
                     >
                         Continue with Google
                     </Button>
-                    <div className="error" style={{ color: "red", textAlign: "center"}}>{google_error_message}</div>
+                    {google_error_message && <div className="error" style={{ color: "red", textAlign: "center"}}>{google_error_message}</div>}
                 </CardContent>
                 {isLoginFormRequired && (
                     <CardContent>

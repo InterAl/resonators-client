@@ -21,13 +21,9 @@ handle(types.RESUME, function*() {
         let user = yield call(sessionApi.get);
         let loggedIn = yield updateUser(user);
         const currentPath = location.pathname;
-        const excludedRedirect = [
-          '/login',
-          '/loginLeader'
-        ];
 
-        if (!loggedIn && !excludedRedirect.includes(currentPath))
-            yield put(navigationActions.navigate((currentPath === '/followers') ? 'loginLeader' : 'login'));
+        if (!loggedIn)
+            yield put(navigationActions.navigate((currentPath === '/followers' || currentPath === '/loginLeader') ? 'loginLeader' : 'login'));
     } catch (err) {
         console.log('resuming session failed', err);
         yield put(navigationActions.navigate('login'));
