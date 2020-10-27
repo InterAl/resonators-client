@@ -118,7 +118,9 @@ class LoginForm extends Component {
                         </form>
                     </CardContent>
                 )}
-                {(this.props.isLeaderPage || !this.state.installPrompt) && (
+                {(this.props.isLeaderPage ||
+                    (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://')
+                ) && ( // Show the switch in Leader mode or in standalone PWA app
                     <CardContent>
                         <span className="leader-switch_mode">Click <Button onClick={this.switchLoginMode}>HERE</Button> to sign in as a {(!this.state.isLeader) ? "leader" : "follower"}</span>
                     </CardContent>
@@ -130,8 +132,7 @@ class LoginForm extends Component {
 
 function mapStateToProps(state) {
     return {
-        errorGoogle: state.router.location.query.error,
-        pwaPrompt: state.pwa.installPrompt // False if shown in the PWA App
+        errorGoogle: state.router.location.query.error
     };
 }
 
