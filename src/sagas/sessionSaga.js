@@ -18,12 +18,16 @@ let {handle, updateState, saga, reducer} = SagaReducerFactory({
 
 handle(types.RESUME, function*() {
     try {
-        let user = yield call(sessionApi.get);
-        let loggedIn = yield updateUser(user);
+        const user = yield call(sessionApi.get);
+        const loggedIn = yield updateUser(user);
         const currentPath = location.pathname;
+        const excludedRedirect = [ // Need this to keep the query params (Google auth errors)
+            '/login',
+            '/loginLeader'
+        ];
 
-        if (!loggedIn)
-            yield put(navigationActions.navigate((currentPath === '/followers' || currentPath === '/loginLeader') ? 'loginLeader' : 'login'));
+        if (!loggedIn && !excludedRedirect.includes(currentPath))
+            yield put(navigationActions.navigate((currentPath === '/followers') ? 'loginLeader' : 'login'));
     } catch (err) {
         console.log('resuming session failed', err);
         yield put(navigationActions.navigate('login'));
