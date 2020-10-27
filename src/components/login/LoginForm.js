@@ -13,11 +13,11 @@ import { actions as navigationActions } from "../../actions/navigationActions";
 const isLoginFormRequired = false;
 
 class LoginForm extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
-            isLeader: false
+            isLeader: props.isLeaderPage
         };
 
         this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
@@ -37,13 +37,13 @@ class LoginForm extends Component {
         let google_error_message = '';
         switch(this.props.errorGoogle) { // this should probably be replaced by key-based translations later
             case 'not_leader':
-                google_error_message = 'This user is not registered as a Leader. Contact your Leader';
+                google_error_message = 'This user is not registered as a Leader.';
             break;
             case 'not_follower':
-                google_error_message = 'This user is not registered as a Follower';
+                google_error_message = 'System cannot find a Follower record for this user. Please contact your Leader.';
                 break;
             case 'follower_registration_not_allowed':
-                google_error_message = 'Can\'t register as a follower. Follower needs to be assigned to a leader';
+                google_error_message = 'Can\'t register as a follower. Please contact your Leader.';
             break;
             case 'unknown':
                 google_error_message = 'Unknown problem. Try again';
