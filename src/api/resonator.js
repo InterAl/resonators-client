@@ -39,11 +39,10 @@ export function removeCriterion(followerId, resonatorId, reminderCriterionId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
 }
 
-export function reorderCriterion(followerId, resonatorId, criterionId, order) {
+export function reorderCriterion(followerId, resonatorId, criteriaOrder) {
     return fetcher.post(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/reorder`, {
-        question_id: criterionId,
-        reminder_id: resonatorId,
-        order: order
+        criteria_order: criteriaOrder,
+        reminder_id: resonatorId
     }, true);
 }
 

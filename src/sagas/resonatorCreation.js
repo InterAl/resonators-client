@@ -193,14 +193,8 @@ function syncResonatorCriteria(resonator, newCriteria, target, newOrder = []) {
 
 function syncResonatorCriteriaOrder(resonator, newOrder, target) {
     var promisesStack = [];
-    let reorderedQuestionsPromises = _.map(newOrder, (qid, order) => {
-        const question = _.find(resonator.questions, rq => rq.question_id === qid);
-        if (!question) return false;
-        return target.resonatorApi.reorderCriterion(resonator[target.targetIdDbName], resonator.id, question.id, order);
-    });
-    if (reorderedQuestionsPromises.length > 0) {
-        promisesStack.push(reorderedQuestionsPromises);
-    }
+    let reorderedQuestionsPromises = target.resonatorApi.reorderCriterion(resonator[target.targetIdDbName], resonator.id, newOrder);
+    promisesStack.push(reorderedQuestionsPromises);
     return promisesStack;
 }
 
