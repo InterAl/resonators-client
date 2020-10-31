@@ -192,10 +192,7 @@ function syncResonatorCriteria(resonator, newCriteria, target, newOrder = []) {
 }
 
 function syncResonatorCriteriaOrder(resonator, newOrder, target) {
-    var promisesStack = [];
-    let reorderedQuestionsPromises = target.resonatorApi.reorderCriterion(resonator[target.targetIdDbName], resonator.id, newOrder);
-    promisesStack.push(reorderedQuestionsPromises);
-    return promisesStack;
+    return target.resonatorApi.reorderCriterion(resonator[target.targetIdDbName], resonator.id, newOrder);
 }
 
 function* getFormData() {
