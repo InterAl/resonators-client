@@ -12,6 +12,7 @@ class EditResonatorCriteria extends Component {
 
         this.handleAddCriterion = this.handleAddCriterion.bind(this);
         this.handleRemoveCriterion = this.handleRemoveCriterion.bind(this);
+        this.handleReorderCriteria = this.handleReorderCriteria.bind(this);
     }
 
     handleAddCriterion(criterionId) {
@@ -34,9 +35,22 @@ class EditResonatorCriteria extends Component {
         });
     }
 
+    handleReorderCriteria(reorderedCriteria) {
+        let order = this.getCriteriaOrder();
+        reorderedCriteria.forEach((criterion) => { order[criterion.order] = criterion.id;});
+        this.props.updateCreationStep({
+            criteriaOrder: order
+        });
+    }
+
     getSelectedCriteria() {
         let {criteria = []} = this.props.formData;
         return criteria;
+    }
+
+    getCriteriaOrder() {
+        let {criteriaOrder = []} = this.props.formData;
+        return criteriaOrder;
     }
 
     render() {
@@ -44,8 +58,10 @@ class EditResonatorCriteria extends Component {
             <div>
                 <ResonatorCriteriaSelection
                     selectedCriteria={this.getSelectedCriteria()}
+                    order={this.getCriteriaOrder()}
                     onAddCriterion={this.handleAddCriterion}
                     onRemoveCriterion={this.handleRemoveCriterion}
+                    onReorderCriteria={this.handleReorderCriteria}
                 />
                 {!this.props.editMode && <NavButtons
                     onNext={this.props.onNext}
