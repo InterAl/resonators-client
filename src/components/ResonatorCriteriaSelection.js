@@ -30,21 +30,27 @@ class ResonatorCriteriaSelection extends Component {
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
-
     handleCheck(criterionId, checked) {
         if (checked) {
             this.props.onAddCriterion(criterionId);
         } else {
             this.props.onRemoveCriterion(criterionId);
         }
+        this.props.onReorderCriteria(this.getCriteriaSorted().map((criterion, idx) => ({...criterion, order: idx})));
     }
 
     isCriterionAttached(criterion) {
         return _.some(this.props.selectedCriteria, (id) => id === criterion.id);
     }
 
-    getCriterionOrder(criterion) {
-        const orderIndex = this.props.order.findIndex(x => x === criterion.id);
+    getCriteriaSorted() {
+        return _.orderBy(this.props.criteria, (c) => {
+            return this.getCriterionOrder(c.id);
+        });
+    }
+
+    getCriterionOrder(criterionId) {
+        const orderIndex = this.props.order.findIndex(x => x === criterionId);
         return (orderIndex >= 0) ? orderIndex : 999;
     }
 
@@ -53,23 +59,18 @@ class ResonatorCriteriaSelection extends Component {
             return;
         }
 
-        const criteria = _.orderBy(this.props.criteria, (c) => {
-            return this.getCriterionOrder(c);
-        });
+        this.reorderCriterion(result.source.index, result.destination.index);
+    }
 
-        const newCriteria = reorder(
-            criteria,
-            result.source.index,
-            result.destination.index
-        );
+    reorderCriterion(startIndex, endIndex) {
+        const criteria = this.getCriteriaSorted();
+        const newCriteria = reorder(criteria, startIndex, endIndex);
 
         this.props.onReorderCriteria(newCriteria);
     }
 
     renderCriteria() {
-        const criteria = _.orderBy(this.props.criteria, [(c) => {
-            return this.getCriterionOrder(c);
-        }]);
+        const criteria = this.getCriteriaSorted();
 
         return criteria.map((criterion, idx) => (
             <Draggable key={criterion.id} draggableId={criterion.id} index={idx}>
