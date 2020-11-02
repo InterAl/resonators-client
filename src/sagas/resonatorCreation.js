@@ -72,7 +72,12 @@ handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
 
     function syncCriteria() {
         if (formData.criteria)
-            return syncResonatorCriteria(resonator, formData.criteria, target);
+            return syncResonatorCriteria(resonator, formData.criteria, target, formData.criteriaOrder);
+    }
+
+    function syncCriteriaOrder() {
+        if (formData.criteriaOrder)
+            return syncResonatorCriteriaOrder(resonator, formData.criteriaOrder, target);
     }
 
     function syncResonatorData() {
@@ -82,7 +87,7 @@ handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
     }
 
     const promise = Promise.all([cleanupOldFile(), syncMedia(), syncCriteria()])
-        .then(syncResonatorData);
+        .then(syncCriteriaOrder).then(syncResonatorData);
 
     const updatedResonator = yield call(() => promise);
     yield target.updateResonator(targetId, { ...resonator, ...updatedResonator });
@@ -168,13 +173,13 @@ handle(types.CREATE, function* (sagaParams, { payload: { targetType } }) {
     }))
 });
 
-function syncResonatorCriteria(resonator, newCriteria, target) {
+function syncResonatorCriteria(resonator, newCriteria, target, newOrder = []) {
     let resonatorQuestions = _.map(resonator.questions, 'question_id');
     let addedQids = _.difference(newCriteria, resonatorQuestions);
     let removedQids = _.difference(resonatorQuestions, newCriteria);
 
     var promisesStack = [];
-    let addQuestionsPromises = target.resonatorApi.addBulkCriterion(resonator[target.targetIdDbName], resonator.id, addedQids);
+    let addQuestionsPromises = target.resonatorApi.addBulkCriterion(resonator[target.targetIdDbName], resonator.id, addedQids, newOrder);
     promisesStack.push(addQuestionsPromises);
     let removedQuestionsPromises = _.map(removedQids, qid => {
         let rqid = _.find(resonator.questions, rq => rq.question_id === qid).id;
@@ -184,6 +189,10 @@ function syncResonatorCriteria(resonator, newCriteria, target) {
         promisesStack.push(removedQuestionsPromises);
     }
     return promisesStack;
+}
+
+function syncResonatorCriteriaOrder(resonator, newOrder, target) {
+    return target.resonatorApi.reorderCriterion(resonator[target.targetIdDbName], resonator.id, newOrder);
 }
 
 function* getFormData() {
@@ -227,6 +236,10 @@ function convertResonatorToForm(resonator) {
         acc[`day${cur}`] = _.includes(resonator.repeat_days, cur);
         return acc;
     }, {});
+    const criteriaOrder = _.reduce(resonator.questions, (q, cur) => {
+        q[cur.order] = cur.question_id;
+        return q;
+    }, []);
 
     const form = {
         ...repeatDays,
@@ -238,6 +251,7 @@ function convertResonatorToForm(resonator) {
         activated: resonator.pop_email ? 'on' : 'off',
         time: new Date(resonator.pop_time),
         criteria: _.map(resonator.questions, 'question_id'),
+        criteriaOrder: criteriaOrder,
         oneOff: resonator.one_off ? 'on' : 'off',
         selectedQuestionnaire: resonator.selected_questionnaire,
         questionnaireDetails: resonator.questionnaire_details,

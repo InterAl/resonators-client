@@ -28,14 +28,22 @@ export function addCriterion(followerId, resonatorId, criterionId) {
         reminder_id: resonatorId
     }, true);
 }
-export function addBulkCriterion(followerId, resonatorId, criterionId) {
+export function addBulkCriterion(followerId, resonatorId, criterionId, questionsOrder = []) {
     return fetcher.post(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria`, {
         question_id: criterionId,
-        reminder_id: resonatorId
+        reminder_id: resonatorId,
+        questions_order: questionsOrder
     }, true);
 }
 export function removeCriterion(followerId, resonatorId, reminderCriterionId) {
     return fetcher.delete(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
+}
+
+export function reorderCriterion(followerId, resonatorId, criteriaOrder) {
+    return fetcher.post(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/reorder`, {
+        criteria_order: criteriaOrder,
+        reminder_id: resonatorId
+    }, true);
 }
 
 export function cleanupOldFile(followerId, resonatorId, itemId)
