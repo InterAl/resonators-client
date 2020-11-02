@@ -60,9 +60,7 @@ export default class HomePage extends Component {
               </ul>
             </nav>
           </header>
-
-          <WCBCT></WCBCT>
-
+          
           <article className="side-padding">
             <h1 className="fold-title margin-bottom-small">
               A secure cloud-based platform for enhancing therapy
