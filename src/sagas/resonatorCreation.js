@@ -244,8 +244,6 @@ function convertResonatorToForm(resonator) {
         return q;
     }, []);
 
-    console.log(criteriaOrder);
-
     const form = {
         ...repeatDays,
         title: resonator.title,
