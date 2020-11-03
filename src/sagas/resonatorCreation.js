@@ -236,10 +236,15 @@ function convertResonatorToForm(resonator) {
         acc[`day${cur}`] = _.includes(resonator.repeat_days, cur);
         return acc;
     }, {});
-    const criteriaOrder = _.reduce(resonator.questions, (q, cur) => {
-        q[cur.order] = cur.question_id;
+    const criteriaOrder = _.reduce(_.orderBy(resonator.questions, (q) => q.updatedAt), (q, cur) => {
+        if (cur.order)
+            q[cur.order] = cur.question_id;
+        else
+            q.push(cur.question_id);
         return q;
     }, []);
+
+    console.log(criteriaOrder);
 
     const form = {
         ...repeatDays,

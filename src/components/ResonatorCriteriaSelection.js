@@ -36,7 +36,23 @@ class ResonatorCriteriaSelection extends Component {
         } else {
             this.props.onRemoveCriterion(criterionId);
         }
-        this.props.onReorderCriteria(this.getCriteriaSorted().map((criterion, idx) => ({...criterion, order: idx})));
+
+        /**
+         * Assign the order for all criteria (including unchecked).
+         * Typically it'd make sense to put this in ComponentDidMount but this.props.criteria is not available there (it's defined later on inside mapStateToProps())
+         */
+
+        this.props.onReorderCriteria(
+            this.getCriteriaSorted().map((criterion, idx) => ({...criterion, order: idx}))
+        );
+
+        /**
+         * Reposition criterion on check/uncheck
+         */
+        this.reorderCriterion(
+            this.getCriterionOrder(criterionId),
+            (checked) ? this.props.selectedCriteria.length  : this.props.criteria.length - 1
+        );
     }
 
     isCriterionAttached(criterion) {
@@ -45,7 +61,7 @@ class ResonatorCriteriaSelection extends Component {
 
     getCriteriaSorted() {
         return _.orderBy(this.props.criteria, (c) => {
-            return this.getCriterionOrder(c.id);
+            return [this.isCriterionAttached(c) ? 0 : 1, this.getCriterionOrder(c.id)];
         });
     }
 
@@ -107,7 +123,7 @@ class ResonatorCriteriaSelection extends Component {
                                 <List
                                     subheader={
                                         <ListSubheader style={{ backgroundColor: this.props.theme.palette.background.paper }}>
-                                            Attach criteria to the resonator (optional)
+                                            Attach criteria to the resonator (optional). <br/>Drag and Drop to reorder
                                         </ListSubheader>
                                     }
                                 >
