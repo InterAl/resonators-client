@@ -36,7 +36,22 @@ class ResonatorCriteriaSelection extends Component {
         } else {
             this.props.onRemoveCriterion(criterionId);
         }
-        this.props.onReorderCriteria(this.getCriteriaSorted().map((criterion, idx) => ({...criterion, order: idx})));
+
+        /**
+         * Assign the order for all criteria (including unchecked).
+         * Typically it'd make sense to put this in ComponentDidMount but this.props.criteria is not available there (it's defined later on inside mapStateToProps())
+         */
+        this.props.onReorderCriteria(
+            this.getCriteriaSorted().map((criterion, idx) => ({...criterion, order: idx}))
+        );
+
+        /**
+         * Reposition criterion on check/uncheck
+         */
+        this.repositionCriterion(
+            this.getCriterionOrder(criterionId),
+            (checked) ? this.props.selectedCriteria.length  : this.props.criteria.length - 1
+        );
     }
 
     isCriterionAttached(criterion) {
@@ -45,7 +60,7 @@ class ResonatorCriteriaSelection extends Component {
 
     getCriteriaSorted() {
         return _.orderBy(this.props.criteria, (c) => {
-            return this.getCriterionOrder(c.id);
+            return [this.isCriterionAttached(c) ? 0 : 1, this.getCriterionOrder(c.id)];
         });
     }
 
@@ -59,10 +74,10 @@ class ResonatorCriteriaSelection extends Component {
             return;
         }
 
-        this.reorderCriterion(result.source.index, result.destination.index);
+        this.repositionCriterion(result.source.index, result.destination.index);
     }
 
-    reorderCriterion(startIndex, endIndex) {
+    repositionCriterion(startIndex, endIndex) {
         const criteria = this.getCriteriaSorted();
         const newCriteria = reorder(criteria, startIndex, endIndex);
 
@@ -107,7 +122,7 @@ class ResonatorCriteriaSelection extends Component {
                                 <List
                                     subheader={
                                         <ListSubheader style={{ backgroundColor: this.props.theme.palette.background.paper }}>
-                                            Attach criteria to the resonator (optional)
+                                            Attach criteria to the resonator (optional). <br/>Drag to reorder
                                         </ListSubheader>
                                     }
                                 >
