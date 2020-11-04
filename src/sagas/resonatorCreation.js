@@ -237,12 +237,13 @@ function convertResonatorToForm(resonator) {
         return acc;
     }, {});
     const criteriaOrder = _.reduce(_.orderBy(resonator.questions, (q) => q.updatedAt), (q, cur) => {
-        if (cur.order)
+        if (cur.order >= 0)
             q[cur.order] = cur.question_id;
         else
             q.push(cur.question_id);
         return q;
     }, []);
+    console.log(resonator.questions);
 
     const form = {
         ...repeatDays,
