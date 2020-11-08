@@ -36,9 +36,6 @@ class LoginForm extends Component {
         const role = (this.state.isLeader) ? "leader" : "follower";
         let google_error_message = '';
         switch(this.props.errorGoogle) { // this should probably be replaced by key-based translations later
-            case 'not_leader':
-                google_error_message = 'This user is not registered as a Leader.';
-            break;
             case 'not_follower':
                 google_error_message = 'System cannot find a Follower record for this user. Please contact your Leader.';
                 break;
