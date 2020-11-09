@@ -85,7 +85,7 @@ const App = (props) => {
                                 <Layout>
                                     <Switch>
                                         {renderRoutes(routesWithLayout)}
-                                        <Route component={NoMatch} />
+                                        {routesWithLayout.length && <Route component={NoMatch} />}
                                     </Switch>
                                 </Layout>
                             </Route>
