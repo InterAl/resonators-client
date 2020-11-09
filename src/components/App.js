@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import MomentUtils from "@date-io/moment";
-import { Route, Switch } from "react-router";
+import { Route, Switch, Redirect } from "react-router";
 import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@material-ui/core";
 import { ConnectedRouter } from "connected-react-router";
@@ -69,6 +69,12 @@ const noLayoutRoutes = [
 const renderRoutes = (routes) => routes.map((route, index) => <Route key={index} exact {...route} />);
 
 const App = (props) => {
+    if (props.user?.isLeader && !props.user?.isFollower) {
+        leaderRoutes.push({ path: "/follower/resonators/:sentResonatorId?", component: () => <Redirect to="/followers" /> });
+    } else if (!props.user?.isLeader && props.user?.isFollower) {
+        followerRoutes.push({ path: "/followers", component: () => <Redirect to="/follower/resonators" /> });
+    }
+
     const routesWithLayout = []
         .concat(props.user?.isLeader ? leaderRoutes : [])
         .concat(props.leader?.group_permissions ? leaderGroupRoutes : [])
