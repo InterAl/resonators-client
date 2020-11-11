@@ -23,9 +23,9 @@ import {
     Person,
     DirectionsWalk,
     AddToHomeScreen,
+    PermIdentity,
     List as ListIcon,
 } from "@material-ui/icons";
-
 import { useBelowBreakpoint } from "./hooks";
 import { actions } from "../actions/menuActions";
 import navigationSelector from "../selectors/navigationSelector";
@@ -67,6 +67,17 @@ function SideMenu(props) {
                    Not required on "mobile" cause then we use the temporary drawer style. */
                 <Toolbar />
             )}
+            {props.user && (
+                <List>
+                    <ListItem>
+                        <ListItemIcon style={{margin: "0 auto"}}>
+                            <PermIdentity />
+                            <ListItemText primary={props.user.email} />
+                        </ListItemIcon>
+                    </ListItem>
+                </List>
+            )}
+            <Divider />
             <List>
                 {props.user?.isLeader && (
                     <>
@@ -135,7 +146,7 @@ function SideMenu(props) {
                         <ListItemIcon>
                             <ViewList />
                         </ListItemIcon>
-                        <ListItemText primary="All Resonators" />
+                        <ListItemText primary="Incoming Resonators" />
                     </ListItem>
                 )}
             </List>
