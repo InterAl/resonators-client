@@ -54,7 +54,7 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
 
 function aggregateChart(allAnswers, allQuestions) {
     let timeToAnswers = _.reduce(allAnswers, (acc, a) => {
-        let time = moment(a.time).format('YYYY-MM-DD');
+        let time = a.time;
         acc[time] = (acc[time] || []).concat({...a, time});
         return acc;
     }, {});
