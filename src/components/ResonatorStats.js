@@ -32,9 +32,6 @@ class ResonatorStats extends Component {
                 resonatorId: this.props.resonatorId
             });
     }
-    formatXAxis(tickItem) {
-        return tickItem.split(" ")[0];
-    }
     renderQuestionLegend(question) {
         return (
             <TableContainer>
@@ -61,7 +58,7 @@ class ResonatorStats extends Component {
             <div key="chart" style={{ height: 500, paddingRight: 30 }}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
-                        <XAxis dataKey="time" tickFormatter={this.formatXAxis} />
+                        <XAxis dataKey="time" />
                         <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]} />
                         <Tooltip />
                         <Legend />
