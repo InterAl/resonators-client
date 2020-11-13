@@ -55,7 +55,8 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
 function aggregateChart(allAnswers, allQuestions) {
     let timeToAnswers = _.reduce(allAnswers, (acc, a) => {
         let time = a.time;
-        acc[time] = (acc[time] || []).concat({...a, time});
+        let time_answered = a.time_answered;
+        acc[time] = (acc[time] || []).concat({...a, time, time_answered});
         return acc;
     }, {});
 
@@ -65,6 +66,7 @@ function aggregateChart(allAnswers, allQuestions) {
         acc.push({
             question_id: 'sumAggregation',
             time,
+            time_answered:timeToAnswers[time][0].time_answered,
             rank
         });
 
@@ -93,6 +95,7 @@ function aggregateChart(allAnswers, allQuestions) {
 function transformAnswer(answer) {
     return {
         time: moment(answer.time).format('D/M/YY HH:mm'),
+        time_answered: moment(answer.time_answered).format('D/M/YY HH:mm'),
         rank: answer.rank,
         question_id: answer.question_id,
         followerName: answer.followerName

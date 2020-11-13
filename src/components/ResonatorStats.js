@@ -9,6 +9,18 @@ import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
 import './ResonatorStats.scss';
 
+const CustomTooltip = ({active, payload, label}) => {
+    if (active) {
+        return (
+            <div className="custom_tooltip">
+                <p>Time Answered: {payload[0].payload.time_answered}</p>
+                <p>Rank: {payload[0].payload.rank}</p>
+            </div>
+        );
+    }
+    return null;
+};
+
 class ResonatorStats extends Component {
     static defaultProps = {
         stats: {}
@@ -60,7 +72,7 @@ class ResonatorStats extends Component {
                     <LineChart data={question.followerAnswers}>
                         <XAxis dataKey="time" />
                         <YAxis tick={true} domain={[question.minAnswerRank, question.maxAnswerRank]} />
-                        <Tooltip />
+                        <Tooltip content={<CustomTooltip />} />
                         <Legend />
                         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
                         <Line type="linear" dataKey="rank" stroke="#82ca9d" />
@@ -119,6 +131,7 @@ class ResonatorStats extends Component {
     getSumByDay(stats) {
         return stats.reduce((acc, next) => ({
             time: next.time.split(' ')[0].concat(' 00:00'),
+            time_answered: next.time_answered,
             rank: acc.rank + next.rank,
             question_id: next.question_id,
         }));
