@@ -165,7 +165,7 @@ export default class HomePage extends Component {
               <h2 className="padding-bottom-medium text-primary">Contact us</h2>
               <p className="padding-bottom-medium">We’re happy to hear from you! Contact us today and speak with one of our customer service representatives — and make your experience with us that much
                 more pleasant!</p>
-              <p className="margin-bottom-large"><b>BuizDev@PsySession.com? <a className="tel" href="tel:+972-556600420">(+972)-55-660-0420</a></b></p>
+              <p className="margin-bottom-large"><b>support@PsySession.com? <a className="tel" href="tel:+972-556600420">(+972)-55-660-0420</a></b></p>
             </div>
             <form className="contact-form" onSubmit={this.handleSubmit}>
               <input type="text" id="contact-form-name" name="name" placeholder="Name" className="contact-section-input margin-bottom-medium" required/>
