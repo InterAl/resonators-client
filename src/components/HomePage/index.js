@@ -19,13 +19,14 @@ import feature8 from './assets/feature-8.svg';
 import graph from './assets/graph.svg';
 import sessionIllustration from './assets/sessionIllustration.jpg';
 import { sendContactForm } from '../../api/sendContactForm';
-import { WCBCT } from './components/WCBCTbanner'
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default class HomePage extends Component {
 
   constructor(props) {
     super(props);
   }
+  recaptchaRef = React.createRef();
 
   handleSubmit(event) {
     event.preventDefault();
@@ -172,6 +173,11 @@ export default class HomePage extends Component {
               <input type="text" id="contact-form-phone" name="phone" placeholder="Phone" className="contact-section-input margin-bottom-medium"/>
               <input type="email" id="contact-form-email" name="email" placeholder="Email" className="contact-section-input margin-bottom-medium" required/>
               <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="contact-section-input margin-bottom-medium"></textarea>
+              <ReCAPTCHA
+                ref={this.recaptchaRef}
+                sitekey="6Lfs494ZAAAAAN44Xh0gW2euVwCa66vMWRfF08gi"
+                onChange={this.onChange}
+              />
               <button className="contact-form-btn btn-primary" >Send</button>
             </form>
           </article>
