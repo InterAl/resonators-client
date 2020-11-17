@@ -175,7 +175,7 @@ export default class HomePage extends Component {
               <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="contact-section-input margin-bottom-medium"></textarea>
               <ReCAPTCHA
                 ref={this.recaptchaRef}
-                sitekey="6Lfs494ZAAAAAN44Xh0gW2euVwCa66vMWRfF08gi"
+                sitekey="6LdyBuQZAAAAAHZRoMHSxkXl9YSW8lNBUlOQCKVS"
                 onChange={this.onChange}
               />
               <button className="contact-form-btn btn-primary" >Send</button>
