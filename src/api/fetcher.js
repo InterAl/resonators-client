@@ -97,7 +97,8 @@ function downloadPayload(response) {
 }
 
 function getResponseFileName(response) {
-    const disposition = response.headers.get("content-disposition");
+    const encodedDisposition = response.headers.get("content-disposition");
+    const disposition = decodeURIComponent(encodedDisposition);
     if (disposition && disposition.includes("attachment")) {
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
         const matches = filenameRegex.exec(disposition);
