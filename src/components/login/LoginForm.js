@@ -10,7 +10,7 @@ import TextField from "../FormComponents/TextField";
 import { actions as sessionActions } from "../../actions/sessionActions";
 import { actions as navigationActions } from "../../actions/navigationActions";
 
-const isLoginFormRequired = false;
+const isLoginFormRequired = true;
 
 class LoginForm extends Component {
     constructor(props) {

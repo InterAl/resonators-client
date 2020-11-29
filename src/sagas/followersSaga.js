@@ -160,7 +160,7 @@ export function* fetchFollowerResonators(followerId) {
 
 function* updateStateWithNewFollower(follower) {
     let lastFollowers = yield select(followersSelector);
-
+    
     let followers = _.reject(lastFollowers, f => f.id === follower.id)
         .concat(follower);
 
