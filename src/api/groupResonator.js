@@ -38,6 +38,13 @@ export function removeCriterion(followerGroupId, resonatorId, reminderCriterionI
     return fetcher.delete(`/leader_followerGroups/${followerGroupId}/reminders/${resonatorId}/criteria/${reminderCriterionId}`);
 }
 
+export function reorderCriterion(followerId, resonatorId, criteriaOrder) {
+    return fetcher.post(`/leader_followers/${followerId}/reminders/${resonatorId}/criteria/reorder`, {
+        criteria_order: criteriaOrder,
+        reminder_id: resonatorId
+    }, true);
+}
+
 export function cleanupOldFile(followerGroupId, resonatorId, itemId)
 {
     return fetcher.delete(`/leader_followerGroups/${followerGroupId}/reminders/${resonatorId}/removeImage/${itemId}`);
