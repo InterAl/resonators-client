@@ -4,7 +4,7 @@ import {createSelector} from 'reselect';
 export default createSelector(
     state => state.criteria,
     state => state.clinics.clinics,
-   
+    
     (criteria, clinics) => {
         return {           
             criteria: _(criteria.criteria)
@@ -23,8 +23,7 @@ export default createSelector(
     }
 );
 
-function filterByClinicId(criteria, criterion) {
-    console.log("Naveen-selector");
+function filterByClinicId(criteria, criterion) {    
     return !criteria.filterByClinicId ||
     criteria.filterByClinicId === 'all' ||
     criteria.clinic_id === criterion.filterByClinicId

@@ -17,13 +17,16 @@ class CriteriaList extends Component {
     constructor() {
         super();
        
+        this.state = {           
+            openedOverflowMenuFollowerId: null,
+        };
+
         this.handleFreezeCriterion = this.handleFreezeCriterion.bind(this);
         this.handleSelectCriteria = this.handleSelectCriteria.bind(this);      
     }
 
-    handleFreezeCriterion(id) {         
-        this.props.showFreezeCriterionPrompt(id);     
-                
+    handleFreezeCriterion(criterionId) {         
+        this.props.showFreezeCriterionPrompt(criterionId);            
     }
 
     handleSelectCriteria(criterionId) {       

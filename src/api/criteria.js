@@ -16,10 +16,10 @@ export function deleteCriterion(clinicId, criterionId) {
     return fetcher.delete(`/leader_clinics/${clinicId}/criteria/${criterionId}.json`);
 }
 
-export function freezeCriterion(criterion, clinic_id) {  
-    return fetcher.post(`/leader_clinics/${criterion}/freeze`,);
+export function freezeCriterion(criterion) {  
+    return fetcher.post(`/leader_clinics/${criterion}/freeze`);
 }
 
-export function unfreezeCriterion(criterion, clinic_id) {
+export function unfreezeCriterion(criterion) {
     return fetcher.post(`/leader_clinics/${criterion}/unfreeze`);
 }

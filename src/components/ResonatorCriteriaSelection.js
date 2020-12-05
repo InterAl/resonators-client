@@ -148,8 +148,10 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 function mapStateToProps(state) {
+    let criterions = criteriaSelector(state);
+    let activeCriterions = _.filter(criterions, c => c.removed === false);
     return {
-        criteria: criteriaSelector(state)
+        criteria: activeCriterions
     };
 }
 
