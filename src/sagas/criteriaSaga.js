@@ -110,13 +110,10 @@ handle(types.DELETE_CRITERION, function*(sagaParams, {payload}) {
 
 function* updateStateWithNewCriteria(criteria) {   
     let lastCriterions = yield select(criteriaSelector);
-
-    let criterias = _.reject(lastCriterions, c => c.id === criteria.id)
-       .concat(criteria);   
-       
+          
     yield put(updateState({
-        criterias,
-        removed: true
+        criteria:  _.reject(lastCriterions, c => c.id === criteria.id)
+        .concat(criteria)
     }));       
     
 }
