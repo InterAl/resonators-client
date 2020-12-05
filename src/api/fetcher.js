@@ -5,6 +5,7 @@ const API_PREFIX = "api";
 const BASE_URL = `${cfg.baseUrl || ""}/${API_PREFIX}`;
 
 function fetcher(url, options = {}) {
+    console.log(BASE_URL + url);
     return fetch(BASE_URL + url, {
         credentials: "same-origin",
         ...options,

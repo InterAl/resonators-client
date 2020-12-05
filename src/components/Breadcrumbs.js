@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import followerSelector from "../selectors/followerSelector";
 import followerGroupSelector from "../selectors/followerGroupSelector";
 import resonatorSelector from "../selectors/resonatorSelector";
-import criterionSelector from "../selectors/criterionSelector";
+import criteriaSelector from "../selectors/criteriaSelector";
 import { Breadcrumbs as MuiBreadcrumbs, Link as MuiLink, Typography } from "@material-ui/core";
 import { NavigateNext } from "@material-ui/icons";
 import { useBelowBreakpoint } from "./hooks";
@@ -204,7 +204,7 @@ const tree = {
                                 },
                                 "/:criterionId": {
                                     title: (state, routeParams) => {
-                                        const criterion = criterionSelector(state, routeParams.criterionId);
+                                        const criterion = criteriaSelector(state, routeParams.criterionId);
                                         return criterion.title;
                                     },
 

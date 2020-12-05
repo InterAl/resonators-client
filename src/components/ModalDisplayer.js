@@ -16,6 +16,7 @@ import ForgotPasswordModal from './ForgotPasswordModal';
 import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import AddLeaderClinicModal from './AddLeaderClinicModal'
 import ResetResonatorPrompt from './ResetResonatorPrompt';
+import FreezeCriterionPrompt from './FreezeCriterionPrompt';
 
 
 const modalMap = {
@@ -32,6 +33,7 @@ const modalMap = {
     'forgotPasswordSuccess': ForgotPasswordSuccess,
     'addLeaderToClinic' : AddLeaderClinicModal,
     'resetResonator': ResetResonatorPrompt,
+    'freezeCriterion': FreezeCriterionPrompt,
 };
 
 class ModalDisplayer extends Component {
