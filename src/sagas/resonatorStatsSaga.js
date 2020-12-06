@@ -30,9 +30,11 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
 
     answers = getUniqueAnswersPerDay(answers, questions);
 
+    let averagedChart = averageChart(answers, questions);
     let aggregatedChart = aggregateChart(answers, questions);
-    questions.push(aggregatedChart.question);
-    answers = answers.concat(aggregatedChart.answers);
+
+    questions.push(averagedChart.question, aggregatedChart.question);
+    answers = answers.concat(averagedChart.answers, aggregatedChart.answers);
 
     questions.sort((a,b) => a.order - b.order || moment(a.updatedAt) - moment(b.updatedAt));
 
@@ -90,6 +92,46 @@ function aggregateChart(allAnswers, allQuestions) {
     };
 
     return { question, answers: aggregatedAnswers};
+}
+
+function averageChart(allAnswers, allQuestions) {
+    let timeToAnswers = _.reduce(allAnswers, (acc, a) => {
+        let time = a.time;
+        let time_answered = a.time_answered;
+        acc[time] = (acc[time] || []).concat({...a, time, time_answered});
+        return acc;
+    }, {});
+
+    let averageAnswers = _.reduce(_.keys(timeToAnswers), (acc, time) => {
+        let rank = _.sumBy(timeToAnswers[time], a => a.rank) / timeToAnswers[time].length;
+
+        acc.push({
+            question_id: 'average',
+            time,
+            time_answered:timeToAnswers[time][0].time_answered,
+            rank
+        });
+
+        return acc;
+    }, []);
+
+    let maxRank = _(allQuestions).map('answers').flatten().map('rank').max();
+
+    let question = {
+        id: 'average',
+        title: 'Average',
+        answers: [{
+            body: '',
+            rank: 0
+        }, {
+            body: '',
+            rank: maxRank
+        }],
+        updatedAt: moment(0).toISOString(),
+        order: -2
+    };
+
+    return { question, answers: averageAnswers};
 }
 
 function transformAnswer(answer) {
