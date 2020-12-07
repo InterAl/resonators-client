@@ -133,8 +133,7 @@ class CriteriaList extends Component {
                 rows={this.getRows()}
                 header={["Criteria"]}                            
                 rowActions={[
-                    rowAction.edit((criterionId) => this.props.push(getEditRoute(criterionId))),
-                    rowAction.remove((criterionId) => this.props.showDeleteCriterionPrompt(criterionId))
+                    rowAction.edit((criterionId) => this.props.push(getEditRoute(criterionId))),                   
                 ]}
                 toolbox={this.getToolbox()}  
                 extraRowActions={this.getExtraRowActions()}

@@ -29,7 +29,7 @@ class FreezeCriterionPrompt extends Component {
                 acceptText='Confirm'
                 text={
                     <Typography>
-                        {`${name} will no longer receive clinics assigned by you. Continue?`}
+                        {`Selected criteria will no longer be available in resonators. Continue?`}
                         <br />
                         <br />
                         (Note: inactive criterias can be filtered in/out at the top of this page)
