@@ -65,7 +65,7 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     getCriterionOrder(criterionId) {
-        const orderIndex = this.props.order.findIndex(x => x === criterionId);
+        const orderIndex = this.props.order.findIndex(x => x === criterionId);        
         return (orderIndex >= 0) ? orderIndex : 999;
     }
 
@@ -85,7 +85,7 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     renderCriteria() {
-        const criteria = this.getCriteriaSorted();
+        const criteria = this.getCriteriaSorted().filter(c => this.isCriterionAttached(c) === true || c.removed === false);
 
         return criteria.map((criterion, idx) => (
             <Draggable key={criterion.id} draggableId={criterion.id} index={idx}>
@@ -147,11 +147,9 @@ const reorder = (list, startIndex, endIndex) => {
     return result.map((criterion, idx) => ({...criterion, order: idx}));
 };
 
-function mapStateToProps(state) {
-    let criterions = criteriaSelector(state);
-    let activeCriterions = _.filter(criterions, c => c.removed === false);
+function mapStateToProps(state) {    
     return {
-        criteria: activeCriterions
+        criteria: criteriaSelector(state)        
     };
 }
 
