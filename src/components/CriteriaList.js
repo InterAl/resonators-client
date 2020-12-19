@@ -9,7 +9,7 @@ import { rowAction } from './RowActions';
 import { push } from "connected-react-router";
 import { Typography, MenuItem } from "@material-ui/core";
 import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
-import OverflowMenu from "./OverflowMenu";;
+import OverflowMenu from "./OverflowMenu";
 import createSelector from '../selectors/criterionSelector';
 
 
