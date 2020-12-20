@@ -5,6 +5,9 @@ import { types as sessionActionTypes} from '../actions/sessionActions';
 import { actions, types } from '../actions/criteriaActions';
 import * as criteriaApi from '../api/criteria';
 import {actions as navActions} from '../actions/navigationActions';
+import createSelector from '../selectors/criterionSelector';
+
+let criteriaSelector = state => state.criteria.criteria;
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
     actionTypes: types,
@@ -60,6 +63,39 @@ handle(types.UPDATE_CRITERION, function*(sagaParams, {payload}) {
     }));
 });
 
+handle(types.FREEZE, function* (sagaParams, { payload }) {
+    yield call(criteriaApi.freezeCriterion, payload);
+    const criteria = yield getCriteria(payload);
+
+    const updatedCriterion = {
+        ...criteria,
+        removed: true
+    };    
+ 
+    yield updateStateWithNewCriteria(updatedCriterion);     
+});
+
+handle(types.TOGGLE_DISPLAY_FROZEN, function* (sagaParams, { payload }) {
+    const { displayFrozen } = yield select(state => state.criteria);
+    
+    yield put(updateState({
+        displayFrozen: !displayFrozen
+    }));      
+});
+
+handle(types.UNFREEZE, function* (sagaParams, { payload }) {
+    yield call(criteriaApi.unfreezeCriterion, payload);
+    const criteria = yield getCriteria(payload);
+
+    const updatedCriterion = {
+        ...criteria,
+        removed: false
+    };    
+ 
+    yield updateStateWithNewCriteria(updatedCriterion);     
+});
+
+
 handle(types.DELETE_CRITERION, function*(sagaParams, {payload}) {
     const criteria = yield select(state => state.criteria.criteria);
     const criterionId = payload;
@@ -72,10 +108,20 @@ handle(types.DELETE_CRITERION, function*(sagaParams, {payload}) {
     }));
 });
 
+function* updateStateWithNewCriteria(criteria) {   
+    let lastCriteria = yield select(criteriaSelector);
+          
+    yield put(updateState({
+        criteria:  _.reject(lastCriteria, c => c.id === criteria.id)
+        .concat(criteria)
+    }));       
+    
+}
+
 function formToCriterion(form) {
     let answers = [];
     const formAnswersEmpty = _.isEmpty(_.keys(form.answers));
-
+    
     if (form.question_kind === 'numeric') {
         if (!formAnswersEmpty) {
             const rankMap = _.reduce(form.answers, (acc, v, k) => {
@@ -133,6 +179,11 @@ function formToCriterion(form) {
         question_kind: form.question_kind,
         answers
     };
+}
+
+function* getCriteria(id) {
+    let criterions = yield select(criteriaSelector);
+    return _.find(criterions, c => c.id === id);
 }
 
 export default {saga, reducer};
