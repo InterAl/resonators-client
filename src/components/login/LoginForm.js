@@ -33,7 +33,7 @@ class LoginForm extends Component {
     }
 
     render() {
-        const role = (this.state.isLeader) ? "leader" : "follower";
+        const role = (this.state.isLeader) ? "LEADER" : "FOLLOWER";
         let google_error_message = '';
         switch(this.props.errorGoogle) { // this should probably be replaced by key-based translations later
             case 'not_follower':
@@ -49,13 +49,13 @@ class LoginForm extends Component {
 
         return (
             <Card className="login-form" elevation={10}>
-                <CardHeader title="Welcome!" subheader={"Sign in to use the Resonators app as a " + role} />
+                <CardHeader title="Welcome to The Resonators Platform!" subheader={isLoginFormRequired ? "" : "Registration is currently possible via a Google account only."} />
                 <CardContent>
-                    {!isLoginFormRequired && (
-                        <Typography paragraph>
-                            Registration to the Resonators app is currently possible via a Google account only
-                        </Typography>
-                    )}
+                    <Typography>
+                        Click on the Google logo below to
+                    </Typography>
+                    <Typography style={{ color: "#38761d", fontWeight: "bold"}}>SIGN IN AS A {role}</Typography>
+                    <Typography paragraph>{this.state.isLeader ? "(Therapist / Research leader)" : "(Patient, Research Participant, Group Member)"}</Typography>
                     <Button
                         fullWidth
                         type="button"
@@ -119,7 +119,10 @@ class LoginForm extends Component {
                     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone) || document.referrer.includes('android-app://')
                 ) && ( // Show the switch in Leader mode or in standalone PWA app
                     <CardContent>
-                        <span className="leader-switch_mode">Click <Button onClick={this.switchLoginMode}>HERE</Button> to sign in as a {(!this.state.isLeader) ? "leader" : "follower"}</span>
+                        <div className="leader-switch_mode">
+                            <span>Click <Button onClick={this.switchLoginMode}>HERE</Button> to <b style={{ color: "#38761d" }}>sign in as a {(!this.state.isLeader) ? "leader" : "follower"}</b></span>
+                            <Typography paragraph>{!this.state.isLeader ? "(Therapist / Research leader)" : "(Patient, Research Participant, Group Member)"}</Typography>
+                        </div>
                     </CardContent>
                 )}
             </Card>
