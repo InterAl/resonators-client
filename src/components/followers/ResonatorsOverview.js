@@ -40,7 +40,7 @@ export default function ResonatorsOverview() {
     return loading ? (
         <LoadingOverlay loading={loading} />
     ) : sentResonatorId ? (
-        <SentResonator sentResonatorId={sentResonatorId} onAnswer={updateResonator} />
+        <SentResonator sentResonatorId={sentResonatorId} updateResonator={updateResonator} />
     ) : (
         <>
             <ResonatorList
