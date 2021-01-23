@@ -7,7 +7,7 @@ import { actions as navigationActions } from "../actions/navigationActions";
 import { actions as statsActions } from '../actions/resonatorStatsActions';
 import followerGroupsSelector from '../selectors/followerGroupsSelector';
 import { MenuItem, Link as MuiLink, Typography, Badge, withWidth } from "@material-ui/core";
-import { NotInterested, Group, PlayCircleFilled, PauseCircleFilled, GetApp } from "@material-ui/icons";
+import {NotInterested, Group, PlayCircleFilled, PauseCircleFilled, GetApp, ContactMail} from "@material-ui/icons";
 import { rowAction } from './RowActions';
 import EntityTable from "./EntityTable";
 import { Link } from "react-router-dom";
@@ -30,6 +30,7 @@ class FollowerGroups extends Component {
         this.handleAddFollowerGroup = this.handleAddFollowerGroup.bind(this);
         this.handleManageFollowers = this.handleManageFollowers.bind(this);
         this.handleFreezeFollowerGroup = this.handleFreezeFollowerGroup.bind(this);
+        this.handleInviteFollower = this.handleInviteFollower.bind(this);
     }
 
     handleSelectFollowerGroup(followerGroupId) {
@@ -54,6 +55,10 @@ class FollowerGroups extends Component {
 
     handleFreezeFollowerGroup(followerGroupId) {
         this.props.showFreezeFollowerGroupPrompt(followerGroupId);
+    }
+
+    handleInviteFollower(followerGroupId) {
+        this.props.showInvitationModal(followerGroupId);
     }
 
     toggleOverflowMenu(followerGroupId) {
@@ -132,6 +137,12 @@ class FollowerGroups extends Component {
 
     getExtraRowActions() {
         return [
+            rowAction({
+                title: "Invite Group",
+                icon: <ContactMail />,
+                onClick: this.handleInviteFollower,
+                isAvailable: () => this.props.invitationsLength > 0
+            }),
             rowAction.remove(this.handleRemoveFollowerGroup),
             rowAction({
                 title: "Activate",
@@ -167,10 +178,12 @@ class FollowerGroups extends Component {
 
 function mapStateToProps(state) {
     const followerGroupsData = followerGroupsSelector(state);
+    const invitationsLength = state.invitations.invitations.length;
 
     return {
         ...followerGroupsData,
-        getFollowerGroup: followerGroupId => _.find(followerGroupsData.followerGroups, (fg) => fg.id === followerGroupId)
+        getFollowerGroup: followerGroupId => _.find(followerGroupsData.followerGroups, (fg) => fg.id === followerGroupId),
+        invitationsLength
     };
 }
 
@@ -204,6 +217,13 @@ function mapDispatchToProps(dispatch) {
                 followerGroupId
             }
         }),
+        showInvitationModal: (followerGroupId) =>
+            navigationActions.showModal({
+                name: "inviteFollower",
+                props: {
+                    followerGroupId,
+                },
+            }),
         selectFollowerGroup: actions.selectFollowerGroup,
         downloadGroupStats: statsActions.downloadGroupStats,
         push

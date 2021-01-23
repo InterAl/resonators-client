@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
+import { PlayCircleFilled, PauseCircleFilled, ContactMail } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
 import { rowAction } from "./RowActions";
 import { Link } from "react-router-dom";
@@ -27,6 +27,7 @@ class Followers extends Component {
         this.handleRemoveFollower = this.handleRemoveFollower.bind(this);
         this.handleAddFollower = this.handleAddFollower.bind(this);
         this.handleFreezeFollower = this.handleFreezeFollower.bind(this);
+        this.handleInviteFollower = this.handleInviteFollower.bind(this);
     }
 
     handleClinicFilterChange(ev, idx, value) {
@@ -51,6 +52,10 @@ class Followers extends Component {
 
     handleFreezeFollower(id) {
         this.props.showFreezeFollowerPrompt(id);
+    }
+
+    handleInviteFollower(id) {
+        this.props.showInvitationModal(id);
     }
 
     toggleOverflowMenu(followerId) {
@@ -157,6 +162,12 @@ class Followers extends Component {
     getExtraRowActions() {
         return [
             rowAction({
+                title: "Invite Follower",
+                icon: <ContactMail />,
+                onClick: this.handleInviteFollower,
+                isAvailable: () => this.props.invitationsLength > 0
+            }),
+            rowAction({
                 title: "Activate",
                 icon: <PlayCircleFilled />,
                 onClick: this.props.unfreezeFollower,
@@ -167,7 +178,7 @@ class Followers extends Component {
                 icon: <PauseCircleFilled />,
                 onClick: this.handleFreezeFollower,
                 isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
-            }),
+            })
         ];
     }
 
@@ -190,10 +201,12 @@ class Followers extends Component {
 
 function mapStateToProps(state) {
     let followersData = followersSelector(state);
+    const invitationsLength = state.invitations.invitations.length;
 
     return {
         ...followersData,
         getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId),
+        invitationsLength
     };
 }
 
@@ -232,6 +245,13 @@ function mapDispatchToProps(dispatch) {
                     props: {
                         followerId,
                     },
+                }),
+            showInvitationModal: (followerId) =>
+                navigationActions.showModal({
+                   name: "inviteFollower",
+                   props: {
+                       followerId,
+                   },
                 }),
             selectFollower: actions.selectFollower,
         },

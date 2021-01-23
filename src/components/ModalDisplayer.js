@@ -6,6 +6,8 @@ import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 import FreezeFollowerPrompt from './FreezeFollowerPrompt';
+import EditInvitationModal from './EditInvitationModal';
+import DeleteInvitationPrompt from './DeleteInvitationPrompt';
 import EditFollowerGroupModal from './EditFollowerGroupModal';
 import DeleteFollowerGroupPrompt from './DeleteFollowerGroupPrompt';
 import FreezeFollowerGroupPrompt from './FreezeFollowerGroupPrompt';
@@ -17,15 +19,19 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import AddLeaderClinicModal from './AddLeaderClinicModal'
 import ResetResonatorPrompt from './ResetResonatorPrompt';
 import FreezeCriterionPrompt from './FreezeCriterionPrompt';
+import InviteFollowerModal from "components/InviteFollowerModal";
 
 
 const modalMap = {
     'editFollower': EditFollowerModal,
     'deleteFollower': DeleteFollowerPrompt,
     'freezeFollower': FreezeFollowerPrompt,
+    'inviteFollower': InviteFollowerModal,
     'editFollowerGroup': EditFollowerGroupModal,
     'deleteFollowerGroup': DeleteFollowerGroupPrompt,
     'freezeFollowerGroup': FreezeFollowerGroupPrompt,
+    'editInvitation': EditInvitationModal,
+    'deleteInvitation': DeleteInvitationPrompt,
     'deleteResonator': DeleteResonatorPrompt,
     'deleteCriterion': DeleteCriterionPrompt,
     'registration': RegistrationModal,
