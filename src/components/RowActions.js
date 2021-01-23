@@ -6,18 +6,18 @@ import OverflowMenu from "./OverflowMenu";
 import { useBelowBreakpoint } from "./hooks";
 import _ from 'lodash';
 
-const computeActionKey = (action) => action.title.toLowerCase();
+const computeActionKey = (itemId, action) => _.isFunction(action.title) ? action.title(itemId) : action.title.toLowerCase();
 
 const renderShownAction = (itemId) => (action) => (
-    <Tooltip title={action.title} key={computeActionKey(action)}>
+    <Tooltip title={computeActionKey(itemId, action)} key={computeActionKey(itemId, action)}>
         <IconButton onClick={() => action.onClick(itemId)}>
             {_.isFunction(action.icon) ? action.icon(itemId) : action.icon}
         </IconButton>
     </Tooltip>
 );
 
-const renderOverflowAction = (itemId) => (action) => (
-    <MenuItem onClick={() => action.onClick(itemId)} key={computeActionKey(action)}>
+const renderOverflowAction = (itemId) => (action) => { console.log(computeActionKey(itemId, action)); return (
+    <MenuItem onClick={() => action.onClick(itemId)} key={computeActionKey(itemId, action)}>
         {action.icon ?
             <ListItemIcon>
                 {_.isFunction(action.icon) ? action.icon(itemId) : action.icon}
@@ -25,7 +25,7 @@ const renderOverflowAction = (itemId) => (action) => (
             null}
         {action.title}
     </MenuItem>
-);
+)};
 
 const isActionAvailable = (itemId) => (action) => action.isAvailable(itemId);
 

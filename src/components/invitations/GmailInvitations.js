@@ -81,7 +81,7 @@ class GmailInvitations extends Component {
                 isAvailable: (invitationId) => !this.props.invitations.find(i => i.id === invitationId).system
             }),
             rowAction({
-                title: "Make Default",
+                title: (invitationId) => (this.state.defaultInvitation === invitationId) ? "Default" : "Make Default",
                 icon: (invitationId) => (this.state.defaultInvitation === invitationId) ? <DoneAll color="primary"/> : <Done />,
                 onClick: this.handleSetDefaultInvitation,
             })
