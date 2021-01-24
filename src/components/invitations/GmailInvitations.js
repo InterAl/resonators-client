@@ -52,7 +52,7 @@ class GmailInvitations extends Component {
             this.props.invitations,
             (acc, f) => {
                 let cols = [];
-                cols.push(<span>{f.subject}</span>);
+                cols.push(<span>{f.displayTitle ? f.displayTitle : f.subject}</span>);
                 acc[f.id] = cols;
                 return acc;
             },

@@ -106,7 +106,7 @@ class EditFollowerModal extends Component {
                                     >
                                         {this.props.invitations.map((invitation, i) => (
                                             <MenuItem value={invitation.id} key={i}>
-                                                {invitation.subject}
+                                                {invitation.displayTitle ? invitation.displayTitle : invitation.subject}
                                             </MenuItem>
                                         ))}
                                     </Select>
