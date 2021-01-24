@@ -4,11 +4,27 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actions } from "../actions/followersActions";
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@material-ui/core";
+import {
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Grid,
+    Checkbox,
+    Select,
+    InputLabel,
+    MenuItem,
+    FormControlLabel,
+    Snackbar
+} from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
 import TextField from "./FormComponents/TextField";
 import navigationInfoSelector from "../selectors/navigationSelector";
 import Papa from 'papaparse';
+import Cookies from "js-cookie";
+
+import "./EditFollowerModal.scss";
 
 class EditFollowerModal extends Component {
     static propTypes = {
@@ -33,7 +49,16 @@ class EditFollowerModal extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.importFollowers = this.importFollowers.bind(this);
+        this.inviteGmail = this.inviteGmail.bind(this);
+        this.copyInvitation = this.copyInvitation.bind(this);
+        this.selectInvitation = this.selectInvitation.bind(this);
+        this.renderForm = this.renderForm.bind(this);
         this.cfg = props.editMode ? editCfg : newCfg;
+        this.state = {
+            invite_gmail: false,
+            invitation: this.props.invitations.length ? this.props.invitations[0] : null,
+            snackbarCopyInvitationState: false
+        }
     }
 
     importFollowers(e) {
@@ -64,7 +89,32 @@ class EditFollowerModal extends Component {
         if (this.props.editMode) this.props.update({ ...formData, id: this.props.followerId });
         else this.props.create(formData);
 
+        if (this.state.invite_gmail) this.inviteGmail(formData.email);
+
+
         this.props.onClose();
+    }
+
+    inviteGmail(email) {
+        const subject = encodeURIComponent(this.state.invitation.subject);
+        const body = encodeURIComponent(this.state.invitation.body);
+        window.open("https://mail.google.com/mail/u/0/?view=cm&fs=1&to="+email+"&su="+subject+"&body="+body+"&tf=1", "_blank");
+    }
+
+    copyInvitation() {
+        if (navigator) {
+            navigator.clipboard.writeText(this.state.invitation.body).then(() => {
+                this.setState({snackbarCopyInvitationState: true})
+            }, (err) => {
+                window.prompt("Copy to clipboard: Ctrl+C, Enter", this.state.invitation.body);
+            });
+        } else {
+            window.prompt("Copy to clipboard: Ctrl+C, Enter", this.state.invitation.body);
+        }
+    }
+
+    selectInvitation(event) {
+        this.setState({ invitation: this.props.invitations.find(x => x.id === event.target.value)});
     }
 
     renderForm() {
@@ -74,7 +124,58 @@ class EditFollowerModal extends Component {
                 <Field type="email" placeholder="Email" name="email" component={TextField} />
 
                 {!this.props.editMode && (
-                    <Field type="password" placeholder="Password" name="password" component={TextField} />
+                    <div>
+                        {this.props.invitations.length > 0 && (
+                            <Grid container justify="space-between" alignItems="center" direction="column" id="inviteGmail">
+                                <Grid container justify="space-between" alignItems="center">
+                                    <Grid item>
+                                        <InputLabel id="select_invitation-label">Invitation Template</InputLabel>
+                                        <Select
+                                            id="select_invitation"
+                                            labelId="select_invitation-label"
+                                            defaultValue={Cookies.get('defaultInvitation') ? Cookies.get('defaultInvitation') : this.props.invitations[0].id}
+                                            style={{ width: "100%" }}
+                                            onChange={this.selectInvitation}
+                                        >
+                                            {this.props.invitations.map((invitation, i) => (
+                                                <MenuItem value={invitation.id} key={i}>
+                                                    {invitation.subject}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button component="span" variant="contained" onClick={this.copyInvitation}>Copy Invitation</Button>
+                                        <Snackbar
+                                            open={this.state.snackbarCopyInvitationState}
+                                            onClose={() => this.setState({snackbarCopyInvitationState: false})}
+                                            autoHideDuration={1000}
+                                            message="Copied to clipboard!"
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Field
+                                        name="invite_gmail"
+                                        component={({ input: { onChange, value }, meta, ...custom }) => (
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        color="primary"
+                                                        checked={this.state.invite_gmail}
+                                                        onChange={() => this.setState({invite_gmail: !this.state.invite_gmail})}
+                                                        {...custom}
+                                                    />
+                                                }
+                                                label={(<span className="invite_subtext">Invite with GMail</span>)}
+                                            />
+                                        )}
+                                    />
+                                </Grid>
+                            </Grid>
+                        )}
+                    </div>
+                    // <Field type="password" placeholder="Password" name="password" component={TextField} />
 
                     // <Field name='clinic'
                     //        label='Clinic'
@@ -161,11 +262,13 @@ function mapStateToProps(state) {
         modalProps: { followerId, editMode },
     } = navigationInfoSelector(state);
     const follower = _.find(state.followers.followers, (f) => f.id === followerId);
+    const invitations = state.invitations.invitations;
     const clinics = state.clinics.clinics;
     const current_clinic_id = state.leaders.leaders.current_clinic_id;
 
     const ret = {
         follower,
+        invitations,
         clinics,
         editMode,
     };

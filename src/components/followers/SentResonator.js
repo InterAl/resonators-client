@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SentResonator({ sentResonatorId, onAnswer }) {
+export default function SentResonator({ sentResonatorId, updateResonator }) {
     const classes = useStyles();
     const history = useHistory();
     const { enqueueSnackbar } = useSnackbar();
@@ -59,7 +59,7 @@ export default function SentResonator({ sentResonatorId, onAnswer }) {
             .catch(showError)
             .then(({ resonator }) => {
                 setResonator(resonator);
-                onAnswer(resonator);
+                updateResonator(resonator);
             })
             .then(confirmSave);
     };
@@ -80,8 +80,10 @@ export default function SentResonator({ sentResonatorId, onAnswer }) {
         setLoading(true);
         api.get(`/follower/resonators/${sentResonatorId}`)
             .catch(showError)
-            .then((data) => data.resonator)
-            .then(setResonator)
+            .then(({ resonator }) => {
+                setResonator(resonator);
+                updateResonator(resonator);
+            })
             .finally(() => setLoading(false));
     }, []);
 

@@ -60,12 +60,12 @@ class ResonatorCriteriaSelection extends Component {
 
     getCriteriaSorted() {
         return _.orderBy(this.props.criteria, (c) => {
-            return [this.isCriterionAttached(c) ? 0 : 1, this.getCriterionOrder(c.id)];
+            return [this.isCriterionAttached(c) ? 0 : 1, this.getCriterionOrder(c.id), 'title'];
         });
     }
 
     getCriterionOrder(criterionId) {
-        const orderIndex = this.props.order.findIndex(x => x === criterionId);        
+        const orderIndex = this.props.order.findIndex(x => x === criterionId);
         return (orderIndex >= 0) ? orderIndex : 999;
     }
 
@@ -147,9 +147,9 @@ const reorder = (list, startIndex, endIndex) => {
     return result.map((criterion, idx) => ({...criterion, order: idx}));
 };
 
-function mapStateToProps(state) {    
+function mapStateToProps(state) {
     return {
-        criteria: criteriaSelector(state)        
+        criteria: criteriaSelector(state)
     };
 }
 

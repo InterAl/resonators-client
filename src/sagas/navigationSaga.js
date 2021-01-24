@@ -16,6 +16,9 @@ const screenToRoute = {
     'followers': {
         route: '/followers'
     },
+    'invitations': {
+        route: '/invitations'
+    },
     'clinics': {
         route: '/clinics'
     },

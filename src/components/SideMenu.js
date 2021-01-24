@@ -21,6 +21,7 @@ import {
     ExpandMore,
     Group,
     Person,
+    ContactMail,
     DirectionsWalk,
     AddToHomeScreen,
     PermIdentity,
@@ -139,6 +140,12 @@ function SideMenu(props) {
                                 </ListItem>
                             </List>
                         </Collapse>
+                        <ListItem button onClick={() => props.clickMenuItem("invitations")}>
+                            <ListItemIcon>
+                                <ContactMail />
+                            </ListItemIcon>
+                            <ListItemText primary="GMail Invitations" />
+                        </ListItem>
                     </>
                 )}
                 {props.user?.isFollower && (

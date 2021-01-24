@@ -17,6 +17,7 @@ import Clinics from "./Clinics";
 import NoMatch from "./NoMatch";
 import HomePage from "./HomePage";
 import Followers from "./Followers";
+import GmailInvitations from "./invitations/GmailInvitations";
 import LoginPage from "./login/LoginPage";
 import CriteriaList from "./CriteriaList";
 import Layout from "./layouts/LeaderLayout";
@@ -40,6 +41,8 @@ const leaderRoutes = [
     { path: "/followers/:followerId/resonators/:resonatorId/show", component: ShowResonator },
     { path: "/followers/:followerId/resonators/:resonatorId/edit", component: EditResonator },
     { path: "/followers/:followerId/resonators/:resonatorId/stats/:qid", component: ResonatorStats },
+
+    { path: "/invitations", component: GmailInvitations},
 
     { path: "/clinics", component: Clinics },
     { path: "/clinics/criteria", component: CriteriaList },
