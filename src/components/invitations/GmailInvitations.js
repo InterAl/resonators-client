@@ -8,7 +8,7 @@ import invitationsSelector from "../../selectors/invitationsSelector";
 import { Typography } from "@material-ui/core";
 import EntityTable from "../EntityTable";
 import { rowAction } from "../RowActions";
-import { Edit, Delete, Done, DoneAll} from "@material-ui/icons";
+import { Edit, Delete, Done, DoneAll, FileCopy } from "@material-ui/icons";
 import Cookies from 'js-cookie';
 
 class GmailInvitations extends Component {
@@ -41,9 +41,15 @@ class GmailInvitations extends Component {
         Cookies.set('defaultInvitation', id);
     }
 
+    handleCloneInvitation(id) {
+        this.props.showCloneInvitationModal(id);
+    }
+
     getHeader() {
         const header = [];
-        header.push("Subject");
+        header.push("Template Title");
+        header.push("Email Subject");
+        header.push("Email Body");
         return header;
     }
 
@@ -52,7 +58,9 @@ class GmailInvitations extends Component {
             this.props.invitations,
             (acc, f) => {
                 let cols = [];
-                cols.push(<span>{f.displayTitle ? f.displayTitle : f.subject}</span>);
+                cols.push(<span>{f.title}</span>);
+                cols.push(<Typography style={{ minWidth: "200px", fontSize: "0.875rem" }}>{f.subject}</Typography>);
+                cols.push(<p>{f.body}</p>);
                 acc[f.id] = cols;
                 return acc;
             },
@@ -79,6 +87,12 @@ class GmailInvitations extends Component {
                 icon: <Delete />,
                 onClick: this.handleRemoveInvitation,
                 isAvailable: (invitationId) => !this.props.invitations.find(i => i.id === invitationId).system
+            }),
+            rowAction({
+                title: "Clone Template",
+                icon: <FileCopy />,
+                onClick: (invitationId) => this.handleCloneInvitation(invitationId),
+                isAvailable: (invitationId) => this.props.invitations.find(i => i.id === invitationId).system
             }),
             rowAction({
                 title: (invitationId) => (this.state.defaultInvitation === invitationId) ? "Default" : "Make Default",
@@ -124,6 +138,14 @@ function mapDispatchToProps(dispatch) {
                 navigationActions.showModal({
                     name: "editInvitation",
                     props: {
+                        editMode: false,
+                    },
+                }),
+            showCloneInvitationModal: (invitationId) =>
+                navigationActions.showModal({
+                    name: "editInvitation",
+                    props: {
+                        invitationId,
                         editMode: false,
                     },
                 }),

@@ -6,7 +6,7 @@ import {actions as navigationActions} from '../actions/navigationActions';
 import EditFollowerModal from './EditFollowerModal';
 import DeleteFollowerPrompt from './DeleteFollowerPrompt';
 import FreezeFollowerPrompt from './FreezeFollowerPrompt';
-import EditInvitationModal from './EditInvitationModal';
+import EditInvitationModal from './invitations/EditInvitationModal';
 import DeleteInvitationPrompt from './DeleteInvitationPrompt';
 import EditFollowerGroupModal from './EditFollowerGroupModal';
 import DeleteFollowerGroupPrompt from './DeleteFollowerGroupPrompt';
@@ -19,7 +19,7 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import AddLeaderClinicModal from './AddLeaderClinicModal'
 import ResetResonatorPrompt from './ResetResonatorPrompt';
 import FreezeCriterionPrompt from './FreezeCriterionPrompt';
-import InviteFollowerModal from "components/InviteFollowerModal";
+import InviteFollowerModal from "components/invitations/InviteFollowerModal";
 
 
 const modalMap = {

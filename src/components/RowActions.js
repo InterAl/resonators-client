@@ -6,7 +6,7 @@ import OverflowMenu from "./OverflowMenu";
 import { useBelowBreakpoint } from "./hooks";
 import _ from 'lodash';
 
-const computeActionKey = (itemId, action) => _.isFunction(action.title) ? action.title(itemId) : action.title.toLowerCase();
+const computeActionKey = (itemId, action) => _.isFunction(action.title) ? action.title(itemId).toLowerCase() : action.title.toLowerCase();
 
 const renderShownAction = (itemId) => (action) => (
     <Tooltip title={computeActionKey(itemId, action)} key={computeActionKey(itemId, action)}>
