@@ -4,15 +4,17 @@ export function get() {
     return fetcher('/invitations');
 }
 
-export function create({subject, body}) {
+export function create({title, subject, body}) {
     return fetcher.post('/invitations', {
+        title,
         subject,
         body
     });
 }
 
-export function edit({id, subject, body}) {
+export function edit({id, title, subject, body}) {
     return fetcher.put(`/invitations/${id}`, {
+        title,
         subject,
         body
     });

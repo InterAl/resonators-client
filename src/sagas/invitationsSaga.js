@@ -48,6 +48,7 @@ handle(types.UPDATE, function* (sagaParams, { payload }) {
     let invitation = yield getInvitation(payload.id);
     let updatedInvitation = {
         ...invitation,
+        title: payload.title,
         subject: payload.subject,
         body: payload.body
     };

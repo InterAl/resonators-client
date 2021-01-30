@@ -59,9 +59,13 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     getCriteriaSorted() {
-        return _.orderBy(this.props.criteria, (c) => {
-            return [this.isCriterionAttached(c) ? 0 : 1, this.getCriterionOrder(c.id), 'title'];
-        });
+        const sorted = this.props.criteria;
+        sorted.sort((a, b) =>
+            this.isCriterionAttached(b) - this.isCriterionAttached(a) ||
+            this.getCriterionOrder(a.id) - this.getCriterionOrder(b.id) ||
+            a.title.localeCompare(b.title)
+        );
+        return sorted;
     }
 
     getCriterionOrder(criterionId) {

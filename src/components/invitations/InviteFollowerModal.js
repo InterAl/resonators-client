@@ -15,13 +15,13 @@ import {
     Snackbar
 } from "@material-ui/core";
 import { reduxForm } from "redux-form";
-import navigationInfoSelector from "../selectors/navigationSelector";
+import navigationInfoSelector from "../../selectors/navigationSelector";
 import {bindActionCreators} from "redux";
 import {actions as followerGroupsActions} from "actions/followerGroupsActions";
 import {push} from "connected-react-router";
 import Cookies from 'js-cookie';
 
-import "./EditFollowerModal.scss";
+import "../EditFollowerModal.scss";
 
 class EditFollowerModal extends Component {
     static propTypes = {
@@ -106,7 +106,7 @@ class EditFollowerModal extends Component {
                                     >
                                         {this.props.invitations.map((invitation, i) => (
                                             <MenuItem value={invitation.id} key={i}>
-                                                {invitation.subject}
+                                                {invitation.title ? invitation.title : invitation.subject}
                                             </MenuItem>
                                         ))}
                                     </Select>

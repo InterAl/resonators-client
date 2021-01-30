@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { convertFromHTML, ContentState, convertToRaw } from 'draft-js';
-import { actions } from "../actions/invitationsActions";
+import { actions } from "actions/invitationsActions";
 import {
     Button,
     Dialog,
@@ -13,11 +13,11 @@ import {
     DialogActions
 } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
-import TextField from "./FormComponents/TextField";
+import TextField from "../FormComponents/TextField";
 import MUIRichTextEditor from "mui-rte";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import { richEditorTheme } from "./richEditorTheme";
-import navigationInfoSelector from "../selectors/navigationSelector";
+import { richEditorTheme } from "../richEditorTheme";
+import navigationInfoSelector from "../../selectors/navigationSelector";
 
 class EditInvitationModal extends Component {
     static propTypes = {
@@ -67,8 +67,9 @@ class EditInvitationModal extends Component {
     renderForm() {
         return (
             <form autoComplete="off" style={{ margin: "50px 0" }}>
-                <Field type="text" placeholder="Subject" name="subject" style={{ marginBottom: "30px" }} component={TextField} />
-                <Field type="text" placeholder="Body" name="body" component={({ input: { onChange, value }, meta, ...custom }) => {
+                <Field type="text" placeholder="Template Title" name="title" component={TextField} />
+                <Field type="text" placeholder="Email Subject" name="subject" style={{ marginBottom: "30px" }} component={TextField} />
+                <Field type="text" placeholder="Email Body" name="body" component={({ input: { onChange, value }, meta, ...custom }) => {
                     const contentHTML = convertFromHTML(value);
                     const state = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
                     const content = JSON.stringify(convertToRaw(state));
@@ -78,7 +79,7 @@ class EditInvitationModal extends Component {
                             <MUIRichTextEditor
                                 defaultValue={content}
                                 controls={[]}
-                                label="Body..."
+                                label="Email Body..."
                                 onChange={this.richChange}
                                 maxLength={1500}
                             />
@@ -117,6 +118,7 @@ function validateInput(data) {
     let errors = {};
 
     if (!data.subject) errors.subject = "Required";
+    if (!data.title) errors.title = "Required";
 
     return errors;
 }
@@ -139,6 +141,7 @@ function mapStateToProps(state) {
 
     if (invitation) {
         ret.initialValues = {
+            title: invitation.title,
             subject: invitation.subject,
             body: invitation.body,
         };
