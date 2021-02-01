@@ -148,10 +148,17 @@ function* updateUser(user = {}) {
 
         yield call(subscribeToPushNotifications);
 
-        if (currentPath === '/' || currentPath === '/login') {
+        if ( // Standalone App or Leader login should lead to /followers when possible, otherwise resonators
+            currentPath === '/loginLeader' ||
+            (currentPath === '/login' && (
+                (window.matchMedia('(display-mode: standalone)').matches) ||
+                (window.navigator.standalone) ||
+                document.referrer.includes('android-app://')
+            ))
+        ) {
+            yield put(navigationActions.navigate(user.isLeader ? 'followers' : 'follower/resonators'));
+        } else if (currentPath === '/' || currentPath === '/login') { // regular Login should always lead to resonators
             yield put(navigationActions.navigate('follower/resonators'));
-        } else if (currentPath === '/loginLeader') {
-            yield put(navigationActions.navigate(user.isFollower ? 'follower/resonators' : 'followers'));
         }
 
     }
