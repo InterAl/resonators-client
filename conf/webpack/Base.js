@@ -98,7 +98,7 @@ class WebpackBaseConfig {
             },
             entry: "./index.js",
             output: {
-                filename: "[name].[contenthash].js",
+                filename: "[name].[hash].js",
                 publicPath: "/",
             },
             module: {
