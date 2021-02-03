@@ -56,7 +56,7 @@ class EditFollowerModal extends Component {
         this.cfg = props.editMode ? editCfg : newCfg;
         this.state = {
             invite_gmail: false,
-            invitation: this.props.invitations.length ? this.props.invitations[0] : null,
+            invitation: Cookies.get('defaultInvitation') ? this.props.invitations.find(x => x.id === Cookies.get('defaultInvitation')) : this.props.invitations[0],
             snackbarCopyInvitationState: false
         }
     }

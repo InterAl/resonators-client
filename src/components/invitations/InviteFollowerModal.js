@@ -44,7 +44,7 @@ class EditFollowerModal extends Component {
             doneBtn: "Send With GMail",
         };
         this.state = {
-            invitation: this.props.invitations.length ? this.props.invitations[0] : null,
+            invitation: Cookies.get('defaultInvitation') ? this.props.invitations.find(x => x.id === Cookies.get('defaultInvitation')) : this.props.invitations[0],
             snackbarCopyInvitationState: false
         }
     }
