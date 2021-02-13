@@ -143,6 +143,7 @@ class EditResonatorSchedule extends Component {
                 margin="normal"
                 component={TextField}
                 style={{ width: 150 }}
+                normalize={(value) => (value < 1) ? 1 : value}
                 InputProps={{
                     startAdornment: <InputAdornment position="start">Every</InputAdornment>,
                     endAdornment: <InputAdornment position="end">weeks</InputAdornment>,
