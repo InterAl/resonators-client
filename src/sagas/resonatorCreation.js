@@ -180,6 +180,10 @@ handle(types.COPY_TO, function* (sagaParams, { payload: { targetType, resonatorI
     const formData = convertResonatorToForm(_.omit(resonator, ['id', 'createdAt', 'updatedAt', 'follower_id']));
     const targetId = (targetType === 'follower') ? followerId : groupId;
     const requestPayload = convertFormToPayload({ targetId, target, formData });
+
+    requestPayload.pop_email = false;
+    requestPayload.disable_copy_to_leader = true;
+
     const response = yield call(target.resonatorApi.create, targetId, requestPayload);
 
     const resonatorQuestions = _.map(resonator.questions, 'question_id');
