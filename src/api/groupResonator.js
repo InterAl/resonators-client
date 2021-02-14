@@ -10,6 +10,10 @@ export function uploadMedia(followerGroupId, resonatorId, file, mediaKind = 'pic
     return fetcher.upload(`/leader_followerGroups/${followerGroupId}/reminders/${resonatorId}/items`, formData);
 }
 
+export function createResonatorAttachment(followerGroupId, resonatorId, link) {
+    return fetcher.post(`/leader_followerGroups/${followerGroupId}/reminders/${resonatorId}/attachment`, {resonatorId, link});
+}
+
 export function update(followerGroupId, resonator) {
     return fetcher.put(`/leader_followerGroups/${followerGroupId}/reminders/${resonator.id}.json`, resonator);
 }
