@@ -191,9 +191,7 @@ handle(types.COPY_TO, function* (sagaParams, { payload: { targetType, resonatorI
 
     if (resonator.items) {
         resonator.items.forEach((image) => {
-            fetch(image.link).then(res => res.blob()).then(blob => {
-                target.resonatorApi.uploadMedia(targetId, response.id, blob);
-            });
+            target.resonatorApi.createResonatorAttachment(targetId, response.id, image.link);
         });
     }
 
