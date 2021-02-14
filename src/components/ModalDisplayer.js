@@ -11,6 +11,7 @@ import DeleteInvitationPrompt from './DeleteInvitationPrompt';
 import EditFollowerGroupModal from './EditFollowerGroupModal';
 import DeleteFollowerGroupPrompt from './DeleteFollowerGroupPrompt';
 import FreezeFollowerGroupPrompt from './FreezeFollowerGroupPrompt';
+import CopyResonatorModal from './CopyResonatorModal';
 import DeleteResonatorPrompt from './DeleteResonatorPrompt';
 import DeleteCriterionPrompt from './DeleteCriterionPrompt';
 import RegistrationModal from './RegistrationModal';
@@ -32,6 +33,7 @@ const modalMap = {
     'freezeFollowerGroup': FreezeFollowerGroupPrompt,
     'editInvitation': EditInvitationModal,
     'deleteInvitation': DeleteInvitationPrompt,
+    'copyResonator': CopyResonatorModal,
     'deleteResonator': DeleteResonatorPrompt,
     'deleteCriterion': DeleteCriterionPrompt,
     'registration': RegistrationModal,

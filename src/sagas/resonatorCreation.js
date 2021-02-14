@@ -173,6 +173,33 @@ handle(types.CREATE, function* (sagaParams, { payload: { targetType } }) {
     }))
 });
 
+handle(types.COPY_TO, function* (sagaParams, { payload: { targetType, resonatorId, followerId, groupId } }) {
+    const target = targetFactory[targetType];
+    const resonators = yield select(resonatorsSelector);
+    const resonator = _.find(resonators, (r) => r.id === resonatorId);
+    const formData = convertResonatorToForm(_.omit(resonator, ['id', 'createdAt', 'updatedAt', 'follower_id']));
+    const targetId = (targetType === 'follower') ? followerId : groupId;
+    const requestPayload = convertFormToPayload({ targetId, target, formData });
+    const response = yield call(target.resonatorApi.create, targetId, requestPayload);
+
+    const resonatorQuestions = _.map(resonator.questions, 'question_id');
+    if (resonatorQuestions) target.resonatorApi.addBulkCriterion(targetId, response.id, resonatorQuestions, formData.criteriaOrder);
+
+    if (resonator.items) {
+        resonator.items.forEach((image) => {
+            fetch(image.link).then(res => res.blob()).then(blob => {
+                target.resonatorApi.uploadMedia(targetId, response.id, blob);
+            });
+        });
+    }
+
+    yield target.fetchResonators(targetId);
+
+    yield put(navigationActions.navigate({
+        route: target.navigationRoute, routeParams: { [target.targetIdName]: targetId }
+    }));
+});
+
 function syncResonatorCriteria(resonator, newCriteria, target, newOrder = []) {
     let resonatorQuestions = _.map(resonator.questions, 'question_id');
     let addedQids = _.difference(newCriteria, resonatorQuestions);
@@ -243,7 +270,6 @@ function convertResonatorToForm(resonator) {
             q.push(cur.question_id);
         return q;
     }, []);
-    console.log(resonator.questions);
 
     const form = {
         ...repeatDays,

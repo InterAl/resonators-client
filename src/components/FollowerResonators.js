@@ -13,7 +13,7 @@ import * as utils from "./utils";
 import OverflowMenu from "./OverflowMenu";
 import getResonatorImage from "../selectors/getResonatorImage";
 import { MenuItem, Typography, Avatar } from "@material-ui/core";
-import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew, Group } from "@material-ui/icons";
+import { RemoveRedEye, PauseCircleFilled, PlayCircleFilled, Autorenew, Group, FileCopy } from "@material-ui/icons";
 
 class FollowerResonators extends Component {
     constructor(props) {
@@ -25,6 +25,7 @@ class FollowerResonators extends Component {
 
         this.handleRemoveResonator = this.handleRemoveResonator.bind(this);
         this.toggleShowInactive = this.toggleShowInactive.bind(this);
+        this.handleCopyResonator = this.handleCopyResonator.bind(this);
         this.handleActivateResonator = this.handleActivateResonator.bind(this);
         this.handleDeactivateResonator = this.handleDeactivateResonator.bind(this);
         this.handleResetResonator = this.handleResetResonator.bind(this);
@@ -110,6 +111,10 @@ class FollowerResonators extends Component {
         };
     }
 
+    handleCopyResonator(resonatorId) {
+        this.props.showCopyResonatorModal(resonatorId);
+    }
+
     handleActivateResonator(id) {
         const resonator = _.find(this.props.resonators, (r) => r.id === id);
         resonator.pop_email = true;
@@ -158,6 +163,11 @@ class FollowerResonators extends Component {
 
     getExtraRowActions() {
         return [
+            rowAction({
+                icon: <FileCopy />,
+                title: "Copy To...",
+                onClick: this.handleCopyResonator
+            }),
             rowAction({
                 icon: <PauseCircleFilled />,
                 title: "Deactivate",
@@ -218,6 +228,13 @@ function mapDispatchToProps(dispatch /* {params: {followerId}} */) {
         {
             fetchFollowerResonators: actions.fetchFollowerResonators,
             activateResonator: resonatorActions.activate,
+            showCopyResonatorModal: (resonatorId) =>
+                navigationActions.showModal({
+                    name: "copyResonator",
+                    props: {
+                        resonatorId,
+                    },
+                }),
             showResetResonatorPrompt: (resonatorId) =>
                 navigationActions.showModal({
                     name: "resetResonator",
