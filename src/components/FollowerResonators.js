@@ -95,20 +95,25 @@ class FollowerResonators extends Component {
         this.setState({ showDisabled: !this.state.showDisabled });
     }
     getToolbox() {
-        return {
-            left: (
-                <Typography variant="h6">
-                    {`${this.props.follower && this.props.follower.user.name}'s Resonators`}
-                </Typography>
-            ),
-            right: (
+        const toolbox = {};
+
+        toolbox.left = (
+            <Typography variant="h6">
+                {`${this.props.follower && this.props.follower.user.name}'s Resonators`}
+            </Typography>
+        );
+
+        if (!this.props.follower?.is_system) {
+            toolbox.right = (
                 <OverflowMenu keepOpen>
                     <MenuItem onClick={this.toggleShowInactive}>
                         {this.state.showDisabled ? "Hide Inactive Resonators" : "Show Inactive Resonators"}
                     </MenuItem>
                 </OverflowMenu>
-            ),
-        };
+            );
+        }
+
+        return toolbox;
     }
 
     handleCopyResonator(resonatorId) {
@@ -146,11 +151,13 @@ class FollowerResonators extends Component {
     }
 
     getRowActions() {
+        if (this.props.follower?.is_system && !this.props.isAdmin) return [];
         return [
             rowAction({
                 title: "Preview",
                 icon: <RemoveRedEye />,
                 onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
+                isAvailable: () => !this.props.follower?.is_system
             }),
             rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
             rowAction.remove(this.handleRemoveResonator),
@@ -172,19 +179,19 @@ class FollowerResonators extends Component {
                 icon: <PauseCircleFilled />,
                 title: "Deactivate",
                 onClick: this.handleDeactivateResonator,
-                isAvailable: (resonatorId) => this.getResonator(resonatorId).pop_email,
+                isAvailable: (resonatorId) => !this.props.follower.is_system && this.getResonator(resonatorId).pop_email,
             }),
             rowAction({
                 icon: <PlayCircleFilled />,
                 title: "Activate",
                 onClick: this.handleActivateResonator,
-                isAvailable: (resonatorId) => !this.getResonator(resonatorId).pop_email,
+                isAvailable: (resonatorId) => !this.props.follower.is_system && !this.getResonator(resonatorId).pop_email,
             }),
             rowAction({
                 icon: <Autorenew />,
                 title: "Reset",
                 onClick: this.handleResetResonator,
-                isAvailable: (resonatorId) => Boolean(this.getResonator(resonatorId).parent_resonator_id),
+                isAvailable: (resonatorId) => !this.props.follower.is_system && Boolean(this.getResonator(resonatorId).parent_resonator_id),
             }),
         ];
     }
@@ -192,7 +199,7 @@ class FollowerResonators extends Component {
     render() {
         return (
             <EntityTable
-                addButton={true}
+                addButton={(!this.props.follower?.is_system || this.props.isAdmin)}
                 rows={this.getRows()}
                 header={this.getHeader()}
                 toolbox={this.getToolbox()}
@@ -215,11 +222,13 @@ function mapStateToProps(
 ) {
     if (!followerId) return {};
 
-    let follower = _.find(state.followers.followers, (f) => f.id === followerId);
+    const follower = _.find(state.followers.followers, (f) => f.id === followerId) || _.find(state.followers.systemFollowers, (f) => f.id === followerId);
+    const isAdmin = state.leaders.leaders.admin_permissions;
 
     return {
         resonators: _.get(follower, "resonators"),
         follower,
+        isAdmin
     };
 }
 

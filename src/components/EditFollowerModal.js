@@ -16,11 +16,14 @@ import {
     InputLabel,
     MenuItem,
     FormControlLabel,
-    Snackbar
+    Snackbar,
+    Radio,
+    RadioGroup
 } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
 import TextField from "./FormComponents/TextField";
 import navigationInfoSelector from "../selectors/navigationSelector";
+import IsSystemRadio from "./IsSystemRadio";
 import Papa from 'papaparse';
 import Cookies from "js-cookie";
 
@@ -52,12 +55,14 @@ class EditFollowerModal extends Component {
         this.inviteGmail = this.inviteGmail.bind(this);
         this.copyInvitation = this.copyInvitation.bind(this);
         this.selectInvitation = this.selectInvitation.bind(this);
+        this.toggleSystem = this.toggleSystem.bind(this);
         this.renderForm = this.renderForm.bind(this);
         this.cfg = props.editMode ? editCfg : newCfg;
         this.state = {
             invite_gmail: false,
             invitation: Cookies.get('defaultInvitation') ? this.props.invitations.find(x => x.id === Cookies.get('defaultInvitation')) : this.props.invitations[0],
-            snackbarCopyInvitationState: false
+            snackbarCopyInvitationState: false,
+            is_system: (props.editMode && props.follower.is_system) ? props.follower.is_system : false
         }
     }
 
@@ -86,6 +91,7 @@ class EditFollowerModal extends Component {
     }
 
     handleSubmit(formData) {
+        formData.is_system = this.state.is_system;
         if (this.props.editMode) this.props.update({ ...formData, id: this.props.followerId });
         else this.props.create(formData);
 
@@ -117,6 +123,12 @@ class EditFollowerModal extends Component {
         this.setState({ invitation: this.props.invitations.find(x => x.id === event.target.value)});
     }
 
+    toggleSystem() {
+        this.setState({
+           is_system: !this.state.is_system
+        });
+    }
+
     renderForm() {
         return (
             <form autoComplete="off">
@@ -125,6 +137,11 @@ class EditFollowerModal extends Component {
 
                 {!this.props.editMode && (
                     <div>
+                        <IsSystemRadio
+                            isAdmin={this.props.isAdmin}
+                            isSystem={this.state.is_system}
+                            toggleSystem={this.toggleSystem}
+                        />
                         {this.props.invitations.length > 0 && (
                             <Grid container justify="space-between" alignItems="center" direction="column" id="inviteGmail">
                                 <Grid container justify="space-between" alignItems="center">
@@ -265,18 +282,21 @@ function mapStateToProps(state) {
     const invitations = state.invitations.invitations;
     const clinics = state.clinics.clinics;
     const current_clinic_id = state.leaders.leaders.current_clinic_id;
+    const isAdmin = state.leaders.leaders.admin_permissions;
 
     const ret = {
         follower,
         invitations,
         clinics,
         editMode,
+        isAdmin
     };
 
     if (follower) {
         ret.initialValues = {
             name: follower.user.name,
             email: follower.user.email,
+            is_system: follower.user.is_system,
         };
     } else {
         ret.initialValues = {

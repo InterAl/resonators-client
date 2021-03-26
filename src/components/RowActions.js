@@ -16,7 +16,7 @@ const renderShownAction = (itemId) => (action) => (
     </Tooltip>
 );
 
-const renderOverflowAction = (itemId) => (action) => { console.log(computeActionKey(itemId, action)); return (
+const renderOverflowAction = (itemId) => (action) => (
     <MenuItem onClick={() => action.onClick(itemId)} key={computeActionKey(itemId, action)}>
         {action.icon ?
             <ListItemIcon>
@@ -25,7 +25,7 @@ const renderOverflowAction = (itemId) => (action) => { console.log(computeAction
             null}
         {action.title}
     </MenuItem>
-)};
+);
 
 const isActionAvailable = (itemId) => (action) => action.isAvailable(itemId);
 
@@ -39,7 +39,7 @@ function RowActions({ actions, extraActions, itemId, overflowAllSize = "xs" }) {
 
     return [
         ...shownActions.filter(isAvailable).map(renderShownAction(itemId)),
-        overflowActions.length ? (
+        overflowActions.filter(isAvailable).length ? (
             <OverflowMenu key="more">
                 {overflowActions.filter(isAvailable).map(renderOverflowAction(itemId))}
             </OverflowMenu>

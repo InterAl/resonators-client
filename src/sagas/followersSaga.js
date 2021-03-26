@@ -7,12 +7,14 @@ import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
 
 let followersSelector = state => state.followers.followers;
+let systemFollowersSelector = state => state.followers.systemFollowers;
 
 let { handle, updateState, saga, reducer } = SagaReducerFactory({
     actionTypes: types,
     actionCreators: actions,
     initState: {
         followers: [],
+        systemFollowers: [],
         filterByClinicId: 'all'
     }
 });
@@ -22,9 +24,11 @@ handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
 
     if (user.isLeader) {
         const followers = yield call(followerApi.get);
-    
+        const systemFollowers = yield call(followerApi.getSystemFollowers);
+
         yield put(updateState({
-            followers
+            followers,
+            systemFollowers
         }));
     }
 });
@@ -39,10 +43,13 @@ handle(types.CREATE, function* (sagaParams, { payload }) {
 handle(types.DELETE, function* (sagaParams, { payload }) {
     yield call(followerApi.deleteFollower, payload);
     let followers = yield select(followersSelector);
+    let systemFollowers = yield select(systemFollowersSelector);
     let followersWithoutDeleted = _.reject(followers, f => f.id === payload);
+    let systemFollowersWithoutDeleted = _.reject(systemFollowers, f => f.id === payload);
 
     yield put(updateState({
-        followers: followersWithoutDeleted
+        followers: followersWithoutDeleted,
+        systemFollowers: systemFollowersWithoutDeleted
     }));
 });
 
@@ -104,8 +111,9 @@ handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
     yield call(followerApi.deleteResonator, follower_id, id);
 
     let followers = yield select(followersSelector);
+    let systemFollowers = yield select(systemFollowersSelector);
 
-    let follower = _.find(followers, f => f.id === follower_id);
+    let follower = _.find(followers, f => f.id === follower_id) || _.find(systemFollowers, f => f.id === follower_id);
 
     followers = _.reject(followers, f => f.id === follower_id)
         .concat({
@@ -115,7 +123,8 @@ handle(resonatorTypes.REMOVE, function* (sagaParams, { payload }) {
         })
 
     yield put(updateState({
-        followers
+        followers,
+        systemFollowers
     }));
 });
 
@@ -159,37 +168,39 @@ export function* fetchFollowerResonators(followerId) {
 }
 
 function* updateStateWithNewFollower(follower) {
-    let lastFollowers = yield select(followersSelector);
-    
-    let followers = _.reject(lastFollowers, f => f.id === follower.id)
-        .concat(follower);
-
-    yield put(updateState({
-        followers
-    }));
+    if (follower.is_system) {
+        const lastSystemFollowers = yield select(systemFollowersSelector);
+        const systemFollowers = _.reject(lastSystemFollowers, f => f.id === follower.id).concat(follower);
+        yield put(updateState({systemFollowers}));
+    } else {
+        const lastFollowers = yield select(followersSelector);
+        const followers = _.reject(lastFollowers, f => f.id === follower.id).concat(follower);
+        yield put(updateState({followers}));
+    }
 }
 
 export function* updateResonator(followerId, resonator) {
     let followers = yield select(followersSelector);
+    let systemFollowers = yield select(systemFollowersSelector);
 
-    let follower = _.find(followers, f => f.id === followerId);
+    let follower = _.find(followers, f => f.id === followerId) || _.find(systemFollowers, f => f.id === followerId);
 
     let updatedResonators = _.reject(follower.resonators, r => r.id === resonator.id)
         .concat(resonator);
 
     let updatedFollower = { ...follower, resonators: updatedResonators };
 
-    let updatedFollowers = _.reject(followers, f => f.id === followerId)
-        .concat(updatedFollower);
+    let updatedFollowers = _.reject(followers, f => f.id === followerId).concat(updatedFollower);
+    let updatedSystemFollowers = _.reject(systemFollowers, f => f.id === followerId).concat(updatedFollower);
 
-    yield put(updateState({
-        followers: updatedFollowers
-    }));
+    yield put(updateState({followers: updatedFollowers, systemFollowers: updatedSystemFollowers}));
 }
 
 function* getFollower(id) {
     let followers = yield select(followersSelector);
-    return _.find(followers, f => f.id === id);
+    let systemFollowers = yield select(systemFollowersSelector);
+
+    return _.find(followers, f => f.id === id) || _.find(systemFollowers, f => f.id === id);
 }
 
 export default { saga, reducer };

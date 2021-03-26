@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import SagaReducerFactory from '../saga-reducers-factory-patch';
-import { call, put, select } from 'redux-saga/effects';
+import {call, put, select, take} from 'redux-saga/effects';
 import { actions, types } from '../actions/resonatorCreationActions';
 import { actions as navigationActions } from '../actions/navigationActions';
 import resonatorsSelector from '../selectors/resonatorsSelector';
@@ -50,7 +50,19 @@ handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
 
     const formData = yield getFormData();
     const targetId = yield select(state => state.resonatorCreation[target.targetIdName]);
-    const resonator = yield select(state => state.resonatorCreation.resonator);
+
+    let resonator = yield select(state => state.resonatorCreation.resonator);
+    //usually the resonator is created on completion of the Schedule step, create it here if that didn't happen
+    if (!resonator) {
+        yield put(actions.create({ targetType }));
+        do {
+            resonator = yield select(state => state.resonatorCreation.resonator);
+            if (resonator)
+                break;
+            else
+                yield take('*');
+        } while (!resonator)
+    }
 
     function cleanupOldFile() {
         if (formData.removeOldFile) {
@@ -251,7 +263,7 @@ function convertFormToPayload({ targetId, target, formData }) {
         disable_copy_to_leader: formData.sendMeCopy !== 'on',
         link: formData.link,
         pop_email: formData.activated === 'on',
-        pop_time: formData.time.toISOString(),
+        pop_time: formData.time?.toISOString(),
         selected_questionnaire: formData.selectedQuestionnaire,
         questionnaire_details: formData.questionnaireDetails,
         interval: formData.interval,

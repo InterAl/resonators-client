@@ -205,7 +205,7 @@ const tree = {
                                 "/:criterionId": {
                                     title: (state, routeParams) => {
                                         const criterion = criteriaSelector(state, routeParams.criterionId);
-                                        return criterion.title;
+                                        return criterion?.title;
                                     },
 
                                     stubRoute: true,
