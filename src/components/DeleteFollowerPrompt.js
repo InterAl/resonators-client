@@ -38,7 +38,7 @@ class DeleteFollowerPrompt extends Component {
 
 function mapStateToProps(state) {
     let {modalProps: {followerId}} = navigationInfoSelector(state);
-    let follower = _.find(state.followers.followers, f => f.id === followerId);
+    let follower = _.find(state.followers.followers, f => f.id === followerId) || _.find(state.followers.systemFollowers, f => f.id === followerId);
 
     return {
         follower

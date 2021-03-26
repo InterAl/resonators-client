@@ -4,6 +4,7 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { actions } from "../../actions/criteriaActions";
 import { reduxForm, formValueSelector, Field } from "redux-form";
+import IsSystemRadio from "../IsSystemRadio";
 // import ClinicSelect from '../FormComponents/ClinicSelect';
 import TextField from "../FormComponents/TextField";
 import {
@@ -28,7 +29,17 @@ class CriteriaCreation extends Component {
 
         this.editMode = !!props.match.params.criterionId;
 
+        this.state = {
+            is_system: (this.editMode && props.criterion?.is_system) ? props.criterion.is_system : false
+        }
+
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    toggleSystem() {
+        this.setState({
+            is_system: !this.state.is_system
+        });
     }
 
     getCreationTypeControl() {
@@ -45,6 +56,7 @@ class CriteriaCreation extends Component {
     }
 
     handleSubmit(form) {
+        form.is_system = this.state.is_system;
         if (this.editMode) {
             this.props.updateCriterion({
                 criterionId: this.props.match.params.criterionId,
@@ -80,7 +92,13 @@ class CriteriaCreation extends Component {
                     <CardContent>
                         <Typography variant="h6">Create a New Criterion</Typography>
                         {/* <ClinicSelect/> */}
-                        <Field name="title" label="Name" component={TextField} />
+                        <IsSystemRadio
+                            isAdmin={this.props.isAdmin}
+                            isSystem={this.state.is_system}
+                            toggleSystem={this.toggleSystem.bind(this)}
+                        />
+                        <Field name="title" label="Title" component={TextField} />
+                        <Field name="tags" label="Tags (Optional, e.g.: OCD; Unified Protocol; OASIS)" component={TextField} />
                         <Field name="description" label="Description" multiline component={TextField} />
                         <Field name="question_kind" label="Type" component={this.renderTypeSelector} />
                     </CardContent>
@@ -145,6 +163,8 @@ function getInitialValues(criterion, formValues) {
         description: criterion.description,
         clinic_id: criterion.clinic_id,
         question_kind: criterion.question_kind,
+        tags: criterion.tags,
+        is_system: criterion.is_system,
         answers,
         numMin,
         numMax,
@@ -160,9 +180,14 @@ function mapStateToProps(state, ownProps) {
         criterion !== undefined
             ? getInitialValues(criterion, formValues)
             : { clinic_id: state.leaders.leaders.current_clinic_id };
+
+    const isAdmin = state.leaders.leaders.admin_permissions;
+
     return {
         initialValues,
         formValues,
+        criterion,
+        isAdmin
     };
 }
 

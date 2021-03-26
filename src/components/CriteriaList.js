@@ -7,46 +7,87 @@ import React, { Component } from "react";
 import EntityTable from "./EntityTable";
 import { rowAction } from './RowActions';
 import { push } from "connected-react-router";
-import { Typography, MenuItem } from "@material-ui/core";
-import { PlayCircleFilled, PauseCircleFilled } from "@material-ui/icons";
+import {Typography, MenuItem, Link as MuiLink} from "@material-ui/core";
+import {PlayCircleFilled, PauseCircleFilled, Edit} from "@material-ui/icons";
 import OverflowMenu from "./OverflowMenu";
 import createSelector from '../selectors/criterionSelector';
+import Filter from './Filter';
+import {Link} from "react-router-dom";
 
 
 class CriteriaList extends Component {
-    constructor() {
-        super();
-       
-        this.state = {           
+    constructor(props) {
+        super(props);
+
+        this.state = {
             openedOverflowMenuFollowerId: null,
+            filter: []
         };
 
         this.handleFreezeCriterion = this.handleFreezeCriterion.bind(this);
-        this.handleSelectCriteria = this.handleSelectCriteria.bind(this);      
+        this.handleSelectCriteria = this.handleSelectCriteria.bind(this);
+        this.toggleAllItems = this.toggleAllItems.bind(this);
+        this.toggleItem = this.toggleItem.bind(this);
     }
 
-    handleFreezeCriterion(criterionId) {         
-        this.props.showFreezeCriterionPrompt(criterionId);            
+    handleFreezeCriterion(criterionId) {
+        this.props.showFreezeCriterionPrompt(criterionId);
     }
 
-    handleSelectCriteria(criterionId) {       
+    handleSelectCriteria(criterionId) {
         this.props.selectCriteria(criterionId);
     }
 
-    toggleOverflowMenu(criterionId) {        
+    toggleOverflowMenu(criterionId) {
         if (!criterionId && !this.state.openedOverflowMenuCriterionId) return; //prevent stack overflow
-        
+
         this.setState({
             openedOverflowMenuCriterionId: criterionId,
-        });       
-    }   
-        
+        });
+    }
+
+    filterItems(activeTags) {
+        if (_.isEqual(activeTags.sort(), this.props.tags.sort())) {
+            this.setState({filter: this.props.tags});
+        } else {
+            this.setState({filter: activeTags});
+        }
+    }
+
+    toggleAllItems() {
+        let filter = this.state.filter;
+        if (_.isEqual(filter.sort(), this.props.tags.sort())) {
+            filter = [];
+            this.setState({filter});
+        } else {
+            filter = this.props.tags;
+            this.setState({filter});
+        }
+        this.filterItems(filter);
+    }
+
+    toggleItem(item) {
+        let filter = this.state.filter;
+        if (filter.includes(item)) {
+            filter = _.reject(filter, (filter) => filter === item);
+            this.setState({filter});
+        } else {
+            filter.push(item);
+            this.setState({filter});
+        }
+        this.filterItems(filter);
+    }
+
     getRows() {
-      
+        const criteria = this.props.criteria.filter(
+            criterion => !this.state.filter.length > 0
+                || criterion.tags?.split(';').some(item => this.state.filter.includes(item.trim()))
+        );
+
         return _.reduce(
-            this.props.criteria,
+            criteria,
             (acc, c) => {
-                let cols = [];                             
+                let cols = [];
                 cols.push(
                     <div>
                         <Typography
@@ -55,17 +96,21 @@ class CriteriaList extends Component {
                                 fontWeight: c.removed ? "" : "bold",
                                 display: "flex",
                                 alignItems: "center",
-                            }}>   
+                            }}>
 
                             {c.removed ? <PauseCircleFilled fontSize="small" style={{ marginRight: 5 }} /> : null}
 
-                            <span>{c.title}</span>                            
-                            </Typography>
+                            <span>{c.title}</span>
+                        </Typography>
 
-                            <Typography style={{ marginLeft: c.removed ? 25 : null }} color="textSecondary">{c.description}</Typography>
-
-                            </div>                    
+                        <Typography style={{ marginLeft: c.removed ? 25 : null }} color="textSecondary">{c.description}</Typography>
+                    </div>
                 );
+                cols.push(c.tags?.split(';').map((tag) =>
+                    <span
+                        className={(this.state.filter.includes(tag.trim())) ? "criterionTag active" : "criterionTag"}
+                        onClick={() => this.toggleItem(tag.trim())}
+                    >{tag}</span>));
 
                 acc[c.id] = cols;
                 return acc;
@@ -76,22 +121,21 @@ class CriteriaList extends Component {
 
     getToolbox() {
         return {
-            left: <Typography variant="h6">Criterias</Typography>,
+            left: <Typography variant="h6">Criteria</Typography>,
             right: (
-                <OverflowMenu keepOpen>                    
+                <OverflowMenu keepOpen>
                     <MenuItem onClick={() => this.props.toggleDisplayFrozen()}>
                         {this.props.displayFrozen ? "Hide Deactivated" : "Show Deactivated"}
                     </MenuItem>
                 </OverflowMenu>
             ),
         };
-    }   
+    }
 
-    renderOverflowMenu() {    
-    
+    renderOverflowMenu() {
         return (criterionId) =>{
             const criteria = this.props.getCriteria(criterionId);
-           
+
             return (
                 <OverflowMenu key="more-options">
                     {criteria.removed? (
@@ -100,28 +144,26 @@ class CriteriaList extends Component {
                         <MenuItem onClick={() => this.handleFreezeCriterion(criterionId)}>Deactivate</MenuItem>
                     )}
                 </OverflowMenu>
-            );     
-        };   
+            );
+        };
     }
 
-    getExtraRowActions() {           
-        return [           
+    getExtraRowActions() {
+        return [
             rowAction({
                 title: "Activate",
                 icon: <PlayCircleFilled />,
                 onClick: this.props.unfreezeCriterion,
-                isAvailable: (criterionId) => this.props.getCriteria(criterionId).removed,
+                isAvailable: (criterionId) => (!this.props.getCriteria(criterionId)?.is_system || this.props.isAdmin) && this.props.getCriteria(criterionId).removed,
             }),
             rowAction({
                 title: "Deactivate",
                 icon: <PauseCircleFilled />,
                 onClick: this.handleFreezeCriterion,
-                isAvailable: (criterionId) => !this.props.getCriteria(criterionId).removed,
+                isAvailable: (criterionId) => (!this.props.getCriteria(criterionId)?.is_system || this.props.isAdmin) && !this.props.getCriteria(criterionId).removed,
             }),
         ];
     }
-    
-    
 
     render() {
         const getEditRoute = (id) => `${location.pathname}/${id}/edit`;
@@ -131,11 +173,27 @@ class CriteriaList extends Component {
                 addButton={true}
                 addText="Add Criterion"
                 rows={this.getRows()}
-                header={["Criteria"]}                            
-                rowActions={[
-                    rowAction.edit((criterionId) => this.props.push(getEditRoute(criterionId))),                   
+                header={[
+                    "Criteria",
+                    this.props.tags.length > 0 ?
+                        <Filter
+                            name="Tags"
+                            list={this.props.tags}
+                            checkedList={this.state.filter}
+                            filterItems={this.filterItems.bind(this)}
+                            toggleItem={this.toggleItem.bind(this)}
+                            toggleAllItems={this.toggleAllItems.bind(this)}
+                        /> : "Tags"
                 ]}
-                toolbox={this.getToolbox()}  
+                rowActions={[
+                    rowAction({
+                        title: "Edit",
+                        icon: <Edit />,
+                        onClick: (criterionId) => this.props.push(getEditRoute(criterionId)),
+                        isAvailable: (criterionId) => !this.props.getCriteria(criterionId)?.is_system || this.props.isAdmin
+                    })
+                ]}
+                toolbox={this.getToolbox()}
                 extraRowActions={this.getExtraRowActions()}
                 onAdd={() => this.props.push(location.pathname + "/new")}
                 className="Criteria"
@@ -144,17 +202,26 @@ class CriteriaList extends Component {
     }
 }
 
-function mapStateToProps(state) {   
+function mapStateToProps(state) {
     let criteriaData = createSelector(state);
+    const isAdmin = state.leaders.leaders.admin_permissions;
+    const tags = _.reduce(criteriaData.criteria, (acc, criterion) => {
+        criterion.tags?.split(';').forEach(tag => {
+            if (!acc.includes(tag.trim()) && tag.trim() !== "") acc.push(tag.trim());
+        });
+        return acc;
+    }, []).sort();
 
     return {
         ...criteriaData,
-        getCriteria: (criterionId) => _.find(criteriaData.criteria, (c) => c.id === criterionId),       
+        isAdmin,
+        getCriteria: (criterionId) => _.find(criteriaData.criteria, (c) => c.id === criterionId),
+        tags
     };
 }
 
-function mapDispatchToProps(dispatch) {   
-    return bindActionCreators({           
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
             unfreezeCriterion: actions.unfreeze,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,
             showDeleteCriterionPrompt: (criterionId) =>
@@ -170,10 +237,10 @@ function mapDispatchToProps(dispatch) {
                 navigationActions.showModal({
                     name: "freezeCriterion",
                     props: {
-                        criterionId,                   
+                        criterionId,
                     },
                 }),
-                selectCriteria: actions.selectCriteria,        
+                selectCriteria: actions.selectCriteria,
         },
         dispatch
     );

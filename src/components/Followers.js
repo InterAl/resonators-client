@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { actions as navigationActions } from "../actions/navigationActions";
 import followersSelector from "../selectors/followersSelector";
 import { MenuItem, Select, InputLabel, Link as MuiLink, Typography } from "@material-ui/core";
-import { PlayCircleFilled, PauseCircleFilled, ContactMail } from "@material-ui/icons";
+import { PlayCircleFilled, PauseCircleFilled, ContactMail, Edit, Delete } from "@material-ui/icons";
 import EntityTable from "./EntityTable";
 import { rowAction } from "./RowActions";
 import { Link } from "react-router-dom";
@@ -70,6 +70,16 @@ class Followers extends Component {
         this.setState({ showEmails: !this.state.showEmails });
     }
 
+    canFollowerEdit(followerId) {
+        const follower = this.props.getFollower(followerId);
+        return !follower.is_system;
+    }
+
+    canFollowerDelete(followerId) {
+        const follower = this.props.getFollower(followerId);
+        return (!follower.is_system || this.props.isAdmin);
+    }
+
     renderClinicFilter() {
         return [
             <InputLabel id="clinic-filter-label">Clinic</InputLabel>,
@@ -97,7 +107,26 @@ class Followers extends Component {
     }
 
     getRows() {
-        return _.reduce(
+        const systemFollowers = _.reduce(
+            this.props.systemFollowers,
+            (acc, f) => {
+                let cols = [];
+                cols.push(
+                    <MuiLink
+                        to={`/followers/${f.id}/resonators`}
+                        component={Link}
+                    >
+                        <span>{f.user.name}</span>
+                    </MuiLink>
+                );
+                cols.push("");
+                acc[f.id] = cols;
+                return acc;
+            },
+            {}
+        );
+
+        const followers = _.reduce(
             this.props.followers,
             (acc, f) => {
                 let cols = [];
@@ -122,6 +151,8 @@ class Followers extends Component {
             },
             {}
         );
+
+        return {...systemFollowers, ...followers};
     }
 
     getToolbox() {
@@ -156,7 +187,20 @@ class Followers extends Component {
     }
 
     getRowActions() {
-        return [rowAction.edit(this.handleEditFollower), rowAction.remove(this.handleRemoveFollower)];
+        return [
+            rowAction({
+                title: "Edit",
+                icon: <Edit />,
+                onClick: this.handleEditFollower,
+                isAvailable: (followerId) => this.canFollowerEdit(followerId)
+            }),
+            rowAction({
+                title: "Remove",
+                icon: <Delete />,
+                onClick: this.handleRemoveFollower,
+                isAvailable: (followerId) => this.canFollowerDelete(followerId)
+            }),
+        ];
     }
 
     getExtraRowActions() {
@@ -165,19 +209,19 @@ class Followers extends Component {
                 title: "Invite Follower",
                 icon: <ContactMail />,
                 onClick: this.handleInviteFollower,
-                isAvailable: () => this.props.invitationsLength > 0
+                isAvailable: (followerId) => this.props.invitationsLength > 0 && this.canFollowerEdit(followerId)
             }),
             rowAction({
                 title: "Activate",
                 icon: <PlayCircleFilled />,
                 onClick: this.props.unfreezeFollower,
-                isAvailable: (followerId) => this.props.getFollower(followerId).frozen,
+                isAvailable: (followerId) => this.props.getFollower(followerId).frozen && this.canFollowerEdit(followerId),
             }),
             rowAction({
                 title: "Deactivate",
                 icon: <PauseCircleFilled />,
                 onClick: this.handleFreezeFollower,
-                isAvailable: (followerId) => !this.props.getFollower(followerId).frozen,
+                isAvailable: (followerId) => !this.props.getFollower(followerId).frozen && this.canFollowerEdit(followerId),
             })
         ];
     }
@@ -201,12 +245,16 @@ class Followers extends Component {
 
 function mapStateToProps(state) {
     let followersData = followersSelector(state);
+    const systemFollowers = state.followers.systemFollowers;
     const invitationsLength = state.invitations.invitations.length;
+    const isAdmin = state.leaders.leaders.admin_permissions;
 
     return {
         ...followersData,
-        getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId),
-        invitationsLength
+        getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId) || _.find(systemFollowers, (f) => f.id === followerId),
+        invitationsLength,
+        systemFollowers,
+        isAdmin
     };
 }
 

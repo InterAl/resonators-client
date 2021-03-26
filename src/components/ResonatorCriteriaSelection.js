@@ -7,6 +7,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import RootRef from "@material-ui/core/RootRef";
 import criteriaSelector from "../selectors/criteriaSelector";
 import "./ResonatorCriteriaSelection.scss";
+import Filter from "components/Filter";
 
 class ResonatorCriteriaSelection extends Component {
     static propTypes = {
@@ -27,7 +28,13 @@ class ResonatorCriteriaSelection extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            filter: []
+        };
+
         this.onDragEnd = this.onDragEnd.bind(this);
+        this.toggleAllItems = this.toggleAllItems.bind(this);
+        this.toggleItem = this.toggleItem.bind(this);
     }
 
     handleCheck(criterionId, checked) {
@@ -89,7 +96,13 @@ class ResonatorCriteriaSelection extends Component {
     }
 
     renderCriteria() {
-        const criteria = this.getCriteriaSorted().filter(c => this.isCriterionAttached(c) === true || c.removed === false);
+        const criteria = this.getCriteriaSorted()
+            .filter(c => this.isCriterionAttached(c) === true || c.removed === false)
+            .filter(
+                criterion => !this.state.filter.length > 0
+                    || criterion.tags?.split(';').some(item => this.state.filter.includes(item.trim()))
+            )
+        ;
 
         return criteria.map((criterion, idx) => (
             <Draggable key={criterion.id} draggableId={criterion.id} index={idx}>
@@ -116,6 +129,38 @@ class ResonatorCriteriaSelection extends Component {
         ));
     }
 
+    filterItems(activeTags) {
+        if (_.isEqual(activeTags.sort(), this.props.tags.sort())) {
+            this.setState({filter: this.props.tags});
+        } else {
+            this.setState({filter: activeTags});
+        }
+    }
+
+    toggleAllItems() {
+        let filter = this.state.filter;
+        if (_.isEqual(filter.sort(), this.props.tags.sort())) {
+            filter = [];
+            this.setState({filter});
+        } else {
+            filter = this.props.tags;
+            this.setState({filter});
+        }
+        this.filterItems(filter);
+    }
+
+    toggleItem(item) {
+        let filter = this.state.filter;
+        if (filter.includes(item)) {
+            filter = _.reject(filter, (filter) => filter === item);
+            this.setState({filter});
+        } else {
+            filter.push(item);
+            this.setState({filter});
+        }
+        this.filterItems(filter);
+    }
+
     render() {
         return (
             <div className="resonator-criteria-selection col-xs-12">
@@ -127,6 +172,15 @@ class ResonatorCriteriaSelection extends Component {
                                     subheader={
                                         <ListSubheader style={{ backgroundColor: this.props.theme.palette.background.paper }}>
                                             Attach criteria to the resonator (optional). <br/>Drag to reorder
+                                            {this.props.tags.length > 0 ?
+                                                <Filter
+                                                    name="Tags"
+                                                    list={this.props.tags}
+                                                    checkedList={this.state.filter}
+                                                    filterItems={this.filterItems.bind(this)}
+                                                    toggleItem={this.toggleItem.bind(this)}
+                                                    toggleAllItems={this.toggleAllItems.bind(this)}
+                                                /> : "Tags"}
                                         </ListSubheader>
                                     }
                                 >
@@ -152,8 +206,17 @@ const reorder = (list, startIndex, endIndex) => {
 };
 
 function mapStateToProps(state) {
+    const criteria = criteriaSelector(state);
+    const tags = _.reduce(criteria, (acc, criterion) => {
+        criterion.tags?.split(';').forEach(tag => {
+            if (!acc.includes(tag.trim()) && tag.trim() !== "") acc.push(tag.trim());
+        });
+        return acc;
+    }, []).sort();
+
     return {
-        criteria: criteriaSelector(state)
+        criteria,
+        tags
     };
 }
 

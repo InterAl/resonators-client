@@ -13,6 +13,8 @@ import { Typography, Button, CircularProgress, Stepper, Step, StepLabel, StepCon
 import Questionnaire from "./Steps/Questionnaire";
 import DailyDiary from "./Steps/DailyDiary";
 import BackButton from "./Steps/backButton";
+import followersSelector from "../../selectors/followersSelector";
+import _ from "lodash";
 
 class EditResonator extends Component {
     static propTypes = {
@@ -110,6 +112,7 @@ class EditResonator extends Component {
 
     renderSchedule() {
         const { followerId } = this.props.match.params;
+        if (this.props.getFollower(followerId)?.is_system) return false;
         return {
             label: "Schedule",
             content: (
@@ -174,11 +177,13 @@ class EditResonator extends Component {
     }
 
     renderFinal() {
+        const { followerId } = this.props.match.params;
+
         return {
             label: "Final",
             content: (
                 <div>
-                    <ActivationStep />
+                    {(!this.props.getFollower(followerId)?.is_system) && <ActivationStep /> }
                     <div className="navButtons">
                         {!this.props.editMode && (
                             <BackButton
@@ -233,7 +238,7 @@ class EditResonator extends Component {
             <div style={{ flex: 1, padding: "10px 20px" }}>
                 <Typography variant="h5">{this.props.editMode ? "Edit Resonator" : "Create Resonator"}</Typography>
                 <Stepper nonLinear={true} activeStep={this.state.activeStep} orientation="vertical">
-                    {this.steps.map((step, index) => this.renderStep(index, step()))}
+                    {this.steps.filter(step => step().content).map((step, index) => this.renderStep(index, step()))}
                 </Stepper>
             </div>
         );
@@ -241,12 +246,16 @@ class EditResonator extends Component {
 }
 
 function mapStateToProps(state) {
+    let followersData = followersSelector(state);
+    const systemFollowers = state.followers.systemFollowers;
+
     return {
         resonator: state.resonatorCreation.resonator,
         editMode: state.resonatorCreation.editMode,
         interactionType: state.resonatorCreation.interactionType,
         showSpinnerFinalUpdate: state.resonatorCreation.showSpinnerFinalUpdate,
         formData: state.resonatorCreation.formData,
+        getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId) || _.find(systemFollowers, (f) => f.id === followerId),
     };
 }
 
