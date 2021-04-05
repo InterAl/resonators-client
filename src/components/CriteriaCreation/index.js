@@ -108,7 +108,7 @@ class CriteriaCreation extends Component {
                         </CardContent>
                     </Collapse>
                     <CardActions style={{ justifyContent: "end" }}>
-                        <Button type="submit" color="primary" variant="contained" disabled={this.props.invalid}>
+                        <Button type="submit" color="primary" variant="contained" disabled={!this.editMode && this.props.invalid}>
                             {this.editMode ? "Update" : "Create"}
                         </Button>
                     </CardActions>

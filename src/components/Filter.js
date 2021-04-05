@@ -14,6 +14,24 @@ class Filter extends Component {
         };
         this.toggleFilter = this.toggleFilter.bind(this);
         this.renderList = this.renderList.bind(this);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+
+        this.wrapperRef = React.createRef();
+        this.openerRef = React.createRef();
+    }
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.current?.contains(event.target) && !this.openerRef.current?.contains(event.target)) {
+            this.setState({ isOpen: false});
+        }
     }
 
     toggleFilter() {
@@ -24,7 +42,7 @@ class Filter extends Component {
         if (!this.state.isOpen) return false;
 
         return (
-            <Grid className="filterBox" container direction="column">
+            <Grid className="filterBox" ref={this.wrapperRef} container direction="column">
                 <Grid key="search" item>
                     <TextField
                         label={"Search " + this.props.name}
@@ -77,6 +95,7 @@ class Filter extends Component {
                     {this.props.name}
                     <FilterListIcon
                         color={this.state.isOpen ? "action" : "primary"}
+                        ref={this.openerRef}
                         onClick={this.toggleFilter}
                         style={{cursor:"pointer"}}
                     />

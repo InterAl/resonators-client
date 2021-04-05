@@ -23,6 +23,7 @@ export const sagas = createRootSaga([
     require('./cardSaga').default.saga,
     require('./resonatorFeedbackSaga').default.saga,
     require('./pwaSaga').default.saga,
+    require('./googleDataSaga').default.saga
 ], {});
 
 export const createReducers = history => combineReducers({
@@ -42,5 +43,6 @@ export const createReducers = history => combineReducers({
     form: formReducer,
     resonatorFeedback: require('./resonatorFeedbackSaga').default.reducer,
     pwa: require('./pwaSaga').default.reducer,
+    googleData: require('./googleDataSaga').default.reducer,
     router: connectRouter(history)
 });

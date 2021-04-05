@@ -106,11 +106,13 @@ class CriteriaList extends Component {
                         <Typography style={{ marginLeft: c.removed ? 25 : null }} color="textSecondary">{c.description}</Typography>
                     </div>
                 );
-                cols.push(c.tags?.split(';').map((tag) =>
-                    <span
+                cols.push(c.tags?.split(';').map((tag) => {
+                    if (!tag.trim()) return false;
+                    return <span
                         className={(this.state.filter.includes(tag.trim())) ? "criterionTag active" : "criterionTag"}
                         onClick={() => this.toggleItem(tag.trim())}
-                    >{tag}</span>));
+                    >{tag};</span>
+                }));
 
                 acc[c.id] = cols;
                 return acc;

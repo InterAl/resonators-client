@@ -17,11 +17,10 @@ import {
     MenuItem,
     FormControlLabel,
     Snackbar,
-    Radio,
-    RadioGroup
 } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
 import TextField from "./FormComponents/TextField";
+import Autocomplete from "./FormComponents/Autocomplete";
 import navigationInfoSelector from "../selectors/navigationSelector";
 import IsSystemRadio from "./IsSystemRadio";
 import Papa from 'papaparse';
@@ -91,6 +90,9 @@ class EditFollowerModal extends Component {
     }
 
     handleSubmit(formData) {
+        formData.name = formData.field1; // Use the weird field names to disable browser autocomplete
+        formData.email = formData.field2;
+
         formData.is_system = this.state.is_system;
         if (this.props.editMode) this.props.update({ ...formData, id: this.props.followerId });
         else this.props.create(formData);
@@ -132,8 +134,22 @@ class EditFollowerModal extends Component {
     renderForm() {
         return (
             <form autoComplete="off">
-                <Field type="text" placeholder="Name" name="name" component={TextField} />
-                <Field type="email" placeholder="Email" name="email" component={TextField} />
+                <Field
+                    options={this.props.googleContacts}
+                    type="text"
+                    placeholder="Name"
+                    name="field1"
+                    component={Autocomplete}
+                    labelKey="name"
+                />
+                <Field
+                    options={this.props.googleContacts}
+                    type="email"
+                    placeholder="Email"
+                    name="field2"
+                    component={Autocomplete}
+                    labelKey="email"
+                />
 
                 {!this.props.editMode && (
                     <div>
@@ -283,19 +299,23 @@ function mapStateToProps(state) {
     const clinics = state.clinics.clinics;
     const current_clinic_id = state.leaders.leaders.current_clinic_id;
     const isAdmin = state.leaders.leaders.admin_permissions;
+    const googleContacts = state.googleData.googleContacts;
 
     const ret = {
         follower,
         invitations,
         clinics,
         editMode,
-        isAdmin
+        isAdmin,
+        googleContacts
     };
 
     if (follower) {
         ret.initialValues = {
             name: follower.user.name,
+            field1: follower.user.name,
             email: follower.user.email,
+            field2: follower.user.email,
             is_system: follower.user.is_system,
         };
     } else {
