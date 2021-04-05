@@ -5,8 +5,11 @@ import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import NavButtons from "./navButtons";
 import ResonatorImage from "../../ResonatorImage";
-import { Button } from "@material-ui/core";
-import getResonatorImage from "../../../selectors/getResonatorImage"
+import { Button, Paper, Tabs, Tab } from "@material-ui/core";
+import getResonatorImage from "../../../selectors/getResonatorImage";
+import CloseIcon from '@material-ui/icons/Close';
+
+import "./media.scss";
 
 class EditResonatorMedia extends Component {
     constructor() {
@@ -14,9 +17,16 @@ class EditResonatorMedia extends Component {
 
         this.handleFileChange = this.handleFileChange.bind(this);
         this.handleRemoveImage = this.handleRemoveImage.bind(this);
+        this.hideImagePicker = this.hideImagePicker.bind(this);
+        this.showImagePicker = this.showImagePicker.bind(this);
+        this.renderImagePicker = this.renderImagePicker.bind(this);
+        this.showLastPicture = this.showLastPicture.bind(this);
 
         this.state = {
             previewImage: null,
+            imagePicker: false,
+            searchPhoto: "",
+            activePicker: 0
         };
     }
 
@@ -33,13 +43,16 @@ class EditResonatorMedia extends Component {
             imageFile: file,
         });
 
+        this.showLastPicture();
+        this.setImagePreview(file);
+    }
+
+    showLastPicture() {
         let lastPicture = _(this.props.resonator.items)
             .filter((i) => i.media_kind === "picture")
             .sortBy((i) => new Date(i.createdAt))
             .last();
         if (lastPicture) lastPicture.visible = 1;
-
-        this.setImagePreview(file);
     }
 
     setImagePreview(file) {
@@ -72,11 +85,95 @@ class EditResonatorMedia extends Component {
         });
     }
 
+    showImagePicker() {
+        this.setState({imagePicker: true});
+    }
+
+    hideImagePicker() {
+        this.setState({imagePicker: false, searchPhoto: ""});
+    }
+
+    async pickImage(imageUrl) {
+        this.setState({
+            previewImage: imageUrl,
+        });
+        this.props.updateCreationStep({
+            imageUrl: imageUrl,
+        });
+        this.showLastPicture();
+        this.hideImagePicker();
+    }
+
+    pickBase64(base64) {
+        this.props.updateCreationStep({
+            imageBase64: base64,
+        });
+        this.setState({
+            previewImage: base64
+        });
+        this.showLastPicture();
+        this.hideImagePicker();
+    }
+
+    renderImagePicker() {
+        if (!this.state.imagePicker) return false;
+        return (
+            <>
+                <div className="imagePicker_wrapper" onClick={this.hideImagePicker}/>
+                <div className="imagePicker">
+                    <div className="imagePicker_searchbar">
+                        <input
+                            placeholder="Search..."
+                            type="text"
+                            name="searchPhotos"
+                            onChange={(e) => this.setState({searchPhoto: e.target.value})}
+                        />
+                        <CloseIcon onClick={this.hideImagePicker} />
+                    </div>
+                    <Paper square>
+                        <Tabs
+                            value={this.state.activePicker}
+                            indicatorColor="primary"
+                            textColor="primary"
+                            onChange={(e, value) => this.setState({activePicker: value})}
+                        >
+                            <Tab label="System Drive" />
+                            <Tab label="User Drive" />
+                        </Tabs>
+                    </Paper>
+                    <div className="imagePicker_list" role="tabpanel" hidden={this.state.activePicker !== 0}>
+                        {this.props.googlePhotos
+                            .filter((photo) => photo.description.includes(this.state.searchPhoto))
+                            .map((photo) => (
+                                <img key={photo.id} src={photo.image} alt="" onClick={() => this.pickImage(photo.image)}/>
+                            ))
+                        }
+                    </div>
+                    <div className="imagePicker_list" role="tabpanel" hidden={this.state.activePicker !== 1}>
+                        {this.props.googleSystemPhotos
+                            .filter((photo) => photo.description.includes(this.state.searchPhoto))
+                            .map((photo) => (
+                                <img key={photo.id} src={photo.image} alt="" onClick={() => this.pickBase64(photo.image)}/>
+                            ))
+                        }
+                    </div>
+                </div>
+            </>
+        );
+    }
+
     render() {
         return (
             <div>
                 <ResonatorImage resonator={this.props.resonator} preview={this.state.previewImage} />
-                <div>
+                {(this.state.previewImage || getResonatorImage(this.props.resonator)) ? (
+                    <div>
+                        <Button onClick={this.handleRemoveImage} style={{ color: "#ff4444", marginLeft: 8 }}>
+                            Remove Image
+                        </Button>
+                    </div>
+                ) : null}
+                <div className="media_selector">
                     <input
                         accept="image/*"
                         style={{ display: "none" }}
@@ -85,15 +182,12 @@ class EditResonatorMedia extends Component {
                         onChange={this.handleFileChange}
                     />
                     <label htmlFor="image-input">
-                        <Button variant="contained" color="primary" component="span">
-                            Upload Image
-                        </Button>
+                        <Button variant="contained" color="primary" component="span">Upload Image</Button>
                     </label>
-                    {(this.state.previewImage || getResonatorImage(this.props.resonator)) ? (
-                        <Button onClick={this.handleRemoveImage} style={{ color: "#ff4444", marginLeft: 8 }}>
-                            Remove Image
-                        </Button>
-                    ) : null}
+                    {(this.props.googlePhotos.length > 0 || this.props.googleSystemPhotos.length > 0) &&
+                        <Button variant="contained" color="primary" onClick={this.showImagePicker}>Select Image</Button>
+                    }
+                    {this.renderImagePicker()}
                 </div>
                 {!this.props.editMode && <NavButtons onNext={this.props.onNext} onBack={this.props.onBack} />}
             </div>
@@ -114,6 +208,8 @@ function mapStateToProps(state) {
     return {
         resonator: state.resonatorCreation.resonator,
         image: state.resonatorCreation.formData.imageFile,
+        googlePhotos: state.googleData.googlePhotos || [],
+        googleSystemPhotos: state.googleData.googleSystemPhotos || []
     };
 }
 

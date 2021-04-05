@@ -204,7 +204,9 @@ const tree = {
                                 },
                                 "/:criterionId": {
                                     title: (state, routeParams) => {
-                                        const criterion = criteriaSelector(state, routeParams.criterionId);
+                                        const criteria = criteriaSelector(state);
+                                        const criterion = _.find(criteria, (c) => c.id === routeParams.criterionId);
+
                                         return criterion?.title;
                                     },
 

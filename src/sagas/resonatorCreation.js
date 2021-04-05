@@ -79,6 +79,10 @@ handle(types.UPDATE_FINAL, function* (sagaParams, { payload: { targetType } }) {
     function syncMedia() {
         if (formData.imageFile) {
             return target.resonatorApi.uploadMedia(targetId, resonator.id, formData.imageFile);
+        } else if (formData.imageUrl) {
+            return target.resonatorApi.createResonatorAttachment(targetId, resonator.id, formData.imageUrl);
+        } else if (formData.imageBase64) {
+            return target.resonatorApi.uploadBase64(targetId, resonator.id, formData.imageBase64);
         }
     }
 

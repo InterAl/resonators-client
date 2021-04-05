@@ -1,0 +1,45 @@
+.media_selector {
+    position: relative;
+}
+.media_selector button {
+    margin-left: 8px;
+}
+.imagePicker_wrapper {
+    background-color:rgba(0,0,0,0.6);
+    position:fixed;
+    top:0;bottom:0;
+    left:0;right:0;
+    z-index:10;
+}
+.imagePicker {
+    position:absolute;
+    background-color:white;
+    padding:20px;
+    z-index:11;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.imagePicker_list {
+    max-width:800px;
+    max-height:500px;
+    overflow:auto;
+    margin-top:20px;
+}
+.imagePicker img {
+    width:150px;
+    margin:10px;
+    cursor:pointer;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.imagePicker_searchbar {
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    margin-bottom:20px;
+}
+
+.imagePicker_searchbar input {
+    width: 90%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding:10px;
+}
