@@ -142,18 +142,18 @@ class EditResonatorMedia extends Component {
                         </Tabs>
                     </Paper>
                     <div className="imagePicker_list" role="tabpanel" hidden={this.state.activePicker !== 0}>
-                        {this.props.googlePhotos
-                            .filter((photo) => photo.description.includes(this.state.searchPhoto))
-                            .map((photo) => (
-                                <img key={photo.id} src={photo.image} alt="" onClick={() => this.pickImage(photo.image)}/>
-                            ))
-                        }
-                    </div>
-                    <div className="imagePicker_list" role="tabpanel" hidden={this.state.activePicker !== 1}>
                         {this.props.googleSystemPhotos
                             .filter((photo) => photo.description.includes(this.state.searchPhoto))
                             .map((photo) => (
                                 <img key={photo.id} src={photo.image} alt="" onClick={() => this.pickBase64(photo.image)}/>
+                            ))
+                        }
+                    </div>
+                    <div className="imagePicker_list" role="tabpanel" hidden={this.state.activePicker !== 1}>
+                        {this.props.googlePhotos
+                            .filter((photo) => photo.description.includes(this.state.searchPhoto))
+                            .map((photo) => (
+                                <img key={photo.id} src={photo.image} alt="" onClick={() => this.pickImage(photo.image)}/>
                             ))
                         }
                     </div>
