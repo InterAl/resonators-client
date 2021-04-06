@@ -181,12 +181,20 @@ class EditResonatorMedia extends Component {
                         type="file"
                         onChange={this.handleFileChange}
                     />
-                    <label htmlFor="image-input">
-                        <Button variant="contained" color="primary" component="span">Upload Image</Button>
-                    </label>
-                    {(this.props.googlePhotos.length > 0 || this.props.googleSystemPhotos.length > 0) &&
-                        <Button variant="contained" color="primary" onClick={this.showImagePicker}>Select Image</Button>
-                    }
+                    <div className="select_image_wrapper">
+                        <p className="select_image_text">Select image from</p>
+                        <div className="select_image_buttonWrapper">
+                            <label htmlFor="image-input">
+                                <Button variant="contained" color="primary" component="span">Local Storage</Button>
+                            </label>
+                            {(this.props.googlePhotos.length > 0 || this.props.googleSystemPhotos.length > 0) &&
+                                <>
+                                    <span className="select_image_buttonSeparator">- OR -</span>
+                                    <Button variant="contained" color="primary" onClick={this.showImagePicker}>Google Drive</Button>
+                                </>
+                            }
+                        </div>
+                    </div>
                     {this.renderImagePicker()}
                 </div>
                 {!this.props.editMode && <NavButtons onNext={this.props.onNext} onBack={this.props.onBack} />}
