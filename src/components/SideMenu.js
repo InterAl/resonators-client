@@ -49,7 +49,6 @@ function SideMenu(props) {
     const classes = useStyles(props);
     const screenSmall = useBelowBreakpoint("sm");
 
-    const [clinicMenuOpen, setClinicMenuOpen] = useState(true);
     const [followerMenuOpen, setFollowerMenuOpen] = useState(true);
 
     const addToHomeScreen = () => props.installPrompt.prompt();
@@ -117,29 +116,18 @@ function SideMenu(props) {
                                 <ListItemText primary="Followers" />
                             </ListItem>
                         )}
-                        <ListItem button onClick={() => setClinicMenuOpen(!clinicMenuOpen)}>
+                        <ListItem button onClick={() => props.clickMenuItem("clinics")}>
                             <ListItemIcon>
-                                <Weekend />
+                                <ListIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Clinic" />
-                            {clinicMenuOpen ? <ExpandLess /> : <ExpandMore />}
+                            <ListItemText primary="Clinics List" />
                         </ListItem>
-                        <Collapse in={clinicMenuOpen}>
-                            <List style={{ marginLeft: 20 }}>
-                                <ListItem button onClick={() => props.clickMenuItem("clinics")}>
-                                    <ListItemIcon>
-                                        <ListIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Clinics List" />
-                                </ListItem>
-                                <ListItem button onClick={() => props.clickMenuItem("criteriaList")}>
-                                    <ListItemIcon>
-                                        <EventNote />
-                                    </ListItemIcon>
-                                    <ListItemText primary="Criteria List" />
-                                </ListItem>
-                            </List>
-                        </Collapse>
+                        <ListItem button onClick={() => props.clickMenuItem("criteriaList")}>
+                            <ListItemIcon>
+                                <EventNote />
+                            </ListItemIcon>
+                            <ListItemText primary="Criteria List" />
+                        </ListItem>
                         <ListItem button onClick={() => props.clickMenuItem("invitations")}>
                             <ListItemIcon>
                                 <ContactMail />
