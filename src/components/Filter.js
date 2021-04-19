@@ -3,6 +3,7 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import {Checkbox, FormControlLabel, Grid, TextField} from "@material-ui/core";
 
 import "./Filter.scss";
+import _ from "lodash";
 
 class Filter extends Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class Filter extends Component {
         this.toggleFilter = this.toggleFilter.bind(this);
         this.renderList = this.renderList.bind(this);
         this.handleClickOutside = this.handleClickOutside.bind(this);
+        this.toggleAllItems = this.toggleAllItems.bind(this);
 
         this.wrapperRef = React.createRef();
         this.openerRef = React.createRef();
@@ -32,6 +34,10 @@ class Filter extends Component {
         if (this.wrapperRef && !this.wrapperRef.current?.contains(event.target) && !this.openerRef.current?.contains(event.target)) {
             this.setState({ isOpen: false});
         }
+    }
+
+    toggleAllItems() {
+        this.props.list.map((item) => this.props.toggleItem(item));
     }
 
     toggleFilter() {
@@ -56,7 +62,7 @@ class Filter extends Component {
                             <Checkbox
                                 color="primary"
                                 checked={this.props.checkedList.length === this.props.list.length}
-                                onChange={this.props.toggleAllItems}
+                                onChange={this.toggleAllItems}
                             />
                         }
                         label={(<span className="filter_subtext">All</span>)}
@@ -90,7 +96,8 @@ class Filter extends Component {
             <div className="filterWrapper">
                 <span style={{
                     display: "flex",
-                    alignItems: "center"
+                    alignItems: "center",
+                    justifyContent: "center"
                 }}>
                     {this.props.name}
                     <FilterListIcon

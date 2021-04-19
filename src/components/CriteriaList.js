@@ -7,12 +7,11 @@ import React, { Component } from "react";
 import EntityTable from "./EntityTable";
 import { rowAction } from './RowActions';
 import { push } from "connected-react-router";
-import {Typography, MenuItem, Link as MuiLink} from "@material-ui/core";
-import {PlayCircleFilled, PauseCircleFilled, Edit} from "@material-ui/icons";
+import {Typography, MenuItem} from "@material-ui/core";
+import {PlayCircleFilled, PauseCircleFilled, Edit, ArrowUpward, ArrowDownward} from "@material-ui/icons";
 import OverflowMenu from "./OverflowMenu";
 import createSelector from '../selectors/criterionSelector';
 import Filter from './Filter';
-import {Link} from "react-router-dom";
 
 
 class CriteriaList extends Component {
@@ -26,8 +25,6 @@ class CriteriaList extends Component {
 
         this.handleFreezeCriterion = this.handleFreezeCriterion.bind(this);
         this.handleSelectCriteria = this.handleSelectCriteria.bind(this);
-        this.toggleAllItems = this.toggleAllItems.bind(this);
-        this.toggleItem = this.toggleItem.bind(this);
     }
 
     handleFreezeCriterion(criterionId) {
@@ -46,43 +43,18 @@ class CriteriaList extends Component {
         });
     }
 
-    filterItems(activeTags) {
-        if (_.isEqual(activeTags.sort(), this.props.tags.sort())) {
-            this.setState({filter: this.props.tags});
-        } else {
-            this.setState({filter: activeTags});
-        }
-    }
-
-    toggleAllItems() {
-        let filter = this.state.filter;
-        if (_.isEqual(filter.sort(), this.props.tags.sort())) {
-            filter = [];
-            this.setState({filter});
-        } else {
-            filter = this.props.tags;
-            this.setState({filter});
-        }
-        this.filterItems(filter);
-    }
-
-    toggleItem(item) {
-        let filter = this.state.filter;
-        if (filter.includes(item)) {
-            filter = _.reject(filter, (filter) => filter === item);
-            this.setState({filter});
-        } else {
-            filter.push(item);
-            this.setState({filter});
-        }
-        this.filterItems(filter);
-    }
-
     getRows() {
         const criteria = this.props.criteria.filter(
-            criterion => !this.state.filter.length > 0
-                || criterion.tags?.split(';').some(item => this.state.filter.includes(item.trim()))
+            criterion => !this.props.tagsFilter?.length > 0
+                || criterion.tags?.split(';').some(item => this.props.tagsFilter?.includes(item.trim()))
+        )
+        .filter(
+            criterion =>
+                !this.props.typeFilter?.length > 0
+                || criterion.is_system === (this.props.typeFilter.includes("System"))
+                || criterion.is_system !== (this.props.typeFilter.includes("Regular"))
         );
+        (!this.props.alphabetSort) ? criteria.reverse() : criteria.sort();
 
         return _.reduce(
             criteria,
@@ -106,13 +78,20 @@ class CriteriaList extends Component {
                         <Typography style={{ marginLeft: c.removed ? 25 : null }} color="textSecondary">{c.description}</Typography>
                     </div>
                 );
-                cols.push(c.tags?.split(';').map((tag) => {
-                    if (!tag.trim()) return false;
-                    return <span
-                        className={(this.state.filter.includes(tag.trim())) ? "criterionTag active" : "criterionTag"}
-                        onClick={() => this.toggleItem(tag.trim())}
-                    >{tag};</span>
-                }));
+                cols.push(
+                    <p style={{textAlign:"center"}}>{c.is_system ? "System" : "Regular"}</p>
+                )
+                cols.push(<div style={{textAlign:"center"}}>
+                        {c.tags?.split(';').map((tag) => {
+                            if (!tag.trim()) return false;
+                            return <span
+                                className={(this.props.tagsFilter?.includes(tag.trim())) ? "criterionTag active" : "criterionTag"}
+                                onClick={() => this.props.toggleFilterTags(tag.trim())}
+                            >{tag};</span>
+
+                        })}
+                    </div>
+                );
 
                 acc[c.id] = cols;
                 return acc;
@@ -176,15 +155,23 @@ class CriteriaList extends Component {
                 addText="Add Criterion"
                 rows={this.getRows()}
                 header={[
-                    "Criteria",
+                    <div
+                        className="link"
+                        onClick={this.props.toggleAlphabetSort.bind(this)}>
+                        Criteria {(this.props.alphabetSort) ? <ArrowUpward/> : <ArrowDownward/>}
+                    </div>,
+                    <Filter
+                        name="Type"
+                        list={["System", "Regular"]}
+                        checkedList={this.props.typeFilter || []}
+                        toggleItem={this.props.toggleFilterType.bind(this)}
+                    />,
                     this.props.tags.length > 0 ?
                         <Filter
                             name="Tags"
                             list={this.props.tags}
-                            checkedList={this.state.filter}
-                            filterItems={this.filterItems.bind(this)}
-                            toggleItem={this.toggleItem.bind(this)}
-                            toggleAllItems={this.toggleAllItems.bind(this)}
+                            checkedList={this.props.tagsFilter || []}
+                            toggleItem={this.props.toggleFilterTags.bind(this)}
                         /> : "Tags"
                 ]}
                 rowActions={[
@@ -226,6 +213,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
             unfreezeCriterion: actions.unfreeze,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,
+            toggleFilterType: actions.filterType,
+            toggleFilterTags: actions.filterTags,
+            toggleAlphabetSort: actions.alphabetSort,
             showDeleteCriterionPrompt: (criterionId) =>
                 navigationActions.showModal({
                     name: "deleteCriterion",
