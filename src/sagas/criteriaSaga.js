@@ -28,6 +28,36 @@ handle(sessionActionTypes.LOGIN_SUCCESS, function*() {
     }
 });
 
+handle(types.ALPHABET_SORT, function*(sagaParams, {payload}) {
+   let { alphabetSort } = yield select(state => state.criteria);
+
+   yield put(updateState( { alphabetSort: !alphabetSort }));
+});
+
+handle(types.FILTER_TAGS, function*(sagaParams, {payload}){
+    let { tagsFilter } = yield select(state => state.criteria);
+
+    if (tagsFilter && tagsFilter.includes(payload)) {
+        tagsFilter = _.reject(tagsFilter, (filter) => filter === payload);
+        yield put(updateState({ tagsFilter }));
+    } else {
+        (tagsFilter) ? tagsFilter.push(payload) : tagsFilter = [payload];
+        yield put(updateState({ tagsFilter }));
+    }
+});
+
+handle(types.FILTER_TYPE, function*(sagaParams, {payload}){
+    let { typeFilter } = yield select(state => state.criteria);
+
+    if (typeFilter && typeFilter.includes(payload)) {
+        typeFilter = _.reject(typeFilter, (filter) => filter === payload);
+        yield put(updateState({ typeFilter }));
+    } else {
+        (typeFilter) ? typeFilter.push(payload) : typeFilter = [payload];
+        yield put(updateState({ typeFilter }));
+    }
+});
+
 handle(types.CREATE_CRITERION, function*(sagaParams, {payload}) {
     let criterion = formToCriterion(payload);
     let newCriterion = yield call(criteriaApi.create, criterion.clinic_id, criterion);

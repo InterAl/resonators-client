@@ -19,6 +19,9 @@ export default createSelector(
             clinics,
             clinicIdFilter: criteria.filterByClinicId,
             displayFrozen: criteria.displayFrozen,
+            typeFilter: criteria.typeFilter,
+            tagsFilter: criteria.tagsFilter,
+            alphabetSort: criteria.alphabetSort,
         };
     }
 );

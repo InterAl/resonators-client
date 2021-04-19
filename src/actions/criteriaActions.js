@@ -6,6 +6,9 @@ const actionsList = [
     'DELETE_CRITERION',
     'FREEZE',
     'UNFREEZE',
+    'ALPHABET_SORT',
+    'FILTER_TAGS',
+    'FILTER_TYPE',
     'TOGGLE_DISPLAY_FROZEN',
     'EDIT',
 ];
