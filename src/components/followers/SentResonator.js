@@ -109,7 +109,7 @@ export default function SentResonator({ sentResonatorId, updateResonator }) {
                         ) : null}
                         <CardContent>
                             <Direction by={resonator.content}>
-                                <Typography paragraph>{resonator.content}</Typography>
+                                <Typography paragraph dangerouslySetInnerHTML={{ __html: resonator.content }} />
                             </Direction>
                             {resonator.link ? <AttachedLink link={resonator.link} /> : null}
                         </CardContent>
