@@ -61,7 +61,7 @@ export default class HomePage extends Component {
               </ul>
             </nav>
           </header>
-          
+
           <article className="side-padding">
             <h1 className="fold-title margin-bottom-small">
               A secure cloud-based platform for enhancing therapy
@@ -162,6 +162,7 @@ export default class HomePage extends Component {
         <section id="contacts" className="contact-section">
           <article className="contact-section-container padding-top-large padding-bottom-large side-padding">
             <div className="contact-section-text">
+              <p><a href="/privacy-policy" target="_blank">Privacy Policy</a></p>
               <h2 className="padding-bottom-medium text-primary">Contact us</h2>
               <p className="padding-bottom-medium">We’re happy to hear from you! Contact us today and speak with one of our customer service representatives — and make your experience with us that much
                 more pleasant!</p>
@@ -175,7 +176,7 @@ export default class HomePage extends Component {
               <textarea rows="40" id="contact-form-message" name="message" placeholder="Message" className="contact-section-input margin-bottom-medium"></textarea>
               <ReCAPTCHA
                 ref={this.recaptchaRef}
-                sitekey="6LdyBuQZAAAAAHZRoMHSxkXl9YSW8lNBUlOQCKVS"                
+                sitekey="6LdyBuQZAAAAAHZRoMHSxkXl9YSW8lNBUlOQCKVS"
               />
               <button className="contact-form-btn btn-primary" >Send</button>
             </form>
