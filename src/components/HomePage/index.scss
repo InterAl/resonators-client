@@ -125,7 +125,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
       }
     }
   }
-  
+
   // Generate spacing utility classes. Margin & Padding.
   @each $name, $size in $spacing-lg {
     $suffix: "";
@@ -412,6 +412,7 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     height: 56px;
     width: 100%;
     border: 0.8px solid $border-primary;
+    box-sizing: border-box;
     border-radius: 4px;
     padding: 15px 20px;
     background-color: $accent;
