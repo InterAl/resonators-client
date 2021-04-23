@@ -11,7 +11,7 @@ export function isMobile(width) {
     return isWidthDown('xs', width);
 }
 
-function getDir(text) {
+export function getDir(text) {
     const textArr = text.split('');
     const hebrewLettersCount = _.reduce(textArr, (acc, letter) => {
         return acc + (isHebrewLetter(letter) ? 1 : 0);

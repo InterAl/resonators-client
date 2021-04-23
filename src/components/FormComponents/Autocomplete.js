@@ -13,11 +13,12 @@ export default function AutocompleteField({options, labelKey, input, ...custom})
                 minWidth: "320px"
             }}
             options={options}
+            className="autocomplete_field"
             getOptionLabel={option => option[labelKey] || ""}
             open={autoCompleteOpen}
-            onChange={(event,value) => {
+            onChange={_.debounce((event,value) => {
                 input.onChange(value ? value[labelKey] : "")
-            }}
+            }, 200)}
             // This will close the autocomplete on empty text
             // Will collapse on select
             onInputChange={(event, value, reason) => {

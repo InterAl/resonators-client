@@ -14,3 +14,20 @@
     }
 }
 
+@media only screen and (max-width:460px) {
+    #inviteGmail {
+        justify-content:center;
+        text-align:center;
+
+        .MuiGrid-item {
+            margin: 0 auto;
+        }
+
+        #copyInvitation {
+            margin-top:10px;
+        }
+    }
+    .autocomplete_field {
+        min-width: 100% !important;
+    }
+}

@@ -8,6 +8,7 @@ import { richEditorTheme } from "../../richEditorTheme";
 import {ContentState, convertFromHTML, convertToRaw} from "draft-js";
 import {stateToHTML} from 'draft-js-export-html';
 import { connect } from "react-redux";
+import * as utils from "../../utils";
 
 class EditResonatorBasic extends Component {
 
@@ -15,6 +16,9 @@ class EditResonatorBasic extends Component {
         super(props);
 
         this.bodyRich = props.description || "";
+        this.state = {
+            direction: props.description ? utils.getDir(props.description) : "ltr"
+        }
         this.richChange = this.richChange.bind(this);
     }
 
@@ -23,6 +27,10 @@ class EditResonatorBasic extends Component {
         if (this.bodyRich !== bodyHTML) {
             this.bodyRich = bodyHTML;
             this.props.formData.description = bodyHTML;
+            const newDir = bodyHTML ? utils.getDir(bodyHTML) : false;
+            if (newDir && this.state.direction !== newDir) {
+                this.setState({direction: utils.getDir(bodyHTML)});
+            }
         }
     }
 
@@ -30,22 +38,24 @@ class EditResonatorBasic extends Component {
         return (
             <div>
                 <Field name="title" label="Title" component={TextField} style={{ marginBottom:"25px" }}/>
-                <Field type="text" placeholder="Description" label="Description" name="description" component={({ input: { onChange, value }, meta, ...custom }) => {
-                    const contentHTML = convertFromHTML(value);
-                    const state = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
-                    const content = JSON.stringify(convertToRaw(state));
+                <div style={{ direction: this.state.direction, textAlign: this.state.direction === "rtl" ? "right" : "left"}}>
+                    <Field type="text" placeholder="Description" label="Description" name="description" component={({ input: { onChange, value }, meta, ...custom }) => {
+                        const contentHTML = convertFromHTML(value);
+                        const state = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
+                        const content = JSON.stringify(convertToRaw(state));
 
-                    return (
-                        <MuiThemeProvider theme={richEditorTheme}>
-                            <MUIRichTextEditor
-                                defaultValue={content}
-                                controls={[]}
-                                label="Description"
-                                onChange={this.richChange}
-                            />
-                        </MuiThemeProvider>
-                    );
-                }} />
+                        return (
+                            <MuiThemeProvider theme={richEditorTheme}>
+                                <MUIRichTextEditor
+                                    defaultValue={content}
+                                    controls={["title", "bold", "italic", "underline", "strikethrough", "link", "media", "numberList", "bulletList", "quote", "code", "clear"]}
+                                    label="Description"
+                                    onChange={this.richChange}
+                                />
+                            </MuiThemeProvider>
+                        );
+                    }} />
+                </div>
                 <Field name="link" label="Link" type="url" component={TextField} />
             </div>
         );

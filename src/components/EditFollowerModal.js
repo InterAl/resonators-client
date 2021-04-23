@@ -178,7 +178,7 @@ class EditFollowerModal extends Component {
                                         </Select>
                                     </Grid>
                                     <Grid item>
-                                        <Button component="span" variant="contained" onClick={this.copyInvitation}>Copy Invitation</Button>
+                                        <Button component="span" variant="contained" onClick={this.copyInvitation} id="copyInvitation">Copy Invitation</Button>
                                         <Snackbar
                                             open={this.state.snackbarCopyInvitationState}
                                             onClose={() => this.setState({snackbarCopyInvitationState: false})}
