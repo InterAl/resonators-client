@@ -6,6 +6,7 @@ module.exports = {
     categories: ["health", "medical"],
     display: "standalone",
     start_url: "/login",
+    orientation: "any",
     scope: "/",
     theme_color: "#00a0b4",
     icons: [
