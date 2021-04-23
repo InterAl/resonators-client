@@ -10,6 +10,8 @@ import {stateToHTML} from 'draft-js-export-html';
 import { connect } from "react-redux";
 import * as utils from "../../utils";
 
+import "./basic.scss";
+
 class EditResonatorBasic extends Component {
 
     constructor(props) {
