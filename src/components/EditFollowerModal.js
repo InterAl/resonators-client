@@ -19,7 +19,6 @@ import {
     Snackbar,
 } from "@material-ui/core";
 import { Field, reduxForm } from "redux-form";
-import TextField from "./FormComponents/TextField";
 import Autocomplete from "./FormComponents/Autocomplete";
 import navigationInfoSelector from "../selectors/navigationSelector";
 import IsSystemRadio from "./IsSystemRadio";
@@ -56,6 +55,7 @@ class EditFollowerModal extends Component {
         this.selectInvitation = this.selectInvitation.bind(this);
         this.toggleSystem = this.toggleSystem.bind(this);
         this.renderForm = this.renderForm.bind(this);
+        this.autocompleteNextField = this.autocompleteNextField.bind(this);
         this.cfg = props.editMode ? editCfg : newCfg;
         this.state = {
             invite_gmail: false,
@@ -63,6 +63,9 @@ class EditFollowerModal extends Component {
             snackbarCopyInvitationState: false,
             is_system: (props.editMode && props.follower.is_system) ? props.follower.is_system : false
         }
+
+        this.nameFieldRef = React.createRef();
+        this.emailFieldRef = React.createRef();
     }
 
     importFollowers(e) {
@@ -131,6 +134,16 @@ class EditFollowerModal extends Component {
         });
     }
 
+    autocompleteNextField(selectedOption, labelKey) {
+        if (labelKey === "name") {
+            this.emailFieldRef.current.value = selectedOption.email;
+            this.props.formData.values.field2 = selectedOption.email;
+        } else {
+            this.nameFieldRef.current.value = selectedOption.name;
+            this.props.formData.values.field1 = selectedOption.name;
+        }
+    }
+
     renderForm() {
         return (
             <form autoComplete="off">
@@ -140,7 +153,9 @@ class EditFollowerModal extends Component {
                     placeholder="Name"
                     name="field1"
                     component={Autocomplete}
+                    autocompleteNextField={this.autocompleteNextField}
                     labelKey="name"
+                    inputRef={this.nameFieldRef}
                 />
                 <Field
                     options={this.props.googleContacts}
@@ -148,7 +163,9 @@ class EditFollowerModal extends Component {
                     placeholder="Email"
                     name="field2"
                     component={Autocomplete}
+                    autocompleteNextField={this.autocompleteNextField}
                     labelKey="email"
+                    inputRef={this.emailFieldRef}
                 />
 
                 {!this.props.editMode && (
@@ -300,6 +317,7 @@ function mapStateToProps(state) {
     const current_clinic_id = state.leaders.leaders.current_clinic_id;
     const isAdmin = state.leaders.leaders.admin_permissions;
     const googleContacts = state.googleData.googleContacts;
+    const formData = state.form.editFollower;
 
     const ret = {
         follower,
@@ -307,7 +325,8 @@ function mapStateToProps(state) {
         clinics,
         editMode,
         isAdmin,
-        googleContacts
+        googleContacts,
+        formData
     };
 
     if (follower) {
