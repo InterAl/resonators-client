@@ -10,12 +10,17 @@ Object.assign(richEditorTheme, {
                 width: "100%",
                 minWidth: "500px"
             },
+            container: {
+                margin: "8px 0px 40px 0px"
+            },
             editor: {
-                borderBottom: "1px solid gray"
+                borderTop: "1px solid gray",
+                borderBottom: "1px solid gray",
             },
             placeHolder: {
                 position: "absolute",
-                top: "-30px"
+                top: "50px",
+                borderBottom: "1px solid gray"
             },
         }
     }
