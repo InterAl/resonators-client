@@ -11,6 +11,7 @@ import EntityTable from "./EntityTable";
 import { rowAction } from "./RowActions";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
+import Filter from "components/Filter";
 
 class Followers extends Component {
     constructor() {
@@ -103,6 +104,15 @@ class Followers extends Component {
         header.push("Name");
         this.state.showEmails && header.push("Email");
         header.push("Clinic");
+        header.push(<Filter
+            name="Groups"
+            list={["STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
+                acc.push(group.group_name);
+                return acc;
+            }, [])]}
+            checkedList={this.props.groupsFilter || []}
+            toggleItem={this.props.toggleFilterGroups.bind(this)}
+        />);
         return header;
     }
 
@@ -120,6 +130,7 @@ class Followers extends Component {
                     </MuiLink>
                 );
                 cols.push("");
+                cols.push("");
                 acc[f.id] = cols;
                 return acc;
             },
@@ -127,7 +138,13 @@ class Followers extends Component {
         );
 
         const followers = _.reduce(
-            this.props.followers,
+            this.props.followers.filter(
+                follower => !this.props.groupsFilter?.length > 0
+                    || follower.groups?.some(group => this.props.groupsFilter?.includes(
+                        this.props.followerGroups.find(g => g.id === group)?.group_name
+                    ))
+                    || (follower.groups.includes("STNDALN") && this.props.groupsFilter?.includes("STNDALN"))
+            ),
             (acc, f) => {
                 let cols = [];
                 cols.push(
@@ -146,6 +163,15 @@ class Followers extends Component {
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);
+                cols.push(<div className="followerGroupsTag">{f.groups.map((groupId) => {
+                    const group = this.props.followerGroups.find(g => g.id === groupId);
+                    const groupName = group?.group_name || "STNDALN";
+
+                    return <span
+                        className={(this.props.groupsFilter?.includes(groupName)) ? "followerGroupTag active" : "followerGroupTag"}
+                        onClick={() => this.props.toggleFilterGroups(groupName)}
+                    >{groupName};</span>
+                })}</div>);
                 acc[f.id] = cols;
                 return acc;
             },
@@ -248,10 +274,12 @@ function mapStateToProps(state) {
     const systemFollowers = state.followers.systemFollowers;
     const invitationsLength = state.invitations.invitations.length;
     const isAdmin = state.leaders.leaders.admin_permissions;
+    const followerGroups = state.followerGroups.followerGroups;
 
     return {
         ...followersData,
         getFollower: (followerId) => _.find(followersData.followers, (f) => f.id === followerId) || _.find(systemFollowers, (f) => f.id === followerId),
+        followerGroups,
         invitationsLength,
         systemFollowers,
         isAdmin
@@ -262,6 +290,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             editFollower: actions.edit,
+            toggleFilterGroups: actions.filterGroups,
             unfreezeFollower: actions.unfreeze,
             filterByClinicId: actions.filterByClinicId,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,

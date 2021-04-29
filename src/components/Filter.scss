@@ -2,6 +2,7 @@
     position: relative;
     display:inline-block;
     margin-left:30px;
+    width: calc(100% - 40px);
 }
 .filterBox {
     position: absolute;
@@ -29,6 +30,23 @@
     font-weight:bold;
 }
 .criterionTag:hover {
+    color: rgb(0, 131, 148);
+}
+.followerGroupsTag {
+    text-align: center;
+    max-width:150px;
+    margin:auto;
+}
+.followerGroupTag {
+    color:#00bcd4;
+    cursor:pointer;
+    margin: 0 5px;
+    word-break: break-word;
+}
+.followerGroupTag.active {
+    font-weight:bold;
+}
+.followerGroupTag:hover {
     color: rgb(0, 131, 148);
 }
 .link {

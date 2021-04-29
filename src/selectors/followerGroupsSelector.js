@@ -19,6 +19,7 @@ export default createSelector(
             clinics,
             clinicIdFilter: followerGroups.filterByClinicId,
             displayFrozen: followerGroups.displayFrozen,
+            groupsFilter: followerGroups.groupsFilter
         };
     }
 );

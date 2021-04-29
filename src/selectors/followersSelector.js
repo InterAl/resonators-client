@@ -18,7 +18,8 @@ export default createSelector(
                                 .value(),
             clinics,
             clinicIdFilter: followers.filterByClinicId,
-            displayFrozen: followers.displayFrozen
+            displayFrozen: followers.displayFrozen,
+            groupsFilter: followers.groupsFilter
         };
     }
 );
