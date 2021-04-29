@@ -53,6 +53,18 @@ handle(types.DELETE, function* (sagaParams, { payload }) {
     }));
 });
 
+handle(types.FILTER_GROUPS, function* (sagaParams, {payload}){
+    let { groupsFilter } = yield select(state => state.followers);
+
+    if (groupsFilter && groupsFilter.includes(payload)) {
+        groupsFilter = _.reject(groupsFilter, (filter) => filter === payload);
+        yield put(updateState({ groupsFilter }));
+    } else {
+        (groupsFilter) ? groupsFilter.push(payload) : groupsFilter = [payload];
+        yield put(updateState({ groupsFilter }));
+    }
+});
+
 handle(types.FREEZE, function* (sagaParams, { payload }) {
     yield call(followerApi.freezeFollower, payload);
     const follower = yield getFollower(payload);

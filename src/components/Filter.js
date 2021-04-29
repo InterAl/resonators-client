@@ -61,7 +61,7 @@ class Filter extends Component {
                         control={
                             <Checkbox
                                 color="primary"
-                                checked={this.props.checkedList.length === this.props.list.length}
+                                checked={this.props.checkedList?.length === this.props.list?.length}
                                 onChange={this.toggleAllItems}
                             />
                         }

@@ -94,7 +94,8 @@ handle(types.UPDATE, function* (sagaParams, { payload }) {
 
 handle(types.UPDATE_FOLLOWER_GROUP_MEMBERS, function* (sagaParams, { payload }) {
     const { newMemberList, followerGroupId } = payload;
-    yield call(followerGroupApi.updateMembers, followerGroupId, newMemberList.map(({ id }) => id));
+    const members = newMemberList.filter((m) => typeof m !== "undefined");
+    yield call(followerGroupApi.updateMembers, followerGroupId, members.map(({ id }) => id));
     const followerGroup = yield getFollowerGroup(followerGroupId);
 
     const updatedFollowerGroup = {
