@@ -20,6 +20,7 @@ class ShowResonator extends Component {
         this.state = {
             iframeWidth: 0,
             iframeHeight: 0,
+            expanded: false
         };
 
         this.handleIframeLoad = this.handleIframeLoad.bind(this);
@@ -187,13 +188,19 @@ class ShowResonator extends Component {
                 {this.renderSectionTitle({ title: resonator.title })}
                 <div>
                     <ExpandableCard
-                        onExpandChange={(expanded) =>
-                            !expanded &&
-                            this.setState({
-                                iframeWidth: 0,
-                                iframeHeight: 0,
-                            })
-                        }
+                        onExpandChange={(expanded) => {
+                            if (!expanded) {
+                                this.setState({
+                                    iframeWidth: 0,
+                                    iframeHeight: 0,
+                                    expanded: expanded
+                                })
+                            } else {
+                                this.setState({
+                                    expanded: expanded
+                                })
+                            }
+                        }}
                         width={this.state.iframeWidth || 497}
                         height={this.state.iframeHeight || 60}
                         id={`resonatorPreview-${resonatorId}`}
@@ -204,15 +211,16 @@ class ShowResonator extends Component {
                         avatar={<RemoveRedEye />}
                     >
                         <div style={{ height: this.state.iframeHeight }}>
-                            {!this.state.iframeHeight && (
+                            {!this.state.expanded && (
                                 <CircularProgress style={{ margin: "0 auto", display: "block" }} />
                             )}
-
-                            <iframe
-                                onLoad={this.handleIframeLoad}
-                                style={{ border: 0, height: "100%", width: "100%" }}
-                                src={`/api/reminders/${resonatorId}/render`}
-                            />
+                            {this.state.expanded && (
+                                <iframe
+                                    onLoad={this.handleIframeLoad}
+                                    style={{ border: 0, height: "100%", width: "100%" }}
+                                    src={`/api/reminders/${resonatorId}/render`}
+                                />
+                            )}
                         </div>
                     </ExpandableCard>
                 </div>

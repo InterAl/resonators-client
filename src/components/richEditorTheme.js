@@ -11,16 +11,20 @@ Object.assign(richEditorTheme, {
                 minWidth: "500px"
             },
             container: {
-                margin: "8px 0px 40px 0px"
+                margin: "-25px 0px 0px 0px"
             },
             editor: {
-                borderTop: "1px solid gray",
                 borderBottom: "1px solid gray",
+                height:"40px",
+                paddingBottom: "0"
+            },
+            toolbar: {
+                borderBottom: "1px solid gray",
+                marginLeft: "15px"
             },
             placeHolder: {
                 position: "absolute",
                 top: "50px",
-                borderBottom: "1px solid gray"
             },
         }
     }
