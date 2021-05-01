@@ -62,7 +62,12 @@ class FollowerGroupResonators extends Component {
                     }}
                 >
                     <Typography style={{ fontWeight: "bold" }}>{_.truncate(resonator.title, { length: 50 })}</Typography>
-                    <Typography color="textSecondary">{_.truncate(resonator.content, { length: 50 })}</Typography>
+                    <Typography color="textSecondary">{_.truncate(
+                        _.unescape(resonator.content)
+                            .replace(/<[^>]*>?/gm, '')
+                            .replace(/&nbsp;/g,' '),
+                        { length: 50 })
+                    }</Typography>
                 </div>
             </div>
         );

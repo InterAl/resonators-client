@@ -26,12 +26,14 @@ class EditResonatorBasic extends Component {
 
     richChange(state) {
         const bodyHTML = stateToHTML(state.getCurrentContent());
+        const bodyPlain = state.getCurrentContent().getPlainText();
+
         if (this.bodyRich !== bodyHTML) {
             this.bodyRich = bodyHTML;
             this.props.formData.description = bodyHTML;
-            const newDir = bodyHTML ? utils.getDir(bodyHTML) : false;
+            const newDir = bodyHTML ? utils.getDir(bodyPlain) : false;
             if (newDir && this.state.direction !== newDir) {
-                this.setState({direction: utils.getDir(bodyHTML)});
+                this.setState({direction: utils.getDir(bodyPlain)});
             }
         }
     }
@@ -75,7 +77,6 @@ export default connect(mapStateToProps, null)(StepBase({
     validate(formData) {
         let errors = {};
         if (!formData.title) errors.title = "Required";
-        if (!formData.description) errors.description = "Required";
         return errors;
     },
 })(EditResonatorBasic));
