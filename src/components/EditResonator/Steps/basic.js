@@ -22,6 +22,7 @@ class EditResonatorBasic extends Component {
             direction: props.description ? utils.getDir(props.description) : "ltr"
         }
         this.richChange = this.richChange.bind(this);
+        this.descriptionRef = React.createRef();
     }
 
     richChange(state) {
@@ -33,7 +34,9 @@ class EditResonatorBasic extends Component {
             this.props.formData.description = bodyHTML;
             const newDir = bodyHTML ? utils.getDir(bodyPlain) : false;
             if (newDir && this.state.direction !== newDir) {
-                this.setState({direction: utils.getDir(bodyPlain)});
+                this.setState({direction: newDir}, () => {
+                    this.descriptionRef.current?.focus()
+                });
             }
         }
     }
@@ -44,13 +47,14 @@ class EditResonatorBasic extends Component {
                 <Field name="title" label="Title" component={TextField} style={{ marginBottom:"25px" }}/>
                 <div style={{ direction: this.state.direction, textAlign: this.state.direction === "rtl" ? "right" : "left"}}>
                     <Field type="text" placeholder="Description" label="Description" name="description" component={({ input: { onChange, value }, meta, ...custom }) => {
-                        const contentHTML = convertFromHTML(value);
+                        const contentHTML = convertFromHTML(value || this.bodyRich);
                         const state = ContentState.createFromBlockArray(contentHTML.contentBlocks, contentHTML.entityMap);
                         const content = JSON.stringify(convertToRaw(state));
 
                         return (
                             <MuiThemeProvider theme={richEditorTheme}>
                                 <MUIRichTextEditor
+                                    ref={this.descriptionRef}
                                     defaultValue={content}
                                     controls={["title", "bold", "italic", "underline", "strikethrough", "link", "media", "numberList", "bulletList", "quote", "code", "clear"]}
                                     label="Description"
