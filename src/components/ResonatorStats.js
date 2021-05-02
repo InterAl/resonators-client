@@ -32,6 +32,14 @@ class ResonatorStats extends Component {
         this.renderCard = this.renderCard.bind(this);
     }
 
+    componentWillMount() {
+        if (this.props.resonatorId) {
+            this.props.fetchResonatorStats({
+                resonatorId: this.props.resonatorId
+            });
+        }
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.resonatorId && this.props.resonatorId !== prevProps.resonatorId)
             this.props.fetchResonatorStats({
