@@ -1,6 +1,7 @@
 import {ActionCreatorHelper} from '../saga-reducers-factory-patch';
 
 const actionsList = [
+    'FETCH',
     'UPDATE',
     'CREATE',
     'DELETE',

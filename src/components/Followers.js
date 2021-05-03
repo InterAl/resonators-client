@@ -31,6 +31,10 @@ class Followers extends Component {
         this.handleInviteFollower = this.handleInviteFollower.bind(this);
     }
 
+    componentWillMount() {
+        this.props.fetchFollowers();
+    }
+
     handleClinicFilterChange(ev, idx, value) {
         this.props.filterByClinicId(value);
     }
@@ -106,7 +110,7 @@ class Followers extends Component {
         header.push("Clinic");
         header.push(<Filter
             name="Groups"
-            list={["STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
+            list={["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
                 acc.push(group.group_name);
                 return acc;
             }, [])]}
@@ -118,7 +122,10 @@ class Followers extends Component {
 
     getRows() {
         const systemFollowers = _.reduce(
-            this.props.systemFollowers,
+            this.props.systemFollowers.filter(
+                systemFollower => !this.props.groupsFilter?.length > 0
+                || this.props.groupsFilter.includes("SYSTEM")
+            ),
             (acc, f) => {
                 let cols = [];
                 cols.push(
@@ -130,7 +137,10 @@ class Followers extends Component {
                     </MuiLink>
                 );
                 cols.push("");
-                cols.push("");
+                cols.push(<div className="followerGroupsTag"><span
+                    className={(this.props.groupsFilter?.includes("SYSTEM")) ? "followerGroupTag active" : "followerGroupTag"}
+                    onClick={() => this.props.toggleFilterGroups("SYSTEM")}
+                >SYSTEM</span></div>);
                 acc[f.id] = cols;
                 return acc;
             },
@@ -289,6 +299,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
+            fetchFollowers: actions.fetch,
             editFollower: actions.edit,
             toggleFilterGroups: actions.filterGroups,
             unfreezeFollower: actions.unfreeze,
