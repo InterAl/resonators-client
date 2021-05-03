@@ -10,6 +10,7 @@ class NumericCreation extends Component {
     };
 
     renderList(min, max) {
+        if (typeof min === "undefined" || max <= 0) return false;
         return (
             <List
                 subheader={
@@ -67,7 +68,7 @@ class NumericCreation extends Component {
                         }}
                     />
                 </div>
-                {numMin && numMax && this.renderList(parseInt(numMin), parseInt(numMax))}
+                {this.renderList(parseInt(numMin), parseInt(numMax))}
             </div>
         );
     }

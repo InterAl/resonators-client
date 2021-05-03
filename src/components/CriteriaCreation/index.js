@@ -220,7 +220,7 @@ export default connect(
             //     errors.clinic = 'Required';
 
             if (form.question_kind === "numeric") {
-                if (!form.numMin) errors.numMin = "Required";
+                if (!form.numMin && form.numMin !== 0) errors.numMin = "Required";
                 if (!form.numMax) errors.numMax = "Required";
                 if (form.numMin && form.numMax) {
                     const [min, max] = [parseInt(form.numMin), parseInt(form.numMax)];
