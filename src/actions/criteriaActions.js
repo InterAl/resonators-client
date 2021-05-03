@@ -8,7 +8,9 @@ const actionsList = [
     'UNFREEZE',
     'ALPHABET_SORT',
     'FILTER_TAGS',
+    'FILTER_TAGS_ALL',
     'FILTER_TYPE',
+    'FILTER_TYPE_ALL',
     'TOGGLE_DISPLAY_FROZEN',
     'EDIT',
 ];

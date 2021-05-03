@@ -37,7 +37,7 @@ class Filter extends Component {
     }
 
     toggleAllItems() {
-        this.props.list.map((item) => this.props.toggleItem(item));
+        this.props.toggleAllItems(this.props.list);
     }
 
     toggleFilter() {

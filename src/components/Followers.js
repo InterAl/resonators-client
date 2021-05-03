@@ -31,6 +31,10 @@ class Followers extends Component {
         this.handleInviteFollower = this.handleInviteFollower.bind(this);
     }
 
+    componentWillMount() {
+        this.props.fetchFollowers();
+    }
+
     handleClinicFilterChange(ev, idx, value) {
         this.props.filterByClinicId(value);
     }
@@ -101,24 +105,29 @@ class Followers extends Component {
 
     getHeader() {
         const header = [];
+        const groupsList = ["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups.filter((group) => group.memberCount > 0), (acc, group) => {
+            acc.push(group.group_name);
+            return acc;
+        }, [])];
         header.push("Name");
         this.state.showEmails && header.push("Email");
         header.push("Clinic");
         header.push(<Filter
             name="Groups"
-            list={["STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
-                acc.push(group.group_name);
-                return acc;
-            }, [])]}
+            list={groupsList}
             checkedList={this.props.groupsFilter || []}
             toggleItem={this.props.toggleFilterGroups.bind(this)}
+            toggleAllItems={this.props.toggleAllFilterGroups.bind(this)}
         />);
         return header;
     }
 
     getRows() {
         const systemFollowers = _.reduce(
-            this.props.systemFollowers,
+            this.props.systemFollowers.filter(
+                systemFollower => !this.props.groupsFilter?.length > 0
+                || this.props.groupsFilter.includes("SYSTEM")
+            ),
             (acc, f) => {
                 let cols = [];
                 cols.push(
@@ -130,7 +139,10 @@ class Followers extends Component {
                     </MuiLink>
                 );
                 cols.push("");
-                cols.push("");
+                cols.push(<div className="followerGroupsTag"><span
+                    className={(this.props.groupsFilter?.includes("SYSTEM")) ? "followerGroupTag active" : "followerGroupTag"}
+                    onClick={() => this.props.toggleFilterGroups("SYSTEM")}
+                >SYSTEM</span></div>);
                 acc[f.id] = cols;
                 return acc;
             },
@@ -289,8 +301,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
+            fetchFollowers: actions.fetch,
             editFollower: actions.edit,
             toggleFilterGroups: actions.filterGroups,
+            toggleAllFilterGroups: actions.filterGroupsAll,
             unfreezeFollower: actions.unfreeze,
             filterByClinicId: actions.filterByClinicId,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,

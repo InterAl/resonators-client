@@ -15,7 +15,7 @@ Object.assign(richEditorTheme, {
             },
             editor: {
                 borderBottom: "1px solid gray",
-                height:"40px",
+                minHeight:"40px",
                 paddingBottom: "0"
             },
             toolbar: {
