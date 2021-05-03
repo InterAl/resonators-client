@@ -46,6 +46,16 @@ handle(types.FILTER_TAGS, function*(sagaParams, {payload}){
     }
 });
 
+handle(types.FILTER_TAGS_ALL, function*(sagaParams, {payload}){
+    const { tagsFilter } = yield select(state => state.criteria);
+
+    if (tagsFilter && tagsFilter.length > 0) {
+        yield put(updateState({ tagsFilter: [] }));
+    } else {
+        yield put(updateState({ tagsFilter: payload }));
+    }
+});
+
 handle(types.FILTER_TYPE, function*(sagaParams, {payload}){
     let { typeFilter } = yield select(state => state.criteria);
 
@@ -55,6 +65,16 @@ handle(types.FILTER_TYPE, function*(sagaParams, {payload}){
     } else {
         (typeFilter) ? typeFilter.push(payload) : typeFilter = [payload];
         yield put(updateState({ typeFilter }));
+    }
+});
+
+handle(types.FILTER_TYPE_ALL, function*(sagaParams, {payload}){
+    const { typeFilter } = yield select(state => state.criteria);
+
+    if (typeFilter && typeFilter.length > 0) {
+        yield put(updateState({ typeFilter: [] }));
+    } else {
+        yield put(updateState({ typeFilter: payload }));
     }
 });
 

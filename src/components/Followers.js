@@ -105,17 +105,19 @@ class Followers extends Component {
 
     getHeader() {
         const header = [];
+        const groupsList = ["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
+            acc.push(group.group_name);
+            return acc;
+        }, [])];
         header.push("Name");
         this.state.showEmails && header.push("Email");
         header.push("Clinic");
         header.push(<Filter
             name="Groups"
-            list={["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
-                acc.push(group.group_name);
-                return acc;
-            }, [])]}
+            list={groupsList}
             checkedList={this.props.groupsFilter || []}
             toggleItem={this.props.toggleFilterGroups.bind(this)}
+            toggleAllItems={this.props.toggleAllFilterGroups.bind(this)}
         />);
         return header;
     }
@@ -302,6 +304,7 @@ function mapDispatchToProps(dispatch) {
             fetchFollowers: actions.fetch,
             editFollower: actions.edit,
             toggleFilterGroups: actions.filterGroups,
+            toggleAllFilterGroups: actions.filterGroupsAll,
             unfreezeFollower: actions.unfreeze,
             filterByClinicId: actions.filterByClinicId,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,

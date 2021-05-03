@@ -3,7 +3,6 @@ import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
 import { types as resonatorTypes } from '../actions/resonatorActions';
-import { types as sessionActionTypes } from '../actions/sessionActions';
 import * as followerApi from '../api/follower';
 
 let followersSelector = state => state.followers.followers;
@@ -56,6 +55,16 @@ handle(types.FILTER_GROUPS, function* (sagaParams, {payload}){
     } else {
         (groupsFilter) ? groupsFilter.push(payload) : groupsFilter = [payload];
         yield put(updateState({ groupsFilter }));
+    }
+});
+
+handle(types.FILTER_GROUPS_ALL, function* (sagaParams, {payload}){
+    const { groupsFilter } = yield select(state => state.followers);
+
+    if (groupsFilter && groupsFilter.length > 0) {
+        yield put(updateState({ groupsFilter: [] }));
+    } else {
+        yield put(updateState({ groupsFilter: payload }));
     }
 });
 

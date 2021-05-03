@@ -9,6 +9,7 @@ const actionsList = [
     'UNFREEZE',
     'TOGGLE_DISPLAY_FROZEN',
     'FILTER_GROUPS',
+    'FILTER_GROUPS_ALL',
     'EDIT',
     'FILTER_BY_CLINIC_ID',
     'FETCH_FOLLOWER_RESONATORS'

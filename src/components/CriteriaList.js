@@ -165,6 +165,7 @@ class CriteriaList extends Component {
                         list={["System", "Regular"]}
                         checkedList={this.props.typeFilter || []}
                         toggleItem={this.props.toggleFilterType.bind(this)}
+                        toggleAllItems={this.props.toggleAllFilterTypes.bind(this)}
                     />,
                     this.props.tags.length > 0 ?
                         <Filter
@@ -172,6 +173,7 @@ class CriteriaList extends Component {
                             list={this.props.tags}
                             checkedList={this.props.tagsFilter || []}
                             toggleItem={this.props.toggleFilterTags.bind(this)}
+                            toggleAllItems={this.props.toggleAllFilterTags.bind(this)}
                         /> : "Tags"
                 ]}
                 rowActions={[
@@ -214,7 +216,9 @@ function mapDispatchToProps(dispatch) {
             unfreezeCriterion: actions.unfreeze,
             toggleDisplayFrozen: actions.toggleDisplayFrozen,
             toggleFilterType: actions.filterType,
+            toggleAllFilterTypes: actions.filterTypeAll,
             toggleFilterTags: actions.filterTags,
+            toggleAllFilterTags: actions.filterTagsAll,
             toggleAlphabetSort: actions.alphabetSort,
             showDeleteCriterionPrompt: (criterionId) =>
                 navigationActions.showModal({
