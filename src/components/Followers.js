@@ -105,7 +105,7 @@ class Followers extends Component {
 
     getHeader() {
         const header = [];
-        const groupsList = ["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups, (acc, group) => {
+        const groupsList = ["SYSTEM", "STNDALN", ..._.reduce(this.props.followerGroups.filter((group) => group.memberCount > 0), (acc, group) => {
             acc.push(group.group_name);
             return acc;
         }, [])];
