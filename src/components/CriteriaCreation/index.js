@@ -21,6 +21,8 @@ import NumericCreation from "./NumericCreation";
 import BooleanCreation from "./BooleanCreation";
 import ValueListCreation from "./ValueListCreation";
 
+import './CriteriaCreation.scss'
+
 const formSelector = formValueSelector("criteriaCreation");
 
 class CriteriaCreation extends Component {
