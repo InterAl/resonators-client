@@ -175,7 +175,9 @@ class Followers extends Component {
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);
-                cols.push(<div className="followerGroupsTag">{f.groups.map((groupId) => {
+                cols.push(<div className="followerGroupsTag">{f.groups.filter(function(item, pos, self) {
+                    return self.indexOf(item) == pos;
+                }).map((groupId) => {
                     const group = this.props.followerGroups.find(g => g.id === groupId);
                     let groupName = group?.group_name || "STNDALN";
                     if (groupId === "STNDALN") groupName = "STNDALN";
@@ -184,8 +186,6 @@ class Followers extends Component {
                         className={(this.props.groupsFilter?.includes(groupName)) ? "followerGroupTag active" : "followerGroupTag"}
                         onClick={() => this.props.toggleFilterGroups(groupName)}
                     >{groupName};</span>
-                }).filter(function(item, pos, self) {
-                    return self.indexOf(item) == pos;
                 })}</div>);
                 acc[f.id] = cols;
                 return acc;
