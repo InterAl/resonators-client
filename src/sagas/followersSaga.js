@@ -61,7 +61,7 @@ handle(types.FILTER_GROUPS, function* (sagaParams, {payload}){
 handle(types.FILTER_GROUPS_ALL, function* (sagaParams, {payload}){
     const { groupsFilter } = yield select(state => state.followers);
 
-    if (groupsFilter && groupsFilter.length > 0) {
+    if (groupsFilter && groupsFilter.length === payload.length) {
         yield put(updateState({ groupsFilter: [] }));
     } else {
         yield put(updateState({ groupsFilter: payload }));

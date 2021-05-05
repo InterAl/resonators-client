@@ -49,7 +49,7 @@ handle(types.FILTER_TAGS, function*(sagaParams, {payload}){
 handle(types.FILTER_TAGS_ALL, function*(sagaParams, {payload}){
     const { tagsFilter } = yield select(state => state.criteria);
 
-    if (tagsFilter && tagsFilter.length > 0) {
+    if (tagsFilter && tagsFilter.length === payload.length) {
         yield put(updateState({ tagsFilter: [] }));
     } else {
         yield put(updateState({ tagsFilter: payload }));
