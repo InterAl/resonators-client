@@ -19,12 +19,13 @@ handle(types.UPDATE_FORM, function* (sagaParams, { payload }) {
     const currentFormData = yield select(formDataSelector);
     const clinics = yield select(clinicsSelector);
     const activeClinic = clinics.find(c => c.is_primary === true);
+    if (!activeClinic) return false;
 
     if (payload.logo || payload.logo === null) activeClinic.logo = payload.logo;
     if (payload.therapistPicture || payload.therapistPicture === null) activeClinic.therapistPicture = payload.therapistPicture;
     if (payload.QRImage || payload.QRImage === null) activeClinic.qr = payload.QRImage;
-    if (payload.phone) activeClinic.phone = payload.phone;
-    if (payload.website) activeClinic.website = payload.website;
+    if (typeof payload.phone !== "undefined") activeClinic.phone = payload.phone;
+    if (typeof payload.website !== "undefined") activeClinic.website = payload.website;
 
     yield put(updateState({
         formData: {

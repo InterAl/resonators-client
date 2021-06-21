@@ -123,7 +123,7 @@ export default function SentResonator({ sentResonatorId, updateResonator }) {
                         ) : null}
                         <Divider />
                         <CardContent>
-                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px" }}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px", direction: "ltr" }}>
                                 <div style={{ display: "inline-flex", flexDirection:"column", alignItems: "center" }}>
                                     {resonator.clinic_logo && <img src={resonator.clinic_logo} style={{height:"100px", maxWidth: "150px"}} />}
                                     {resonator.clinic_name && <span>{resonator.clinic_name}</span>}
