@@ -65,6 +65,7 @@ class CriteriaCreation extends Component {
                 ...form,
             });
         } else {
+            if (!form.clinic_id) form.clinic_id = this.props.initialValues.clinic_id;
             this.props.createCriterion(form);
         }
     }
@@ -81,6 +82,7 @@ class CriteriaCreation extends Component {
             >
                 <MenuItem value="numeric">Numeric</MenuItem>
                 <MenuItem value="boolean">Yes / No</MenuItem>
+                <MenuItem value="text">Text</MenuItem>
             </MuiTextField>
         );
     }

@@ -2,6 +2,7 @@ import React from "react";
 
 import BooleanQuestion from "./BooleanQuestion";
 import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
+import TextQuestion from "./TextQuestion";
 
 function Question({ question, onAnswer }) {
     switch (question.type) {
@@ -24,6 +25,14 @@ function Question({ question, onAnswer }) {
                     handleAnswer={onAnswer}
                 />
             );
+        case "text":
+            return (
+                <TextQuestion
+                    question={question.body}
+                    answerBody={question.answerBody}
+                    handleAnswer={onAnswer}
+                />
+            )
         default:
             return null;
     }
