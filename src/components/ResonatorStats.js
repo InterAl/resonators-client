@@ -13,6 +13,7 @@ const CustomTooltip = ({active, payload, label}) => {
     if (active) {
         return (
             <div className="custom_tooltip">
+                {payload[0].payload.tooltip && <p>{payload[0].payload.tooltip}</p>}
                 <p>Time Answered: {payload[0].payload.time_answered}</p>
                 <p>Rank: {payload[0].payload.rank}</p>
             </div>

@@ -1,0 +1,27 @@
+.clinicSettings {
+    .clinicSettings_row {
+        display:flex;
+        justify-content:center;
+        align-items:center;
+
+        >div {
+            margin: 5px;
+        }
+    }
+    .qr_wrapper {
+        margin-top:20px;
+    }
+    .select_image_wrapper {
+        align-items:center;
+        >img {
+            max-height:100px;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .clinicSettings_row {
+        flex-direction:column;
+    }
+}

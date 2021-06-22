@@ -122,6 +122,24 @@ export default function SentResonator({ sentResonatorId, updateResonator }) {
                             </>
                         ) : null}
                         <Divider />
+                        <CardContent>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px" }}>
+                                <div style={{ display: "inline-flex", flexDirection:"column", alignItems: "center" }}>
+                                    {resonator.clinic_logo && <img src={resonator.clinic_logo} style={{height:"100px", maxWidth: "150px"}} />}
+                                    {resonator.clinic_name && <span>{resonator.clinic_name}</span>}
+                                </div>
+                                <div style={{ display: "inline-flex", flexDirection:"column", alignItems: "center" }}>
+                                    {resonator.clinic_qr && <img src={resonator.clinic_qr} style={{ marginBottom: "10px" }} />}
+                                    {resonator.clinic_phone && <a href={'tel:'+resonator.clinic_hone} style={{ direction: "ltr" }} target="_blank">{resonator.clinic_phone}</a>}
+                                    {resonator.clinic_website && <a href={resonator.clinic_website} target="_blank">{resonator.clinic_website}</a>}
+                                </div>
+                                <div style={{ display: "inline-flex", flexDirection:"column", alignItems: "center" }}>
+                                    {resonator.leader_photo && <img src={resonator.leader_photo} style={{height:"100px", maxWidth: "150px"}} />}
+                                    {resonator.leader_name && <span>{resonator.leader_name}</span>}
+                                </div>
+                            </div>
+                        </CardContent>
+                        <Divider />
                         <CardActions>
                             <Button onClick={goToAllResonators}>Close</Button>
                         </CardActions>

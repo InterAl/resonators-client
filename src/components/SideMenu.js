@@ -29,6 +29,7 @@ import {
 } from "@material-ui/icons";
 import { useBelowBreakpoint } from "./hooks";
 import { actions } from "../actions/menuActions";
+import ClinicSettings from "./ClinicSettings";
 import navigationSelector from "../selectors/navigationSelector";
 
 const useStyles = makeStyles((theme) => ({
@@ -70,9 +71,10 @@ function SideMenu(props) {
             {props.user && (
                 <List>
                     <ListItem>
-                        <ListItemIcon style={{margin: "0 auto"}}>
+                        <ListItemIcon style={{margin: "0 auto", alignItems: "center"}}>
                             <PermIdentity />
                             <ListItemText primary={props.user.email} />
+                            {props.user?.isLeader && <ClinicSettings />}
                         </ListItemIcon>
                     </ListItem>
                 </List>

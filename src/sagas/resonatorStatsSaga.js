@@ -140,7 +140,9 @@ function transformAnswer(answer) {
         time_answered: moment(answer.time_answered).format('D/M/YY HH:mm'),
         rank: answer.rank,
         question_id: answer.question_id,
-        followerName: answer.followerName
+        followerName: answer.followerName,
+        answerBody: answer.answerBody,
+        tooltip: answer.tooltip
     };
 }
 
