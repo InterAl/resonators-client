@@ -155,7 +155,7 @@ class ClinicSettings extends Component {
                         onChange={this.handleTherapistPictureChange}
                     />
                     <div className="select_image_wrapper">
-                        <p className="select_image_text">Therapist Picture</p>
+                        <p className="select_image_text">Leader's Picture</p>
                         {(this.state.therapistPreview || this.props.activeClinic?.therapistPicture) && <>
                             <img src={this.state.therapistPreview || this.props.activeClinic?.therapistPicture} />
                             <Button onClick={this.handleRemoveTherapistPicture} style={{ color: "#ff4444" }}>Remove Image</Button>
