@@ -163,8 +163,7 @@ class FollowerResonators extends Component {
             rowAction({
                 title: "Preview",
                 icon: <RemoveRedEye />,
-                onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId)),
-                isAvailable: () => !this.props.follower?.is_system
+                onClick: (resonatorId) => this.props.push(this.getPreviewRoute(resonatorId))
             }),
             rowAction.edit((resonatorId) => this.props.push(this.getEditRoute(resonatorId))),
             rowAction.remove(this.handleRemoveResonator),
