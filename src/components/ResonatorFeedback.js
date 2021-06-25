@@ -22,13 +22,16 @@ class ResonatorFeedback extends Component {
             questionId: query.question_id,
             answerId: query.answer_id,
             sentResonatorId: query.sent_resonator_id,
+            type: query.type
         });
+        this.textInputRef = React.createRef();
     }
 
-    handleAnswerClick(questionId, answerId) {
+    handleAnswerClick(questionId, answerId, type) {
         this.props.sendAnswer({
             questionId,
             answerId,
+            type
         });
     }
 
@@ -48,7 +51,7 @@ class ResonatorFeedback extends Component {
         return (
             <Button
                 key={idx}
-                onClick={() => this.handleAnswerClick(q.id, a.id)}
+                onClick={() => this.handleAnswerClick(q.id, a.id, q.question_kind)}
                 style={{ marginBottom: 20, textAlign: this.props.rtl ? "right" : "left", display: "block" }}
                 variant={this.props.answered[q.id] === a.id ? "contained" : "outlined"}
                 color="primary"
@@ -72,6 +75,21 @@ class ResonatorFeedback extends Component {
         const { question } = q;
         const answers = _.orderBy(question.answers, (a) => a.rank);
         const { rtl } = this.props;
+        let input;
+        if (question.question_kind === 'text') {
+            input = <CardContent>
+                <input type="text" ref={this.textInputRef} placeholder="Text..." />
+                <Button
+                    key={question.id}
+                    onClick={() => this.handleAnswerClick(this.props.resonator.questions.find(q => q.question_id === question.id)?.id || question.id, (this.textInputRef.current.value) ? this.textInputRef.current.value : "", question.question_kind)}
+                    style={{ marginTop: 20, textAlign: this.props.rtl ? "right" : "left", display: "block" }}
+                    variant={this.props.answered[question.id] ? "contained" : "outlined"}
+                    color="primary"
+                >Save</Button>
+            </CardContent>
+        } else {
+            input = <CardContent>{_.map(answers, (a) => this.renderAnswer(question, a))}</CardContent>
+        }
 
         return (
             <Card key={q.id} elevation={10}>
@@ -80,7 +98,8 @@ class ResonatorFeedback extends Component {
                     subheader={this.renderQuestionDescription()}
                     style={{ textAlign: rtl ? "right" : "left" }}
                 />
-                <CardContent>{_.map(answers, (a) => this.renderAnswer(question, a))}</CardContent>
+                {input}
+
                 {this.props.currentQuestionIdx > 1 && <CardActions>{this.renderBackButton()}</CardActions>}
             </Card>
         );
@@ -109,7 +128,10 @@ class ResonatorFeedback extends Component {
 
 function mapStateToProps(state) {
     const { resonator, answered, currentQuestionIdx } = state.resonatorFeedback;
-    const question = (resonator?.questions || [])[currentQuestionIdx];
+    console.log(resonator.questions);
+    const question = ((resonator?.questions || [])[currentQuestionIdx - 1]?.question.question_kind === 'text')
+                        ? (resonator?.questions || [])[currentQuestionIdx - 1]
+                        : (resonator?.questions || [])[currentQuestionIdx];
 
     return {
         resonator,
