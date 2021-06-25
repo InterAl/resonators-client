@@ -28,7 +28,7 @@ handle(types.LOAD_RESONATOR, function* (sagaParams, {payload}) {
 
 handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
     try {
-        const {questionId, answerId} = payload;
+        const {questionId, answerId, type} = payload;
         const {resonator, answered, currentQuestionIdx} = yield selectResonatorFeedback();
         const {sent_resonator_id} = yield select(state => state.init.query);
         yield showSpinner(questionId, answerId);
@@ -46,7 +46,8 @@ handle(types.SEND_ANSWER, function*(sagaParams, {payload}) {
             resonatorId: resonator.id,
             questionId,
             answerId,
-            sentResonatorId: sent_resonator_id
+            sentResonatorId: sent_resonator_id,
+            type
         });
 
         yield put(updateState({
