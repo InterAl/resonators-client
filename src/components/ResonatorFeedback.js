@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { bindActionCreators } from "redux";
-import { Button, Card, CardHeader, CardContent, CardActions, withTheme, Typography } from "@material-ui/core";
+import { Button, Card, CardHeader, CardContent, CardActions, withTheme, Typography, TextareaAutosize } from "@material-ui/core";
 
 import { actions } from "../actions/feedbackActions";
 import Layout from "./layouts/EmptyCenteredLayout";
@@ -78,7 +78,7 @@ class ResonatorFeedback extends Component {
         let input;
         if (question.question_kind === 'text') {
             input = <CardContent>
-                <input type="text" ref={this.textInputRef} placeholder="Text..." />
+                <TextareaAutosize ref={this.textInputRef} rowsMin={3} style={{ width: "100%", resize: "vertical" }} placeholder="Text..."/>
                 <Button
                     key={question.id}
                     onClick={() => this.handleAnswerClick(this.props.resonator.questions.find(q => q.question_id === question.id)?.id || question.id, (this.textInputRef.current.value) ? this.textInputRef.current.value : "", question.question_kind)}
@@ -128,7 +128,7 @@ class ResonatorFeedback extends Component {
 
 function mapStateToProps(state) {
     const { resonator, answered, currentQuestionIdx } = state.resonatorFeedback;
-    console.log(resonator.questions);
+
     const question = ((resonator?.questions || [])[currentQuestionIdx - 1]?.question.question_kind === 'text')
                         ? (resonator?.questions || [])[currentQuestionIdx - 1]
                         : (resonator?.questions || [])[currentQuestionIdx];
