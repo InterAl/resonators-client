@@ -15,12 +15,14 @@ export function addLeaderToClinic(email, clinic_id) {
         clinic_id
     });
 }
-export function saveSettings({phone, website, QRImage, logo, therapistPicture}) {
+export function saveSettings({phone, website, QRImage, logo, name, therapistName, therapistPicture}) {
     return fetcher.post('/leader_clinics/clinic_settings', {
         phone,
         website,
         QRImage,
         logo,
+        name,
+        therapistName,
         therapistPicture
     });
 }

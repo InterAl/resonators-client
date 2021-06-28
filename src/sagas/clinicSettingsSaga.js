@@ -26,6 +26,8 @@ handle(types.UPDATE_FORM, function* (sagaParams, { payload }) {
     if (payload.QRImage || payload.QRImage === null) activeClinic.qr = payload.QRImage;
     if (typeof payload.phone !== "undefined") activeClinic.phone = payload.phone;
     if (typeof payload.website !== "undefined") activeClinic.website = payload.website;
+    if (typeof payload.therapistName !== "undefined") activeClinic.therapistName = payload.therapistName;
+    if (typeof payload.name !== "undefined") activeClinic.name = payload.name;
 
     yield put(updateState({
         formData: {
