@@ -6,7 +6,7 @@ export const getOptionLabel = (option, question) => {
     if (question.type === "numeric") {
         return `${option.value}${option.label ? ` - ${option.label}` : ""}`
     } else if (question.type === "text") {
-        return "Text";
+        return option.label || "No answer";
     } else {
         return option.label;
     }

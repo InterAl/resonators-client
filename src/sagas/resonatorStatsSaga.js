@@ -28,10 +28,12 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     let stats = yield select(state => state.resonatorStats.stats);
     let {questions, answers} = yield call(statsApi.get, resonatorId);
 
+    const numericAnswers = answers.filter(a => questions.find(q => q.id === a.question_id).question_kind === 'numeric');
+    const numericAnswersPerDay = getUniqueAnswersPerDay(numericAnswers, questions);
     answers = getUniqueAnswersPerDay(answers, questions);
 
-    let averagedChart = averageChart(answers, questions);
-    let aggregatedChart = aggregateChart(answers, questions);
+    let averagedChart = averageChart(numericAnswersPerDay, questions);
+    let aggregatedChart = aggregateChart(numericAnswersPerDay, questions);
 
     questions.push(averagedChart.question, aggregatedChart.question);
     answers = answers.concat(averagedChart.answers, aggregatedChart.answers);

@@ -61,7 +61,7 @@ class ClinicSettings extends Component {
             this.setState({
                 logoPreview: e.target.result,
             });
-            this.updateForm({logo: e.target.result});
+            this.updateForm({logo: file});
         };
         reader.readAsDataURL(file);
     }
@@ -74,7 +74,7 @@ class ClinicSettings extends Component {
             this.setState({
                 therapistPreview: e.target.result,
             });
-            this.updateForm({therapistPicture: e.target.result});
+            this.updateForm({therapistPicture: file});
         };
         reader.readAsDataURL(file);
     }
@@ -169,6 +169,22 @@ class ClinicSettings extends Component {
                 </div>
                 <div className="clinicSettings_row">
                     <Field
+                        name="name"
+                        label="Clinic Name"
+                        type="text"
+                        component={TextField}
+                        onChange={(e) => this.updateForm({name: e.target.value})}
+                    />
+                    <Field
+                        name="therapistName"
+                        label="Therapist Name"
+                        type="text"
+                        component={TextField}
+                        onChange={(e) => this.updateForm({therapistName: e.target.value})}
+                    />
+                </div>
+                <div className="clinicSettings_row">
+                    <Field
                         name="phone"
                         label="Phone Number"
                         type="tel"
@@ -218,6 +234,8 @@ function mapStateToProps(state) {
     const clinicBrandingEnabled = state.leaders.leaders.clinic_branding;
     formData.phone = activeClinic?.phone;
     formData.website = activeClinic?.website;
+    formData.name = activeClinic?.name;
+    formData.therapistName = activeClinic?.therapistName;
 
     return {
         formData,
@@ -226,6 +244,8 @@ function mapStateToProps(state) {
         initialValues: {
             phone: activeClinic?.phone,
             website: activeClinic?.website,
+            name: activeClinic?.name,
+            therapistName: activeClinic?.therapistName,
         },
         enableReinitialize: true,
     };
