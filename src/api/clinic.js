@@ -15,16 +15,24 @@ export function addLeaderToClinic(email, clinic_id) {
         clinic_id
     });
 }
-export function saveSettings({phone, website, QRImage, logo, name, therapistName, therapistPicture}) {
+export function saveSettings({phone, website, name, logo, qr, therapistPicture, therapistName}) {
     return fetcher.post('/leader_clinics/clinic_settings', {
         phone,
         website,
-        QRImage,
-        logo,
         name,
+        logo,
+        qr,
         therapistName,
         therapistPicture
     });
+}
+export function uploadMedia(fieldName, file, mediaKind = 'picture') {
+    let formData = new FormData();
+    formData.append('field_name', fieldName);
+    formData.append('media_kind', mediaKind);
+    formData.append('media_title', file.name);
+    formData.append('media_data', file);
+    return fetcher.upload('/leader_clinics/clinic_settings/upload', formData);
 }
 export function edit({
     id,

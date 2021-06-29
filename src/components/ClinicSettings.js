@@ -61,7 +61,7 @@ class ClinicSettings extends Component {
             this.setState({
                 logoPreview: e.target.result,
             });
-            this.updateForm({logo: e.target.result});
+            this.updateForm({logo: file});
         };
         reader.readAsDataURL(file);
     }
@@ -74,7 +74,7 @@ class ClinicSettings extends Component {
             this.setState({
                 therapistPreview: e.target.result,
             });
-            this.updateForm({therapistPicture: e.target.result});
+            this.updateForm({therapistPicture: file});
         };
         reader.readAsDataURL(file);
     }
