@@ -6,3 +6,16 @@
         margin-bottom: 36px;
     }
 }
+.resonatorStats_title {
+    display:flex;
+    align-items: center;
+    padding:10px;
+    margin-bottom:20px;
+    height:65px;
+    > div {
+        margin-left: 15px;
+    }
+}
+.MuiPaper-root {
+    border-top: 1px solid silver;
+}

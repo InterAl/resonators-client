@@ -33,10 +33,8 @@ handle(types.FETCH_RESONATOR_STATS, function*(sagaParams, {payload}) {
     answers = getUniqueAnswersPerDay(answers, questions);
 
     let averagedChart = averageChart(numericAnswersPerDay, questions);
-    let aggregatedChart = aggregateChart(numericAnswersPerDay, questions);
-
-    questions.push(averagedChart.question, aggregatedChart.question);
-    answers = answers.concat(averagedChart.answers, aggregatedChart.answers);
+    questions.push(averagedChart.question);
+    answers = answers.concat(averagedChart.answers);
 
     questions.sort((a,b) => a.order - b.order || moment(a.updatedAt) - moment(b.updatedAt));
 

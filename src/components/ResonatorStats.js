@@ -4,7 +4,7 @@ import { actions as statsActions } from '../actions/resonatorStatsActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { ResponsiveContainer, LineChart, XAxis, YAxis, Tooltip, CartesianGrid, Line, Legend } from 'recharts';
-import { TableContainer, Table, TableBody, TableRow, TableCell, Typography } from '@material-ui/core';
+import { TableContainer, Table, TableBody, TableRow, TableCell, Typography, Grid, Paper } from '@material-ui/core';
 import { InsertChart } from '@material-ui/icons';
 import ExpandableCard from './ExpandableCard';
 import './ResonatorStats.scss';
@@ -102,18 +102,19 @@ class ResonatorStats extends Component {
 
     renderCard(question) {
         return (
-            <ExpandableCard
-                id={`resonatorStats_${question.id}`}
-                title={question.title}
-                subtitle={question.description}
-                avatar={<InsertChart />}
-                key={question.id}
-                style={{ marginBottom: 10, minWidth: "100%" }}
-            >
-                {_.isEmpty(question.followerAnswers) ?
-                    this.renderTypography('No feedback has been given for this criterion.') : this.renderChart(question)}
-            </ExpandableCard>
-        )
+            <Grid item>
+                <Paper>
+                    <Paper className="resonatorStats_title">
+                        <InsertChart />
+                        <div>
+                            <Typography>{question.title}</Typography>
+                            <Typography variant="secondary">{question.description}</Typography>
+                        </div>
+                    </Paper>
+                    {_.isEmpty(question.followerAnswers) ? this.renderTypography('No feedback has been given for this criterion.') : this.renderChart(question)}
+                </Paper>
+            </Grid>
+        );
     }
 
     formatStats(stats) {
@@ -149,7 +150,9 @@ class ResonatorStats extends Component {
         return (
             <React.Fragment>
                 <div className='resonator-stats-wrapper'>
+                    <Grid container justify="center" alignItems="center" spacing={5}>
                         {stats || this.renderTypography('No stats are available.')}
+                    </Grid>
                 </div>
             </React.Fragment>
 
