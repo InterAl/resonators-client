@@ -36,7 +36,7 @@ class FollowerResonators extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.follower && this.props.follower && nextProps.follower.id !== this.props.follower.id)
+        if (nextProps.follower && nextProps.follower?.id !== this.props.follower?.id)
             nextProps.fetchFollowerResonators(nextProps.follower.id);
     }
 
@@ -106,7 +106,7 @@ class FollowerResonators extends Component {
 
         toolbox.left = (
             <Typography variant="h6">
-                {`${this.props.follower && this.props.follower.user.name}'s Resonators`}
+                {this.props.follower ? `${this.props.follower?.user?.name}'s Resonators` : "Loading..."}
             </Typography>
         );
 
