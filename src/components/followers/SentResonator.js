@@ -132,6 +132,7 @@ export default function SentResonator({ sentResonatorId, updateResonator }) {
                                     {resonator.clinic_qr && <img src={resonator.clinic_qr} style={{ marginBottom: "10px" }} />}
                                     {resonator.clinic_phone && <a href={'tel:'+resonator.clinic_hone} style={{ direction: "ltr", maxHeight: "36px", overflow:"hidden" }} target="_blank">{resonator.clinic_phone}</a>}
                                     {resonator.clinic_website && <a href={resonator.clinic_website} style={{maxHeight: "36px", overflow:"hidden"}} target="_blank">{resonator.clinic_website}</a>}
+                                    {resonator.clinic_email && <a href={"mailto:"+resonator.clinic_email} style={{maxHeight: "36px", overflow:"hidden"}}>{resonator.clinic_email}</a>}
                                 </div>
                                 <div style={{ display: "inline-flex", flexDirection:"column", alignItems: "center" }}>
                                     {resonator.leader_photo && <img src={resonator.leader_photo} style={{height:"100px", maxWidth: "150px"}} />}

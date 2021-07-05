@@ -94,7 +94,7 @@ class ClinicSettings extends Component {
     }
 
     updateQR() {
-        if (!this.props.formData.phone && !this.props.formData.website) {
+        if (!this.props.formData.name && !this.props.formData.email && !this.props.formData.phone && !this.props.formData.website) {
             this.updateForm({QRImage: null});
         } else {
             const svg = document.getElementById("QRCode");
@@ -120,9 +120,11 @@ class ClinicSettings extends Component {
     }
 
     renderForm() {
-        const QRPhone = (this.props.formData.phone) ? "Phone: " + this.props.formData.phone : false;
+        const QRName = (this.props.formData.name) ? "Clinic Name: " + this.props.formData.name : false;
+        const QREmail = (this.props.formData.email) ? " Email: " + this.props.formData.email : false;
+        const QRPhone = (this.props.formData.phone) ? " Phone: " + this.props.formData.phone : false;
         const QRWebsite = (this.props.formData.website) ? " Website: " + this.props.formData.website : false;
-        const QRValue = [QRPhone, QRWebsite].filter(Boolean).join();
+        const QRValue = [QRName, QREmail, QRPhone, QRWebsite].filter(Boolean).join();
         this.updateQR();
 
         return (
@@ -174,6 +176,13 @@ class ClinicSettings extends Component {
                         type="text"
                         component={TextField}
                         onChange={(e) => this.updateForm({name: e.target.value})}
+                    />
+                    <Field
+                        name="email"
+                        label="Clinic Email"
+                        type="email"
+                        component={TextField}
+                        onChange={(e) => this.updateForm({email: e.target.value})}
                     />
                     <Field
                         name="therapistName"
@@ -235,6 +244,7 @@ function mapStateToProps(state) {
     formData.phone = activeClinic?.phone;
     formData.website = activeClinic?.website;
     formData.name = activeClinic?.name;
+    formData.email = activeClinic?.email;
     formData.therapistName = activeClinic?.therapistName;
 
     return {
@@ -245,6 +255,7 @@ function mapStateToProps(state) {
             phone: activeClinic?.phone,
             website: activeClinic?.website,
             name: activeClinic?.name,
+            email: activeClinic?.email,
             therapistName: activeClinic?.therapistName,
         },
         enableReinitialize: true,

@@ -150,7 +150,7 @@ class ResonatorStats extends Component {
         return (
             <React.Fragment>
                 <div className='resonator-stats-wrapper'>
-                    <Grid container justify="center" alignItems="center" spacing={5}>
+                    <Grid container justify="center" alignItems="flex-start" spacing={5}>
                         {stats || this.renderTypography('No stats are available.')}
                     </Grid>
                 </div>

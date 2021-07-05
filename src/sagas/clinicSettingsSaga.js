@@ -28,6 +28,7 @@ handle(types.UPDATE_FORM, function* (sagaParams, { payload }) {
     if (typeof payload.website !== "undefined") activeClinic.website = payload.website;
     if (typeof payload.therapistName !== "undefined") activeClinic.therapistName = payload.therapistName;
     if (typeof payload.name !== "undefined") activeClinic.name = payload.name;
+    if (typeof payload.email !== "undefined") activeClinic.email = payload.email;
 
     yield put(updateState({
         formData: {

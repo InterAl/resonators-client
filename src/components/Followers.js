@@ -12,6 +12,8 @@ import { rowAction } from "./RowActions";
 import { Link } from "react-router-dom";
 import OverflowMenu from "./OverflowMenu";
 import Filter from "components/Filter";
+import { InlineIcon } from '@iconify/react';
+import googleDrive from '@iconify-icons/mdi/google-drive';
 
 class Followers extends Component {
     constructor() {
@@ -160,18 +162,22 @@ class Followers extends Component {
             (acc, f) => {
                 let cols = [];
                 cols.push(
-                    <MuiLink
-                        to={`/followers/${f.id}/resonators`}
-                        component={Link}
-                        style={{
-                            color: f.frozen ? "rgb(157, 155, 155)" : "",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        {f.frozen ? <PauseCircleFilled fontSize="small" style={{ marginRight: 5 }} /> : null}
-                        <span>{f.user.name}</span>
-                    </MuiLink>
+                    <>
+                        <MuiLink
+                            to={`/followers/${f.id}/resonators`}
+                            component={Link}
+                            style={{
+                                color: f.frozen ? "rgb(157, 155, 155)" : "",
+                                display: "inline-flex",
+                                marginRight: "10px",
+                                alignItems: "center",
+                            }}
+                        >
+                            {f.frozen ? <PauseCircleFilled fontSize="small" style={{ marginRight: 5 }} /> : null}
+                            <span>{f.user.name}</span>
+                        </MuiLink>
+                        {f.gdrive_link && <MuiLink href={f.gdrive_link} target="_blank"><InlineIcon icon={googleDrive} /></MuiLink>}
+                    </>
                 );
                 this.state.showEmails && cols.push(f.user.email);
                 cols.push(f.clinicName);

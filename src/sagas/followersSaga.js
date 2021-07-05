@@ -2,6 +2,7 @@ import _ from 'lodash';
 import SagaReducerFactory from '../saga-reducers-factory-patch';
 import { call, put, select, take } from 'redux-saga/effects';
 import { actions, types } from '../actions/followersActions';
+import {types as sessionActionTypes} from "actions/sessionActions";
 import { types as resonatorTypes } from '../actions/resonatorActions';
 import * as followerApi from '../api/follower';
 
@@ -15,6 +16,14 @@ let { handle, updateState, saga, reducer } = SagaReducerFactory({
         followers: [],
         systemFollowers: [],
         filterByClinicId: 'all'
+    }
+});
+
+handle(sessionActionTypes.LOGIN_SUCCESS, function* () {
+    const user = yield select((state) => state.session.user);
+
+    if (user.isLeader) {
+        yield fetchFollowers();
     }
 });
 
@@ -165,7 +174,7 @@ export function* waitForFollowers() {
 
 export function* fetchFollowerResonators(followerId) {
     let follower = yield getFollower(followerId);
-
+console.log(follower, followerId);
     if (!follower)
         yield waitForFollowers();
 
