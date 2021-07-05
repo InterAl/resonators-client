@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
             marginRight: theme.spacing(2)
         },
     },
+    or: {
+        margin: "0px 5px"
+    }
 }));
 
 export default function TextQuestion({ question, answerBody, handleAnswer }) {
@@ -26,6 +29,8 @@ export default function TextQuestion({ question, answerBody, handleAnswer }) {
             <div className={classes.options}>
                 <TextField label="Text" className={classes.option} inputProps={{ maxLength: 250 }} defaultValue={answerBody} inputRef={textInput} />
                 <Button color="primary" variant="contained" onClick={() => handleAnswer(textInput.current.value)}>Answer</Button>
+                <div className={classes.or}>OR</div>
+                <Button color="primary" variant="contained" onClick={() => handleAnswer(" ")}>Skip</Button>
             </div>
         </div>
     );
