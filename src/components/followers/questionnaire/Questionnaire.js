@@ -23,7 +23,7 @@ const findFirstUnansweredQuestion = (questions) =>
         0
     );
 
-const isQuestionAnswered = (question) => question.type === "text" || Boolean(question.answer);
+const isQuestionAnswered = (question) => Boolean(question.answer);
 
 export default ({ questions, onAnswer }) => {
     const classes = useStyle();
