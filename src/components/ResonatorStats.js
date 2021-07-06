@@ -69,8 +69,8 @@ class ResonatorStats extends Component {
     }
 
     renderChart(question) {
-        return [
-            <div key="chart" style={{ height: 500, paddingRight: 30 }}>
+        return (<>
+            <div key="chart" style={{ width: 500, height: 500, paddingRight: 30, boxSizing: "border-box" }}>
                 <ResponsiveContainer>
                     <LineChart data={question.followerAnswers}>
                         <XAxis dataKey="time" />
@@ -81,15 +81,15 @@ class ResonatorStats extends Component {
                         <Line type="linear" dataKey="rank" stroke="#82ca9d" />
                     </LineChart>
                 </ResponsiveContainer>
-            </div>,
-            <ExpandableCard
+            </div>
+            {question.id !== 'average' && <ExpandableCard
                 id={`resonatorStats_${question.id}_legend`}
-                title='Legend'
+                title={question.question_kind === 'text' ? 'Show Data' : 'Legend'}
                 key="card"
             >
                 {this.renderQuestionLegend(question)}
-            </ExpandableCard>
-        ];
+            </ExpandableCard>}
+        </>);
     }
 
     renderTypography(text) {
