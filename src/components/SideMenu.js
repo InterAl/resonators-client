@@ -74,7 +74,7 @@ function SideMenu(props) {
                         <ListItemIcon style={{margin: "0 auto", alignItems: "center"}}>
                             <PermIdentity />
                             <ListItemText primary={props.user.email} />
-                            {props.user?.isLeader && <ClinicSettings />}
+                            {props.user?.isLeader && props.currentClinic?.is_primary && <ClinicSettings />}
                         </ListItemIcon>
                     </ListItem>
                 </List>
@@ -177,6 +177,7 @@ export default connect(
     (state) => ({
         menuOpen: navigationSelector(state).menuOpen,
         leader: state.leaders.leaders,
+        currentClinic: state.clinics?.clinics?.find(c => c.id === state.leaders?.leaders?.current_clinic_id),
         user: state.session.user,
         installPrompt: state.pwa.installPrompt,
     }),
