@@ -1,6 +1,7 @@
 import SagaReducerFactory from '../saga-reducers-factory-patch';
 import {call, put, select} from 'redux-saga/effects';
 import { actions, types } from '../actions/clinicSettingsActions';
+import { actions as sessionActions } from '../actions/sessionActions';
 import * as clinicApi from '../api/clinic';
 
 let {handle, updateState, saga, reducer} = SagaReducerFactory({
@@ -27,6 +28,7 @@ handle(types.UPDATE_FORM, function* (sagaParams, { payload }) {
     if (typeof payload.phone !== "undefined") activeClinic.phone = payload.phone;
     if (typeof payload.website !== "undefined") activeClinic.website = payload.website;
     if (typeof payload.therapistName !== "undefined") activeClinic.therapistName = payload.therapistName;
+    if (typeof payload.therapistEmail !== "undefined") activeClinic.therapistEmail = payload.therapistEmail;
     if (typeof payload.name !== "undefined") activeClinic.name = payload.name;
     if (typeof payload.email !== "undefined") activeClinic.email = payload.email;
 
@@ -45,6 +47,9 @@ handle(types.SAVE, function* (sagaParams, { payload }) {
     if (currentFormData.logo) clinicApi.uploadMedia('logo', currentFormData.logo);
     if (currentFormData.therapistPicture) clinicApi.uploadMedia('therapistPicture', currentFormData.therapistPicture);
 
-    yield call(clinicApi.saveSettings, currentFormData);
+    const response = yield call(clinicApi.saveSettings, currentFormData);
+    if (response.user) {
+        yield put(sessionActions.updateUserState({email: response.user.email}));
+    }
 });
 export default {saga, reducer};

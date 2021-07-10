@@ -21,12 +21,12 @@ class ClinicSettings extends Component {
     constructor(props) {
         super(props);
 
-        this.QRSize = 64;
+        this.QRSize = 82;
 
         this.state = {
             open: false,
             logoPreview: null,
-            therapistPreview: null,
+            therapistPreview: null
         };
 
         this.handleOpen = this.handleOpen.bind(this);
@@ -94,7 +94,7 @@ class ClinicSettings extends Component {
     }
 
     updateQR() {
-        if (!this.props.formData.name && !this.props.formData.email && !this.props.formData.phone && !this.props.formData.website) {
+        if (!this.props.formData.therapistName && !this.props.formData.therapistEmail) {
             this.updateForm({QRImage: null});
         } else {
             const svg = document.getElementById("QRCode");
@@ -119,12 +119,26 @@ class ClinicSettings extends Component {
         }
     }
 
+    getVCard() {
+        if (!this.props.formData.therapistName && !this.props.formData.therapistEmail) {
+            return "";
+        }
+        const VCardStart = "BEGIN:VCARD\nVERSION:3.0\n";
+        const VCardEnd = "END:VCARD";
+        let VCardContent = "";
+        if (this.props.formData.therapistName) {
+            VCardContent += "N:"+ this.props.formData.therapistName + "\n";
+        }
+
+        if (this.props.formData.therapistEmail) {
+            VCardContent += "EMAIL;type=INTERNET,WORK,pref:"+ this.props.formData.therapistEmail + "\n";
+        }
+
+        return VCardStart + VCardContent + VCardEnd;
+    }
+
     renderForm() {
-        const QRName = (this.props.formData.name) ? "Clinic Name: " + this.props.formData.name : false;
-        const QREmail = (this.props.formData.email) ? " Email: " + this.props.formData.email : false;
-        const QRPhone = (this.props.formData.phone) ? " Phone: " + this.props.formData.phone : false;
-        const QRWebsite = (this.props.formData.website) ? " Website: " + this.props.formData.website : false;
-        const QRValue = [QRName, QREmail, QRPhone, QRWebsite].filter(Boolean).join();
+        const QRValue = this.getVCard();
         this.updateQR();
 
         return (
@@ -157,7 +171,7 @@ class ClinicSettings extends Component {
                         onChange={this.handleTherapistPictureChange}
                     />
                     <div className="select_image_wrapper">
-                        <p className="select_image_text">Leader's Picture</p>
+                        <p className="select_image_text">Therapist's Picture</p>
                         {(this.state.therapistPreview || this.props.activeClinic?.therapistPicture) && <>
                             <img src={this.state.therapistPreview || this.props.activeClinic?.therapistPicture} />
                             <Button onClick={this.handleRemoveTherapistPicture} style={{ color: "#ff4444" }}>Remove Image</Button>
@@ -178,6 +192,15 @@ class ClinicSettings extends Component {
                         onChange={(e) => this.updateForm({name: e.target.value})}
                     />
                     <Field
+                        name="therapistName"
+                        label="Therapist Name"
+                        type="text"
+                        component={TextField}
+                        onChange={(e) => this.updateForm({therapistName: e.target.value})}
+                    />
+                </div>
+                <div className="clinicSettings_row">
+                    <Field
                         name="email"
                         label="Clinic Email"
                         type="email"
@@ -185,11 +208,11 @@ class ClinicSettings extends Component {
                         onChange={(e) => this.updateForm({email: e.target.value})}
                     />
                     <Field
-                        name="therapistName"
-                        label="Therapist Name"
-                        type="text"
+                        name="therapistEmail"
+                        label="Therapist Email"
+                        type="email"
                         component={TextField}
-                        onChange={(e) => this.updateForm({therapistName: e.target.value})}
+                        onChange={(e) => this.updateForm({therapistEmail: e.target.value})}
                     />
                 </div>
                 <div className="clinicSettings_row">
@@ -216,7 +239,7 @@ class ClinicSettings extends Component {
     }
 
     render() {
-        if (this.props.clinicBrandingEnabled === false) return false;
+        if (this.props.leader.clinicBrandingEnabled === false) return false;
         return (
             <>
                 <Settings onClick={this.handleOpen} style={{cursor:"pointer"}}/>
@@ -240,23 +263,25 @@ const Form = reduxForm({
 function mapStateToProps(state) {
     const activeClinic = state.clinicSettings?.activeClinic;
     const formData = state.clinicSettings?.formData;
-    const clinicBrandingEnabled = state.leaders.leaders.clinic_branding;
+    const leader = state.leaders.leaders;
     formData.phone = activeClinic?.phone;
     formData.website = activeClinic?.website;
     formData.name = activeClinic?.name;
     formData.email = activeClinic?.email;
     formData.therapistName = activeClinic?.therapistName;
+    formData.therapistEmail = activeClinic?.therapistEmail;
 
     return {
         formData,
         activeClinic,
-        clinicBrandingEnabled,
+        leader,
         initialValues: {
             phone: activeClinic?.phone,
             website: activeClinic?.website,
             name: activeClinic?.name,
             email: activeClinic?.email,
             therapistName: activeClinic?.therapistName,
+            therapistEmail: activeClinic?.therapistEmail,
         },
         enableReinitialize: true,
     };

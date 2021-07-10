@@ -134,6 +134,14 @@ handle(types.RESET_PASSWORD, function*(sagaParams, {payload}) {
     }
 });
 
+handle(types.UPDATE_USER_STATE, function*(sagaParams, {payload}) {
+    if (!payload) return false;
+    const user = yield select(state => state.session.user);
+    yield put(updateState({
+        user: {...user, ...payload}
+    }));
+});
+
 function* updateUser(user = {}) {
     const loggedIn = new Date(user.expires_at) > new Date();
 
