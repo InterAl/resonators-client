@@ -222,6 +222,10 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
     margin: auto;
     font-size: 15px;
 
+    nav {
+        position: relative;
+    }
+
     @media #{$media-sm} {
       padding: 35px 45px 155px;
     }
@@ -260,20 +264,59 @@ $media-lg: "only screen and (min-width: #{$breakpoint-lg})";
   }
 
   .menu-links {
-    display: none;
+    display:flex;
+    visibility: hidden;
     color: $secondary;
-
-    li:not(:last-of-type) {
-      margin-right: 20px;
-    }
+    flex-direction:column;
+    transition:0.3s;
+    max-height:0;
+    max-width: 0;
+    overflow:hidden;
+    text-align: right;
+    position:absolute;
+    right:0;
+    background-color:white;
+    box-shadow: 5px 5px 10px 5px rgba(0,0,0,0.2);
+    border-radius: 6px;
 
     a {
       color: inherit;
+      padding: 10px 20px;
+      width:170px;
+      display: block;
+      transition:0.8s;
+      opacity:0;
     }
 
     @media #{$media-md} {
-      display: flex;
+      visibility:visible;
+      flex-direction:row;
+      max-height:1000px;
+      max-width:initial;
+      position:static;
+      box-shadow:none;
+      background-color:transparent;
+      border-radius:0;
+
+      li:not(:last-of-type) {
+          margin-right: 20px;
+      }
+      a {
+          padding:0;
+          width:auto;
+          transition:none;
+          opacity:1;
+      }
     }
+  }
+
+  .menu-links.active {
+      visibility:visible;
+      max-height:1000px;
+      max-width:250px;
+      a {
+          opacity:1;
+      }
   }
 
   .what-is-psysession {

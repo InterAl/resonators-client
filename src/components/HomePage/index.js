@@ -25,6 +25,10 @@ export default class HomePage extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+        hamMenuOpen: false
+    };
   }
   recaptchaRef = React.createRef();
 
@@ -46,12 +50,12 @@ export default class HomePage extends Component {
           <header className='header'>
             <img src={logoImg} alt="" className="logo"/>
             <nav>
-              <div className="menu-icon">
+              <div className="menu-icon" onClick={() => this.setState({hamMenuOpen: !this.state.hamMenuOpen})}>
                 <div className="menu-icon-bar"></div>
                 <div className="menu-icon-bar"></div>
                 <div className="menu-icon-bar"></div>
               </div>
-              <ul className="menu-links">
+              <ul className={this.state.hamMenuOpen ? "menu-links active" : "menu-links"}>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#what-is-psysession">What is Psysession</a></li>
                 <li><a href="#how-it-works">How it works</a></li>
@@ -67,7 +71,7 @@ export default class HomePage extends Component {
               A secure cloud-based platform for enhancing therapy
             </h1>
             <p className="fold-subtext margin-bottom">Created by therapists and developers for therapists and patients</p>
-            <a href="/login" className="btn-primary margin-bottom-medium">Try it now</a>
+            <a href="/loginLeader" className="btn-primary margin-bottom-medium">Try it now</a>
           </article>
         </section>
 
@@ -136,7 +140,7 @@ export default class HomePage extends Component {
                 <p>CBT-like homework forms</p>
               </li>
             </ul>
-            <a href="/login" className="btn-primary margin-bottom-medium">Try it now</a>
+            <a href="/loginLeader" className="btn-primary margin-bottom-medium">Try it now</a>
           </article>
         </section>
 
