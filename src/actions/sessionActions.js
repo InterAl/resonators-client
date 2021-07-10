@@ -8,7 +8,8 @@ const actionsList = [
     'REGISTER',
     'GOOGLE_LOGIN',
     'RECOVER_PASSWORD',
-    'RESET_PASSWORD'
+    'RESET_PASSWORD',
+    'UPDATE_USER_STATE'
 ];
 
 export const types = ActionCreatorHelper.createTypes(actionsList, 'SESSION_');
