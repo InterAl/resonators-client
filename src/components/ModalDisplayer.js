@@ -20,6 +20,7 @@ import ForgotPasswordSuccess from './ForgotPasswordSuccess';
 import AddLeaderClinicModal from './AddLeaderClinicModal'
 import ResetResonatorPrompt from './ResetResonatorPrompt';
 import FreezeCriterionPrompt from './FreezeCriterionPrompt';
+import donatePaypalModal from './donatePaypalModal';
 import InviteFollowerModal from "components/invitations/InviteFollowerModal";
 
 
@@ -42,6 +43,7 @@ const modalMap = {
     'addLeaderToClinic' : AddLeaderClinicModal,
     'resetResonator': ResetResonatorPrompt,
     'freezeCriterion': FreezeCriterionPrompt,
+    'donatePaypal': donatePaypalModal
 };
 
 class ModalDisplayer extends Component {
