@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 import { Menu } from "@material-ui/icons";
 import { bindActionCreators } from "redux";
-import { AppBar, Toolbar, IconButton, Hidden, makeStyles } from "@material-ui/core";
+import { AppBar, Toolbar, IconButton, Hidden, makeStyles, Button } from "@material-ui/core";
 
 import HeaderLogo from "./HeaderLogo";
 import Breadcrumbs from "./Breadcrumbs";
 import { actions } from "../actions/menuActions";
 import loginInfoSelector from "../selectors/loginInfo";
+import {actions as navigationActions} from "../actions/navigationActions";
 
 const useStyles = makeStyles((theme) => ({
     appBar: { zIndex: theme.zIndex.drawer + 1 },
@@ -31,6 +32,7 @@ function TopBar(props) {
                     ) : null}
                     <Breadcrumbs />
                 </div>
+                <Button variant="contained" onClick={props.showDonatePaypalModal}>Donate</Button>
                 <Hidden xsDown>
                     <HeaderLogo />
                 </Hidden>
@@ -41,5 +43,9 @@ function TopBar(props) {
 
 export default connect(
     (state) => ({ loggedIn: loginInfoSelector(state).loggedIn }),
-    (dispatch) => bindActionCreators({ toggleMenu: actions.toggleMenu }, dispatch)
+    (dispatch) => bindActionCreators({
+        toggleMenu: actions.toggleMenu,
+        showDonatePaypalModal: () =>
+            navigationActions.showModal({name: "donatePaypal"}),
+    }, dispatch)
 )(TopBar);
